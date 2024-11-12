@@ -53,7 +53,7 @@ private
   end
 
   def gias_data_sample_file
-    Bookings::Data::GiasDataFile.new.sample_path
+    Bookings::Data::GiasDataFile::SAMPLE_PATH
   end
 
   def data_in_batches

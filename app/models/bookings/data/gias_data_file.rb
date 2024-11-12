@@ -4,7 +4,7 @@ module Bookings
       EXPECTED_HEADER = '"URN","LA (code)","LA (name)","EstablishmentNumber","EstablishmentName"'.freeze
       EXPECTED_FIRST_ROW = %r(\A\d{3}\d+,)
       TEMP_PATH = Rails.root.join('tmp', 'gias').freeze
-      SAMPLE_COUNT = 1000
+      SAMPLE_PATH = "db/data/example_schools.csv".freeze
       attr_reader :today
 
       def initialize
@@ -13,10 +13,6 @@ module Bookings
 
       def todays_file
         @todays_file ||= TEMP_PATH.join "edubase-#{today}.csv"
-      end
-
-      def todays_sample_file
-        @todays_sample_file ||= TEMP_PATH.join "sample-#{today}.csv"
       end
 
       def remove_todays_file!
@@ -37,10 +33,6 @@ module Bookings
         remove_old_files! # GC earlier files
 
         already_downloaded? ? todays_file : fetch_file
-      end
-
-      def sample_path
-        already_sampled? ? todays_sample_file : sample_file
       end
 
       def source_url
@@ -83,10 +75,6 @@ module Bookings
         File.exist? todays_file
       end
 
-      def already_sampled?
-        File.exist? todays_sample_file
-      end
-
       def fetch_file
         create_temp_dir
 
@@ -96,13 +84,6 @@ module Bookings
             raise InvalidSourceUri, "Invalid source URI: #{source_url}"
           end
         end
-      end
-
-      def sample_file
-        IO.popen(["head", "-n #{SAMPLE_COUNT}", path.to_s]) do |io|
-          File.write(todays_sample_file, io.read)
-        end
-        todays_sample_file.to_s
       end
 
       def download_and_save

@@ -64,38 +64,6 @@ describe Bookings::Data::GiasDataFile do
     end
   end
 
-  describe '#sample_path' do
-    before { allow(subject).to receive(:sample_file) { subject.todays_sample_file } }
-
-    context 'with existing file' do
-      before { allow(subject).to receive(:already_sampled?).and_return true }
-      let!(:sample_path) { subject.sample_path }
-
-      it "will return path of todays sample file" do
-        expect(sample_path).to eql \
-          Rails.root.join('tmp', 'gias', "sample-#{today}.csv")
-      end
-
-      it "will return existing file" do
-        is_expected.not_to have_received(:sample_file)
-      end
-    end
-
-    context 'without existing file' do
-      before { allow(subject).to receive(:already_sampled?).and_return false }
-      let!(:sample_path) { subject.sample_path }
-
-      it "will return path of todays file" do
-        expect(sample_path).to eql \
-          Rails.root.join('tmp', 'gias', "sample-#{today}.csv")
-      end
-
-      it "will generate a new file" do
-        is_expected.to have_received(:sample_file)
-      end
-    end
-  end
-
   context '#remove_old_files' do
     let(:yesterday) { Time.zone.yesterday.strftime('%Y%m%d') }
     let(:today) { Time.zone.today.strftime('%Y%m%d') }

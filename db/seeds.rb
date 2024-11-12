@@ -13,7 +13,8 @@ YAML.load_file(Rails.root.join('db', 'data', 'school_types.yml')).each do |eduba
   Bookings::SchoolType.create(name: name, edubase_id: edubase_id)
 end
 
+# Import a sample of 1000 schools
 # rubocop:disable Rails/Output
-puts "\nYou can import all 47000 schools using 'bundle exec rails data:schools:mass_import'"
-puts "\nYou can import a sample of 1000 schools using 'bundle exec rails data:schools:sample_import'"
+puts "\nImporting a small sample of schools. You can import all 47000 schools using 'bundle exec rails data:schools:mass_import'"
+Bookings::SchoolSync.new(email_override: nil).import_sample
 # rubocop:enable Rails/Output
