@@ -15,6 +15,6 @@ end
 
 # Import a sample of 1000 schools
 # rubocop:disable Rails/Output
-puts "\nImporting a sample of 1000 schools. You can import all 47000 schools using 'bundle exec rails data:schools:mass_import'"
+puts "\nImporting a small sample of schools. You can import all 47000 schools using 'bundle exec rails data:schools:mass_import'"
 Bookings::SchoolSync.new(email_override: nil).import_sample
 # rubocop:enable Rails/Output
