@@ -59,11 +59,13 @@ gem "redis", "~> 4.7"
 
 gem 'kaminari'
 
-gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.15.0"
+gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.14.2"
 gem 'dfe-autocomplete', require: 'dfe/autocomplete', github: 'DFE-Digital/dfe-autocomplete'
 gem 'dfe-reference-data', require: 'dfe/reference_data', github: 'DFE-Digital/dfe-reference-data', tag: 'v3.5.0'
 
 gem "rolify"
+
+gem "google-cloud-bigquery", "1.50.0"
 
 gem 'phonelib'
 gem 'sentry-rails'
