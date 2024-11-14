@@ -66,7 +66,7 @@ DfE::Analytics.configure do |config|
 
   # The name of the BigQuery dataset we're writing to.
   #
-  config.bigquery_dataset = 'gse_events_staging'
+  config.bigquery_dataset = 'bat_cross_project'
 
   # Ensure JSON API Key does not get set
   config.bigquery_api_json_key = ''
