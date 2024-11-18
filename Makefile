@@ -93,7 +93,7 @@ composed-variables:
 	$(eval STORAGE_ACCOUNT_NAME=${AZURE_RESOURCE_PREFIX}${SERVICE_SHORT}tfstate${CONFIG_SHORT}sa)
 
 bin/terrafile: ## Install terrafile to manage terraform modules
-	curl -sL https://github.com/coretech/terrafile/releases/download/v${TERRAFILE_VERSION}/terrafile_${TERRAFILE_VERSION}_$$(uname)_x86_64.tar.gz \
+	curl -sL https://github.com/coretech/terrafile/releases/download/v${TERRAFILE_VERSION}/terrafile_${TERRAFILE_VERSION}_$$(uname)_$$(uname -m).tar.gz \
 		| tar xz -C ./bin terrafile
 
 terraform-init: composed-variables bin/terrafile set-azure-account

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eu
+
 MODE=NOTSET
 MODE_ERROR="Mode must be one of (  -s (sidekiq), -c (brakeman), -f (frontend), -r (rubocop) , -x (database) , -y (cucumber) , -z (rspec), -s (shell) )"
 
@@ -10,6 +12,11 @@ while [[ $# -gt 0 ]]; do
     -m|migrate)
 	  echo Running Migration
           bundle exec rails db:migrate
+	  shift
+      ;;
+    -e|prepare)
+	  echo Preparing database
+          bundle exec rails db:prepare
 	  shift
       ;;
     -p|profile)

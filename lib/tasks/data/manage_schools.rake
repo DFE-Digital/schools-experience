@@ -7,6 +7,13 @@ namespace :data do
       Bookings::SchoolSync.new(email_override: args[:email_override]).import_all
     end
 
+    desc "Import a sample of  GiaS (EduBase) data from local file"
+    task :sample_import, %i[email_override] => :environment do |_t, args|
+      args.with_defaults(email_override: nil)
+
+      Bookings::SchoolSync.new(email_override: args[:email_override]).import_sample
+    end
+
     desc "Update schools"
     task update: :environment do |_t, _args|
       Bookings::SchoolSync.new.update_all

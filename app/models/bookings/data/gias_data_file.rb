@@ -4,6 +4,7 @@ module Bookings
       EXPECTED_HEADER = '"URN","LA (code)","LA (name)","EstablishmentNumber","EstablishmentName"'.freeze
       EXPECTED_FIRST_ROW = %r(\A\d{3}\d+,)
       TEMP_PATH = Rails.root.join('tmp', 'gias').freeze
+      SAMPLE_PATH = "db/data/example_schools.csv".freeze
       attr_reader :today
 
       def initialize
