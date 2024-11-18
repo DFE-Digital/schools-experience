@@ -52,7 +52,7 @@ end
 
 Then("every booking should contain a link to view cancelled booking details") do
   within('#bookings') do
-    page.all('.booking').each do |sr|
+    page.all('.booking').find_each do |sr|
       within(sr) do
         booking_id = sr['data-booking']
         expect(page).to have_link('View', href: schools_cancelled_booking_path(booking_id))

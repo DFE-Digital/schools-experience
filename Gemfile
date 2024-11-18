@@ -152,6 +152,8 @@ group :test do
 
   gem 'rails-controller-testing', '>= 1.0.5'
   gem "rspec-json_expectations", "~> 2.2"
+  gem 'rubocop-capybara'
+  gem 'rubocop-rspec'
   gem 'shoulda-matchers', '~> 6.1'
 
   gem 'capybara-screenshot'

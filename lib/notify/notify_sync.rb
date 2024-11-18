@@ -23,7 +23,7 @@ class NotifySync
 
     # Any templates remaining aren't present locally
     if remote_templates_copy.size.positive?
-      remote_templates_copy.each do |_, template|
+      remote_templates_copy.each_value do |template|
         puts output_line(template.id, template.name, "Missing local template")
       end
     end
@@ -66,7 +66,7 @@ private
 
   def local_templates
     Dir.glob(File.join(TEMPLATE_PATH, "*.md")).each.with_object({}) do |path, hash|
-      template_id = path.match(/\.(?<template_id>[A-z0-9\-]+)\.md$/)[:template_id]
+      template_id = path.match(/\.(?<template_id>[A-z0-9-]+)\.md$/)[:template_id]
       hash[template_id] = File.read(path).chomp
     end
   end

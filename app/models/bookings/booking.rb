@@ -158,7 +158,7 @@ module Bookings
     delegate :status, to: :bookings_placement_request
 
     def placement_start_date_with_duration
-      if bookings_placement_request&.placement_date&.present?
+      if bookings_placement_request&.placement_date.present?
         [date.to_formatted_s(:govuk), 'for', duration_days].join(' ')
       else
         date.to_formatted_s(:govuk)

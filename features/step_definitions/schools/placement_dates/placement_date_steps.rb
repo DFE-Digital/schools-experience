@@ -67,7 +67,7 @@ Given "I have previously selected {string}" do |subject_name|
 end
 
 Given("I uncheck all dates") do
-  page.all("input[type=checkbox]").each(&:uncheck)
+  page.all("input[type=checkbox]").find_each(&:uncheck)
 end
 
 When "I select {string} recurrence and enter a valid date" do |recurrence_type|

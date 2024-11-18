@@ -780,7 +780,9 @@ DEPENDENCIES
   rspec-rails (~> 6.1.1)
   rspec-sonarqube-formatter
   rspec_junit_formatter
+  rubocop-capybara
   rubocop-govuk
+  rubocop-rspec
   selenium-webdriver
   sentry-rails
   sentry-ruby

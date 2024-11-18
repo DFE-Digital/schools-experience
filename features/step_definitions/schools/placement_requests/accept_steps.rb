@@ -11,7 +11,7 @@ end
 
 Then("every row of the booking details list should have a {string} link") do |string|
   within('#booking-details') do
-    page.all('div.govuk-summary-list__row').each do |row|
+    page.all('div.govuk-summary-list__row').find_each do |row|
       expect(row).to have_link(string)
     end
   end

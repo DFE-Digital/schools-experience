@@ -1,3 +1,7 @@
+require:
+  - rubocop-capybara
+  - rubocop-rspec
+
 inherit_gem:
   rubocop-govuk:
     - config/default.yml

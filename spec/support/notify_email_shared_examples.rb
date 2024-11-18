@@ -44,7 +44,7 @@ shared_examples_for "notify template" do |template_id, personalisation|
   end
 
   describe 'Initialization' do
-    personalisation&.each do |k, _|
+    personalisation&.each_key do |k|
       specify "should raise an error if supplied without :#{k}" do
         { to: to }.merge(personalisation.except(k)).tap do |args|
           expect { described_class.new(args) }.to raise_error(ArgumentError, /required keywords:.*#{k}/)
@@ -54,7 +54,7 @@ shared_examples_for "notify template" do |template_id, personalisation|
   end
 
   describe 'Attributes' do
-    personalisation&.each do |k, _|
+    personalisation&.each_key do |k|
       specify "should respond to #{k}" do
         expect(subject).to respond_to(k)
       end

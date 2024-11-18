@@ -105,7 +105,7 @@ end
 
 Then("every request should contain a title starting with {string}") do |string|
   within('#placement-requests') do
-    page.all('.placement-request').each do |sr|
+    page.all('.placement-request').find_each do |sr|
       within(sr) do
         expect(page).to have_css('h2', text: /#{string}/)
       end

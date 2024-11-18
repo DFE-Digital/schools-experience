@@ -43,7 +43,7 @@ end
 
 Then("each result should have the following information") do |table|
   attributes = table.raw.flatten
-  page.all('ul > li.school-result').each do |result|
+  page.all('ul > li.school-result').find_each do |result|
     attributes.each do |attribute|
       expect(result).to have_css('strong', text: attribute)
     end

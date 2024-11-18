@@ -113,7 +113,7 @@ describe Bookings::Data::SchoolMassImporter do
       specify 'the new records should have coordinates' do
         # we're relying on Breasal to do the maths, so just check
         # they're populated
-        Bookings::School.all.each do |school|
+        Bookings::School.all.find_each do |school|
           expect(school.coordinates).to be_present
         end
       end
@@ -123,7 +123,7 @@ describe Bookings::Data::SchoolMassImporter do
         subject { Bookings::Data::SchoolMassImporter.new(edubase_data, email_override) }
 
         specify "all emails should be set to the override email address" do
-          Bookings::School.all.each do |school|
+          Bookings::School.all.find_each do |school|
             expect(school.contact_email).to eql(email_override)
           end
         end

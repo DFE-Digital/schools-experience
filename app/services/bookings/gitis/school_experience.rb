@@ -61,7 +61,7 @@ module Bookings
             date: (cancellation.booking || cancellation.placement_request.placement_date)&.date,
             urn: cancellation.school_urn,
             school_name: cancellation.school_name,
-            teaching_subject_name: (cancellation.booking&.bookings_subject&.name || cancellation.placement_request.subject_first_choice),
+            teaching_subject_name: cancellation.booking&.bookings_subject&.name || cancellation.placement_request.subject_first_choice,
             duration: (cancellation.booking || cancellation.placement_request.placement_date)&.duration,
             status: status
           )

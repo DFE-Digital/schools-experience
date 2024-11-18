@@ -125,7 +125,7 @@ describe Schools::Attendance do
     end
 
     specify 'should correctly update bookings with param values' do
-      bookings_params.each do |id, _status|
+      bookings_params.each_key do |id|
         booking = Bookings::Booking.find(id)
 
         expect(Bookings::Gitis::SchoolExperience).to \
