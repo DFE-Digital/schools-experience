@@ -1,3 +1,10 @@
+inherit_from: .rubocop_todo.yml
+
+require:
+  - rubocop-rspec
+  - rubocop-capybara
+  - rubocop-factory_bot
+
 inherit_gem:
   rubocop-govuk:
     - config/default.yml
@@ -103,3 +110,10 @@ Rails/TimeZone:
 
 Rails/Date:
   Enabled: false
+
+AllCops:
+  Exclude:
+    - "node_modules/**/*"
+    - "vendor/**/*"
+    - "db/schema.rb"
+    - "db/migrate/*.rb"
