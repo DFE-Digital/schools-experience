@@ -11,12 +11,12 @@ Given("I visit the Dashboard page") do
 end
 
 Then("I should be redirected to the candidate signin page") do
-  expect page.to have_current_path(candidates_signin_path)
+  expect(page).to have_current_path(candidates_signin_path)
 end
 
 Given("I am on the candidate signin page") do
   visit candidates_dashboard_path
-  expect page.to have_current_path(candidates_signin_path)
+  expect(page).to have_current_path(candidates_signin_path)
 end
 
 When("I enter my name and email address") do

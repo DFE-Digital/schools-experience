@@ -45,7 +45,7 @@ end
 When("I am viewing my chosen previous booking") do
   path = path_for('previous booking', booking_id: @booking_id)
   visit(path)
-  expect page.to have_current_path(path)
+  expect(page).to have_current_path(path)
 end
 
 Given("the scheduled booking date is in the past") do

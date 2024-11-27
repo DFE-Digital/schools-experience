@@ -79,7 +79,7 @@ When("I am viewing the rejected request") do
   path = path_for('rejected request', placement_request: @rejected_request)
 
   visit(path)
-  expect page.to have_current_path(path)
+  expect(page).to have_current_path(path)
 end
 
 Given("a request has been rejected because of {string}") do |rejection_category|

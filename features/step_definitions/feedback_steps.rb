@@ -1,7 +1,7 @@
 Given("I am on the {string} page prior to giving feedback") do |string|
   path_for(string).tap do |p|
     visit(p)
-    expect page.to have_current_path(p)
+    expect(page).to have_current_path(p)
     @referrer = page.current_url
     expect(@referrer).to start_with('http')
   end

@@ -109,7 +109,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
 
   def complete_contact_information_step
     expect(page).to have_current_path \
-      "/candidates/schools/#{school_urn}/registrations/contact_information/new", ignore_query: true
+      "/candidates/schools/#{school_urn}/registrations/contact_information/new"
 
     # Submit contact information form with errors
     fill_in 'Address line 1', with: ''
@@ -128,7 +128,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
 
   def complete_education_step
     expect(page).to have_current_path \
-      "/candidates/schools/#{school_urn}/registrations/education/new", ignore_query: true
+      "/candidates/schools/#{school_urn}/registrations/education/new"
 
     # Submit registrations/education form with errors
     choose 'Graduate or postgraduate'
@@ -143,7 +143,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
 
   def complete_teaching_preference_step
     expect(page).to have_current_path \
-      "/candidates/schools/#{school_urn}/registrations/teaching_preference/new", ignore_query: true
+      "/candidates/schools/#{school_urn}/registrations/teaching_preference/new"
 
     # Submit registrations/teaching_preference form with errors
     choose "I’m very sure and think I’ll apply"
@@ -158,7 +158,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
 
   def complete_placement_preference_step
     expect(page).to have_current_path \
-      "/candidates/schools/#{school_urn}/registrations/placement_preference/new", ignore_query: true
+      "/candidates/schools/#{school_urn}/registrations/placement_preference/new"
 
     # Submit registrations/placement_preference form with errors
     fill_in 'Enter what you want to get out of your placement', with: ''
@@ -172,7 +172,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
 
   def complete_availability_preference_step
     expect(page).to have_current_path \
-      "/candidates/schools/#{school_urn}/registrations/availability_preference/new", ignore_query: true
+      "/candidates/schools/#{school_urn}/registrations/availability_preference/new"
 
     # Submit registrations/availability_preference form with errors
     fill_in 'Enter your availability', with: ''
@@ -186,7 +186,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
 
   def complete_background_step
     expect(page).to have_current_path \
-      "/candidates/schools/#{school_urn}/registrations/background_check/new", ignore_query: true
+      "/candidates/schools/#{school_urn}/registrations/background_check/new"
 
     # Submit registrations/background_check form with errors
     click_button 'Continue'
@@ -199,7 +199,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
 
   def complete_application_preview_step(name: 'testy mctest', email: nil, button_text: 'Accept and send')
     expect(page).to have_current_path \
-      "/candidates/schools/#{school_urn}/registrations/application_preview", ignore_query: true
+      "/candidates/schools/#{school_urn}/registrations/application_preview"
 
     # Expect preview to match the data we successfully submited
     expect(page).to have_text "Full name #{name}"
@@ -249,6 +249,6 @@ feature 'Candidate Registrations (via the API)', type: :feature do
   def get_bounced_to_contact_information_step
     visit "/candidates/schools/#{school_urn}/registrations/application_preview"
     expect(page).to have_current_path \
-      "/candidates/schools/#{school_urn}/registrations/contact_information/new", ignore_query: true
+      "/candidates/schools/#{school_urn}/registrations/contact_information/new"
   end
 end

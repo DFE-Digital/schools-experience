@@ -82,5 +82,5 @@ Given("I am viewing the withdrawn request") do
   path = path_for('withdrawn request', placement_request: @withdrawn_request)
 
   visit(path)
-  expect page.to have_current_path(path)
+  expect(page).to have_current_path(path)
 end

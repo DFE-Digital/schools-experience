@@ -10,7 +10,7 @@ end
 When("I am on the {string} screen for my chosen school") do |page_name|
   path = path_for(page_name, school: @school)
   visit(path)
-  expect page.to have_current_path(path)
+  expect(page).to have_current_path(path)
 end
 
 Then("I should see the list of primary placement dates") do
@@ -71,7 +71,7 @@ end
 
 Then("I should be on the {string} page for my chosen school") do |string|
   path = path_for(string, school: @school)
-  expect page.to have_current_path(path)
+  expect(page).to have_current_path(path)
 end
 
 Then("I should see the duration listed in each radio button label") do

@@ -7,7 +7,7 @@ feature "Save the referer" do
     click_on "Submit feedback"
     click_on "Accept analytics cookies"
 
-    expect(page).to have_current_path(root_path, ignore_query: true)
+    expect(page).to have_current_path(root_path)
   end
 
   scenario "a user accepts the cookies from valid path" do
@@ -15,7 +15,7 @@ feature "Save the referer" do
 
     click_on "Accept analytics cookies"
 
-    expect(page).to have_current_path(root_path, ignore_query: true)
+    expect(page).to have_current_path(root_path)
   end
 
   scenario "a user accepts the cookies from a blacklisted path" do
@@ -23,6 +23,6 @@ feature "Save the referer" do
 
     click_on "Accept analytics cookies"
 
-    expect(page).to have_current_path(edit_cookie_preference_path, ignore_query: true)
+    expect(page).to have_current_path(edit_cookie_preference_path)
   end
 end

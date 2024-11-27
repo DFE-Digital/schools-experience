@@ -104,12 +104,12 @@ Given("I search for schools near {string}") do |string|
   visit(new_candidates_school_search_path)
   fill_in 'Enter location or postcode', with: string
   click_button 'Search'
-  expect page.to have_current_path(candidates_schools_path)
+  expect(page).to have_current_path(candidates_schools_path)
 end
 
 When("I click back on the results screen") do
   click_link 'Back'
-  expect page.to have_current_path(new_candidates_school_search_path)
+  expect(page).to have_current_path(new_candidates_school_search_path)
 end
 
 Then("the location input should be populated with {string}") do |string|

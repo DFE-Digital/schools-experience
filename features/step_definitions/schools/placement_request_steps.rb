@@ -67,7 +67,7 @@ end
 Given("I am on the placement request page") do
   path = path_for('placement request', placement_request: @placement_request)
   visit(path)
-  expect page.to have_current_path(path)
+  expect(page).to have_current_path(path)
 end
 
 Then("I should see all the upcoming requests listed") do
@@ -164,7 +164,7 @@ end
 Then("I should be on the confirm booking page") do
   path = path_for('confirm booking', placement_request: @placement_request)
   visit(path)
-  expect page.to have_current_path(path)
+  expect(page).to have_current_path(path)
 end
 
 Then("I should see a table with the following headings:") do |table|
@@ -277,7 +277,7 @@ end
 When("I am on the flagged placement request page") do
   path = path_for('placement request', placement_request: @placement_requests.last)
   visit(path)
-  expect page.to have_current_path(path)
+  expect(page).to have_current_path(path)
 end
 
 Then("I should see the warning details") do

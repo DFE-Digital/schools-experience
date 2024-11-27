@@ -6,7 +6,7 @@ end
 Given("I am on the profile page for the chosen school") do
   path = candidates_school_path(@school.urn)
   visit(path)
-  expect page.to have_current_path(path)
+  expect(page).to have_current_path(path)
 end
 
 Given("I am on the profile page for the school") do

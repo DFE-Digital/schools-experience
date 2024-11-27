@@ -45,5 +45,5 @@ Given "I have chosen a subject specific date" do
 end
 
 Given "I should not have been kicked back to the start of the wizard" do
-  expect(page).to have_no_current_path(/subject_and_date_information/)
+  expect(page).not_to have_current_path(/subject_and_date_information/)
 end

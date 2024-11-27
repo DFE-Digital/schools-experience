@@ -39,7 +39,7 @@ Then("I click the link to the close confirmation page") do
 end
 
 Then "I should be on the Are you sure you want to close this date page" do
-  expect(page).to have_current_path schools_placement_date_close_path(placement_date_id: Bookings::PlacementDate.last.id), ignore_query: true
+  expect(page).to have_current_path(schools_placement_date_close_path(placement_date_id: Bookings::PlacementDate.last.id))
 end
 
 Then("there should be a {string} link to the new placement date page") do |string|

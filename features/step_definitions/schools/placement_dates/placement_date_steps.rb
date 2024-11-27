@@ -62,7 +62,7 @@ Given "I have previously selected {string}" do |subject_name|
   click_button('Continue')
   click_button('Publish placement date')
 
-  expect page.to have_current_path(path_for('placement dates'))
+  expect(page).to have_current_path(path_for('placement dates'))
   expect(page).to have_content(subject_name)
 end
 
@@ -113,7 +113,7 @@ end
 When "I try to edit the subjects for my newly-created placement date" do
   path = path_for('new subject selection', placement_date_id: Bookings::PlacementDate.last.id)
   visit path
-  expect page.to have_current_path(path)
+  expect(page).to have_current_path(path)
 end
 
 Then "I should see the date summary row" do
@@ -144,12 +144,12 @@ Then "there should be a {string} number field" do |string|
 end
 
 Then("I should be on the {string} page for my placement date") do |page_name|
-  expect page.to have_current_path(path_for(page_name, placement_date_id: @school.bookings_placement_dates.last.id))
+  expect(page).to have_current_path(path_for(page_name, placement_date_id: @school.bookings_placement_dates.last.id))
 end
 
 Then "I should be on the new configuration page for this date" do
   expect(page).to have_current_path \
-    path_for('new configuration', placement_date_id: @school.bookings_placement_dates.last.id), ignore_query: true
+    path_for('new configuration', placement_date_id: @school.bookings_placement_dates.last.id)
 end
 
 Then "I should see a list of subjects the school offers" do

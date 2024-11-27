@@ -19,7 +19,7 @@ Given("I have progressed to the {string} page for the {string} placement request
     bookings_placement_request: @placement_request)
   path = path_for(string, placement_request: @placement_request)
   visit(path)
-  expect page.to have_current_path(path)
+  expect(page).to have_current_path(path)
 end
 
 Then("I should see an email preview that has the following sections:") do |table|

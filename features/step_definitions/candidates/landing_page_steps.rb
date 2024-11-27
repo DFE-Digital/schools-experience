@@ -34,11 +34,11 @@ ensure
 end
 
 Then("I should be on the {string} page") do |string|
-  expect page.to have_current_path(path_for(string))
+  expect(page).to have_current_path(path_for(string))
 end
 
 Then("I should be on the {string} page for my school of choice") do |string|
-  expect page.to have_current_path(path_for(string, school: @school))
+  expect(page).to have_current_path(path_for(string, school: @school))
 end
 
 Then("I should see a column on the right with the following useful links:") do |table|

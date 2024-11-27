@@ -6,7 +6,7 @@ end
 Given("I am on the accept placement request page") do
   path = path_for("accept placement request", placement_request: @placement_request)
   visit(path)
-  expect page.to have_current_path(path)
+  expect(page).to have_current_path(path)
 end
 
 Then("every row of the booking details list should have a {string} link") do |string|
@@ -43,7 +43,7 @@ end
 When("I am on the {string} screen for that placement request") do |string|
   path = path_for(string, placement_request: @placement_request)
   visit(path)
-  expect page.to have_current_path(path)
+  expect(page).to have_current_path(path)
 end
 
 Then("the {string} link should take me to the {string} page") do |link_text, screen|

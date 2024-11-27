@@ -38,7 +38,7 @@ end
 When("I am viewing my chosen cancelled booking") do
   path = path_for('cancelled booking', booking_id: @booking_id)
   visit(path)
-  expect page.to have_current_path(path)
+  expect(page).to have_current_path(path)
 end
 
 Given("there is a cancelled booking") do
