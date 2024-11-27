@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :placement_request, class: Bookings::PlacementRequest do
+  factory :placement_request, class: 'Bookings::PlacementRequest' do
     association \
       :school,
       :with_profile,

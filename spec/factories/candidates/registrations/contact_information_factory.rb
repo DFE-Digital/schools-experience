@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :contact_information, class: Candidates::Registrations::ContactInformation do
+  factory :contact_information, class: 'Candidates::Registrations::ContactInformation' do
     urn { 11_048 }
     building { 'New house' }
     street { 'Test street' }
