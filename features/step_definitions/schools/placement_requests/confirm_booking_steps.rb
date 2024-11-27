@@ -3,12 +3,12 @@ Given("I am on the {string} page for my chosen placement request") do |identifie
 
   path = path_for(identifier, placement_request: @placement_request)
   visit(path)
-  expect(page.current_path).to eql(path)
+  expect page.to have_current_path(path)
 end
 
 Then("I should be on the {string} page for my chosen placement request") do |identifier|
   path = path_for(identifier, placement_request: @placement_request)
-  expect(page.current_path).to eql(path)
+  expect page.to have_current_path(path)
 end
 
 When("I am on the {string} page for my fixed placement request") do |identifier|
@@ -22,7 +22,7 @@ When("I am on the {string} page for my fixed placement request") do |identifier|
 
   path = path_for(identifier, placement_request: @placement_request)
   visit(path)
-  expect(page.current_path).to eql(path)
+  expect page.to have_current_path(path)
 end
 
 Then("the subheading should be {string} followed by the candidate's name") do |subheading|
@@ -103,7 +103,7 @@ end
 Given("I am on the {string} page for the placement request") do |string|
   path = path_for(string, placement_request: @placement_request)
   visit(path)
-  expect(page.current_path).to eql(path)
+  expect page.to have_current_path(path)
 end
 
 When("the school has no prior accepted placement requests") do
@@ -137,6 +137,6 @@ Then("there should be an {string} button and a {string} link") do |button_text, 
 end
 
 Then("I should be on the {string} page for the placement request") do |string|
-  expect(page.current_path).to eql(path_for(string, placement_request: @placement_request))
+  expect page.to have_current_path(path_for(string, placement_request: @placement_request))
   expect(@placement_request.booking).to be_present
 end

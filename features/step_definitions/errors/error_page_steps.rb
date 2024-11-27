@@ -4,7 +4,7 @@ Given("I am on the {string} error page") do |http_error|
 
   path = "/#{code}"
   visit(path)
-  expect(page.current_path).to eql(path)
+  expect page.to have_current_path(path)
 end
 
 Then("there should be an email address for support") do

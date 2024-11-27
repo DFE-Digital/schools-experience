@@ -33,7 +33,7 @@ end
 Given("I am viewing my chosen booking") do
   path = path_for('booking', booking_id: @booking_id)
   visit(path)
-  expect(page.current_path).to eql(path)
+  expect page.to have_current_path(path)
 end
 
 And("there is/are {int} booking/bookings") do |count|

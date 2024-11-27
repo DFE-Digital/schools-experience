@@ -8,7 +8,7 @@ Given("I am on the edit page for my {string} placement") do |type|
   )
   path = edit_schools_placement_date_path(@placement_date)
   visit path
-  expect(page.current_path).to eql(new_schools_placement_date_placement_detail_path(@placement_date))
+  expect page.to have_current_path(new_schools_placement_date_placement_detail_path(@placement_date))
 end
 
 Given("I am on the edit page for my placement that is {string}") do |state|
@@ -21,7 +21,7 @@ Given("I am on the edit page for my placement that is {string}") do |state|
   )
   path = new_schools_placement_date_placement_detail_path(@placement_date)
   visit path
-  expect(page.current_path).to eql(path)
+  expect page.to have_current_path(path)
 end
 
 When("I click the 'Close placement date' link") do

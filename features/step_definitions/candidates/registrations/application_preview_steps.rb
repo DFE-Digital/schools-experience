@@ -37,7 +37,7 @@ Given("I have filled in my subject and date information successfully") do
 
   click_button 'Continue'
 
-  expect(page.current_path).to eql \
+  expect(page).to have_current_path \
     "/candidates/schools/#{@school.urn}/registrations/personal_information/new"
 end
 
@@ -47,8 +47,8 @@ Given("I have filled in my personal information successfully") do
   fill_in 'Last name', with: 'mctest'
   fill_in 'Email address', with: 'unknown@example.com'
   click_button 'Continue'
-  expect(page.current_path).to eq \
-    "/candidates/schools/#{@school.urn}/registrations/contact_information/new"
+  expect(page).to have_current_path \
+    "/candidates/schools/#{@school.urn}/registrations/contact_information/new", ignore_query: true
 end
 
 Given("I have filled in my contact information successfully") do
@@ -60,16 +60,16 @@ Given("I have filled in my contact information successfully") do
   fill_in 'Postcode', with: 'TE57 1NG'
   fill_in 'UK telephone number', with: '01234567890'
   click_button 'Continue'
-  expect(page.current_path).to eq \
-    "/candidates/schools/#{@school.urn}/registrations/education/new"
+  expect(page).to have_current_path \
+    "/candidates/schools/#{@school.urn}/registrations/education/new", ignore_query: true
 end
 
 Given("I have filled in my education details successfully") do
   choose 'Graduate or postgraduate'
   fill_in "What subject are you studying?", with: "Physics"
   click_button 'Continue'
-  expect(page.current_path).to eq \
-    "/candidates/schools/#{@school.urn}/registrations/teaching_preference/new"
+  expect(page).to have_current_path \
+    "/candidates/schools/#{@school.urn}/registrations/teaching_preference/new", ignore_query: true
 end
 
 Given("I have filled in my teaching preferences successfully") do
@@ -77,24 +77,24 @@ Given("I have filled in my teaching preferences successfully") do
   select 'Physics', from: 'First choice'
   select 'Mathematics', from: 'Second choice'
   click_button 'Continue'
-  expect(page.current_path).to eq \
-    "/candidates/schools/#{@school.urn}/registrations/placement_preference/new"
+  expect(page).to have_current_path \
+    "/candidates/schools/#{@school.urn}/registrations/placement_preference/new", ignore_query: true
 end
 
 Given("I have filled in my placement preferences for fixed dates successfully") do
   fill_in 'Enter what you want to get out of your placement', with: 'I enjoy teaching'
   click_button 'Continue'
 
-  expect(page.current_path).to eq \
-    "/candidates/schools/#{@school.urn}/registrations/background_check/new"
+  expect(page).to have_current_path \
+    "/candidates/schools/#{@school.urn}/registrations/background_check/new", ignore_query: true
 end
 
 Given("I have filled in my placement preferences successfully") do
   fill_in 'Enter what you want to get out of your placement', with: 'I enjoy teaching'
   click_button 'Continue'
 
-  expect(page.current_path).to eq \
-    "/candidates/schools/#{@school.urn}/registrations/availability_preference/new"
+  expect(page).to have_current_path \
+    "/candidates/schools/#{@school.urn}/registrations/availability_preference/new", ignore_query: true
 end
 
 Given("I have filled in my availability preferences successfully") do
@@ -102,16 +102,16 @@ Given("I have filled in my availability preferences successfully") do
 
   click_button 'Continue'
 
-  expect(page.current_path).to eq \
-    "/candidates/schools/#{@school.urn}/registrations/background_check/new"
+  expect(page).to have_current_path \
+    "/candidates/schools/#{@school.urn}/registrations/background_check/new", ignore_query: true
 end
 
 Given("I have filled in my background checks successfully") do
   # Submit registrations/background_check form successfully
   choose 'Yes'
   click_button 'Continue'
-  expect(page.current_path).to eq \
-    "/candidates/schools/#{@school.urn}/registrations/application_preview"
+  expect(page).to have_current_path \
+    "/candidates/schools/#{@school.urn}/registrations/application_preview", ignore_query: true
 end
 
 Given("my school has flexible dates") do
@@ -130,7 +130,7 @@ Given("the/my school has fixed dates") do
 end
 
 When("I am on the {string} page for my choice of school") do |string|
-  expect(page.current_path).to eql(path_for(string, school: @school.urn))
+  expect page.to have_current_path(path_for(string, school: @school.urn))
 end
 
 Then("I should see the following summary rows:") do |table|

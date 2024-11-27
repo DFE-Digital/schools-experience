@@ -1,5 +1,5 @@
 Given("I have progressed to the {string} page for my chosen placement request") do |string|
-  expect(page.current_path).to eql(path_for(string, placement_request: @placement_request))
+  expect page.to have_current_path(path_for(string, placement_request: @placement_request))
 end
 
 Given("I have completed the 'confirm booking' page") do

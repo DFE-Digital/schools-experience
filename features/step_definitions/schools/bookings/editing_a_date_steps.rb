@@ -1,12 +1,12 @@
 When("I am on the {string} page for my booking") do |string|
   path = path_for(string, booking_id: @booking_id)
   visit(path)
-  expect(page.current_path).to eql(path)
+  expect page.to have_current_path(path)
 end
 
 Then("I should be on the date changed confirmation page") do
   path = path_for('booking date changed', booking_id: @booking_id)
-  expect(page.current_path).to eql(path)
+  expect page.to have_current_path(path)
 end
 
 Then("I should see a {string} link to the show page for my booking") do |string|

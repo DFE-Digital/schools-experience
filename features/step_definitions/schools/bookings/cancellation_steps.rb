@@ -1,7 +1,7 @@
 When("I am on the cancel booking page") do
   path = path_for('cancel booking', booking_id: @booking_id)
   visit(path)
-  expect(page.current_path).to eql(path)
+  expect page.to have_current_path(path)
 end
 
 Given("I have progressed to the cancellation email preview page") do
