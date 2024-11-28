@@ -25,6 +25,10 @@ class Bookings::SchoolSync
     end
   end
 
+  def import_sample
+    Bookings::Data::SchoolMassImporter.new(data_sample, email_override).import
+  end
+
   # update any school records that differ from edubase source
   def update_all
     data_in_batches do |batch|
@@ -48,6 +52,10 @@ private
     Bookings::Data::GiasDataFile.new.path
   end
 
+  def gias_data_sample_file
+    Bookings::Data::GiasDataFile::SAMPLE_PATH
+  end
+
   def data_in_batches
     rows = []
     CSV.foreach(gias_data_file, headers: true, encoding: "ISO-8859-1:UTF-8") do |row|
@@ -62,5 +70,13 @@ private
     yield rows if rows.any?
 
     true
+  end
+
+  def data_sample
+    rows = []
+    CSV.foreach(gias_data_sample_file, headers: true, encoding: "ISO-8859-1:UTF-8") do |row|
+      rows << row
+    end
+    rows
   end
 end

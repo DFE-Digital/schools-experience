@@ -23,7 +23,7 @@ gem 'geocoder'
 gem 'puma', '~> 6.4.3'
 
 # Transpile app-like JavaScript. Read more: https://github.com/shakacode/shakapacker
-gem 'shakapacker', '8.0.1'
+gem 'shakapacker', '8.0.2'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
@@ -59,7 +59,7 @@ gem "redis", "~> 4.7"
 
 gem 'kaminari'
 
-gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.14.2"
+gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.15.1"
 gem 'dfe-autocomplete', require: 'dfe/autocomplete', github: 'DFE-Digital/dfe-autocomplete'
 gem 'dfe-reference-data', require: 'dfe/reference_data', github: 'DFE-Digital/dfe-reference-data', tag: 'v3.5.0'
 
@@ -154,6 +154,9 @@ group :test do
 
   gem 'rails-controller-testing', '>= 1.0.5'
   gem "rspec-json_expectations", "~> 2.2"
+  gem 'rubocop-capybara', '~> 2.21'
+  gem 'rubocop-factory_bot', '~> 2.26'
+  gem 'rubocop-rspec', '~> 3.2'
   gem 'shoulda-matchers', '~> 6.1'
 
   gem 'capybara-screenshot'

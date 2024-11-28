@@ -17,6 +17,9 @@
 default: &default
   adapter: postgis
   encoding: unicode
+  # AKS DATABASE_URL will start with `postgres://`, which overrides the postgis adapter
+  # so we need to replace `postgres` if it occurs at the beginning of DATABASE_URL
+  url: <%= ENV.fetch('DATABASE_URL', 'postgis://postgres@localhost:5432').sub(/^postgres/, "postgis") %>
   # For details on connection pooling, see Rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
@@ -98,10 +101,6 @@ test: &test
 #
 production: &production
   <<: *default
-  host: <%= ENV['DB_HOST'] %>
-  database: <%= ENV['DB_DATABASE'] %>
-  username: <%= ENV['DB_USERNAME'] %>
-  password: <%= ENV['DB_PASSWORD'] %>
   keepalives: 1
   keepalives_idle: 60
   keepalives_interval: 20
