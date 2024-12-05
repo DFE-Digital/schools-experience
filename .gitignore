@@ -48,10 +48,6 @@ coverage
 # Visual Studio Code
 .vscode
 
-# DevOps files
-
-bin/terrafile
-
 # Terraform files
 vendor/
 
