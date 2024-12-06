@@ -49,6 +49,13 @@ variable "app_replicas" {
   description = "number of replicas of the web app"
   default     = 1
 }
+variable "enable_dfe_analytics_federated_auth" {
+  description = "Create the resources in Google cloud for federated authentication and enable in application"
+  default     = false
+}
+variable "dataset_name" {
+  description = "dfe analytics dataset name in Google Bigquery"
+}
 
 variable "enable_monitoring" {
   default     = false

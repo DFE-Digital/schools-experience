@@ -3,6 +3,10 @@ on:
   pull_request:
     types: [closed]
 
+permissions:
+  id-token: write
+  pull-requests: write
+
 jobs:
   destroy:
     name: Destroy
@@ -16,12 +20,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Set Environment variables
         shell: bash
         run: |
           tf_vars_file=terraform/aks/config/review.tfvars.json
           terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/terraform.tf | grep -o [0-9\.]*)
           echo "TERRAFORM_VERSION=$terraform_version" >> $GITHUB_ENV
+
+      - uses: google-github-actions/auth@v2
+        with:
+          project_id: get-into-teaching
+          workload_identity_provider: projects/574582782335/locations/global/workloadIdentityPools/schools-experience/providers/schools-experience
 
       - name: Use Terraform ${{ env.TERRAFORM_VERSION }}
         uses: hashicorp/setup-terraform@v3

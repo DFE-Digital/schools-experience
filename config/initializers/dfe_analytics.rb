@@ -53,4 +53,6 @@ DfE::Analytics.configure do |config|
   # config.environment = ENV.fetch('RAILS_ENV', 'development')
 
   config.bigquery_maintenance_window = "08-09-2024 18:00..08-09-2024 19:00"
+
+  config.azure_federated_auth = ENV.include? "GOOGLE_CLOUD_CREDENTIALS"
 end
