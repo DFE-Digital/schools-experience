@@ -11,6 +11,9 @@ on:
         description: Release Tag
         required: true
 
+permissions:
+  id-token: write
+
 jobs:
   manual:
     name: Deploy to ${{github.event.inputs.environment}}
@@ -31,7 +34,7 @@ jobs:
       - uses: Azure/login@v2
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
-      
+
       - name: Fetch slack token
         uses: azure/CLI@v2
         id: fetch-slack-secret
