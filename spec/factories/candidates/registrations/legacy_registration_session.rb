@@ -1,6 +1,6 @@
 # TODO: SE-1877 remove this file
 FactoryBot.define do
-  factory :legacy_registration_session, class: Candidates::Registrations::RegistrationSession do
+  factory :legacy_registration_session, class: 'Candidates::Registrations::RegistrationSession' do
     transient do
       urn { 11_048 }
       bookings_placement_date_id { 16 }

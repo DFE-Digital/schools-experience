@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :teaching_preference, class: Candidates::Registrations::TeachingPreference do
+  factory :teaching_preference, class: 'Candidates::Registrations::TeachingPreference' do
     transient do
       school { FactoryBot.create :bookings_school }
     end

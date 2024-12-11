@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :api_schools_experience_sign_up, class: GetIntoTeachingApiClient::SchoolsExperienceSignUp do
+  factory :api_schools_experience_sign_up, class: 'GetIntoTeachingApiClient::SchoolsExperienceSignUp' do
     candidate_id { SecureRandom.uuid }
     master_id { nil }
     merged { false }
@@ -28,12 +28,12 @@ FactoryBot.define do
     end
   end
 
-  factory :api_privacy_policy, class: GetIntoTeachingApiClient::PrivacyPolicy do
+  factory :api_privacy_policy, class: 'GetIntoTeachingApiClient::PrivacyPolicy' do
     id { SecureRandom.uuid }
     text { "policy text" }
   end
 
-  factory :api_teaching_subject, class: GetIntoTeachingApiClient::TeachingSubject do
+  factory :api_teaching_subject, class: 'GetIntoTeachingApiClient::TeachingSubject' do
     id { SecureRandom.uuid }
     sequence(:value) { |i| "Gitis Subject #{i}" }
   end

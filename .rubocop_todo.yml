@@ -16,11 +16,6 @@ Capybara/VisibilityMatcher:
   Exclude:
     - "features/step_definitions/candidates/schools/filtering_steps.rb"
 
-# Offense count: 36
-# This cop supports safe autocorrection (--autocorrect).
-FactoryBot/FactoryClassName:
-  Enabled: false
-
 # Offense count: 3
 # Configuration parameters: EnforcedStyle, AllowedGems, Include.
 # SupportedStyles: Gemfile, gems.rb, gemspec
