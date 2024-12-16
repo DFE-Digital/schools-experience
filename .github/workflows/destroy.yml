@@ -55,5 +55,11 @@ jobs:
         run: |
             make ci review terraform-destroy PR_NUMBER=${{github.event.number}}
 
+      - name: Set Container Access Key
+        run: |
+          TFSTATE_CONTAINER_ACCESS_KEY="$(az storage account keys list -g s189t01-gse-rv-rg -n s189t01gsetfstatervsa | jq -r '.[0].value')"
+          echo "::add-mask::$TFSTATE_CONTAINER_ACCESS_KEY"
+          echo "TFSTATE_CONTAINER_ACCESS_KEY=$TFSTATE_CONTAINER_ACCESS_KEY" >> $GITHUB_ENV
+
       - name: Delete Terraform State File
-        run:  az storage blob delete --container-name  terraform-state --account-name s189t01gsetfstatervsa --account-key ${{secrets.ARM_ACCESS_KEY}} -n ${{github.event.number}}_kubernetes.tfstate
+        run:  az storage blob delete --container-name  terraform-state --account-name s189t01gsetfstatervsa --account-key ${TFSTATE_CONTAINER_ACCESS_KEY} -n ${{github.event.number}}_kubernetes.tfstate

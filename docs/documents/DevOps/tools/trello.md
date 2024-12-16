@@ -17,7 +17,7 @@ In School Experience there is a workflow which uses the [Github Action](https://
 [Get School Experience](https://trello.com/b/nS4OTSIl/get-school-experience)
 
 ## Change Key
-The trello keys are linked to the service account schoolexperience-tech@digital.education.gov.uk. The email is a Google group and the trello password
+The trello keys are linked to the service account schoolexperience-tech@digital.education.gov.uk. The email is a 365 distribution list and the trello password
 is kept in azure key vault s105p01-kv. To generate the API key and token, follow the instructions on [Developer API Keys](https://trello.com/app-key).
 
 Then once you have them, use the command `make development edit-infra-secrets` to edit your secrets and store them in Azure key vault.

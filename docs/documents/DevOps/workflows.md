@@ -31,9 +31,6 @@ This is the heart of the deployment system, it has a number of phases
 	8. **Quality Assurance** - Also known as the staging area, this is a near live test, ensuring all the components hang together, so there is a high degree of confidence the Production deployment will work.
 	9. **Production** - The final deployment to the live system
 
-### [Check Service Principal](https://github.com/DFE-Digital/schools-experience/blob/master/.github/workflows/check_sp.yml)
-Ran each night this workflow checks that Service Prinicipal has at least 30 days left before its security credentials expire. If due to expire a message is sent to [SLACK](https://slack.com) with instructions on how to reset it.
-
 ### [DO NOT MERGE](https://github.com/DFE-Digital/schools-experience/blob/master/.github/workflows/stop_merges.yml)
 When a PR is labelled with DO NOT MERGE, this workflow will prevent the system from merging it.
 
