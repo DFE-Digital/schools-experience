@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: get-school-experience-maintenance
+  labels:
+    app: get-school-experience-maintenance
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: get-school-experience-maintenance
+  template:
+    metadata:
+      labels:
+        app: get-school-experience-maintenance
+    spec:
+      nodeSelector:
+        teacherservices.cloud/node_pool: applications
+        kubernetes.io/os: linux
+      containers:
+      - name: get-school-experience-maintenance
+        image: ghcr.io/dfe-digital/schools-experience-maintenance:#MAINTENANCE_IMAGE_TAG#
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: 64M
+            cpu: 0.1
+          limits:
+            memory: 64M
+            cpu: 1
