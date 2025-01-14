@@ -108,7 +108,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
   end
 
   def complete_contact_information_step
-    expect(page.current_path).to eq \
+    expect(page).to have_current_path \
       "/candidates/schools/#{school_urn}/registrations/contact_information/new"
 
     # Submit contact information form with errors
@@ -127,7 +127,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
   end
 
   def complete_education_step
-    expect(page.current_path).to eq \
+    expect(page).to have_current_path \
       "/candidates/schools/#{school_urn}/registrations/education/new"
 
     # Submit registrations/education form with errors
@@ -142,7 +142,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
   end
 
   def complete_teaching_preference_step
-    expect(page.current_path).to eq \
+    expect(page).to have_current_path \
       "/candidates/schools/#{school_urn}/registrations/teaching_preference/new"
 
     # Submit registrations/teaching_preference form with errors
@@ -157,7 +157,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
   end
 
   def complete_placement_preference_step
-    expect(page.current_path).to eq \
+    expect(page).to have_current_path \
       "/candidates/schools/#{school_urn}/registrations/placement_preference/new"
 
     # Submit registrations/placement_preference form with errors
@@ -171,7 +171,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
   end
 
   def complete_availability_preference_step
-    expect(page.current_path).to eq \
+    expect(page).to have_current_path \
       "/candidates/schools/#{school_urn}/registrations/availability_preference/new"
 
     # Submit registrations/availability_preference form with errors
@@ -185,7 +185,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
   end
 
   def complete_background_step
-    expect(page.current_path).to eq \
+    expect(page).to have_current_path \
       "/candidates/schools/#{school_urn}/registrations/background_check/new"
 
     # Submit registrations/background_check form with errors
@@ -198,7 +198,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
   end
 
   def complete_application_preview_step(name: 'testy mctest', email: nil, button_text: 'Accept and send')
-    expect(page.current_path).to eq \
+    expect(page).to have_current_path \
       "/candidates/schools/#{school_urn}/registrations/application_preview"
 
     # Expect preview to match the data we successfully submited
@@ -248,7 +248,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
 
   def get_bounced_to_contact_information_step
     visit "/candidates/schools/#{school_urn}/registrations/application_preview"
-    expect(page.current_path).to eq \
+    expect(page).to have_current_path \
       "/candidates/schools/#{school_urn}/registrations/contact_information/new"
   end
 end
