@@ -46,6 +46,8 @@ module "web_application" {
   enable_logit           = var.enable_logit
 
   enable_prometheus_monitoring = var.enable_prometheus_monitoring
+
+  send_traffic_to_maintenance_page = true
 }
 
 module "worker_application" {
