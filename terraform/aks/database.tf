@@ -19,6 +19,7 @@ module "postgres" {
   azure_maintenance_window       = var.azure_maintenance_window
   server_docker_image            = "postgis/postgis:14-3.4"
   create_database                = var.create_database
+  send_traffic_to_maintenance_page = true
 }
 
 module "redis-cache" {
