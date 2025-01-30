@@ -88,7 +88,7 @@ gem 'activerecord-import'
 # See https://github.com/adzap/validates_timeliness/pull/213
 gem "validates_timeliness", github: "mitsuru/validates_timeliness", ref: "f28a625"
 
-gem "get_into_teaching_api_client_faraday", '=3.4.0', github: "DFE-Digital/get-into-teaching-api-ruby-client", ref: 'f538756', require: "api/client"
+gem "get_into_teaching_api_client_faraday", '>= 3.5.0', github: "DFE-Digital/get-into-teaching-api-ruby-client", require: "api/client"
 
 # See https://github.com/mikel/mail/pull/1439
 gem 'net-smtp', require: false

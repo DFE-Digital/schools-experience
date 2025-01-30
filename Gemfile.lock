@@ -31,12 +31,11 @@ GIT
 
 GIT
   remote: https://github.com/DFE-Digital/get-into-teaching-api-ruby-client.git
-  revision: f538756a3dfce0125a1f676f6f37680665c5a34d
-  ref: f538756
+  revision: ffeb13fb301cc177f9a578ef21145500ce9ca763
   specs:
-    get_into_teaching_api_client (3.4.0)
+    get_into_teaching_api_client (3.5.0)
       faraday (~> 1.0, >= 1.0.1)
-    get_into_teaching_api_client_faraday (3.4.0)
+    get_into_teaching_api_client_faraday (3.5.0)
       activesupport
       faraday
       faraday-encoding
@@ -259,7 +258,7 @@ GEM
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
     faraday-retry (1.0.3)
-    faraday_middleware (1.2.0)
+    faraday_middleware (1.2.1)
       faraday (~> 1.0)
     faraday_middleware-circuit_breaker (0.6.0)
       faraday (>= 0.9, < 3.0)
@@ -765,7 +764,7 @@ DEPENDENCIES
   faraday
   foreman
   geocoder
-  get_into_teaching_api_client_faraday (= 3.4.0)!
+  get_into_teaching_api_client_faraday (>= 3.5.0)!
   govuk_design_system_formbuilder (~> 4.0.0)
   hashids
   ice_cube
