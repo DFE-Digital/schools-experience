@@ -119,7 +119,11 @@ variable "webapp_command" {
 variable "create_database" {
   default = true
 }
-
+variable "send_traffic_to_maintenance_page" {
+  description = "During a maintenance operation, keep sending traffic to the maintenance page instead of resetting the ingress"
+  type        = bool
+  default     = false
+}
 locals {
   azure_credentials = try(jsondecode(var.azure_credentials_json), null)
   postgres_ssl_mode = var.enable_postgres_ssl ? "require" : "disable"
