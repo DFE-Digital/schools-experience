@@ -2,6 +2,9 @@ module Bookings
   class RegistrationContactMapper
     attr_reader :registration_session, :gitis_contact
 
+    CREATION_CHANNEL_SOURCE_SCHOOL_EXPERIENCE = 222_750_013
+    CREATION_CHANNEL_SERVICE_SCHOOL_EXPERIENCE = 222_750_001
+
     delegate :personal_information, :contact_information, :education, :teaching_preference,
       :placement_preference, :availability_preference, :background_check, to: :registration_session
 
@@ -34,6 +37,8 @@ module Bookings
       gitis_contact.accepted_policy_id = current_privacy_policy.id
 
       gitis_contact.degree_subject = education.degree_subject
+      gitis_contact.creation_channel_source_id = CREATION_CHANNEL_SOURCE_SCHOOL_EXPERIENCE
+      gitis_contact.creation_channel_service_id = CREATION_CHANNEL_SERVICE_SCHOOL_EXPERIENCE
 
       gitis_contact
     end
