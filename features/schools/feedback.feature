@@ -27,7 +27,6 @@ Feature: Feedback
 
           And there should be a 'How could we improve the service? (optional)' text area
 
-    @javascript
     Scenario: Completing the form with error
         Given I am on the 'new schools feedback' page
         When I choose 'Something else' from the 'What did you come to do on the service?' radio buttons
@@ -36,7 +35,6 @@ Feature: Feedback
         And I click the 'Submit feedback' button
         Then I should see an error
 
-    @javascript
     Scenario: Completing the form successfully
         Given I am on the 'new schools feedback' page
         When I choose 'Something else' from the 'What did you come to do on the service?' radio buttons
