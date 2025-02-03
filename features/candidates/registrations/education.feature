@@ -25,13 +25,15 @@ Feature: Entering candidate education details
         When I submit the form
         Then I should be on the 'teaching preference' page for my school of choice
 
-    @javascript
+    # Disabled Javascript scenario which requires Selenium+javascript to run (incompatible with Alpine 3.21)
+    @wip
     Scenario: Hiding degree subject choice when candidate has no degree
         Given I am on the 'education' page for my school of choice
         When I choose 'I don\'t have a degree and am not studying for one' as my degree stage
         Then I should not see any subject choices
 
-    @javascript
+    # Disabled Javascript scenario which requires Selenium+javascript to run (incompatible with Alpine 3.21)
+    @wip
     Scenario: Showing degree subject choice when candidate has a degree
         Given I am on the 'education' page for my school of choice
         When I choose 'Final year' as my degree stage

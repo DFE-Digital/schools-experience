@@ -141,6 +141,7 @@ GEM
     ast (2.4.2)
     attr_required (1.0.1)
     base64 (0.2.0)
+    benchmark (0.4.0)
     bigdecimal (3.1.9)
     bindata (2.5.0)
     bindex (0.8.1)
@@ -171,14 +172,13 @@ GEM
     concurrent-ruby (1.3.4)
     connection_pool (2.4.1)
     crack (0.4.5)
-      bigdecimal
       rexml
     crass (1.0.6)
     cronex (0.15.0)
       tzinfo
       unicode (>= 0.4.4.5)
     csv (3.3.0)
-    cucumber (9.2.0)
+    cucumber (9.2.1)
       builder (~> 3.2)
       cucumber-ci-environment (> 9, < 11)
       cucumber-core (> 13, < 14)
@@ -202,10 +202,10 @@ GEM
     cucumber-html-formatter (21.3.1)
       cucumber-messages (> 19, < 25)
     cucumber-messages (22.0.0)
-    cucumber-rails (3.0.0)
+    cucumber-rails (3.1.1)
       capybara (>= 3.11, < 4)
       cucumber (>= 5, < 10)
-      railties (>= 5.2, < 8)
+      railties (>= 5.2, < 9)
     cucumber-tag-expressions (6.1.0)
     daemons (1.4.1)
     database_cleaner (2.1.0)
@@ -222,6 +222,7 @@ GEM
     dotenv-rails (3.1.2)
       dotenv (= 3.1.2)
       railties (>= 6.1)
+    drb (2.2.1)
     dry-initializer (3.1.1)
     erubi (1.13.1)
     et-orbi (1.2.11)
@@ -263,6 +264,7 @@ GEM
     faraday_middleware-circuit_breaker (0.6.0)
       faraday (>= 0.9, < 3.0)
       stoplight (>= 2.1, < 4.0)
+    ffi (1.17.0)
     ffi (1.17.0-aarch64-linux-gnu)
     ffi (1.17.0-aarch64-linux-musl)
     ffi (1.17.0-arm-linux-gnu)
@@ -335,6 +337,11 @@ GEM
     ice_cube (0.17.0)
     invisible_captcha (2.3.0)
       rails (>= 5.2)
+    io-console (0.8.0)
+    irb (1.15.1)
+      pp (>= 0.6.0)
+      rdoc (>= 4.0.0)
+      reline (>= 0.4.2)
     json (2.7.5)
     json-jwt (1.15.3.1)
       activesupport (>= 4.2)
@@ -383,6 +390,7 @@ GEM
     multi_test (1.1.0)
     multi_xml (0.6.0)
     multipart-post (2.4.1)
+    mutex_m (0.3.0)
     net-imap (0.5.1)
       date
       net-protocol
@@ -426,6 +434,7 @@ GEM
       validate_url
       webfinger (~> 1.2)
     os (1.1.4)
+    ostruct (0.6.1)
     package_json (0.1.0)
     pagy (8.6.3)
     parallel (1.25.1)
@@ -439,6 +448,9 @@ GEM
       activerecord (>= 6.1)
       activesupport (>= 6.1)
     phonelib (0.9.2)
+    pp (0.6.2)
+      prettyprint
+    prettyprint (0.2.0)
     prometheus-client (4.2.2)
     pry (0.14.2)
       coderay (~> 1.1)
@@ -448,6 +460,9 @@ GEM
       pry (>= 0.13, < 0.15)
     pry-rails (0.3.9)
       pry (>= 0.10.4)
+    psych (5.2.3)
+      date
+      stringio
     public_suffix (6.0.1)
     puma (6.5.0)
       nio4r (~> 2.0)
@@ -514,10 +529,14 @@ GEM
     rb-fsevent (0.11.2)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    rdoc (6.11.0)
+      psych (>= 4.0.0)
     redis (4.8.1)
     redlock (1.3.2)
       redis (>= 3.0.0, < 6.0)
     regexp_parser (2.9.0)
+    reline (0.6.0)
+      io-console (~> 0.5)
     representable (3.2.0)
       declarative (< 0.1.0)
       trailblazer-option (>= 0.1.1, < 0.2.0)
@@ -650,6 +669,7 @@ GEM
       spring (>= 0.9.1)
     stoplight (3.0.2)
       redlock (~> 1.0)
+    stringio (3.1.2)
     swd (1.3.0)
       activesupport (>= 3)
       attr_required (>= 0.0.5)
@@ -745,6 +765,7 @@ DEPENDENCIES
   acts_as_list
   addressable
   amazing_print
+  benchmark
   bootsnap (>= 1.1.0)
   brakeman (>= 6.0.1)
   breasal
@@ -753,13 +774,15 @@ DEPENDENCIES
   capybara (>= 3.38.0)
   capybara-screenshot
   connection_pool
-  cucumber-rails (>= 2.6.1)
+  cucumber (>= 9.2.1)
+  cucumber-rails (>= 3.1.1)
   daemons
   database_cleaner
   dfe-analytics!
   dfe-autocomplete!
   dfe-reference-data!
   dotenv-rails (>= 2.7.6)
+  drb
   factory_bot_rails (>= 6.2.0)
   faraday
   foreman
@@ -769,13 +792,16 @@ DEPENDENCIES
   hashids
   ice_cube
   invisible_captcha (>= 2.0.0)
+  irb
   json (>= 2.3.0)
   kaminari
   listen (>= 3.8.0)
   meta-tags (~> 2.22)
+  mutex_m
   net-smtp
   notifications-ruby-client
   openid_connect
+  ostruct
   parallel_tests
   pg (>= 0.18, < 2.0)
   pg_search
@@ -791,6 +817,7 @@ DEPENDENCIES
   rails-erd
   rails_semantic_logger
   redis (~> 4.7)
+  reline
   rolify
   rspec-json_expectations (~> 2.2)
   rspec-rails (~> 6.1.1)
@@ -824,7 +851,7 @@ DEPENDENCIES
   yabeda-sidekiq
 
 RUBY VERSION
-   ruby 3.1.4p223
+   ruby 3.4.1p0
 
 BUNDLED WITH
-   2.5.11
+   2.6.3
