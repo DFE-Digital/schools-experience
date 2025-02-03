@@ -15,13 +15,15 @@ Feature: Configuring a placement date
     Given I have entered a placement date
     Then the page's main heading should be "Select type of experience"
 
-  @javascript
+  # Disabled Javascript scenario which requires Selenium+javascript to run (incompatible with Alpine 3.21)
+  @wip
   Scenario: Select no max number of bookings
     Given I have entered a placement date
     When I choose 'No' from the "Is there a maximum number of bookings you’ll accept for this date?" radio buttons
     Then there is no 'Enter maximum number of bookings' text area
 
-  @javascript
+  # Disabled Javascript scenario which requires Selenium+javascript to run (incompatible with Alpine 3.21)
+  @wip
   Scenario: Select max number of bookings
     Given I have entered a placement date
     When I choose 'Yes' from the "Is there a maximum number of bookings you’ll accept for this date?" radio buttons
