@@ -64,7 +64,7 @@ module "worker_application" {
   replicas                   = var.sidekiq_replicas
   enable_logit               = var.enable_logit
 
-  enable_prometheus_monitoring = var.enable_prometheus_monitoring
-
-  enable_gcp_wif = true
+  enable_prometheus_monitoring     = var.enable_prometheus_monitoring
+  send_traffic_to_maintenance_page = var.send_traffic_to_maintenance_page
+  enable_gcp_wif                   = true
 }
