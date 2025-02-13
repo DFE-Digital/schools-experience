@@ -343,7 +343,7 @@ GEM
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    json (2.7.5)
+    json (2.9.1)
     json-jwt (1.15.3.1)
       activesupport (>= 4.2)
       aes_key_wrap
