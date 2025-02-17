@@ -19,12 +19,14 @@ Feature: Experience preference
         Given I am on the 'Placement preference' page for my school of choice
         Then there should be a 'Enter what you want to get out of your placement' text area
 
-    @javascript
+    # Disabled Javascript scenario which requires Selenium+javascript to run (incompatible with Alpine 3.21)
+    @wip
     Scenario: Word counting in placement objectives
         Given I am on the 'Placement preference' page for my school of choice
         Then the 'Enter what you want to get out of your placement' word count should say 'You have 150 words remaining'
 
-    @javascript
+    # Disabled Javascript scenario which requires Selenium+javascript to run (incompatible with Alpine 3.21)
+    @wip
     Scenario: Updating the word count in placement objectives
         Given I am on the 'Placement preference' page for my school of choice
         When I enter 'The quick brown fox' into the 'Enter what you want to get out of your placement' text area

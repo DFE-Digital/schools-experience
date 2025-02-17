@@ -3,6 +3,10 @@ on:
   pull_request:
     types: [closed]
 
+permissions:
+  id-token: write
+  pull-requests: write
+
 jobs:
   destroy:
     name: Destroy
@@ -16,12 +20,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Set Environment variables
         shell: bash
         run: |
           tf_vars_file=terraform/aks/config/review.tfvars.json
           terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/terraform.tf | grep -o [0-9\.]*)
           echo "TERRAFORM_VERSION=$terraform_version" >> $GITHUB_ENV
+
+      - uses: google-github-actions/auth@v2
+        with:
+          project_id: get-into-teaching
+          workload_identity_provider: projects/574582782335/locations/global/workloadIdentityPools/schools-experience/providers/schools-experience
 
       - name: Use Terraform ${{ env.TERRAFORM_VERSION }}
         uses: hashicorp/setup-terraform@v3
@@ -45,5 +55,11 @@ jobs:
         run: |
             make ci review terraform-destroy PR_NUMBER=${{github.event.number}}
 
+      - name: Set Container Access Key
+        run: |
+          TFSTATE_CONTAINER_ACCESS_KEY="$(az storage account keys list -g s189t01-gse-rv-rg -n s189t01gsetfstatervsa | jq -r '.[0].value')"
+          echo "::add-mask::$TFSTATE_CONTAINER_ACCESS_KEY"
+          echo "TFSTATE_CONTAINER_ACCESS_KEY=$TFSTATE_CONTAINER_ACCESS_KEY" >> $GITHUB_ENV
+
       - name: Delete Terraform State File
-        run:  az storage blob delete --container-name  terraform-state --account-name s189t01gsetfstatervsa --account-key ${{secrets.ARM_ACCESS_KEY}} -n ${{github.event.number}}_kubernetes.tfstate
+        run:  az storage blob delete --container-name  terraform-state --account-name s189t01gsetfstatervsa --account-key ${TFSTATE_CONTAINER_ACCESS_KEY} -n ${{github.event.number}}_kubernetes.tfstate

@@ -1,24 +1,88 @@
 name: Backup Database
+
 on:
   workflow_dispatch:
-  schedule: # 01:00 UTC
-    - cron: "0 1 * * *"
+    inputs:
+      environment:
+        description: Environment to backup
+        required: true
+        default: development
+        type: choice
+        options:
+        - development
+        - staging
+        - production
+      backup-file:
+        description: |
+          Backup file name (without extension). Default is gse_[env]_adhoc_YYYY-MM-DD. Set it explicitly when backing up a point-in-time (PTR) server. (Optional)
+        required: false
+        type: string
+        default: default
+      db-server:
+        description: |
+          Name of the database server. Default is the live server. When backing up a point-in-time (PTR) server, use the full name of the PTR server. (Optional)
+
+  schedule:
+    - cron: "0 1 * * *" # 01:00 UTC
+
+env:
+  SERVICE_NAME: get-school-experience
+  SERVICE_SHORT: gse
+  TF_VARS_PATH: terraform/aks/config
+
 jobs:
   backup:
     name: Backup Database
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 1
-      matrix:
-        environment: [development,  staging, production]
     environment:
-       name: ${{matrix.environment}}
-    concurrency: ${{matrix.environment}}_${{github.event.number}}
+      name: ${{ inputs.environment || 'production' }}
+    env:
+      DEPLOY_ENV: ${{ inputs.environment || 'production'  }}
+      BACKUP_FILE: ${{ inputs.backup-file || 'schedule'  }}
+
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v4
-      - name: Backup database
-        uses: ./.github/workflows/actions/database-backup
-        with:
-          environment: ${{matrix.environment}}
-          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+    - uses: actions/checkout@v4
+
+    - uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Set environment variables
+      run: |
+        source global_config/${DEPLOY_ENV}.sh
+        tf_vars_file=${TF_VARS_PATH}/${DEPLOY_ENV}.tfvars.json
+        echo "CLUSTER=$(jq -r '.cluster' ${tf_vars_file})" >> $GITHUB_ENV
+        echo "RESOURCE_GROUP_NAME=${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-rg" >> $GITHUB_ENV
+        echo "STORAGE_ACCOUNT_NAME=${AZURE_RESOURCE_PREFIX}${SERVICE_SHORT}dbbkp${CONFIG_SHORT}sa" >> $GITHUB_ENV
+        TODAY=$(date +"%F")
+        echo "DB_SERVER=${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-pg" >> $GITHUB_ENV
+        if [ "${BACKUP_FILE}" == "schedule" ]; then
+          BACKUP_FILE=${SERVICE_SHORT}_${CONFIG_SHORT}_${TODAY}
+        elif [ "${BACKUP_FILE}" == "default" ]; then
+          BACKUP_FILE=${SERVICE_SHORT}_${CONFIG_SHORT}_adhoc_${TODAY}
+        else
+          BACKUP_FILE=${BACKUP_FILE}
+        fi
+        echo "BACKUP_FILE=${BACKUP_FILE}" >> $GITHUB_ENV
+        echo "KEYVAULT_NAME=${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-inf-kv" >> $GITHUB_ENV
+
+    - name: Fetch secrets from key vault
+      uses: azure/CLI@v2
+      id: key-vault-secrets
+      with:
+        inlineScript: |
+          SLACK_WEBHOOK=$(az keyvault secret show --name "SLACK-WEBHOOK" --vault-name ${KEYVAULT_NAME} --query "value" -o tsv)
+          echo "::add-mask::$SLACK_WEBHOOK"
+          echo "SLACK_WEBHOOK=$SLACK_WEBHOOK" >> $GITHUB_OUTPUT
+
+    - name: Backup ${{ env.DEPLOY_ENV }} postgres
+      uses: DFE-Digital/github-actions/backup-postgres@master
+      with:
+        storage-account: ${{ env.STORAGE_ACCOUNT_NAME }}
+        resource-group: ${{ env.RESOURCE_GROUP_NAME }}
+        app-name: get-school-experience-${{ env.DEPLOY_ENV }}
+        cluster: ${{ env.CLUSTER }}
+        azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+        backup-file: ${{ env.BACKUP_FILE }}.sql
+        db-server-name: ${{ inputs.db-server }}
+        slack-webhook: ${{ steps.key-vault-secrets.outputs.SLACK_WEBHOOK }}

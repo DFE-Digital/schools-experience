@@ -1,0 +1,104 @@
+---
+name: Manual Deploy
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Deploy environment"
+        required: true
+        type: choice
+        default: review
+        options:
+        - review
+        - development
+        - staging
+        - production
+      docker-image-tag:
+        description: "Docker image tag to deploy"
+        required: true
+        type: string
+      pull-request-number:
+        description: "Pull request number (required for review environment)"
+        required: false
+        type: string
+
+permissions:
+  id-token: write
+
+jobs:
+  manual:
+    name: Deploy to ${{github.event.inputs.environment}}
+    environment:
+       name: ${{github.event.inputs.environment}}
+
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: set-up-environment
+        uses: DFE-Digital/github-actions/set-up-environment@master
+
+      - uses: Azure/login@v2
+        with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Fetch SECURE USERNAME
+        uses: azure/CLI@v2
+        id: fetch-username
+        with:
+          inlineScript: |
+            SECRET_VALUE=$(az keyvault secret show --name "SECURE-USERNAME" --vault-name "${{ secrets.APP_KEY_VAULT}}" --query "value" -o tsv)
+            echo "::add-mask::$SECRET_VALUE"
+            echo "SECURE_USERNAME=$SECRET_VALUE" >> $GITHUB_OUTPUT
+
+      - name: Fetch SECURE PASSWORD
+        uses: azure/CLI@v2
+        id: fetch-password
+        with:
+          inlineScript: |
+            SECRET_VALUE=$(az keyvault secret show --name "SECURE-PASSWORD" --vault-name "${{ secrets.APP_KEY_VAULT}}" --query "value" -o tsv)
+            echo "::add-mask::$SECRET_VALUE"
+            echo "SECURE_PASSWORD=$SECRET_VALUE" >> $GITHUB_OUTPUT
+
+      - name: Fetch slack token
+        uses: azure/CLI@v2
+        id: fetch-slack-secret
+        with:
+          inlineScript: |
+            SECRET_VALUE=$(az keyvault secret show --name "SLACK-WEBHOOK" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
+            echo "::add-mask::$SECRET_VALUE"
+            echo "SLACK-WEBHOOK=$SECRET_VALUE" >> $GITHUB_OUTPUT
+
+      - name: Deploy to ${{github.event.inputs.environment}}
+        uses: ./.github/workflows/actions/deploy
+        id: deploy
+        with:
+          environment: ${{ github.event.inputs.environment }}
+          sha:  ${{ github.event.inputs.docker-image-tag }}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          pr: ${{ github.event.inputs.pull-request-number }}
+          secure-username: ${{ steps.fetch-username.outputs.SECURE_USERNAME}}
+          secure-password: ${{ steps.fetch-password.outputs.SECURE_PASSWORD}}
+
+      - name: Slack Deploy Notification
+        if: github.event.inputs.environment == 'production'
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_COLOR: ${{env.SLACK_SUCCESS}}
+          SLACK_MESSAGE:  Deploy success
+          SLACK_TITLE: "Manual Deploy to ${{ github.event.inputs.environment }}: ${{ github.event.inputs.docker-image-tag }}"
+          SLACK_WEBHOOK: "${{steps.fetch-slack-secret.outputs.SLACK-WEBHOOK}}"
+          MSG_MINIMAL: true
+
+      - name: Slack Notification
+        if: failure() && github.event.inputs.environment == 'production'
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_COLOR: ${{env.SLACK_ERROR}}
+          SLACK_TITLE: "Manual Deploy Failed: ${{ github.event.inputs.docker-image-tag }}"
+          SLACK_MESSAGE: Failure deploying ${{github.event.inputs.environment}}
+          SLACK_WEBHOOK: "${{steps.fetch-slack-secret.outputs.SLACK-WEBHOOK}}"

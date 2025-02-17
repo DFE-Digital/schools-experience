@@ -49,6 +49,13 @@ variable "app_replicas" {
   description = "number of replicas of the web app"
   default     = 1
 }
+variable "enable_dfe_analytics_federated_auth" {
+  description = "Create the resources in Google cloud for federated authentication and enable in application"
+  default     = false
+}
+variable "dataset_name" {
+  description = "dfe analytics dataset name in Google Bigquery"
+}
 
 variable "enable_monitoring" {
   default     = false
@@ -112,7 +119,11 @@ variable "webapp_command" {
 variable "create_database" {
   default = true
 }
-
+variable "send_traffic_to_maintenance_page" {
+  description = "During a maintenance operation, keep sending traffic to the maintenance page instead of resetting the ingress"
+  type        = bool
+  default     = false
+}
 locals {
   azure_credentials = try(jsondecode(var.azure_credentials_json), null)
   postgres_ssl_mode = var.enable_postgres_ssl ? "require" : "disable"

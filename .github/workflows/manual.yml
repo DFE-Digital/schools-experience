@@ -10,6 +10,12 @@ on:
       tag:
         description: Release Tag
         required: true
+      pr:
+        description: Pull Request Reference
+        required: false
+
+permissions:
+  id-token: write
 
 jobs:
   manual:
@@ -31,7 +37,25 @@ jobs:
       - uses: Azure/login@v2
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
-      
+
+      - name: Fetch SECURE USERNAME
+        uses: azure/CLI@v2
+        id: fetch-username
+        with:
+          inlineScript: |
+            SECRET_VALUE=$(az keyvault secret show --name "SECURE-USERNAME" --vault-name "${{ secrets.APP_KEY_VAULT}}" --query "value" -o tsv)
+            echo "::add-mask::$SECRET_VALUE"
+            echo "SECURE_USERNAME=$SECRET_VALUE" >> $GITHUB_OUTPUT
+
+      - name: Fetch SECURE PASSWORD
+        uses: azure/CLI@v2
+        id: fetch-password
+        with:
+          inlineScript: |
+            SECRET_VALUE=$(az keyvault secret show --name "SECURE-PASSWORD" --vault-name "${{ secrets.APP_KEY_VAULT}}" --query "value" -o tsv)
+            echo "::add-mask::$SECRET_VALUE"
+            echo "SECURE_PASSWORD=$SECRET_VALUE" >> $GITHUB_OUTPUT
+
       - name: Fetch slack token
         uses: azure/CLI@v2
         id: fetch-slack-secret
@@ -61,6 +85,9 @@ jobs:
           environment: ${{ github.event.inputs.environment }}
           sha:  ${{ steps.tag_id.outputs.release_sha }}
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          pr: ${{github.event.inputs.pr}}
+          secure-username: ${{ steps.fetch-username.outputs.SECURE_USERNAME}}
+          secure-password: ${{ steps.fetch-password.outputs.SECURE_PASSWORD}}
 
       - name: Slack Release Notification
         if: steps.tag_id.outputs.release_id && github.event.inputs.environment == 'Production'

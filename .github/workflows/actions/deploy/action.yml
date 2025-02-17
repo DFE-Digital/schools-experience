@@ -60,6 +60,11 @@ runs:
           ;;
         esac
 
+    - uses: google-github-actions/auth@v2
+      with:
+        project_id: get-into-teaching
+        workload_identity_provider: projects/574582782335/locations/global/workloadIdentityPools/schools-experience/providers/schools-experience
+
     - name: Use Terraform ${{ env.TERRAFORM_VERSION }}
       uses: hashicorp/setup-terraform@v3
       with:

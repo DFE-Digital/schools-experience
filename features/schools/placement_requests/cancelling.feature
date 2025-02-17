@@ -64,14 +64,12 @@ Feature: Rejecting placement requests
         When I click the 'Preview rejection email' button
         Then I should see a preview of what I have entered
 
-    @javascript
     Scenario: Entering a custom option
         Given there is at least one placement request
         And I am on the reject placement request page
         And I check the 'Other' checkbox
         Then a text area labelled 'Cancellation reasons' should have appeared
 
-    @javascript
     Scenario: Rejecting the requests with a custom reason
         Given there is at least one placement request
         And I am on the reject placement request page
