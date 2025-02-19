@@ -9,10 +9,6 @@ variable "namespace" {
 variable "environment" {
   description = "Name of the deployed environment in AKS"
 }
-variable "azure_credentials_json" {
-  default     = null
-  description = "JSON containing the service principal authentication key when running in automation"
-}
 variable "azure_resource_prefix" {
   description = "Standard resource prefix. Usually s189t01 (test) or s189p01 (production)"
 }
@@ -125,7 +121,6 @@ variable "send_traffic_to_maintenance_page" {
   default     = false
 }
 locals {
-  azure_credentials = try(jsondecode(var.azure_credentials_json), null)
   postgres_ssl_mode = var.enable_postgres_ssl ? "require" : "disable"
   app_name_suffix   = var.app_name == null ? var.environment : var.app_name
 }
