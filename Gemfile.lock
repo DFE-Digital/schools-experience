@@ -342,7 +342,7 @@ GEM
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    json (2.7.5)
+    json (2.9.1)
     json-jwt (1.15.3.1)
       activesupport (>= 4.2)
       aes_key_wrap
@@ -391,7 +391,7 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.4.1)
     mutex_m (0.3.0)
-    net-imap (0.5.1)
+    net-imap (0.5.6)
       date
       net-protocol
     net-pop (0.1.2)
@@ -709,7 +709,7 @@ GEM
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    webrick (1.8.2)
+    webrick (1.9.1)
     websocket (1.2.10)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)

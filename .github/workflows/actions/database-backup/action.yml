@@ -5,8 +5,14 @@ inputs:
   environment:
     description: "The name of the environment"
     required: true
-  azure_credentials:
-    description: "JSON object containing a service principal that can read from Azure Key Vault"
+  azure-client-id:
+    description: Managed identity client ID
+    required: true
+  azure-subscription-id:
+    description: Azure subscription ID
+    required: true
+  azure-tenant-id:
+    description: Azure tenant ID
     required: true
 
 runs:
@@ -33,7 +39,9 @@ runs:
 
   - uses: Azure/login@v2
     with:
-      creds: ${{ inputs.azure_credentials }}
+      client-id: ${{ inputs.azure-client-id }}
+      tenant-id: ${{ inputs.azure-tenant-id }}
+      subscription-id: ${{ inputs.azure-subscription-id }}
 
   - name: Fetch slack token
     uses: azure/CLI@v2
@@ -49,7 +57,9 @@ runs:
 
   - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
     with:
-       azure-credentials: ${{ inputs.azure_credentials }}
+       azure-client-id: ${{ inputs.azure-client-id }}
+       azure-tenant-id: ${{ inputs.azure-tenant-id }}
+       azure-subscription-id: ${{ inputs.azure-subscription-id }}
 
   - name: Set environment variables
     shell: bash
