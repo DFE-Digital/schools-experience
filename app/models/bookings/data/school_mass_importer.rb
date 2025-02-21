@@ -85,47 +85,11 @@ module Bookings
         val.present? ? val.strip : nil
       end
 
-      def cleanup_website(urn, url)
-        return nil if url.blank?
-
-        raise "invalid hostname for #{urn}, #{url}" unless url.split(".").size > 1
-
-        # do nothing if starting with a valid protocol
-        url_with_prefix = if url.starts_with?("http:", "https:")
-                            url
-
-                          # typos
-                          elsif url.starts_with?("http;")
-                            url.tr('http;', 'http:')
-
-                          elsif url.starts_with?("Hhtp:")
-                            url.tr('Hhtp:', 'http:')
-
-                          # add a prefix if none present, most common error
-                          else
-                            "http://#{url}"
-                          end
-
-        # skip ip addresses
-        return nil if url_with_prefix =~ /\d+\.\d+\.\d+\.\d+/
-
-        # skip email addresses
-        return nil if url_with_prefix =~ /@/
-
-        # skip urls that don't look sensible
-        unless url_with_prefix.match?(/^(http|https):\/\/[a-z0-9]+([\-.]{1}[a-z0-9]+)*\.[a-z]{2,10}(:[0-9]{1,5})?(\/.*)?$/ix)
-          Rails.logger.info "invalid website for #{urn}, #{url}"
-          return nil
-        end
-
-        url_with_prefix.downcase
-      end
-
       def build_school(edubase_row)
         attributes = {
           urn: nilify(edubase_row['URN']),
           name: nilify(edubase_row['EstablishmentName']),
-          website: cleanup_website(edubase_row['URN'], edubase_row['SchoolWebsite']),
+          website: cleanup_website(edubase_row),
           contact_email: email_override.presence,
           address_1: nilify(edubase_row['Street']),
           address_2: nilify(edubase_row['Locality']),
