@@ -63,7 +63,7 @@ module EdubaseDataHelpers
     return nil if url_with_prefix =~ /@/
 
     # skip urls that don't look sensible
-    unless url_with_prefix.match?(/^(http|https):\/\/[a-z0-9]+([\-.]{1}[a-z0-9]+)*\.[a-z]{2,10}(:[0-9]{1,5})?(\/.*)?$/ix)
+    unless url_with_prefix.match?(/^(http|https):\/\/[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,10}(:[0-9]{1,5})?(\/.*)?$/ix)
       Rails.logger.info "invalid website for #{urn}, #{url}"
       return nil
     end
