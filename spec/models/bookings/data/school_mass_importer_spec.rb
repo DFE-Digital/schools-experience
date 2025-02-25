@@ -93,7 +93,7 @@ describe Bookings::Data::SchoolMassImporter do
 
       context 'Cleaning up websites' do
         specify 'invalid websites should raise errors' do
-          expect { subject.send(:cleanup_website, 101_010, "invalidcom") }.to raise_error(
+          expect { subject.send(:cleanup_website, { 'URN' => 101_010, 'SchoolWebsite' => "invalidcom" }) }.to raise_error(
             RuntimeError, "invalid hostname for 101010, invalidcom"
           )
         end

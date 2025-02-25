@@ -31,6 +31,7 @@ describe Bookings::Data::SchoolUpdater do
         address_2: "North Kensington",
         town: "London",
         postcode: "W10 5EF",
+        website: "http://www.st.rbkc.sch.uk",
         record: create(:bookings_school, urn: 100_492)
       )
     end
@@ -41,6 +42,7 @@ describe Bookings::Data::SchoolUpdater do
         addresS_2: "Highgate",
         town: "London",
         postcode: "N6 5LY",
+        website: "http://www.sta.islington.sch.uk",
         record: create(:bookings_school, urn: 100_459)
       )
     end
@@ -52,12 +54,13 @@ describe Bookings::Data::SchoolUpdater do
         addresS_2: "Notting Hill",
         town: "London",
         postcode: "W11 4BJ",
+        website: "http://www.stfrancisofassisi.org.uk",
         record: create(:bookings_school, urn: 100_494)
       )
     end
     let!(:schools) { [school_100492, school_100459, school_100494] }
 
-    # missing school not actuall tested, just ensure update doesn't crash
+    # missing school not actually tested, just ensure update doesn't crash
     # because it's missing
     let!(:missing_school_urn) { 100_171 }
 
@@ -68,6 +71,7 @@ describe Bookings::Data::SchoolUpdater do
         schools.each do |school|
           expect(school.record.reload.name).to eql(school.actual_name)
           expect(school.record.reload.address_1).to eql(school.address_1)
+          expect(school.record.reload.website).to eql(school.website)
         end
       end
     end
