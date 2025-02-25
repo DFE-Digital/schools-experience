@@ -18,7 +18,7 @@ module Schools
       end
 
       def edit
-        @teacher_training = current_school_profile.teacher_training
+        @teacher_training = duplicate_if_frozen(current_school_profile.teacher_training)
       end
 
       def update
