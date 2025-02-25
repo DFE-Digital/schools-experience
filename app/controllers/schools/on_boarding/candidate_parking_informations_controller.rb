@@ -20,7 +20,7 @@ module Schools
       end
 
       def edit
-        @candidate_parking_information = current_school_profile.candidate_parking_information
+        @candidate_parking_information = duplicate_if_frozen(current_school_profile.candidate_parking_information)
       end
 
       def update
