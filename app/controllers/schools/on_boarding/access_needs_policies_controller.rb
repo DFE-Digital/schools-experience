@@ -19,7 +19,7 @@ module Schools
       end
 
       def edit
-        @access_needs_policy = current_school_profile.access_needs_policy
+        @access_needs_policy = duplicate_if_frozen(current_school_profile.access_needs_policy)
       end
 
       def update
