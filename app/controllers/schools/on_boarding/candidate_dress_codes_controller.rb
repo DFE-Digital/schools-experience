@@ -21,7 +21,7 @@ module Schools
       end
 
       def edit
-        @candidate_dress_code = current_school_profile.candidate_dress_code
+        @candidate_dress_code = duplicate_if_frozen(current_school_profile.candidate_dress_code)
       end
 
       def update
