@@ -18,7 +18,7 @@ module Schools
       end
 
       def edit
-        @dbs_requirement = current_school_profile.dbs_requirement
+        @dbs_requirement = current_school_profile.dbs_requirement.dup
       end
 
       def update
