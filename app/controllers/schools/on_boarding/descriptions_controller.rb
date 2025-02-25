@@ -17,7 +17,7 @@ module Schools
       end
 
       def edit
-        @description = current_school_profile.description.dup
+        @description = duplicate_if_frozen(current_school_profile.description)
       end
 
       def update

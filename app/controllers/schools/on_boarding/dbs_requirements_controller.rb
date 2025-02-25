@@ -18,7 +18,7 @@ module Schools
       end
 
       def edit
-        @dbs_requirement = current_school_profile.dbs_requirement.dup
+        @dbs_requirement = duplicate_if_frozen(current_school_profile.dbs_requirement)
       end
 
       def update
