@@ -17,7 +17,7 @@ module Schools
       end
 
       def edit
-        @description = current_school_profile.description
+        @description = current_school_profile.description.dup
       end
 
       def update
