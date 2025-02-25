@@ -2,11 +2,11 @@ module Schools
   module OnBoarding
     class DbsFeesController < OnBoardingsController
       def new
-        @dbs_fee = current_school_profile.dbs_fee
+        @dbs_fee = duplicate_if_frozen(current_school_profile.dbs_fee)
       end
 
       def edit
-        @dbs_fee = current_school_profile.dbs_fee
+        @dbs_fee = duplicate_if_frozen(current_school_profile.dbs_fee)
         render :new
       end
 
