@@ -181,10 +181,10 @@ domains-init: domains-composed-variables set-azure-account
 		-backend-config=storage_account_name=${STORAGE_ACCOUNT_NAME} \
 		-backend-config=key=${ENVIRONMENT}.tfstate
 
-domains-plan: domains domains-init ## Terraform plan for DNS environment domains. Usage: make development_aks domains-plan
+domains-plan: domains domains-init ## Terraform plan for DNS environment domains. Usage: make development domains-plan
 	terraform -chdir=terraform/domains/environment_domains plan -var-file config/${CONFIG}.tfvars.json
 
-domains-apply: domains domains-init ## Terraform apply for DNS environment domains. Usage: make development_aks domains-apply
+domains-apply: domains domains-init ## Terraform apply for DNS environment domains. Usage: make development domains-apply
 	terraform -chdir=terraform/domains/environment_domains apply -var-file config/${CONFIG}.tfvars.json ${AUTO_APPROVE}
 
 test-cluster:
@@ -197,7 +197,7 @@ production-cluster:
 
 get-cluster-credentials: set-azure-account
 	az aks get-credentials --overwrite-existing -g ${CLUSTER_RESOURCE_GROUP_NAME} -n ${CLUSTER_NAME}
-	kubelogin convert-kubeconfig -l $(if ${GITHUB_ACTIONS},spn,azurecli)
+	kubelogin convert-kubeconfig -l $(if ${AAD_LOGIN_METHOD},${AAD_LOGIN_METHOD},azurecli)
 
 maintenance-image-push:
 	$(if ${GITHUB_TOKEN},, $(error Provide a valid Github token with write:packages permissions as GITHUB_TOKEN variable))
