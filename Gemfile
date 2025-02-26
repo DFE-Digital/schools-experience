@@ -23,7 +23,7 @@ gem 'geocoder'
 gem 'puma', '~> 6.5.0'
 
 # Transpile app-like JavaScript. Read more: https://github.com/shakacode/shakapacker
-gem 'shakapacker', '8.0.2'
+gem 'shakapacker', '8.1.0'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
