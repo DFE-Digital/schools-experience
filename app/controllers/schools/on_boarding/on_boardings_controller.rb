@@ -1,6 +1,7 @@
 module Schools
   module OnBoarding
     class OnBoardingsController < BaseController
+      include FrozenObjectHelper
       skip_before_action :ensure_onboarded
 
     private

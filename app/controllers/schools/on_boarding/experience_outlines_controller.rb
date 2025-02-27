@@ -18,7 +18,7 @@ module Schools
       end
 
       def edit
-        @experience_outline = current_school_profile.experience_outline
+        @experience_outline = duplicate_if_frozen(current_school_profile.experience_outline)
       end
 
       def update

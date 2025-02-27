@@ -17,7 +17,7 @@ module Schools
       end
 
       def edit
-        @admin_contact = current_school_profile.admin_contact
+        @admin_contact = duplicate_if_frozen(current_school_profile.admin_contact)
       end
 
       def update

@@ -6,7 +6,7 @@ module Schools
       end
 
       def new
-        @fees = current_school_profile.fees
+        @fees = duplicate_if_frozen(current_school_profile.fees)
       end
 
       def create
@@ -20,7 +20,7 @@ module Schools
       end
 
       def edit
-        @fees = current_school_profile.fees
+        @fees = duplicate_if_frozen(current_school_profile.fees)
       end
 
       def update
