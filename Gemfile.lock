@@ -170,7 +170,7 @@ GEM
       launchy
     choice (0.2.0)
     coderay (1.1.3)
-    concurrent-ruby (1.3.4)
+    concurrent-ruby (1.3.5)
     connection_pool (2.4.1)
     crack (0.4.5)
       rexml
@@ -318,7 +318,7 @@ GEM
       html-attributes-utils (~> 1.0.0, >= 1.0.0)
       pagy (>= 6, < 9)
       view_component (>= 3.9, < 3.13)
-    govuk_design_system_formbuilder (4.0.0)
+    govuk_design_system_formbuilder (5.8.0)
       actionview (>= 6.1)
       activemodel (>= 6.1)
       activesupport (>= 6.1)
@@ -333,7 +333,7 @@ GEM
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
     httpclient (2.8.3)
-    i18n (1.14.6)
+    i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     ice_cube (0.17.0)
     invisible_captcha (2.3.0)
@@ -789,7 +789,7 @@ DEPENDENCIES
   foreman
   geocoder
   get_into_teaching_api_client_faraday (= 3.4.0)!
-  govuk_design_system_formbuilder (~> 4.0.0)
+  govuk_design_system_formbuilder (~> 5.8.0)
   hashids
   ice_cube
   invisible_captcha (>= 2.0.0)
