@@ -321,7 +321,7 @@ GEM
       html-attributes-utils (~> 1.0.0, >= 1.0.0)
       pagy (>= 6, < 9)
       view_component (>= 3.9, < 3.13)
-    govuk_design_system_formbuilder (5.2.0)
+    govuk_design_system_formbuilder (5.8.0)
       actionview (>= 6.1)
       activemodel (>= 6.1)
       activesupport (>= 6.1)
@@ -803,7 +803,7 @@ DEPENDENCIES
   foreman
   geocoder
   get_into_teaching_api_client_faraday (= 3.4.0)!
-  govuk_design_system_formbuilder (~> 5.2.0)
+  govuk_design_system_formbuilder (= 5.8.0)
   hashids
   ice_cube
   invisible_captcha (>= 2.0.0)
