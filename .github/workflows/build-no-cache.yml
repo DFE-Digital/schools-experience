@@ -37,9 +37,6 @@ jobs:
             SNYK_TOKEN=$(az keyvault secret show --name "SNYK-TOKEN" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
             echo "::add-mask::$SNYK_TOKEN"
             echo "SNYK-TOKEN=$SNYK_TOKEN" >> $GITHUB_OUTPUT
-            SLACK_WEBHOOK=$(az keyvault secret show --name "SLACK-WEBHOOK" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
-            echo "::add-mask::$SLACK_WEBHOOK"
-            echo "SLACK-WEBHOOK=$SLACK_WEBHOOK" >> $GITHUB_OUTPUT
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@master
@@ -82,4 +79,4 @@ jobs:
            SLACK_COLOR: ${{env.SLACK_ERROR}}
            SLACK_MESSAGE: 'There has been a failure building the application'
            SLACK_TITLE: 'Failure Building Application'
-           SLACK_WEBHOOK: ${{ steps.fetch-keyvault-secret.outputs.SLACK-WEBHOOK }}
+           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}

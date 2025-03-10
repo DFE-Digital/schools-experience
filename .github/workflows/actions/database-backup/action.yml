@@ -43,15 +43,6 @@ runs:
       tenant-id: ${{ inputs.azure-tenant-id }}
       subscription-id: ${{ inputs.azure-subscription-id }}
 
-  - name: Fetch slack token
-    uses: azure/CLI@v2
-    id: fetch-slack-secret
-    with:
-      inlineScript: |
-        SECRET_VALUE=$(az keyvault secret show --name "SLACK-WEBHOOK" --vault-name "${{ env.INF_VAULT_NAME }}" --query "value" -o tsv)
-        echo "::add-mask::$SECRET_VALUE"
-        echo "SLACK-WEBHOOK=$SECRET_VALUE" >> $GITHUB_OUTPUT
-
   - name: Set kubectl
     uses: DFE-Digital/github-actions/set-kubectl@master
 
@@ -136,6 +127,6 @@ runs:
       SLACK_USERNAME: CI Deployment
       SLACK_TITLE: Database backup failure
       SLACK_MESSAGE: ${{ inputs.environment }} database backup job failed
-      SLACK_WEBHOOK: "${{steps.fetch-slack-secret.outputs.SLACK-WEBHOOK}}"
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
       SLACK_COLOR: failure
       SLACK_FOOTER: Sent from backup job in database-backup workflow
