@@ -59,15 +59,6 @@ jobs:
             echo "::add-mask::$SECRET_VALUE"
             echo "SECURE_PASSWORD=$SECRET_VALUE" >> $GITHUB_OUTPUT
 
-      - name: Fetch slack token
-        uses: azure/CLI@v2
-        id: fetch-slack-secret
-        with:
-          inlineScript: |
-            SECRET_VALUE=$(az keyvault secret show --name "SLACK-WEBHOOK" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
-            echo "::add-mask::$SECRET_VALUE"
-            echo "SLACK-WEBHOOK=$SECRET_VALUE" >> $GITHUB_OUTPUT
-
       - name: Get Release Id from Tag
         id: tag_id
         uses: DFE-Digital/github-actions/DraftReleaseByTag@master
@@ -101,7 +92,7 @@ jobs:
           SLACK_COLOR: ${{env.SLACK_SUCCESS}}
           SLACK_MESSAGE:  ${{ fromJson( steps.tag_id.outputs.release_body) }}
           SLACK_TITLE: "Release Published to ${{github.event.inputs.environment}}: ${{steps.tag_id.outputs.release_name}}"
-          SLACK_WEBHOOK: "${{steps.fetch-slack-secret.outputs.SLACK-WEBHOOK}}"
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           MSG_MINIMAL: true
 
       - name: Slack Notification
@@ -111,4 +102,4 @@ jobs:
           SLACK_COLOR: ${{env.SLACK_ERROR}}
           SLACK_TITLE: "Manual Release Failed: ${{steps.tag_id.outputs.release_name}}"
           SLACK_MESSAGE: Failure deploying ${{github.event.inputs.environment}} release
-          SLACK_WEBHOOK: "${{steps.fetch-slack-secret.outputs.SLACK-WEBHOOK}}"
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}

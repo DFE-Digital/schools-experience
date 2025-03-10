@@ -68,15 +68,6 @@ jobs:
             echo "::add-mask::$SECRET_VALUE"
             echo "SECURE_PASSWORD=$SECRET_VALUE" >> $GITHUB_OUTPUT
 
-      - name: Fetch slack token
-        uses: azure/CLI@v2
-        id: fetch-slack-secret
-        with:
-          inlineScript: |
-            SECRET_VALUE=$(az keyvault secret show --name "SLACK-WEBHOOK" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
-            echo "::add-mask::$SECRET_VALUE"
-            echo "SLACK-WEBHOOK=$SECRET_VALUE" >> $GITHUB_OUTPUT
-
       - name: Deploy to ${{github.event.inputs.environment}}
         uses: ./.github/workflows/actions/deploy
         id: deploy
@@ -97,7 +88,7 @@ jobs:
           SLACK_COLOR: ${{env.SLACK_SUCCESS}}
           SLACK_MESSAGE:  Deploy success
           SLACK_TITLE: "Manual Deploy to ${{ github.event.inputs.environment }}: ${{ github.event.inputs.docker-image-tag }}"
-          SLACK_WEBHOOK: "${{steps.fetch-slack-secret.outputs.SLACK-WEBHOOK}}"
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           MSG_MINIMAL: true
 
       - name: Slack Notification
@@ -107,4 +98,4 @@ jobs:
           SLACK_COLOR: ${{env.SLACK_ERROR}}
           SLACK_TITLE: "Manual Deploy Failed: ${{ github.event.inputs.docker-image-tag }}"
           SLACK_MESSAGE: Failure deploying ${{github.event.inputs.environment}}
-          SLACK_WEBHOOK: "${{steps.fetch-slack-secret.outputs.SLACK-WEBHOOK}}"
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
