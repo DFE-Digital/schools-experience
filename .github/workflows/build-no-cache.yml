@@ -13,7 +13,6 @@ permissions:
 jobs:
   build:
     name: Build
-    environment: review
     runs-on: ubuntu-latest
 
     steps:
@@ -22,21 +21,6 @@ jobs:
 
       - name: set-up-environment
         uses: DFE-Digital/github-actions/set-up-environment@master
-
-      - uses: Azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-      - name: Fetch synk token from key vault
-        uses: azure/CLI@v2
-        id: fetch-keyvault-secret
-        with:
-          inlineScript: |
-            SNYK_TOKEN=$(az keyvault secret show --name "SNYK-TOKEN" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
-            echo "::add-mask::$SNYK_TOKEN"
-            echo "SNYK-TOKEN=$SNYK_TOKEN" >> $GITHUB_OUTPUT
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@master
@@ -63,7 +47,7 @@ jobs:
       - name: Run Snyk to check Docker image for vulnerabilities
         uses: snyk/actions/docker@master
         env:
-          SNYK_TOKEN: ${{ steps.fetch-keyvault-secret.outputs.SNYK-TOKEN }}
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           image: ${{ env.DOCKER_REPOSITORY }}:master
           args: --severity-threshold=high --file=Dockerfile  --exclude-app-vulns
