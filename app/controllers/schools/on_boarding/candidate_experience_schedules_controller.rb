@@ -21,7 +21,7 @@ module Schools
 
       def edit
         @candidate_experience_schedule = \
-          current_school_profile.candidate_experience_schedule
+          duplicate_if_frozen(current_school_profile.candidate_experience_schedule)
       end
 
       def update

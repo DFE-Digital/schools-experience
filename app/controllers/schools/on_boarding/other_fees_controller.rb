@@ -2,11 +2,11 @@ module Schools
   module OnBoarding
     class OtherFeesController < OnBoardingsController
       def new
-        @other_fee = current_school_profile.other_fee
+        @other_fee = duplicate_if_frozen(current_school_profile.other_fee)
       end
 
       def edit
-        @other_fee = current_school_profile.other_fee
+        @other_fee = duplicate_if_frozen(current_school_profile.other_fee)
         render :new
       end
 

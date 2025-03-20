@@ -3,7 +3,7 @@ module Schools
     class CandidateRequirementsSelectionsController < OnBoardingsController
       def new
         @candidate_requirements_selection = \
-          current_school_profile.candidate_requirements_selection
+          duplicate_if_frozen(current_school_profile.candidate_requirements_selection)
       end
 
       def create
@@ -23,7 +23,7 @@ module Schools
 
       def edit
         @candidate_requirements_selection = \
-          current_school_profile.candidate_requirements_selection
+          duplicate_if_frozen(current_school_profile.candidate_requirements_selection)
       end
 
       def update
