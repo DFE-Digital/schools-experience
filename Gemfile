@@ -160,7 +160,7 @@ group :test do
   gem "rspec-json_expectations", "~> 2.2"
   gem 'rubocop-capybara', '~> 2.21'
   gem 'rubocop-factory_bot', '~> 2.26'
-  gem 'rubocop-rspec', '~> 3.2'
+  gem 'rubocop-rspec', '~> 3.5'
   gem 'shoulda-matchers', '~> 6.1'
 
   gem 'capybara-screenshot'
