@@ -258,9 +258,7 @@ module Schools
         @school_profile.admin_contact.email_secondary
       end
 
-      def flexible_dates?
-        @school_profile.flexible_dates?
-      end
+      delegate :flexible_dates?, to: :@school_profile
 
     private
 
