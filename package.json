@@ -41,7 +41,7 @@
     "webpack": "5",
     "webpack-assets-manifest": "5",
     "webpack-cli": "4",
-    "webpack-merge": "5",
+    "webpack-merge": "6",
     "webpack-sources": "^3.2.3"
   },
   "devDependencies": {
