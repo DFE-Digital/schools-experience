@@ -4,6 +4,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby File.read(".ruby-version").chomp
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+# Required to fix a dependency issue with Rails upgrade to version 7.0.8 and the Logger error
+gem "concurrent-ruby", "1.3.4"
 gem 'rails', '~> 7.0.8'
 
 gem 'json', '>= 2.3.0' # Fix for CVE-2020-10663
@@ -23,7 +25,7 @@ gem 'geocoder'
 gem 'puma', '~> 6.5.0'
 
 # Transpile app-like JavaScript. Read more: https://github.com/shakacode/shakapacker
-gem 'shakapacker', '8.0.2'
+gem 'shakapacker', '8.2.0'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
