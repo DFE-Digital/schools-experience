@@ -4,6 +4,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby File.read(".ruby-version").chomp
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+# Required to fix a dependency issue with Rails upgrade to version 7.0.8 and the Logger error
+gem "concurrent-ruby", "1.3.4"
 gem 'rails', '~> 7.0.8'
 
 gem 'json', '>= 2.3.0' # Fix for CVE-2020-10663
