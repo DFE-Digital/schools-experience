@@ -13,7 +13,6 @@ class NotifyEmail::SchoolRequestCancellation < NotifyDespatchers::Email
     requested_on:,
     placement_request_url:
   )
-
     self.school_name           = school_name
     self.candidate_name        = candidate_name
     self.cancellation_reasons  = cancellation_reasons

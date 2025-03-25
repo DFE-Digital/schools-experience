@@ -8,7 +8,6 @@ class NotifySms::CandidateBookingSchoolCancelsBooking < NotifyDespatchers::Sms
     school_name:,
     dates_requested:
   )
-
     self.school_name = school_name
     self.dates_requested = dates_requested
 
