@@ -24,7 +24,6 @@ class NotifyEmail::CandidateRequestConfirmationNoPii < NotifyDespatchers::Email
     school_name:,
     cancellation_url:
   )
-
     self.candidate_dbs_check_document             =        candidate_dbs_check_document
     self.candidate_degree_stage                   =        candidate_degree_stage
     self.candidate_degree_subject                 =        candidate_degree_subject

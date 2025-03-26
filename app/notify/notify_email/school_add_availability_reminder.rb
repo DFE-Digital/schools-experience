@@ -2,7 +2,6 @@ class NotifyEmail::SchoolAddAvailabilityReminder < NotifyDespatchers::Email
   def initialize(
     to:
   )
-
     super(to: to)
   end
 

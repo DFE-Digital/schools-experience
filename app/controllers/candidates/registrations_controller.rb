@@ -15,7 +15,6 @@ module Candidates
 
     def gitis_mapper(registration_session = current_registration,
                      gitis_contact = current_contact)
-
       Bookings::RegistrationContactMapper.new(registration_session, gitis_contact)
     end
   end

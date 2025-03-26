@@ -31,7 +31,6 @@ class NotifyEmail::CandidateVirtualExperienceBookingDateChanged < NotifyDespatch
     new_date:,
     old_date:
   )
-
     self.school_name = school_name
     self.candidate_name = candidate_name
     self.placement_schedule = placement_schedule

@@ -10,7 +10,6 @@ class NotifySms::CandidateBookingReminder < NotifyDespatchers::Sms
     dates_requested:,
     cancellation_url:
   )
-
     self.time_until_booking_descriptive = time_until_booking_descriptive
     self.dates_requested = dates_requested
     self.cancellation_url = cancellation_url
