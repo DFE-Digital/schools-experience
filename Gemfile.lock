@@ -152,7 +152,7 @@ GEM
       racc
     breasal (0.0.1)
     builder (3.3.0)
-    bullet (7.1.5)
+    bullet (8.0.1)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (11.1.3)
