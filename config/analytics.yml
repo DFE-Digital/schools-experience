@@ -198,6 +198,8 @@
   - supports_access_needs
   - disability_confident
   - has_access_needs_policy
+  - admin_contact_email
+  - admin_contact_email_secondary
   :bookings_placement_date_subjects:
   - id
   - bookings_placement_date_id
