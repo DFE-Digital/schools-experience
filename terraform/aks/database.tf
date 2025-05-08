@@ -14,7 +14,7 @@ module "postgres" {
   server_version                 = "14"
   azure_sku_name                 = var.postgres_flexible_server_sku
   azure_enable_backup_storage    = var.azure_enable_backup_storage
-  azure_extensions               = ["POSTGIS", "address_standardizer", "plpgsql", "postgis_raster", "uuid-ossp", "citext"]
+  azure_extensions               = ["POSTGIS", "address_standardizer", "postgis_raster", "uuid-ossp", "citext"]
   azure_enable_high_availability = var.postgres_enable_high_availability
   azure_maintenance_window       = var.azure_maintenance_window
   server_docker_image            = "postgis/postgis:14-3.4"
