@@ -23,8 +23,8 @@ RUN echo "sha-${SHA}" > /etc/school-experience-sha
 RUN apk update && apk add -Uu --no-cache zlib-dev busybox ncurses
 
 # hadolint ignore=DL3018
-RUN apk add -U --no-cache bash build-base git tzdata libxml2 libxml2-dev gcompat \
-    postgresql-libs postgresql-dev nodejs yarn \
+RUN apk add -U --no-cache bash build-base git tzdata libxml2 libxml2-dev \
+    libffi-dev yaml-dev gcompat gcc postgresql-libs postgresql-dev nodejs yarn \
     chromium chromium-chromedriver
 
 # Copy Entrypoint script
