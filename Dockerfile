@@ -1,4 +1,4 @@
-FROM ruby:3.4.1-alpine3.21
+FROM ruby:3.4.3-alpine3.21
 
 ENV RAILS_ENV=production \
     NODE_ENV=production \
@@ -38,7 +38,7 @@ RUN yarn install && yarn cache clean
 # Install Gems removing artifacts
 COPY .ruby-version Gemfile Gemfile.lock ./
 # hadolint ignore=SC2046
-RUN gem install bundler --version='~> 2.5.11' && \
+RUN gem install bundler --version='~> 2.6.8' && \
     bundle install --jobs=$(nproc --all) && \
     rm -rf /root/.bundle/cache && \
     rm -rf /usr/local/bundle/cache
