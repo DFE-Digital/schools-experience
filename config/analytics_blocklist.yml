@@ -18,6 +18,7 @@
   - teacher_training_teacher_training_url
   - admin_contact_full_name
   - admin_contact_email
+  - admin_contact_phone
   - candidate_experience_schedule_times_flexible_details
   - admin_contact_email_secondary
   - dbs_requirement_dbs_policy_details
@@ -49,7 +50,6 @@
   - teacher_training_info
   - teacher_training_url
   - admin_contact_full_name
-  - admin_contact_phone
   - administration_fee_description
   - dbs_fee_description
   - other_fee_description
