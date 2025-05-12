@@ -1,4 +1,4 @@
-FROM ruby:3.4.1-alpine3.21
+FROM ruby:3.4.3-alpine3.21
 
 ENV RAILS_ENV=production \
     NODE_ENV=production \
@@ -23,8 +23,8 @@ RUN echo "sha-${SHA}" > /etc/school-experience-sha
 RUN apk update && apk add -Uu --no-cache zlib-dev busybox ncurses
 
 # hadolint ignore=DL3018
-RUN apk add -U --no-cache bash build-base git tzdata libxml2 libxml2-dev gcompat \
-    postgresql-libs postgresql-dev nodejs yarn \
+RUN apk add -U --no-cache bash build-base git tzdata libxml2 libxml2-dev \
+    libffi-dev yaml-dev gcompat gcc postgresql-libs postgresql-dev nodejs yarn \
     chromium chromium-chromedriver
 
 # Copy Entrypoint script
@@ -38,7 +38,7 @@ RUN yarn install && yarn cache clean
 # Install Gems removing artifacts
 COPY .ruby-version Gemfile Gemfile.lock ./
 # hadolint ignore=SC2046
-RUN gem install bundler --version='~> 2.5.11' && \
+RUN gem install bundler --version='~> 2.6.8' && \
     bundle install --jobs=$(nproc --all) && \
     rm -rf /root/.bundle/cache && \
     rm -rf /usr/local/bundle/cache
