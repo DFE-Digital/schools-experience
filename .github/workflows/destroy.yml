@@ -1,71 +1,41 @@
-name: Destroy Review Instance
+name: Delete review app
+
 on:
   pull_request:
-    types: [closed]
-
-permissions:
-  id-token: write
-  pull-requests: write
-  contents: write
+    types: [closed, unlabeled]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: PR number of review app to delete
+        required: true
+        type: string
 
 jobs:
-  destroy:
-    name: Destroy
-    environment:
-       name: review
+  delete-review-app:
+    name: Delete review app ${{ github.event.pull_request.number }}
     runs-on: ubuntu-latest
-    concurrency: review_${{github.event.number}}
-    defaults:
-      run:
-        shell: bash
+    concurrency: review_${{ github.event.pull_request.number || github.event.inputs.pr_number }}
+    if: >
+      github.event.action == 'closed' && contains(github.event.pull_request.labels.*.name, 'deploy') ||
+      (github.event.action == 'unlabeled' && github.event.label.name == 'deploy') || (github.event_name ==
+      'workflow_dispatch')
+
+    environment: review
+    permissions:
+      pull-requests: write
+      id-token: write
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set Environment variables
-        shell: bash
-        run: |
-          tf_vars_file=terraform/aks/config/review.tfvars.json
-          terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/terraform.tf | grep -o [0-9\.]*)
-          echo "TERRAFORM_VERSION=$terraform_version" >> $GITHUB_ENV
-
-      - uses: google-github-actions/auth@v2
-        with:
-          project_id: get-into-teaching
-          workload_identity_provider: projects/574582782335/locations/global/workloadIdentityPools/schools-experience/providers/schools-experience
-
-      - name: Use Terraform ${{ env.TERRAFORM_VERSION }}
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: ${{ env.TERRAFORM_VERSION }}
-
-      - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
+      - name: Delete review app
+        uses: DFE-Digital/github-actions/delete-review-app@master
         with:
           azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-
-      - uses: Azure/login@v2
-        with:
-            client-id: ${{ secrets.AZURE_CLIENT_ID }}
-            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-      - name: K8 setup for review apps
-        shell: bash
-        run: |
-          make review get-cluster-credentials PR_NUMBER=${{ github.event.number }}
-
-      - name: Terraform Destroy
-        run: |
-            make ci review terraform-destroy PR_NUMBER=${{github.event.number}}
-
-      - name: Set Container Access Key
-        run: |
-          TFSTATE_CONTAINER_ACCESS_KEY="$(az storage account keys list -g s189t01-gse-rv-rg -n s189t01gsetfstatervsa | jq -r '.[0].value')"
-          echo "::add-mask::$TFSTATE_CONTAINER_ACCESS_KEY"
-          echo "TFSTATE_CONTAINER_ACCESS_KEY=$TFSTATE_CONTAINER_ACCESS_KEY" >> $GITHUB_ENV
-
-      - name: Delete Terraform State File
-        run:  az storage blob delete --container-name  terraform-state --account-name s189t01gsetfstatervsa --account-key ${TFSTATE_CONTAINER_ACCESS_KEY} -n ${{github.event.number}}_kubernetes.tfstate
+          pr-number: ${{ github.event.pull_request.number || github.event.inputs.pr_number }}
+          resource-group-name: "s189t01-gse-rv-rg"
+          storage-account-name: "s189t01gsetfstatervsa"
+          tf-state-file: "${{ github.event.pull_request.number || github.event.inputs.pr_number }}_kubernetes.tfstate"
+          gcp-wip: "projects/574582782335/locations/global/workloadIdentityPools/schools-experience/providers/schools-experience"
+          gcp-project-id: "get-into-teaching"
+          terraform-base: "terraform/aks"
