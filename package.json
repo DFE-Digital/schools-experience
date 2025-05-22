@@ -33,7 +33,7 @@
     "postcss-preset-env": "^6.7.2",
     "sass": "^1.84.0",
     "sass-loader": "^16.0.4",
-    "semver": "^7.5.2",
+    "semver": "^7.7.1",
     "shakapacker": "8.2.0",
     "stimulus": "^3.2.2",
     "style-loader": "^4.0.0",
