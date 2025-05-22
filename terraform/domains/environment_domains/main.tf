@@ -10,6 +10,7 @@ module "domains" {
   host_name           = each.value.origin_hostname
   null_host_header    = try(each.value.null_host_header, false)
   cached_paths        = try(each.value.cached_paths, [])
+  rate_limit          = try(var.rate_limit, null)
 }
 
 # Takes values from hosted_zone.domain_name.cnames (or txt_records, a-records). Use for domains which are not associated with front door.
