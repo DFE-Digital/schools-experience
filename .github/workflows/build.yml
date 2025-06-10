@@ -26,7 +26,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     outputs:
-      DOCKER_IMAGE: ${{ steps.docker.outputs.DOCKER_IMAGE }}
+      DOCKER_IMAGE: ${{ steps.docker.outputs.IMAGE_TAG }}
 
     steps:
       - name: Check out the repo
@@ -39,18 +39,6 @@ jobs:
         uses: brpaz/hadolint-action@master
         with:
           dockerfile: "Dockerfile"
-
-      - name: Set DOCKER_IMAGE environment variable
-        id: docker
-        run: |
-          if [ "${{github.ref}}" == "refs/heads/master" ]
-          then
-            echo "DOCKER_IMAGE=${{ env.DOCKER_REPOSITORY }}:${{ github.sha }}" >> $GITHUB_OUTPUT
-            echo "DOCKER_MASTER=${{ env.DOCKER_REPOSITORY }}:master" >> $GITHUB_OUTPUT
-          else
-            echo "DOCKER_IMAGE=${{ env.DOCKER_REPOSITORY }}:${{ github.sha }}" >> $GITHUB_OUTPUT
-            echo "DOCKER_MASTER=${{ env.DOCKER_REPOSITORY }}:PR-${{ github.event.number }}" >> $GITHUB_OUTPUT
-          fi
 
       - name: Build and push docker image
         id: build-image
@@ -271,7 +259,7 @@ jobs:
           echo "MATRIX_ENVIRONMENTS={\"environment\":[\"development\",\"staging\",\"production\"]}" >> $GITHUB_ENV
 
       - name: Set matrix environments ( Review)
-        if: github.event_name == 'push_request' && github.ref != 'refs/heads/master'
+        if: github.event_name == 'pull_request' && github.ref != 'refs/heads/master'
         run: |
           echo "MATRIX_ENVIRONMENTS={\"environment\":[\"review\"]}" >> $GITHUB_ENV
       - name: Generate Tag from PR Number
