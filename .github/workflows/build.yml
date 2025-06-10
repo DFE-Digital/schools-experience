@@ -26,7 +26,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     outputs:
-      DOCKER_IMAGE: ${{ steps.build-image.outputs.IMAGE_TAG }}
+      DOCKER_IMAGE: ${{ steps.build-image.outputs.DOCKER_IMAGE }}
 
     steps:
       - name: Check out the repo
