@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   pull_request:
   push:
-    branches: [master]
+    branches: [main]
 
 permissions:
   contents: write
@@ -40,51 +40,30 @@ jobs:
         with:
           dockerfile: "Dockerfile"
 
-      - name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@master
-
-      - name: Get Short SHA
-        id: sha
-        run: echo "short=$(echo $GITHUB_SHA | cut -c -7)" >> $GITHUB_OUTPUT
-
       - name: Set DOCKER_IMAGE environment variable
         id: docker
         run: |
           if [ "${{github.ref}}" == "refs/heads/master" ]
           then
-             echo "DOCKER_IMAGE=${{ env.DOCKER_REPOSITORY }}:sha-${{ steps.sha.outputs.short }}" >> $GITHUB_OUTPUT
+             echo "DOCKER_IMAGE=${{ env.DOCKER_REPOSITORY }}:$GITHUB_SHA" >> $GITHUB_OUTPUT
              echo "DOCKER_MASTER=${{ env.DOCKER_REPOSITORY }}:master" >> $GITHUB_OUTPUT
           else
-             echo "DOCKER_IMAGE=${{ env.DOCKER_REPOSITORY }}:review-${{steps.sha.outputs.short }}" >> $GITHUB_OUTPUT
+             echo "DOCKER_IMAGE=${{ env.DOCKER_REPOSITORY }}:$GITHUB_SHA" >> $GITHUB_OUTPUT
              echo "DOCKER_MASTER=${{ env.DOCKER_REPOSITORY }}:PR-${{ github.event.number }}" >> $GITHUB_OUTPUT
           fi
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
+      - name: Build and push docker image
+        id: build-image
+        uses: DFE-Digital/github-actions/build-docker-image@master
         with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          context: .
+          docker-repository: ${{ env.DOCKER_REPOSITORY }}
+          max-cache: false
+          reuse-cache: true
+          snyk-token: ${{ secrets.SNYK_TOKEN }}
+          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
 
-      - name: Build and push to GitHub Container Registry
-        uses: docker/build-push-action@v6
-        with:
-          cache-from: ${{ env.DOCKER_REPOSITORY }}:master
-          tags: |
-            ${{ steps.docker.outputs.DOCKER_IMAGE }}
-            ${{ steps.docker.outputs.DOCKER_MASTER }}
-          push: true
-          build-args: SHA=${{ steps.sha.outputs.short }}
-
-      - name: Slack Notification
-        if: failure() && github.ref == 'refs/heads/master'
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_COLOR: ${{env.SLACK_ERROR}}
-          SLACK_MESSAGE: "There has been a failure building the application"
-          SLACK_TITLE: "Failure Building Application"
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
   spec_tests:
     name: Unit Tests
@@ -155,14 +134,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Run Snyk to check Docker image for vulnerabilities
-        uses: snyk/actions/docker@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          image: ${{needs.build.outputs.DOCKER_IMAGE}}
-          args: --severity-threshold=high --file=Dockerfile --exclude-app-vulns --policy-path=/.snyk
 
       - name: Run Brakeman static security scanner
         run: docker run -t --rm -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  brakeman
