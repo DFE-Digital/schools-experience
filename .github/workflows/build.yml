@@ -45,10 +45,10 @@ jobs:
         run: |
           if [ "${{github.ref}}" == "refs/heads/master" ]
           then
-            echo "DOCKER_IMAGE=${{ env.DOCKER_REPOSITORY }}:${{ steps.build-image.outputs.tag }}" >> $GITHUB_OUTPUT
+            echo "DOCKER_IMAGE=${{ env.DOCKER_REPOSITORY }}:${{ steps.set-outputs.outputs.tag }}" >> $GITHUB_OUTPUT
             echo "DOCKER_MASTER=${{ env.DOCKER_REPOSITORY }}:master" >> $GITHUB_OUTPUT
           else
-            echo "DOCKER_IMAGE=${{ env.DOCKER_REPOSITORY }}:${{ steps.build-image.outputs.tag }}" >> $GITHUB_OUTPUT
+            echo "DOCKER_IMAGE=${{ env.DOCKER_REPOSITORY }}:${{ steps.set-outputs.outputs.tag }}" >> $GITHUB_OUTPUT
             echo "DOCKER_MASTER=${{ env.DOCKER_REPOSITORY }}:PR-${{ github.event.number }}" >> $GITHUB_OUTPUT
           fi
 
