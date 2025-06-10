@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   pull_request:
   push:
-    branches: [main]
+    branches: [2326-docker-build-image]
 
 permissions:
   contents: write
@@ -48,8 +48,8 @@ jobs:
             echo "DOCKER_IMAGE=${{ env.DOCKER_REPOSITORY }}:${{ github.sha }}" >> $GITHUB_OUTPUT
             echo "DOCKER_MASTER=${{ env.DOCKER_REPOSITORY }}:master" >> $GITHUB_OUTPUT
           else
-            echo "DOCKER_IMAGE=${{ env.DOCKER_REPOSITORY }}:${{ github.sha }}" >> $GITHUB_OUTPUT
-            echo "DOCKER_MASTER=${{ env.DOCKER_REPOSITORY }}:${{ github.event.number }}-docker-build-image" >> $GITHUB_OUTPUT
+            echo "DOCKER_IMAGE=${{ env.DOCKER_REPOSITORY }}:${{ github.event.number }}-docker-build-image" >> $GITHUB_OUTPUT
+            echo "DOCKER_MASTER=${{ env.DOCKER_REPOSITORY }}:PR-${{ github.event.number }}" >> $GITHUB_OUTPUT
           fi
 
       - name: Build and push docker image
