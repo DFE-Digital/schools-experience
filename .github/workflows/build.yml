@@ -40,7 +40,6 @@ jobs:
         with:
           dockerfile: "Dockerfile"
 
-          #
       - name: Set DOCKER_IMAGE environment variable
         id: docker
         run: |
@@ -272,7 +271,7 @@ jobs:
           echo "MATRIX_ENVIRONMENTS={\"environment\":[\"development\",\"staging\",\"production\"]}" >> $GITHUB_ENV
 
       - name: Set matrix environments ( Review)
-        if: github.event_name == 'pull_request' && github.ref != 'refs/heads/master'
+        if: github.event_name == 'push_request' && github.ref != 'refs/heads/master'
         run: |
           echo "MATRIX_ENVIRONMENTS={\"environment\":[\"review\"]}" >> $GITHUB_ENV
       - name: Generate Tag from PR Number
