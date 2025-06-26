@@ -86,6 +86,10 @@ variable "statuscake_alerts" {
       website_url    = optional(list(string), [])
       ssl_url        = optional(list(string), [])
       contact_groups = optional(list(number), [])
+      content_matchers = optional(list(object({
+        matcher = string
+        content = string
+      })), [])
     })
   )
   default = {}

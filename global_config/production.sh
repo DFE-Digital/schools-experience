@@ -6,4 +6,4 @@ AZURE_RESOURCE_PREFIX=s189p01
 KV_PURGE_PROTECTION=false
 PLATFORM=aks
 IMAGE_TAG_PREFIX=sha
-TERRAFORM_MODULES_TAG=stable
+TERRAFORM_MODULES_TAG=1664-implement-statuscake-string-matching-in-the-terraform-module
