@@ -26,7 +26,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     outputs:
-      DOCKER_IMAGE: ${{ steps.build-image.outputs.image }}
+      DOCKER_IMAGE: ghcr.io/dfe-digital/schools-experience:${{ steps.sha.outputs.prefix }}-${{ steps.sha.outputs.short }}
 
     steps:
       - name: Check out the repo
@@ -59,6 +59,7 @@ jobs:
              {
               echo 'TAGS_VAR<<EOF'
               echo ${{ env.DOCKER_REPOSITORY }}:sha-${{ steps.sha.outputs.short }}
+              echo ${{ env.DOCKER_REPOSITORY }}:${{ steps.sha.outputs.short }}
               echo ${{ env.DOCKER_REPOSITORY }}:master
               echo EOF
             } >> "$GITHUB_ENV"
@@ -73,6 +74,7 @@ jobs:
               echo 'TAGS_VAR<<EOF'
               echo ${{ env.DOCKER_REPOSITORY }}:review-${{steps.sha.outputs.short }}
               echo ${{ env.DOCKER_REPOSITORY }}:PR-${{ github.event.number }}
+              echo ${{ env.DOCKER_REPOSITORY }}:${{steps.sha.outputs.short }}
               echo EOF
             } >> "$GITHUB_ENV"
             {
@@ -92,7 +94,7 @@ jobs:
           context: ""
           max-cache: false
           main-branch: "master"
-          docker-sha: ${{ steps.sha.outputs.prefix }}-${{ steps.sha.outputs.short }}
+          docker-sha: ${{ steps.sha.outputs.short }}
           snyk-token: ${{ secrets.SNYK_TOKEN }}
 
       # - name: Slack Notification
@@ -173,14 +175,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Run Snyk to check Docker image for vulnerabilities
-      #   uses: snyk/actions/docker@master
-      #   env:
-      #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      #   with:
-      #     image: ${{needs.build.outputs.DOCKER_IMAGE}}
-      #     args: --severity-threshold=high --file=Dockerfile --exclude-app-vulns --policy-path=/.snyk
 
       - name: Run Brakeman static security scanner
         run: docker run -t --rm -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  brakeman
