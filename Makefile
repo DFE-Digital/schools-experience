@@ -215,3 +215,8 @@ enable-maintenance: maintenance-image-push maintenance-fail-over
 disable-maintenance: get-cluster-credentials
 	$(eval export CONFIG)
 	./maintenance_page/scripts/failback.sh
+
+action-group: set-azure-account # make production action-group ACTION_GROUP_EMAIL=notificationemail@domain.com . Must be run before setting enable_monitoring=true. Use any non-prod environment to create in the test subscription.
+	$(if $(ACTION_GROUP_EMAIL), , $(error Please specify a notification email for the action group))
+	az group create -l uksouth -g ${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-mn-rg --tags "Product=${SERVICE_NAME}"
+	az monitor action-group create -n ${AZURE_RESOURCE_PREFIX}-${SERVICE_NAME} -g ${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-mn-rg --action email ${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-email ${ACTION_GROUP_EMAIL}
