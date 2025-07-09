@@ -10,13 +10,6 @@ ENV RAILS_ENV=production \
 RUN mkdir /app
 WORKDIR /app
 
-EXPOSE 3000
-ENTRYPOINT [ "/app/docker-entrypoint.sh"]
-CMD ["-m", "--frontend" ]
-
-ARG SHA
-RUN echo "sha-${SHA}" > /etc/school-experience-sha
-
 # remove upgrade zlib-dev & busybox when ruby:3.1.0-alpine3.15 base image is updated to address snyk vuln https://snyk.io/vuln/SNYK-ALPINE315-ZLIB-2434420
 # also https://security.snyk.io/vuln/SNYK-ALPINE315-NCURSES-2952568
 # hadolint ignore=DL3018
@@ -49,3 +42,11 @@ RUN bundle exec rake assets:precompile SECRET_KEY_BASE=stubbed SKIP_REDIS=true
 
 # Create symlinks for CSS files without digest hashes for use in error pages
 RUN bundle exec rake assets:symlink_non_digested SECRET_KEY_BASE=stubbed SKIP_REDIS=true
+
+ARG COMMIT_SHA
+ENV SHA=${COMMIT_SHA}
+RUN echo "sha-${SHA}" > /etc/school-experience-sha
+
+EXPOSE 3000
+ENTRYPOINT [ "/app/docker-entrypoint.sh"]
+CMD ["-m", "--frontend" ]
