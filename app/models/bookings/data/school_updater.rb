@@ -55,7 +55,8 @@ module Bookings
         [
           attributes_match?(school, row),
           coords_match?(school, row),
-          school_types_match?(school, row)
+          school_types_match?(school, row),
+          websites_match?(school, row)
         ].all?
       end
 
@@ -69,6 +70,10 @@ module Bookings
 
       def school_types_match?(school, row)
         school.school_type.edubase_id == retrieve_school_type(row)
+      end
+
+      def websites_match?(school, row)
+        school.website == cleanup_website(row)
       end
 
       def build_attributes(row)
@@ -89,9 +94,10 @@ module Bookings
 
         # In addition to the directly-mappable attributes we also need
         # to assign a school type and convert its coordinates
-        attributes.tap do |att|
+        attributes.then do |att|
           att.merge(coordinates: convert_to_point(row))
           att.merge(school_type_id: school_types[row[retrieve_school_type(row)]])
+          att.merge(website: cleanup_website(row))
         end
       end
     end

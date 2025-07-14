@@ -2,7 +2,6 @@ class NotifyEmail::SchoolUserInvite < NotifyDespatchers::Email
   def initialize(
     to:
   )
-
     super(to: to)
   end
 

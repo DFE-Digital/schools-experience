@@ -1,5 +1,5 @@
 ---
-:shared: 
+:shared:
   :users_roles:
   - user_id
   :users:
@@ -11,6 +11,10 @@
   - coordinates
   :bookings_candidates:
   - id
+  :bookings_profiles:
+  - admin_contact_email
+  - admin_contact_email_secondary
+  - admin_contact_phone
   :bookings_placement_requests:
   - candidate_id
   :events:

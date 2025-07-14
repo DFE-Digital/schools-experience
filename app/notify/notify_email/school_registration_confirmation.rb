@@ -8,7 +8,6 @@ class NotifyEmail::SchoolRegistrationConfirmation < NotifyDespatchers::Email
     school_experience_profile_link:,
     school_experience_dashboard_link:
   )
-
     self.school_experience_profile_link = school_experience_profile_link
     self.school_experience_dashboard_link = school_experience_dashboard_link
     super(to: to)

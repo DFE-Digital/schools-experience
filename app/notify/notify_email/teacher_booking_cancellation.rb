@@ -15,7 +15,6 @@ class NotifyEmail::TeacherBookingCancellation < NotifyDespatchers::Email
     placement_finish_date:,
     placement_cancellation_reason:
   )
-
     self.school_teacher_name           = school_teacher_name
     self.school_name                   = school_name
     self.candidate_name                = candidate_name

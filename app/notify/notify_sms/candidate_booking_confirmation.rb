@@ -10,7 +10,6 @@ class NotifySms::CandidateBookingConfirmation < NotifyDespatchers::Sms
     dates_requested:,
     cancellation_url:
   )
-
     self.school_name = school_name
     self.dates_requested = dates_requested
     self.cancellation_url = cancellation_url

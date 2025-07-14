@@ -11,7 +11,6 @@ class NotifyEmail::TeacherBookingConfirmation < NotifyDespatchers::Email
     placement_finish_date:,
     school_experience_dashboard_link:
   )
-
     self.candidate_name                   = candidate_name
     self.placement_start_date             = placement_start_date
     self.placement_finish_date            = placement_finish_date
