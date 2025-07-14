@@ -101,6 +101,7 @@ describe HealthchecksController, type: :request do
     context "with DEPLOYMENT_ID set" do
       before do
         allow(ENV).to receive(:fetch).with('DEPLOYMENT_ID').and_return('1997-08-29')
+        allow(ENV).to receive(:fetch).with('DFE_SIGNIN_HEALTHCHECK_USER_ID', anything)
 
         get deployment_path
       end
