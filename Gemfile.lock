@@ -31,12 +31,11 @@ GIT
 
 GIT
   remote: https://github.com/DFE-Digital/get-into-teaching-api-ruby-client.git
-  revision: f538756a3dfce0125a1f676f6f37680665c5a34d
-  ref: f538756
+  revision: 8a0dafe9d40c1f17f64c1ebc8846bcd04c8d7f38
   specs:
-    get_into_teaching_api_client (3.4.0)
+    get_into_teaching_api_client (3.6.0)
       faraday (~> 1.0, >= 1.0.1)
-    get_into_teaching_api_client_faraday (3.4.0)
+    get_into_teaching_api_client_faraday (3.6.0)
       activesupport
       faraday
       faraday-encoding
@@ -246,21 +245,21 @@ GEM
       faraday-retry (~> 1.0)
       ruby2_keywords (>= 0.0.4)
     faraday-em_http (1.0.0)
-    faraday-em_synchrony (1.0.0)
+    faraday-em_synchrony (1.0.1)
     faraday-encoding (0.0.6)
       faraday
     faraday-excon (1.1.0)
     faraday-http-cache (2.5.1)
       faraday (>= 0.8)
     faraday-httpclient (1.0.1)
-    faraday-multipart (1.0.4)
-      multipart-post (~> 2)
+    faraday-multipart (1.1.1)
+      multipart-post (~> 2.0)
     faraday-net_http (1.0.2)
     faraday-net_http_persistent (1.2.0)
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
     faraday-retry (1.0.3)
-    faraday_middleware (1.2.0)
+    faraday_middleware (1.2.1)
       faraday (~> 1.0)
     faraday_middleware-circuit_breaker (0.6.0)
       faraday (>= 0.9, < 3.0)
@@ -797,7 +796,7 @@ DEPENDENCIES
   faraday
   foreman
   geocoder
-  get_into_teaching_api_client_faraday (= 3.4.0)!
+  get_into_teaching_api_client_faraday (>= 3.6.0)!
   govuk_design_system_formbuilder (~> 5.9.0)
   hashids
   ice_cube
