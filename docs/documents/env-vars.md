@@ -58,6 +58,8 @@ If required Exceptions Notifications can be sent to Sentry.
 
 `DFE_SIGNIN_API_CLIENT` - Sets the iss claim in the payload. The "iss" (issuer) claim identifies the principal that issued the JWT. It it set on the manage service page in OpenID Connect / Client Id.
 
+`DFE_SIGNIN_HEALTHCHECK_USER_ID` - The DfE Sign In User Id to use when performing a healthcheck to verify that the DfE Sign In service is alive (this will be used in the call to `dfe_sign_in_api_host/users/<USER-ID>/organisations`). It will need to be a valid User ID, not a randomly generated GUID.
+
 ## Other integrations
 
 `NOTIFY_API_KEY` - API key used to send emails via Notify. Tech leads and senior developers have access to the Notify account.
