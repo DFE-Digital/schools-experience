@@ -22,39 +22,36 @@ jobs:
       - name: set-up-environment
         uses: DFE-Digital/github-actions/set-up-environment@master
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@master
+      - name: Set BRANCH_TAG
+        run: |
+          if [ "${{github.ref}}" == "refs/heads/master" ]
+          then
+            GIT_BRANCH=master
+          else
+            GIT_BRANCH=${{ github.ref_name }}
+          fi
+          echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
 
-      - name: Get Short SHA
-        id: sha
-        run:  echo "short=$(echo $GITHUB_SHA | cut -c -7)" >> $GITHUB_OUTPUT
+      - name: Set DOCKER_IMAGE environment variable
+        id: docker
+        run: |
+            {
+              echo 'TAGS_VAR<<EOF'
+              echo ${{ env.DOCKER_REPOSITORY }}:${{ env.BRANCH_TAG }}
+              echo EOF
+            } >> "$GITHUB_ENV"
 
-      - name: Login to GitHub Container Repository
-        uses: docker/login-action@v3
+      - name: Build and push docker image
+        id: build-image
+        uses: DFE-Digital/github-actions/build-docker-image@master
         with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build docker image
-        uses: docker/build-push-action@v6
-        with:
-          tags: ${{ env.DOCKER_REPOSITORY }}:master
-          load: true
-          push: false
-          build-args: SHA=${{ steps.sha.outputs.short }}
-
-      - name: Run Snyk to check Docker image for vulnerabilities
-        uses: snyk/actions/docker@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          image: ${{ env.DOCKER_REPOSITORY }}:master
-          args: --severity-threshold=high --file=Dockerfile  --exclude-app-vulns
-
-      - name: Push image to registry
-        if: success()
-        run: docker image push --all-tags ${{ env.DOCKER_REPOSITORY }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          context: ""
+          max-cache: false
+          reuse-cache: false
+          main-branch: "master"
+          docker-sha: ${{ env.BRANCH_TAG }}
+          snyk-token: ${{ secrets.SNYK_TOKEN }}
 
       - name: Slack Notification
         if: failure() && github.ref == 'refs/heads/master'
