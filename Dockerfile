@@ -7,12 +7,14 @@ ENV RAILS_ENV=production \
     RACK_TIMEOUT_SERVICE_TIMEOUT=60 \
     BUNDLE_BUILD__SASSC=--disable-march-tune-native
 
-RUN mkdir /app
+RUN mkdir -p /app/tmp
 WORKDIR /app
 
-EXPOSE 3000
-ENTRYPOINT [ "/app/docker-entrypoint.sh"]
-CMD ["-m", "--frontend" ]
+# Create non-root user and group
+RUN addgroup -S appgroup -g 20001 && adduser -S appuser -G appgroup -u 10001
+
+# Change ownership only for directories that need write access
+RUN chown -R appuser:appgroup /app/tmp
 
 ARG SHA
 RUN echo "sha-${SHA}" > /etc/school-experience-sha
@@ -49,3 +51,10 @@ RUN bundle exec rake assets:precompile SECRET_KEY_BASE=stubbed SKIP_REDIS=true
 
 # Create symlinks for CSS files without digest hashes for use in error pages
 RUN bundle exec rake assets:symlink_non_digested SECRET_KEY_BASE=stubbed SKIP_REDIS=true
+
+# Use non-root user
+USER 10001
+
+EXPOSE 3000
+ENTRYPOINT [ "/app/docker-entrypoint.sh"]
+CMD ["-m", "--frontend" ]
