@@ -14,8 +14,11 @@ WORKDIR /app
 RUN addgroup -S appgroup -g 20001 && adduser -S appuser -G appgroup -u 10001
 
 # Change ownership only for directories that need write access
-RUN chown -R appuser:appgroup /app/tmp
-RUN chmod -R u+w /app/tmp
+# Make sure /app/tmp and /app/tmp/cache/webpacker are writable by appuser
+RUN mkdir -p /app/tmp/cache/webpacker && \
+    chown -R appuser:appgroup /app/tmp && \
+    chmod -R u+w /app/tmp
+
 
 ARG SHA
 RUN echo "sha-${SHA}" > /etc/school-experience-sha
