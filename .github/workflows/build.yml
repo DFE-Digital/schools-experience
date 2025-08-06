@@ -96,6 +96,7 @@ jobs:
               echo ${{ env.DOCKER_REPOSITORY }}:review-${{ steps.sha.outputs.short }}
               echo ${{ env.DOCKER_REPOSITORY }}:PR-${{ github.event.number }}
               echo ${{ env.DOCKER_REPOSITORY }}:${{ env.BRANCH_TAG }}
+              echo ${{ env.DOCKER_REPOSITORY }}:master
               echo EOF
             } >> "$GITHUB_ENV"
           fi
