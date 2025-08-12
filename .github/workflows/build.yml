@@ -140,7 +140,10 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Bring up Docker compose Stack
-        run:  docker compose -f docker-compose-ci.yml up -d
+        run: |
+          mkdir -p out tmp
+          sudo chown -R 10001:10001 out tmp
+          docker compose -f docker-compose-ci.yml up -d
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
@@ -157,7 +160,10 @@ jobs:
           path: ${{ github.workspace }}/out/rubocop-result.json
 
       - name: Run Specs
-        run:  docker compose -f docker-compose-ci.yml run --rm db-tasks rspec
+        run: |
+          mkdir -p out tmp
+          sudo chown -R 10001:10001 out tmp
+          docker compose -f docker-compose-ci.yml run --rm db-tasks rspec
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
@@ -223,6 +229,8 @@ jobs:
 
       - name: Run Cucumber Tests
         run: |
+          mkdir -p out tmp
+          sudo chown -R 10001:10001 out tmp
           docker compose -f docker-compose-ci.yml run --rm \
             -e RAILS_ENV \
             -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
@@ -267,6 +275,8 @@ jobs:
 
       - name: Run Cucumber Tests
         run: |
+          mkdir -p out tmp
+          sudo chown -R 10001:10001 out tmp
           docker compose -f docker-compose-ci.yml run --rm \
             -e RAILS_ENV \
             -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
