@@ -2,6 +2,7 @@ version: '3.3'
 
 services:
    school-experience:
+     user: "10001"
      image: ${IMAGE}
      command: "frontend"
      ports:
@@ -24,6 +25,7 @@ services:
        - ${PWD}/coverage:/app/coverage
 
    sidekiq-jobs:
+     user: "10001"
      image: ${IMAGE}
      command: "sidekiq"
      restart: always
@@ -40,6 +42,7 @@ services:
        - db-tasks
 
    db-tasks:
+     user: "10001"
      image: ${IMAGE}
      command: "database"
      restart: on-failure
