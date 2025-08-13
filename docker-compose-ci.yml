@@ -57,6 +57,7 @@ services:
        - WEB_URL=postgis://postgres:secret@postgres/school_experience
      volumes:
        - .:/ci_build
+       - tmp-volume:/app/tmp
        - ${PWD}/out:/app/out
        - ${PWD}/coverage:/app/coverage
      depends_on:
@@ -84,3 +85,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+volumes:
+  tmp-volume:
+    driver: local
