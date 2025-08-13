@@ -161,6 +161,7 @@ jobs:
 
       - name: Run Specs
         run: |
+          rm -rf tmp
           mkdir -p out tmp
           sudo chown -R 10001:10001 out tmp
           docker compose -f docker-compose-ci.yml run --rm db-tasks rspec
