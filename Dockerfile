@@ -7,17 +7,11 @@ ENV RAILS_ENV=production \
     RACK_TIMEOUT_SERVICE_TIMEOUT=60 \
     BUNDLE_BUILD__SASSC=--disable-march-tune-native
 
-RUN mkdir -p /app/tmp /app/out /app/log
+# Create app user and group with UID/GID 10001
+RUN addgroup -g 10001 -S appgroup && adduser -u 10001 -S appuser -G appgroup
+
+RUN mkdir /app
 WORKDIR /app
-
-# Create non-root user and group
-RUN addgroup -S appgroup -g 20001 && adduser -S appuser -G appgroup -u 10001
-
-# Create writable directories and set proper permissions for non-root user
-RUN mkdir -p /app/tmp /app/out /app/log && \
-    chown -R appuser:appgroup /app && \
-    chmod -R u+rwX /app && \
-    chmod -R u+rwX /app/out
 
 # remove upgrade zlib-dev & busybox when ruby:3.1.0-alpine3.15 base image is updated to address snyk vuln https://snyk.io/vuln/SNYK-ALPINE315-ZLIB-2434420
 # also https://security.snyk.io/vuln/SNYK-ALPINE315-NCURSES-2952568
@@ -30,15 +24,15 @@ RUN apk add -U --no-cache bash build-base git tzdata libxml2 libxml2-dev \
     chromium chromium-chromedriver
 
 # Copy Entrypoint script
-COPY script/docker-entrypoint.sh .
+COPY --chown=appuser:appgroup script/docker-entrypoint.sh .
 RUN chmod +x /app/docker-entrypoint.sh
 
 # install NPM packages removign artifacts
-COPY package.json yarn.lock ./
+COPY --chown=appuser:appgroup package.json yarn.lock ./
 RUN yarn install && yarn cache clean
 
 # Install Gems removing artifacts
-COPY .ruby-version Gemfile Gemfile.lock ./
+COPY --chown=appuser:appgroup .ruby-version Gemfile Gemfile.lock ./
 # hadolint ignore=SC2046
 RUN gem install bundler --version='~> 2.6.8' && \
     bundle install --jobs=$(nproc --all) && \
@@ -46,7 +40,7 @@ RUN gem install bundler --version='~> 2.6.8' && \
     rm -rf /usr/local/bundle/cache
 
 # Add code and compile assets
-COPY . .
+COPY --chown=appuser:appgroup . .
 RUN bundle exec rake assets:precompile SECRET_KEY_BASE=stubbed SKIP_REDIS=true
 
 # Create symlinks for CSS files without digest hashes for use in error pages
@@ -56,7 +50,11 @@ ARG COMMIT_SHA
 ENV SHA=${COMMIT_SHA}
 RUN echo "sha-${SHA}" > /etc/school-experience-sha
 
-# Use non-root user
+# Create writable directories and set proper permissions for non-root user
+RUN mkdir -p /app/tmp /app/out /app/log /tmp /tmp/prometheus/ && \
+    chown -R appuser:appgroup /app /app/tmp /app/out /app/log /tmp /tmp/prometheus/
+
+# Switch to non-root user
 USER 10001
 
 EXPOSE 3000
