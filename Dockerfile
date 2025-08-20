@@ -51,8 +51,8 @@ ENV SHA=${COMMIT_SHA}
 RUN echo "sha-${SHA}" > /etc/school-experience-sha
 
 # Create writable directories and set proper permissions for non-root user
-RUN mkdir -p /app/tmp /app/out /app/log /tmp /tmp/prometheus/ && \
-    chown -R appuser:appgroup /app /app/tmp /app/out /app/log /tmp /tmp/prometheus/
+RUN mkdir -p /app/tmp /app/out /app/log /app/coverage /tmp /tmp/prometheus/ && \
+    chown -R appuser:appgroup /app /app/tmp /app/out /app/log /app/coverage /tmp /tmp/prometheus/
 
 # Switch to non-root user
 USER 10001
