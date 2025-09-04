@@ -44,90 +44,93 @@ GIT
       faraday_middleware-circuit_breaker
       get_into_teaching_api_client
 
-GIT
-  remote: https://github.com/mitsuru/validates_timeliness.git
-  revision: f28a62589cc069d1d1f5dfd99e1749edca04cd68
-  ref: f28a625
-  specs:
-    validates_timeliness (6.0.0.beta2)
-      activemodel (>= 6.0.0, < 7.1)
-      timeliness (>= 0.3.10, < 1)
-
 GEM
   remote: https://rubygems.org/
   specs:
-    actioncable (7.0.8.7)
-      actionpack (= 7.0.8.7)
-      activesupport (= 7.0.8.7)
+    actioncable (7.1.5.2)
+      actionpack (= 7.1.5.2)
+      activesupport (= 7.1.5.2)
       nio4r (~> 2.0)
       websocket-driver (>= 0.6.1)
-    actionmailbox (7.0.8.7)
-      actionpack (= 7.0.8.7)
-      activejob (= 7.0.8.7)
-      activerecord (= 7.0.8.7)
-      activestorage (= 7.0.8.7)
-      activesupport (= 7.0.8.7)
+      zeitwerk (~> 2.6)
+    actionmailbox (7.1.5.2)
+      actionpack (= 7.1.5.2)
+      activejob (= 7.1.5.2)
+      activerecord (= 7.1.5.2)
+      activestorage (= 7.1.5.2)
+      activesupport (= 7.1.5.2)
       mail (>= 2.7.1)
       net-imap
       net-pop
       net-smtp
-    actionmailer (7.0.8.7)
-      actionpack (= 7.0.8.7)
-      actionview (= 7.0.8.7)
-      activejob (= 7.0.8.7)
-      activesupport (= 7.0.8.7)
+    actionmailer (7.1.5.2)
+      actionpack (= 7.1.5.2)
+      actionview (= 7.1.5.2)
+      activejob (= 7.1.5.2)
+      activesupport (= 7.1.5.2)
       mail (~> 2.5, >= 2.5.4)
       net-imap
       net-pop
       net-smtp
-      rails-dom-testing (~> 2.0)
-    actionpack (7.0.8.7)
-      actionview (= 7.0.8.7)
-      activesupport (= 7.0.8.7)
-      rack (~> 2.0, >= 2.2.4)
+      rails-dom-testing (~> 2.2)
+    actionpack (7.1.5.2)
+      actionview (= 7.1.5.2)
+      activesupport (= 7.1.5.2)
+      nokogiri (>= 1.8.5)
+      racc
+      rack (>= 2.2.4)
+      rack-session (>= 1.0.1)
       rack-test (>= 0.6.3)
-      rails-dom-testing (~> 2.0)
-      rails-html-sanitizer (~> 1.0, >= 1.2.0)
+      rails-dom-testing (~> 2.2)
+      rails-html-sanitizer (~> 1.6)
     actionpack-cloudfront (1.2.0)
       actionpack (>= 4.2)
       railties (>= 4.2)
-    actiontext (7.0.8.7)
-      actionpack (= 7.0.8.7)
-      activerecord (= 7.0.8.7)
-      activestorage (= 7.0.8.7)
-      activesupport (= 7.0.8.7)
+    actiontext (7.1.5.2)
+      actionpack (= 7.1.5.2)
+      activerecord (= 7.1.5.2)
+      activestorage (= 7.1.5.2)
+      activesupport (= 7.1.5.2)
       globalid (>= 0.6.0)
       nokogiri (>= 1.8.5)
-    actionview (7.0.8.7)
-      activesupport (= 7.0.8.7)
+    actionview (7.1.5.2)
+      activesupport (= 7.1.5.2)
       builder (~> 3.1)
-      erubi (~> 1.4)
-      rails-dom-testing (~> 2.0)
-      rails-html-sanitizer (~> 1.1, >= 1.2.0)
-    activejob (7.0.8.7)
-      activesupport (= 7.0.8.7)
+      erubi (~> 1.11)
+      rails-dom-testing (~> 2.2)
+      rails-html-sanitizer (~> 1.6)
+    activejob (7.1.5.2)
+      activesupport (= 7.1.5.2)
       globalid (>= 0.3.6)
-    activemodel (7.0.8.7)
-      activesupport (= 7.0.8.7)
-    activerecord (7.0.8.7)
-      activemodel (= 7.0.8.7)
-      activesupport (= 7.0.8.7)
+    activemodel (7.1.5.2)
+      activesupport (= 7.1.5.2)
+    activerecord (7.1.5.2)
+      activemodel (= 7.1.5.2)
+      activesupport (= 7.1.5.2)
+      timeout (>= 0.4.0)
     activerecord-import (1.8.1)
       activerecord (>= 4.2)
-    activerecord-postgis-adapter (8.0.3)
-      activerecord (~> 7.0.0)
+    activerecord-postgis-adapter (9.0.2)
+      activerecord (~> 7.1.0)
       rgeo-activerecord (~> 7.0.0)
-    activestorage (7.0.8.7)
-      actionpack (= 7.0.8.7)
-      activejob (= 7.0.8.7)
-      activerecord (= 7.0.8.7)
-      activesupport (= 7.0.8.7)
+    activestorage (7.1.5.2)
+      actionpack (= 7.1.5.2)
+      activejob (= 7.1.5.2)
+      activerecord (= 7.1.5.2)
+      activesupport (= 7.1.5.2)
       marcel (~> 1.0)
-      mini_mime (>= 1.1.0)
-    activesupport (7.0.8.7)
+    activesupport (7.1.5.2)
+      base64
+      benchmark (>= 0.3)
+      bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
+      connection_pool (>= 2.2.5)
+      drb
       i18n (>= 1.6, < 2)
+      logger (>= 1.4.2)
       minitest (>= 5.1)
+      mutex_m
+      securerandom (>= 0.3)
       tzinfo (~> 2.0)
     acts_as_list (1.2.4)
       activerecord (>= 6.1)
@@ -392,7 +395,7 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.4.1)
     mutex_m (0.3.0)
-    net-imap (0.5.7)
+    net-imap (0.5.10)
       date
       net-protocol
     net-pop (0.1.2)
@@ -481,23 +484,28 @@ GEM
     rack-proxy (0.7.7)
       rack
     rack-rewrite (1.5.1)
+    rack-session (1.0.2)
+      rack (< 3)
     rack-test (2.2.0)
       rack (>= 1.3)
     rack-timeout (0.7.0)
-    rails (7.0.8.7)
-      actioncable (= 7.0.8.7)
-      actionmailbox (= 7.0.8.7)
-      actionmailer (= 7.0.8.7)
-      actionpack (= 7.0.8.7)
-      actiontext (= 7.0.8.7)
-      actionview (= 7.0.8.7)
-      activejob (= 7.0.8.7)
-      activemodel (= 7.0.8.7)
-      activerecord (= 7.0.8.7)
-      activestorage (= 7.0.8.7)
-      activesupport (= 7.0.8.7)
+    rackup (1.0.1)
+      rack (< 3)
+      webrick
+    rails (7.1.5.2)
+      actioncable (= 7.1.5.2)
+      actionmailbox (= 7.1.5.2)
+      actionmailer (= 7.1.5.2)
+      actionpack (= 7.1.5.2)
+      actiontext (= 7.1.5.2)
+      actionview (= 7.1.5.2)
+      activejob (= 7.1.5.2)
+      activemodel (= 7.1.5.2)
+      activerecord (= 7.1.5.2)
+      activestorage (= 7.1.5.2)
+      activesupport (= 7.1.5.2)
       bundler (>= 1.15.0)
-      railties (= 7.0.8.7)
+      railties (= 7.1.5.2)
     rails-controller-testing (1.0.5)
       actionpack (>= 5.0.1.rc1)
       actionview (>= 5.0.1.rc1)
@@ -518,13 +526,14 @@ GEM
       rack
       railties (>= 5.1)
       semantic_logger (~> 4.13)
-    railties (7.0.8.7)
-      actionpack (= 7.0.8.7)
-      activesupport (= 7.0.8.7)
-      method_source
+    railties (7.1.5.2)
+      actionpack (= 7.1.5.2)
+      activesupport (= 7.1.5.2)
+      irb
+      rackup (>= 1.0.0)
       rake (>= 12.2)
-      thor (~> 1.0)
-      zeitwerk (~> 2.5)
+      thor (~> 1.0, >= 1.2.2)
+      zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.3.0)
     rb-fsevent (0.11.2)
@@ -621,6 +630,7 @@ GEM
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
+    securerandom (0.4.1)
     selenium-webdriver (4.22.0)
       base64 (~> 0.2)
       logger (~> 1.4)
@@ -701,6 +711,9 @@ GEM
     validate_url (1.0.15)
       activemodel (>= 3.0.0)
       public_suffix
+    validates_timeliness (7.1.0)
+      activemodel (>= 7.0.0, < 8)
+      timeliness (>= 0.3.10, < 1)
     view_component (3.12.1)
       activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
@@ -719,7 +732,8 @@ GEM
       hashdiff (>= 0.4.0, < 2.0.0)
     webrick (1.9.1)
     websocket (1.2.10)
-    websocket-driver (0.7.6)
+    websocket-driver (0.8.0)
+      base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     xpath (3.2.0)
@@ -769,7 +783,7 @@ PLATFORMS
 DEPENDENCIES
   actionpack-cloudfront (>= 1.2.0)
   activerecord-import
-  activerecord-postgis-adapter (= 8.0.3)
+  activerecord-postgis-adapter (~> 9)
   acts_as_list
   addressable
   amazing_print
@@ -821,7 +835,7 @@ DEPENDENCIES
   rack-attack
   rack-rewrite
   rack-timeout
-  rails (~> 7.0.8)
+  rails (~> 7.1)
   rails-controller-testing (>= 1.0.5)
   rails-erd
   rails_semantic_logger
@@ -849,7 +863,7 @@ DEPENDENCIES
   spring-commands-rspec
   tzinfo-data
   uk_postcode
-  validates_timeliness!
+  validates_timeliness (~> 7)
   web-console (>= 4.2.0)
   webmock
   webrick

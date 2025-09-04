@@ -6,7 +6,7 @@ ruby File.read(".ruby-version").chomp
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 # Required to fix a dependency issue with Rails upgrade to version 7.0.8 and the Logger error
 gem "concurrent-ruby", "1.3.4"
-gem 'rails', '~> 7.0.8'
+gem 'rails', '~> 7.1'
 
 gem 'json', '>= 2.3.0' # Fix for CVE-2020-10663
 
@@ -17,7 +17,7 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'pg_search'
 
 # PostGIS adapter for Active Record
-gem 'activerecord-postgis-adapter', '8.0.3'
+gem 'activerecord-postgis-adapter', '~> 9'
 gem 'breasal'
 gem 'geocoder'
 
@@ -86,9 +86,7 @@ gem 'ice_cube'
 
 gem 'activerecord-import'
 
-# Using a fork until Rails 7 support is upstreamed.
-# See https://github.com/adzap/validates_timeliness/pull/213
-gem "validates_timeliness", github: "mitsuru/validates_timeliness", ref: "f28a625"
+gem "validates_timeliness", '~> 7'
 
 gem "get_into_teaching_api_client_faraday", '>= 3.6.0', github: "DFE-Digital/get-into-teaching-api-ruby-client", require: "api/client"
 
