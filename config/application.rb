@@ -12,7 +12,6 @@ require "action_controller/railtie"
 # require "action_text/engine"
 require "action_view/railtie"
 # require "action_cable/engine"
-# require "sprockets/railtie"
 require "rails/test_unit/railtie"
 
 require "prometheus/client/data_stores/direct_file_store"
@@ -40,6 +39,11 @@ module SchoolExperience
     config.active_model.i18n_customize_full_message = true
 
     config.exceptions_app = routes
+
+    # Please, add to the `ignore` list any other `lib` subdirectories that do
+    # not contain `.rb` files, or that should not be reloaded or eager loaded.
+    # Common ones are `templates`, `generators`, or `middleware`, for example.
+    config.autoload_lib(ignore: %w(assets tasks))
 
     # Configuration for the application, engines, and railties goes here.
     #

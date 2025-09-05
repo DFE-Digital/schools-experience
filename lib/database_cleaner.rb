@@ -1,0 +1,3 @@
+module DatabaseCleaner
+
+end

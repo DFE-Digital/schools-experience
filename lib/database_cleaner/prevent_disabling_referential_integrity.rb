@@ -1,8 +1,11 @@
-module PreventDisablingReferentialIntegrity
-  def disable_referential_integrity
-    yield
+module DatabaseCleaner
+  module PreventDisablingReferentialIntegrity
+    def disable_referential_integrity
+      yield
+    end
   end
 end
 
+
 ActiveRecord::ConnectionAdapters::PostgreSQLAdapter \
-  .include PreventDisablingReferentialIntegrity
+  .include DatabaseCleaner::PreventDisablingReferentialIntegrity
