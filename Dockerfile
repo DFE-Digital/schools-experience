@@ -15,7 +15,7 @@ RUN addgroup -S appgroup -g 20001 && adduser -S appuser -G appgroup -u 10001
 
 # Create writable directories and set proper permissions for non-root user
 RUN mkdir -p /app/tmp /app/out /app/log /app/coverage /tmp /tmp/prometheus/ && \
-    chown -R appuser:appgroup /app /app/tmp /app/out /app/log /app/coverage /tmp /tmp/prometheus/ \
+    chown -R appuser:appgroup /app /app/tmp /app/out /app/log /app/coverage /tmp /tmp/prometheus/ &&\
     chmod -R u+rwX /app /app/tmp /app/out /app/log /app/coverage /tmp /tmp/prometheus/
 
 # remove upgrade zlib-dev & busybox when ruby:3.1.0-alpine3.15 base image is updated to address snyk vuln https://snyk.io/vuln/SNYK-ALPINE315-ZLIB-2434420
