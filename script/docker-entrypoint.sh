@@ -124,10 +124,10 @@ elif [[ ${MODE} == "CUCUMBER" ]] ; then
 	  echo Running cucumber using profile ${PROFILE}
 
       # List all features to txt file.
-      find . -type f -name "*.feature" > features.txt
+      find . -type f -name "*.feature" > /app/tmp/features.txt
 
       # Read features from text file.
-      readarray -t FEATURES < features.txt
+      readarray -t FEATURES < /app/tmp/features.txt
 
       # Determine portion of features to run.
       FEATURES_COUNT=("${#FEATURES[@]}")
