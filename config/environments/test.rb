@@ -52,8 +52,8 @@ Rails.application.configure do
   # Raises error for missing translations.
   config.i18n.raise_on_missing_translations = true
 
-  # Render exception templates for rescuable exceptions and raise for other exceptions.
-  config.action_dispatch.show_exceptions = :rescuable
+  # Raise exceptions instead of rendering exception templates.
+  config.action_dispatch.show_exceptions = :none
 
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
@@ -79,9 +79,6 @@ Rails.application.configure do
   config.session_store :cache_store,
     key: 'schoolex-test-session',
     expire_after: 1.hour # Sets explicit TTL for Session Redis keys
-
-  # Raise exceptions instead of rendering exception templates.
-  config.action_dispatch.show_exceptions = false
 
   # Use the test adapter for active jobs
   config.active_job.queue_adapter = :test

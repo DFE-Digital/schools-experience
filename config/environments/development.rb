@@ -119,7 +119,7 @@ Rails.application.configure do
 
   config.x.maintenance_mode = %w[1 yes true].include?(ENV['MAINTENANCE_MODE'].to_s)
 
-  config.x.git_api_token = Rails.application.credentials.git_api_token.presence
+  config.x.git_api_token = ENV['GIT_API_TOKEN']
   config.x.git_api_endpoint = "https://getintoteachingapi-development.test.teacherservices.cloud/api"
   config.x.api_client_cache_store = ActiveSupport::Cache::MemoryStore.new
 

@@ -105,3 +105,7 @@ REDIS_URL - url for Redis server, defaults to local Redis server
 `CANDIDATE_URN_WHITELIST` - Comma separated whitelist of school URNS which will always be shown in the search results.
 
 `SECRET_KEY_BASE` - Key used by Rails to verify the integrity of signed cookies.
+
+## Serving assets whilst in development mode
+
+`RAILS_SERVE_STATIC_FILES=true` - set this in your local `.env.local` file in order to be able to serve assets locally whilst developing
