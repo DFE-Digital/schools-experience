@@ -5,7 +5,7 @@ Feature: Candidate landing page
 
     Scenario: Site header
         Given I am on the 'landing' page
-        Then the main site header should be 'Get school experience'
+        Then the main service header should be 'Get school experience'
 
     Scenario: Page heading
         Given I am on the 'landing' page
