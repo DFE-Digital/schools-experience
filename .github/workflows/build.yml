@@ -327,13 +327,7 @@ jobs:
           echo "MATRIX_ENVIRONMENTS={\"environment\":[\"development\",\"staging\",\"production\"]}" >> $GITHUB_ENV
 
       - name: Set matrix environments ( Review)
-        if: |
-          github.event_name == 'pull_request' && 
-          github.ref != 'refs/heads/master' && 
-          (
-            github.actor != 'dependabot[bot]' || 
-            contains(github.event.pull_request.labels.*.name, 'deploy')
-          )
+        if: github.event_name == 'pull_request' && github.ref != 'refs/heads/master' && contains(github.event.pull_request.labels.*.name, 'deploy')
         run: |
           echo "MATRIX_ENVIRONMENTS={\"environment\":[\"review\"]}" >> $GITHUB_ENV
       - name: Generate Tag from PR Number
