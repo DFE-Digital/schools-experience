@@ -154,7 +154,7 @@ jobs:
 
       - name: Keep Rubocop output
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ env.rubocop-artifact-name }}
           path: ${{ github.workspace }}/out/rubocop-result.json
@@ -170,14 +170,14 @@ jobs:
 
       - name: Keep Unit Tests Results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ env.unit-tests-artifact-name }}
           path: ${{ github.workspace }}/out/test-report.xml
 
       - name: Keep Code Coverage Report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ env.code-coverage-artifact-name }}
           path: ${{ github.workspace }}/coverage/coverage.json
@@ -247,7 +247,7 @@ jobs:
 
       - name: Keep Unit Tests Results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ env.cucumber-tests-artifact-name }}_${{ matrix.node }}
           path: ${{ github.workspace }}/out
@@ -294,7 +294,7 @@ jobs:
 
       - name: Keep Unit Tests Results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ env.selenium-cucumber-tests-artifact-name }}_${{ matrix.node }}
           path: ${{ github.workspace }}/out
