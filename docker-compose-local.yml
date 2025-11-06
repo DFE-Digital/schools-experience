@@ -52,6 +52,8 @@ services:
        - WEB_URL=postgis://postgres:secret@postgres/school_experience
      volumes:
        - .:/ci_build
+       - tmp-volume:/app/tmp
+       - out-volume:/app/out
      depends_on:
        - postgres
        - redis
@@ -65,3 +67,8 @@ services:
 
    redis:
      image: redis:5-alpine
+volumes:
+  tmp-volume:
+    driver: local
+  out-volume:
+    driver: local
