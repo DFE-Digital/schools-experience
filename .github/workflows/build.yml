@@ -140,12 +140,17 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Bring up Docker compose Stack
-        run: docker compose -f docker-compose-ci.yml up -d
+        run: |
+          mkdir -p out tmp
+          sudo chown -R 10001:10001 out tmp
+          docker compose -f docker-compose-ci.yml up -d
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
       - name: Lint Ruby
-        run: docker run -t --rm -v ${PWD}/out:/app/out -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  rubocop
+        run: |
+          mkdir -p out tmp && sudo chown 10001:10001 out tmp
+          docker run -t --rm -u 10001 -v ${PWD}/out:/app/out -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  rubocop
 
       - name: Keep Rubocop output
         if: always()
@@ -155,7 +160,11 @@ jobs:
           path: ${{ github.workspace }}/out/rubocop-result.json
 
       - name: Run Specs
-        run: docker compose -f docker-compose-ci.yml run --rm db-tasks rspec
+        run: |
+          sudo rm -rf tmp
+          mkdir -p out tmp coverage
+          sudo chown -R 10001:10001 out tmp coverage
+          docker compose -f docker-compose-ci.yml run --rm db-tasks rspec
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
@@ -192,7 +201,10 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run Brakeman static security scanner
-        run: docker run -t --rm -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  brakeman
+        run: |
+          mkdir -p out tmp
+          sudo chown 10001:10001 out tmp
+          docker run -t --rm -u 10001 -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  brakeman
 
   cucumber_tests:
     name: Cucumber Tests
@@ -217,7 +229,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run Cucumber Tests
-        run: |-
+        run: |
+          mkdir -p out tmp
+          sudo chown -R 10001:10001 out tmp
           docker compose -f docker-compose-ci.yml run --rm \
             -e RAILS_ENV \
             -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
@@ -261,7 +275,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run Cucumber Tests
-        run: |-
+        run: |
+          mkdir -p out tmp
+          sudo chown -R 10001:10001 out tmp
           docker compose -f docker-compose-ci.yml run --rm \
             -e RAILS_ENV \
             -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
@@ -328,10 +344,10 @@ jobs:
 
       - name: Set matrix environments ( Review)
         if: |
-          github.event_name == 'pull_request' && 
-          github.ref != 'refs/heads/master' && 
+          github.event_name == 'pull_request' &&
+          github.ref != 'refs/heads/master' &&
           (
-            github.actor != 'dependabot[bot]' || 
+            github.actor != 'dependabot[bot]' ||
             contains(github.event.pull_request.labels.*.name, 'deploy')
           )
         run: |
