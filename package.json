@@ -27,7 +27,7 @@
     "custom-event-polyfill": "^1.0.7",
     "dfe-autocomplete": "github:DFE-Digital/dfe-autocomplete",
     "express": "5.1.0",
-    "govuk-frontend": "5.11.0",
+    "govuk-frontend": "5.13.0",
     "js-cookie": "^3.0.5",
     "json5": "2.2.3",
     "mini-css-extract-plugin": "^2.9.2",
