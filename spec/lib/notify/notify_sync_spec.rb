@@ -1,7 +1,7 @@
 require 'rails_helper'
 require Rails.root.join("lib", "notify", "notify_sync")
 
-describe NotifySync do
+describe Notify::NotifySync do
   before do
     stub_const(
       'NotifySync::API_KEY',

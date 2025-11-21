@@ -7,9 +7,9 @@ describe Schools::Attendance do
   let(:bookings) { [booking_1, booking_2, booking_3] }
   let(:bookings_params) do
     {
-      booking_1.id => true,
-      booking_2.id => true,
-      booking_3.id => false
+      booking_1.id.to_s => true,
+      booking_2.id.to_s => true,
+      booking_3.id.to_s => false
     }
   end
 
@@ -42,9 +42,9 @@ describe Schools::Attendance do
 
     specify 'should correctly assign params' do
       expect(subject.bookings_params).to eql(
-        booking_1.id => true,
-        booking_2.id => true,
-        booking_3.id => false
+        booking_1.id.to_s => true,
+        booking_2.id.to_s => true,
+        booking_3.id.to_s => false
       )
     end
   end
