@@ -6,6 +6,5 @@ module DatabaseCleaner
   end
 end
 
-
 ActiveRecord::ConnectionAdapters::PostgreSQLAdapter \
   .include DatabaseCleaner::PreventDisablingReferentialIntegrity

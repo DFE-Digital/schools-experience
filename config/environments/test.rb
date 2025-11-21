@@ -67,14 +67,13 @@ Rails.application.configure do
   # Tell Active Support which deprecation messages to disallow.
   config.active_support.disallowed_deprecation_warnings = []
 
-
   # Use Redis for Session and cache
   config.cache_store = :redis_cache_store,
-    {
-      url: ENV['REDIS_URL'].presence,
-      db: ENV['TEST_ENV_NUMBER'].presence, # Note DB overrides db in URL if both specified
-      namespace: 'test-cache'
-    }
+                       {
+                         url: ENV['REDIS_URL'].presence,
+                         db: ENV['TEST_ENV_NUMBER'].presence, # Note DB overrides db in URL if both specified
+                         namespace: 'test-cache'
+                       }
 
   config.session_store :cache_store,
     key: 'schoolex-test-session',

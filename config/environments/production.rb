@@ -58,7 +58,7 @@ Rails.application.configure do
   config.force_ssl = true
 
   # Log to STDOUT by default
-  config.logger = ActiveSupport::Logger.new(STDOUT)
+  config.logger = ActiveSupport::Logger.new($stdout)
     .tap  { |logger| logger.formatter = ::Logger::Formatter.new }
     .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
 
@@ -98,14 +98,14 @@ Rails.application.configure do
 
   # Use Redis for Session and cache if REDIS_URL or REDIS_CACHE_URL is set
   config.cache_store = :redis_cache_store,
-    {
-      url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL'].presence,
-      reconnect_attempts: 1,
-      tcp_keepalive: 60,
-      error_handler: lambda do |method:, returning:, exception:|
-        Sentry.capture_exception(exception)
-      end
-    }
+                       {
+                         url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL'].presence,
+                         reconnect_attempts: 1,
+                         tcp_keepalive: 60,
+                         error_handler: lambda do |method:, returning:, exception:|
+                           Sentry.capture_exception(exception)
+                         end
+                       }
 
   config.session_store :cache_store,
     key: 'schoolex-session',
