@@ -3,7 +3,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_for access_needs_support, url: schools_on_boarding_access_needs_support_path, method: method do |f| %>
+    <%= form_for_duplicated_object access_needs_support, url: schools_on_boarding_access_needs_support_path, method: method do |f| %>
       <%= f.govuk_error_summary %>
       <%= f.hidden_field :supports_access_needs, value: nil %>
 

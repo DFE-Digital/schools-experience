@@ -54,8 +54,8 @@ describe Schools::ConfirmAttendanceController, type: :request do
       put(
         schools_confirm_attendance_path,
         params: {
-          attended.id => 'true',
-          unattended.id => 'false',
+          attended.id.to_s => 'true',
+          unattended.id.to_s => 'false',
         }
       )
     end
