@@ -7,8 +7,12 @@ ENV RAILS_ENV=production \
     RACK_TIMEOUT_SERVICE_TIMEOUT=60 \
     BUNDLE_BUILD__SASSC=--disable-march-tune-native
 
-RUN mkdir /app
+RUN mkdir -p /app/tmp /app/out /app/log
 WORKDIR /app
+
+# Create non-root user and group
+RUN addgroup -S appgroup -g 20001 && adduser -S appuser -G appgroup -u 10001
+
 
 # remove upgrade zlib-dev & busybox when ruby:3.1.0-alpine3.15 base image is updated to address snyk vuln https://snyk.io/vuln/SNYK-ALPINE315-ZLIB-2434420
 # also https://security.snyk.io/vuln/SNYK-ALPINE315-NCURSES-2952568
@@ -19,6 +23,9 @@ RUN apk update && apk add -Uu --no-cache zlib-dev busybox ncurses
 RUN apk add -U --no-cache bash build-base git tzdata libxml2 libxml2-dev \
     libffi-dev yaml-dev gcompat gcc postgresql-libs postgresql-dev nodejs yarn \
     chromium chromium-chromedriver
+
+# Upgrade libxml to 2.13.9-r0 to address synk vuln https://security.snyk.io/vuln/SNYK-ALPINE321-LIBXML2-13509049
+RUN apk add -U --no-cache libxml2=2.13.9-r0 libxml2-dev=2.13.9-r0
 
 # Copy Entrypoint script
 COPY script/docker-entrypoint.sh .
@@ -46,6 +53,14 @@ RUN bundle exec rake assets:symlink_non_digested SECRET_KEY_BASE=stubbed SKIP_RE
 ARG COMMIT_SHA
 ENV SHA=${COMMIT_SHA}
 RUN echo "sha-${SHA}" > /etc/school-experience-sha
+
+# Create writable directories and set proper permissions for non-root user
+RUN mkdir -p /app/tmp /app/out /app/log /app/coverage /tmp /tmp/prometheus/ && \
+    chown -R appuser:appgroup /app/tmp /app/out /app/log /app/coverage /tmp /tmp/prometheus/ &&\
+    chmod -R u+rwX /app/tmp /app/out /app/log /app/coverage /tmp /tmp/prometheus/
+
+# Use non-root user
+USER 10001
 
 EXPOSE 3000
 ENTRYPOINT [ "/app/docker-entrypoint.sh"]

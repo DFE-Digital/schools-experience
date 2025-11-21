@@ -9,7 +9,7 @@ Feature: The School Dashboard
 
     Scenario: Site header
         Given I am on the 'schools dashboard' page
-        Then the main site header should be 'Manage school experience'
+        Then the main service header should be 'Manage school experience'
 
     Scenario: Hiding the managing requests section when schools haven't onboarded
         Given my school has not yet fully-onboarded

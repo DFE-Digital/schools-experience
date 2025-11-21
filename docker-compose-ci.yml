@@ -2,6 +2,7 @@ version: '3.3'
 
 services:
    school-experience:
+     user: root
      image: ${IMAGE}
      command: "frontend"
      ports:
@@ -24,6 +25,7 @@ services:
        - ${PWD}/coverage:/app/coverage
 
    sidekiq-jobs:
+     user: root
      image: ${IMAGE}
      command: "sidekiq"
      restart: always
@@ -40,6 +42,7 @@ services:
        - db-tasks
 
    db-tasks:
+     user: root
      image: ${IMAGE}
      command: "database"
      restart: on-failure
@@ -54,6 +57,7 @@ services:
        - WEB_URL=postgis://postgres:secret@postgres/school_experience
      volumes:
        - .:/ci_build
+       - ${PWD}/tmp:/app/tmp
        - ${PWD}/out:/app/out
        - ${PWD}/coverage:/app/coverage
      depends_on:

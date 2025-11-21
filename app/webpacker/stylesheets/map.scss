@@ -61,7 +61,7 @@
     display: none;
     position: relative;
 
-    @include mq($from: desktop) {
+    @include govuk-media-query($from: desktop) {
       min-width: 300px;
     }
   }
