@@ -1,3 +1,4 @@
+require 'database_cleaner/active_record'
 require 'database_cleaner/prevent_disabling_referential_integrity'
 
 truncation_options = { except: %w[schema_migrations spatial_ref_sys] }
@@ -29,6 +30,11 @@ end
 
 DatabaseCleaner.strategy = :deletion, deletion_options
 Cucumber::Rails::Database.javascript_strategy = :deletion, deletion_options
+
+Around do |scenario, block|
+  DatabaseCleaner.cleaning(&block)
+end
+
 if ENV['DEBUG_DATABASE_CLEANER'].present?
   ActiveRecord::Base.logger = Logger.new($stdout)
 end
