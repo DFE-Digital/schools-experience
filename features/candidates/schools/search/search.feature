@@ -3,6 +3,9 @@ Feature: Schools search page
     As a potential candidate
     I want to be able to search for schools in my area
 
+    Background:
+        Given my search is within England
+
     Scenario: Page contents
         Given I am on the 'find a school' page
         Then the page's main header should be 'Search for school experience'

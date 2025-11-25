@@ -31,7 +31,7 @@ end
 DatabaseCleaner.strategy = :deletion, deletion_options
 Cucumber::Rails::Database.javascript_strategy = :deletion, deletion_options
 
-Around do |scenario, block|
+Around do |_scenario, block|
   DatabaseCleaner.cleaning(&block)
 end
 

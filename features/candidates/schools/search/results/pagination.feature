@@ -3,6 +3,9 @@ Feature: School search result pagination
     As a potential candidate
     I want to be able to browse through results by page
 
+    Background:
+        Given my search is within England
+
     Scenario: Pagination links are not displayed when there isn't a full page of results
         Given there are 6 schools in 'London'
         When I have searched for 'London' and am on the results page
