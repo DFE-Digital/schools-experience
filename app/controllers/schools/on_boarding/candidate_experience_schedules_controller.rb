@@ -20,8 +20,11 @@ module Schools
       end
 
       def edit
+        # NB: we must initialise new models when editing an existing one because
+        # we are using the composed_of framework to build the components of
+        # SchoolProfile. Otherwise, frozen variable errors will be triggered.
         @candidate_experience_schedule = \
-          current_school_profile.candidate_experience_schedule
+          CandidateExperienceSchedule.new(current_school_profile.candidate_experience_schedule.attributes)
       end
 
       def update

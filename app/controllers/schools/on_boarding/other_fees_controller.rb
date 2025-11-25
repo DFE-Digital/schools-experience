@@ -2,11 +2,11 @@ module Schools
   module OnBoarding
     class OtherFeesController < OnBoardingsController
       def new
-        @other_fee = current_school_profile.other_fee
+        @other_fee = OtherFee.new(current_school_profile.other_fee.attributes)
       end
 
       def edit
-        @other_fee = current_school_profile.other_fee
+        @other_fee = OtherFee.new(current_school_profile.other_fee.attributes)
         render :new
       end
 

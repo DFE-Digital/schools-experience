@@ -3,7 +3,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_for_duplicated_object disability_confident, url: schools_on_boarding_disability_confident_path, method: method do |f| %>
+    <%= form_for disability_confident, url: schools_on_boarding_disability_confident_path, method: method do |f| %>
       <%= f.govuk_error_summary %>
       <%= f.hidden_field :is_disability_confident, value: nil %>
 

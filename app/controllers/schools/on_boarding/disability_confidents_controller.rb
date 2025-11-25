@@ -20,7 +20,7 @@ module Schools
       end
 
       def edit
-        @disability_confident = current_school_profile.disability_confident
+        @disability_confident = DisabilityConfident.new(current_school_profile.disability_confident.attributes)
       end
 
       def update

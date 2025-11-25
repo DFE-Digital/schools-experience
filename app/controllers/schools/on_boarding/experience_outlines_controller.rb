@@ -18,7 +18,7 @@ module Schools
       end
 
       def edit
-        @experience_outline = current_school_profile.experience_outline
+        @experience_outline = ExperienceOutline.new(current_school_profile.experience_outline.attributes)
       end
 
       def update

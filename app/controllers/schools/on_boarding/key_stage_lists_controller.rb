@@ -17,7 +17,7 @@ module Schools
       end
 
       def edit
-        @key_stage_list = current_school_profile.key_stage_list
+        @key_stage_list = KeyStageList.new(current_school_profile.key_stage_list.attributes)
       end
 
       def update

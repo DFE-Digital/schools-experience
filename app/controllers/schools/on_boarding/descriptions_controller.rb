@@ -17,7 +17,10 @@ module Schools
       end
 
       def edit
-        @description = current_school_profile.description
+        # NB: we must initialise new models when editing an existing one because
+        # we are using the composed_of framework to build the components of
+        # SchoolProfile. Otherwise, frozen variable errors will be triggered.
+        @description = Description.new(current_school_profile.description.attributes)
       end
 
       def update

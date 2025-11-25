@@ -2,11 +2,14 @@ module Schools
   module OnBoarding
     class DbsFeesController < OnBoardingsController
       def new
-        @dbs_fee = current_school_profile.dbs_fee
+        @dbs_fee = DBSFee.new(current_school_profile.dbs_fee.attributes)
       end
 
       def edit
-        @dbs_fee = current_school_profile.dbs_fee
+        # NB: we must initialise new models when editing an existing one because
+        # we are using the composed_of framework to build the components of
+        # SchoolProfile. Otherwise, frozen variable errors will be triggered.
+        @dbs_fee = DBSFee.new(current_school_profile.dbs_fee.attributes)
         render :new
       end
 

@@ -17,7 +17,7 @@ module Schools
       end
 
       def edit
-        @phases_list = current_school_profile.phases_list
+        @phases_list = PhasesList.new(current_school_profile.phases_list.attributes)
       end
 
       def update

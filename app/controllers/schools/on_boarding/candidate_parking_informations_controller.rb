@@ -20,7 +20,10 @@ module Schools
       end
 
       def edit
-        @candidate_parking_information = current_school_profile.candidate_parking_information
+        # NB: we must initialise new models when editing an existing one because
+        # we are using the composed_of framework to build the components of
+        # SchoolProfile. Otherwise, frozen variable errors will be triggered.
+        @candidate_parking_information = CandidateParkingInformation.new(current_school_profile.candidate_parking_information.attributes)
       end
 
       def update

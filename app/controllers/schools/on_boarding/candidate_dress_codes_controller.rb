@@ -21,7 +21,10 @@ module Schools
       end
 
       def edit
-        @candidate_dress_code = current_school_profile.candidate_dress_code
+        # NB: we must initialise new models when editing an existing one because
+        # we are using the composed_of framework to build the components of
+        # SchoolProfile. Otherwise, frozen variable errors will be triggered.
+        @candidate_dress_code = CandidateDressCode.new(current_school_profile.candidate_dress_code.attributes)
       end
 
       def update
