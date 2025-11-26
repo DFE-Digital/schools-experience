@@ -253,7 +253,6 @@ Rails.application.config.active_record.generate_secure_token_on = :initialize
 Rails.application.config.action_view.sanitizer_vendor = Rails::HTML::Sanitizer.best_supported_vendor
 
 ###
-# # NB: enabling this option doesn't currently work
 # Configure Action Text to use an HTML5 standards-compliant sanitizer when it is supported on your
 # platform.
 #
@@ -262,6 +261,7 @@ Rails.application.config.action_view.sanitizer_vendor = Rails::HTML::Sanitizer.b
 #
 # In previous versions of Rails, Action Text always used `Rails::HTML4::Sanitizer` as its vendor.
 #++
+# NB: enabling this option doesn't currently work
 # Rails.application.config.action_text.sanitizer_vendor = Rails::HTML::Sanitizer.best_supported_vendor
 
 ###
