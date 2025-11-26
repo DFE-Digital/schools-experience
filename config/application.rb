@@ -52,5 +52,7 @@ module SchoolExperience
     #
     config.time_zone = "London"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    config.add_autoload_paths_to_load_path = false
   end
 end
