@@ -59,7 +59,7 @@ module Schools
     end
 
     def build_updated_attendance
-      bookings = unlogged_bookings.where(id: keys_to_ids(bookings_params.keys))
+      bookings = unlogged_bookings.where(id: bookings_params.keys)
 
       assign_gitis_contacts(bookings)
 
@@ -68,10 +68,6 @@ module Schools
 
     def ids_to_keys(ids)
       ids.map(&:to_s)
-    end
-
-    def keys_to_ids(keys)
-      keys.map(&:to_i)
     end
   end
 end
