@@ -3,7 +3,7 @@ module Schools
     class CandidateRequirementsSelectionsController < OnBoardingsController
       def new
         @candidate_requirements_selection = \
-          current_school_profile.candidate_requirements_selection
+          CandidateRequirementsSelection.new(current_school_profile.candidate_requirements_selection.attributes)
       end
 
       def create
@@ -22,8 +22,11 @@ module Schools
       end
 
       def edit
-        @candidate_requirements_selection = \
-          current_school_profile.candidate_requirements_selection
+        # NB: we must initialise new models when editing an existing one because
+        # we are using the composed_of framework to build the components of
+        # SchoolProfile. Otherwise, frozen variable errors will be triggered.
+        @candidate_requirements_selection = CandidateRequirementsSelection.new \
+          current_school_profile.candidate_requirements_selection.attributes
       end
 
       def update

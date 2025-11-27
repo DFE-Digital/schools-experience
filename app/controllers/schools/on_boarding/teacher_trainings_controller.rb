@@ -3,7 +3,7 @@ module Schools
     class TeacherTrainingsController < OnBoardingsController
       def new
         @teacher_training = \
-          TeacherTraining.new_from_bookings_school current_school
+          TeacherTraining.new(TeacherTraining.new_from_bookings_school(current_school).attributes)
       end
 
       def create
@@ -18,7 +18,10 @@ module Schools
       end
 
       def edit
-        @teacher_training = current_school_profile.teacher_training
+        # NB: we must initialise new models when editing an existing one because
+        # we are using the composed_of framework to build the components of
+        # SchoolProfile. Otherwise, frozen variable errors will be triggered.
+        @teacher_training = TeacherTraining.new(current_school_profile.teacher_training.attributes)
       end
 
       def update

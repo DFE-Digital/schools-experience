@@ -17,7 +17,10 @@ module Schools
       end
 
       def edit
-        @admin_contact = current_school_profile.admin_contact
+        # NB: we must initialise new models when editing an existing one because
+        # we are using the composed_of framework to build the components of
+        # SchoolProfile. Otherwise, frozen variable errors will be triggered.
+        @admin_contact = AdminContact.new(current_school_profile.admin_contact.attributes)
       end
 
       def update

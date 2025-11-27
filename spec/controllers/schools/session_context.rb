@@ -20,6 +20,8 @@ shared_context "logged in DfE user" do
   end
 
   before do
+    allow(ENV).to receive(:fetch).and_call_original
+
     allow(ENV).to receive(:fetch)
       .with('DFE_SIGNIN_API_CLIENT')
       .and_return('abc')

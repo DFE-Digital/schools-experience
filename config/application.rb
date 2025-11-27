@@ -12,7 +12,6 @@ require "action_controller/railtie"
 # require "action_text/engine"
 require "action_view/railtie"
 # require "action_cable/engine"
-# require "sprockets/railtie"
 require "rails/test_unit/railtie"
 
 require "prometheus/client/data_stores/direct_file_store"
@@ -41,6 +40,11 @@ module SchoolExperience
 
     config.exceptions_app = routes
 
+    # Please, add to the `ignore` list any other `lib` subdirectories that do
+    # not contain `.rb` files, or that should not be reloaded or eager loaded.
+    # Common ones are `templates`, `generators`, or `middleware`, for example.
+    config.autoload_lib(ignore: %w[assets tasks])
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
@@ -48,5 +52,7 @@ module SchoolExperience
     #
     config.time_zone = "London"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    config.add_autoload_paths_to_load_path = false
   end
 end

@@ -23,10 +23,11 @@ module Schools
   private
 
     def bookings_params
+      # NB: as of Rails 7.1, the param keys must be strings/symbols, and not integers
       params
         .select { |key, _| key.match(/\A\d+\z/) }
-        .transform_keys(&:to_i)
-        .slice(*unlogged_bookings.ids)
+        .transform_keys(&:to_s)
+        .slice(*ids_to_keys(unlogged_bookings.ids))
       # Avoid throwing key error if the user hits back button then
       # resubmits the form causing the params to no longer match up with
       # the unlogged_bookings.
@@ -63,6 +64,10 @@ module Schools
       assign_gitis_contacts(bookings)
 
       @updated_attendance = Schools::Attendance.new(bookings: bookings, bookings_params: bookings_params)
+    end
+
+    def ids_to_keys(ids)
+      ids.map(&:to_s)
     end
   end
 end

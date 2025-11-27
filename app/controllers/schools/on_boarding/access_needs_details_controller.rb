@@ -19,7 +19,10 @@ module Schools
       end
 
       def edit
-        @access_needs_detail = current_school_profile.access_needs_detail
+        # NB: we must initialise new models when editing an existing one because
+        # we are using the composed_of framework to build the components of
+        # SchoolProfile. Otherwise, frozen variable errors will be triggered.
+        @access_needs_detail = AccessNeedsDetail.new(current_school_profile.access_needs_detail.attributes)
       end
 
       def update

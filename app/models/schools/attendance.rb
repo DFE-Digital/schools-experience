@@ -11,9 +11,8 @@ module Schools
 
     def save
       @updated_bookings = []
-
-      bookings_params.each do |booking_id, attended|
-        fetch(booking_id).tap do |booking|
+      bookings_params.each do |booking_key, attended|
+        fetch(booking_key).tap do |booking|
           booking.attended = ActiveModel::Type::Boolean.new.cast(attended)
           booking.save!(context: :attendance)
           send_candidate_feedback_email(booking)
@@ -30,8 +29,8 @@ module Schools
     end
 
     def update_gitis
-      bookings_params.slice(*updated_bookings).each do |booking_id, attended|
-        fetch(booking_id).tap do |booking|
+      bookings_params.slice(*updated_bookings.map(&:to_s)).each do |booking_key, attended|
+        fetch(booking_key).tap do |booking|
           status = ActiveModel::Type::Boolean.new.cast(attended) ? :completed : :did_not_attend
           Bookings::Gitis::SchoolExperience.from_booking(booking, status)
             .write_to_gitis_contact(booking.contact_uuid)
@@ -53,8 +52,8 @@ module Schools
       @indexed_bookings ||= bookings.index_by(&:id)
     end
 
-    def fetch(id)
-      indexed_bookings.fetch(id)
+    def fetch(booking_key)
+      indexed_bookings.fetch(booking_key.to_i)
     end
 
     def update_error(exception)

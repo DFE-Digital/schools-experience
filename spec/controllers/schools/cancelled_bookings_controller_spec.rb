@@ -20,7 +20,7 @@ describe Schools::CancelledBookingsController, type: :request do
     it { expect(response).to render_template(:index) }
 
     it 'assigns the correct bookings' do
-      expect(assigns(:bookings)).to eq cancelled_by_school + cancelled_by_candidate
+      expect(assigns(:bookings)).to match_array(cancelled_by_school + cancelled_by_candidate)
     end
   end
 

@@ -5,6 +5,7 @@ Feature: Filtering school search results
 
     Background:
         Given the phases 'Primary' and 'Secondary' exist
+        And my search is within England
 
     Scenario: Filtering by Education Phase
         Given I have searched for 'Manchester' and am on the results page
