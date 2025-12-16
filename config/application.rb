@@ -34,7 +34,8 @@ Prometheus::Client.config.data_store = file_store
 module SchoolExperience
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.0
+    config.load_defaults 7.1
+    config.active_support.cache_format_version = 7.1
 
     config.active_model.i18n_customize_full_message = true
 
@@ -54,7 +55,5 @@ module SchoolExperience
     # config.eager_load_paths << Rails.root.join("extras")
 
     config.add_autoload_paths_to_load_path = false
-
-    config.active_support.cache_format_version = 7.1
   end
 end
