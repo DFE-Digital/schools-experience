@@ -17,7 +17,7 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
     describe "#urn" do
       it "is invalid when too long" do
         model.school.urn = 123_456_789
-        expect { subject }.to raise_exception ActiveModel::ValidationError, "Validation failed: is too long (maximum is 8 characters)"
+        expect { subject }.to raise_exception ActiveModel::ValidationError, "Validation failed: Urn is too long (maximum is 8 characters)"
       end
     end
 
@@ -30,14 +30,14 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
       end
 
       it "is invalid when too long" do
-        expect { subject }.to raise_exception ActiveModel::ValidationError, "Validation failed: must be less than or equal to 100"
+        expect { subject }.to raise_exception ActiveModel::ValidationError, "Validation failed: Duration must be less than or equal to 100"
       end
     end
 
     describe "#school_name" do
       it "is invalid when too long" do
         model.school.name = "*" * 101
-        expect { subject }.to raise_exception ActiveModel::ValidationError, "Validation failed: is too long (maximum is 100 characters)"
+        expect { subject }.to raise_exception ActiveModel::ValidationError, "Validation failed: School name is too long (maximum is 100 characters)"
       end
     end
 
@@ -45,7 +45,7 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
       let(:status) { :invalid }
 
       it "is invalid when not included in the list of statuses" do
-        expect { subject }.to raise_exception ActiveModel::ValidationError, "Validation failed: is not included in the list"
+        expect { subject }.to raise_exception ActiveModel::ValidationError, "Validation failed: Status is not included in the list"
       end
     end
   end

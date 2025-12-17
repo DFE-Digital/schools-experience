@@ -37,10 +37,6 @@ module SchoolExperience
     config.load_defaults 7.1
     config.active_support.cache_format_version = 7.1
 
-    config.active_model.i18n_customize_full_message = true
-
-    config.exceptions_app = routes
-
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
@@ -55,5 +51,7 @@ module SchoolExperience
     # config.eager_load_paths << Rails.root.join("extras")
 
     config.add_autoload_paths_to_load_path = false
+    config.exceptions_app = routes
+    config.active_model.i18n_customize_full_message = true
   end
 end
