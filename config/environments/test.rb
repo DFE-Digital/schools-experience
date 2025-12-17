@@ -9,10 +9,10 @@ require Rails.root.join('spec', 'support', 'fake_get_into_teaching_api_client')
 # and recreated between test runs. Don't rely on the data there!
 
 Rails.application.configure do
+  # Settings specified here will take precedence over those in config/application.rb.
+
   # Verifies that versions and hashed value of the package contents in the project's package.json
   config.shakapacker.check_yarn_integrity = false
-
-  # Settings specified here will take precedence over those in config/application.rb.
 
   # While tests run files are not watched, reloading is not necessary.
   config.enable_reloading = false
@@ -139,6 +139,6 @@ Rails.application.configure do
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
 
-  # Raise error when a before_action's only/except options reference missing actions
+  # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
 end
