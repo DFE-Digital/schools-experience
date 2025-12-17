@@ -2,7 +2,7 @@
 require "fileutils"
 
 APP_ROOT = File.expand_path("..", __dir__)
-APP_NAME = "school-experience"
+APP_NAME = "school-experience".freeze
 
 def system!(*args)
   system(*args, exception: true)

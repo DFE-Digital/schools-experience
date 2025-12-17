@@ -28,15 +28,9 @@ listen_port = ENV.fetch("PORT", 3000)
 # Specifies the `environment` that Puma will run in.
 environment ENV.fetch("RAILS_ENV", "development")
 
-
-
 # Specify the PID file. Defaults to tmp/pids/server.pid in development.
 # In other environments, only set the PID file if requested.
 pidfile ENV.fetch("PIDFILE", "tmp/pids/server.pid")
-
-
-
-
 
 # Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart
