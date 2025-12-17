@@ -176,7 +176,7 @@ class Bookings::School < ApplicationRecord
   scope :disability_confident, lambda { |option|
     if option.present?
       joins(:profile)
-        .where('bookings_profiles.disability_confident IS ?', option)
+        .where('bookings_profiles.disability_confident': option)
     else
       all
     end
@@ -185,7 +185,7 @@ class Bookings::School < ApplicationRecord
   scope :with_parking, lambda { |option|
     if option.present?
       joins(:profile)
-        .where('bookings_profiles.parking_provided IS ?', option)
+        .where('bookings_profiles.parking_provided': option)
     else
       all
     end

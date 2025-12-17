@@ -6,7 +6,7 @@ ruby File.read(".ruby-version").chomp
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 # Required to fix a dependency issue with Rails upgrade to version 7.0.8 and the Logger error
 gem "concurrent-ruby", "1.3.4"
-gem 'rails', '~> 7.1'
+gem 'rails', '~> 7.2'
 
 gem 'json', '>= 2.3.0' # Fix for CVE-2020-10663
 
@@ -17,7 +17,7 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'pg_search'
 
 # PostGIS adapter for Active Record
-gem 'activerecord-postgis-adapter', '~> 9'
+gem 'activerecord-postgis-adapter', '~> 10'
 gem 'breasal'
 gem 'geocoder'
 
