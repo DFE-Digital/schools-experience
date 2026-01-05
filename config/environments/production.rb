@@ -1,10 +1,10 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
+  # Settings specified here will take precedence over those in config/application.rb.
+
   # Verifies that versions and hashed value of the package contents in the project's package.json
   config.shakapacker.check_yarn_integrity = false
-
-  # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
   config.enable_reloading = false
@@ -61,13 +61,15 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
 
+  # Skip http-to-https redirect for the default health check endpoint.
+  # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
+
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id, ->(_) { "PID:#{Process.pid}" }]
 
   # "info" includes generic and useful information about system operation, but avoids logging too much
   # information to avoid inadvertent exposure of personally identifiable information (PII). If you
   # want to log everything, set the level to "debug".
-  # config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
@@ -112,7 +114,6 @@ Rails.application.configure do
 
   config.active_job.queue_adapter = :sidekiq
 
-  config.force_ssl = true
   config.ssl_options = {
     redirect: {
       exclude: lambda do |request|
@@ -171,4 +172,7 @@ Rails.application.configure do
   # ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+  # Only use :id for inspections in production.
+  config.active_record.attributes_for_inspect = [:id]
 end
