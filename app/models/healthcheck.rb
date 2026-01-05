@@ -23,6 +23,7 @@ class Healthcheck
 
   def test_postgresql
     ApplicationRecord.connection
+    ApplicationRecord.connection.execute("SELECT 1") # NB as of Rails 7.2 the connection isn't actually established until a query is made
     ApplicationRecord.connected?
   rescue RuntimeError
     false
