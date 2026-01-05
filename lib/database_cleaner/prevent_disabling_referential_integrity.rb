@@ -1,3 +1,5 @@
+require "active_record/connection_adapters/postgresql_adapter"
+
 module DatabaseCleaner
   module PreventDisablingReferentialIntegrity
     def disable_referential_integrity
