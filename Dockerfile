@@ -27,6 +27,9 @@ RUN apk add -U --no-cache bash build-base git tzdata libxml2 libxml2-dev \
 # Upgrade libxml to 2.13.9-r0 to address synk vuln https://security.snyk.io/vuln/SNYK-ALPINE321-LIBXML2-13509049
 RUN apk add -U --no-cache libxml2=2.13.9-r0 libxml2-dev=2.13.9-r0
 
+# Upgrade libpng to 1.6.54-0 to address synk vuln https://security.snyk.io/vuln/SNYK-ALPINE321-LIBPNG-15062366
+RUN apk add -U --no-cache libpng=1.6.54-r0
+
 # Copy Entrypoint script
 COPY script/docker-entrypoint.sh .
 RUN chmod +x /app/docker-entrypoint.sh
