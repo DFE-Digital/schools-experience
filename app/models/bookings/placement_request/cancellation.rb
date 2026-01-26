@@ -43,7 +43,6 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
     :contact_uuid,
     :gitis_contact,
     :gitis_contact=,
-    :dates_requested,
     :token,
     :booking,
     :placement_date,
