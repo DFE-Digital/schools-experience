@@ -17,6 +17,10 @@ default: &default
 
   extract_css: true
 
+  # Upgrading to Shakapacker 9
+  css_modules_export_mode: default
+  javascript_transpiler: "swc"
+
 development:
   <<: *default
   compile: true
