@@ -91,6 +91,18 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           MSG_MINIMAL: true
 
+      - name: Teams Deploy Notification
+        if: failure() && github.event.inputs.environment == 'production'
+        uses: DFE-Digital/github-actions/send-to-teams-channel@master
+        with:
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          title: Manual Deploy
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
+          status: good
+          minimal: true
+          message: |
+            Manual Deploy to production successful: ${{ github.event.inputs.docker-image-tag }}"
+
       - name: Slack Notification
         if: failure() && github.event.inputs.environment == 'production'
         uses: rtCamp/action-slack-notify@master
@@ -99,3 +111,13 @@ jobs:
           SLACK_TITLE: "Manual Deploy Failed: ${{ github.event.inputs.docker-image-tag }}"
           SLACK_MESSAGE: Failure deploying ${{github.event.inputs.environment}}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Notify teams channel on job failure
+        if: failure() && github.event.inputs.environment == 'production'
+        uses: DFE-Digital/github-actions/send-to-teams-channel@master
+        with:
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          title: Manual Deploy
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
+          message: |
+            Failure in Deploy to Production
