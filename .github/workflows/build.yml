@@ -121,6 +121,16 @@ jobs:
           SLACK_TITLE: "Failure Building Application"
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
+      - name: Notify teams channel on job failure
+        if: failure() && github.ref == 'refs/heads/master'
+        uses: DFE-Digital/github-actions/send-to-teams-channel@master
+        with:
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          title: Build and Deploy
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
+          message: |
+            There has been a failure building the application
+
   spec_tests:
     name: Unit Tests
     runs-on: ubuntu-latest
@@ -486,6 +496,18 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           MSG_MINIMAL: true
 
+      - name: Teams Release Notification
+        if: matrix.environment  == 'Production' && steps.tag_id.outputs.release_id
+        uses: DFE-Digital/github-actions/send-to-teams-channel@master
+        with:
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          title: "Release Published: ${{steps.tag_id.outputs.release_name}}"
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
+          minimal: true
+          status: good
+          message: |
+            ${{ fromJson(steps.tag_id.outputs.release_body) }}
+
       - name: Slack Notification
         if: failure() && matrix.environment == 'Production'
         uses: rtCamp/action-slack-notify@master
@@ -494,6 +516,16 @@ jobs:
           SLACK_TITLE: Failure in Post-Development Deploy
           SLACK_MESSAGE: Failure with initialising ${{matrix.environment}} deployment for ${{env.APPLICATION}}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Notify teams channel on job failure
+        if: failure() && matrix.environment == 'Production'
+        uses: DFE-Digital/github-actions/send-to-teams-channel@master
+        with:
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          title: Build and Deploy
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
+          message: |
+            Failure in Deploy to Production
 
   owasp:
     name: "OWASP Test"
@@ -550,6 +582,16 @@ jobs:
           SLACK_TITLE: "Failure: OWSAP Testing has failed on  Development"
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
+      - name: Notify teams channel on job failure
+        if: failure()
+        uses: DFE-Digital/github-actions/send-to-teams-channel@master
+        with:
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          title: Build and Deploy
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
+          message: |
+            Failure in OWASP Checks
+
   deploy_domains_infra:
     name: Deploy Domains Infrastructure
     runs-on: ubuntu-latest
@@ -570,6 +612,8 @@ jobs:
           azure-tenant-id:  ${{ secrets.AZURE_TENANT_ID   }}
           azure-subscription-id:  ${{ secrets.AZURE_SUBSCRIPTION_ID   }}
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
 
   deploy_domains_env:
     name: Deploy Domains to ${{ matrix.domain_environment }} environment
@@ -597,3 +641,5 @@ jobs:
           environment: ${{ matrix.domain_environment }}
           healthcheck: healthcheck
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}

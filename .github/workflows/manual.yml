@@ -95,6 +95,18 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           MSG_MINIMAL: true
 
+      - name: Teams Release Notification
+        if: steps.tag_id.outputs.release_id && github.event.inputs.environment == 'Production'
+        uses: DFE-Digital/github-actions/send-to-teams-channel@master
+        with:
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          title: "Release Published: ${{steps.tag_id.outputs.release_name}}"
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
+          minimal: true
+          status: good
+          message: |
+            ${{ fromJson(steps.tag_id.outputs.release_body) }}
+
       - name: Slack Notification
         if: failure() && github.event.inputs.environment == 'Production'
         uses: rtCamp/action-slack-notify@master
@@ -103,3 +115,13 @@ jobs:
           SLACK_TITLE: "Manual Release Failed: ${{steps.tag_id.outputs.release_name}}"
           SLACK_MESSAGE: Failure deploying ${{github.event.inputs.environment}} release
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Notify teams channel on job failure
+        if: failure() && github.event.inputs.environment == 'production'
+        uses: DFE-Digital/github-actions/send-to-teams-channel@master
+        with:
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          title: Manual Deploy
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
+          message: |
+            Failure in Deploy to Production
