@@ -25,7 +25,7 @@ gem 'geocoder'
 gem 'puma', '~> 7.2.0'
 
 # Transpile app-like JavaScript. Read more: https://github.com/shakacode/shakapacker
-gem 'shakapacker', '8.2.0'
+gem 'shakapacker', '9.5.0'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
@@ -50,7 +50,7 @@ gem 'yabeda-sidekiq'
 
 gem 'dotenv-rails', '>= 2.7.6'
 
-gem 'govuk-components', '~> 5.11.0'
+gem 'govuk-components', '~> 5.11.3'
 gem 'govuk_design_system_formbuilder', '~> 5.11.0'
 gem 'notifications-ruby-client'
 
@@ -161,7 +161,7 @@ group :test do
   gem "rspec-json_expectations", "~> 2.2"
   gem 'rubocop-capybara', '~> 2.21'
   gem 'rubocop-factory_bot', '~> 2.26'
-  gem 'rubocop-rspec', '~> 3.5'
+  gem 'rubocop-rspec', '~> 3.9'
   gem 'shoulda-matchers', '~> 6.1'
 
   gem 'capybara-screenshot'
