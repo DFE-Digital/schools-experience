@@ -68,8 +68,6 @@ If required Exceptions Notifications can be sent to Sentry.
 
 `GTM_ID` - Google Tag Manager account id
 
-`SLACK_WEBHOOK` - Webhook to communicate pipeline events to Slack channel. A new token may be generated on Slack app https://ukgovernmentdfe.slack.com/apps/A02HUD62ADP-school-experience-deployments. New collaborators may be added by existing collaborators or #digital-tools-support.
-
 ## Deactivating the service
 
 `MAINTENANCE_MODE` - Put entire service into maintenance mode, 1 = on, blank = off
