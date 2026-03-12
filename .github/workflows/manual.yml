@@ -85,16 +85,6 @@ jobs:
           secure-username: ${{ steps.fetch-username.outputs.SECURE_USERNAME}}
           secure-password: ${{ steps.fetch-password.outputs.SECURE_PASSWORD}}
 
-      - name: Slack Release Notification
-        if: steps.tag_id.outputs.release_id && github.event.inputs.environment == 'Production'
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_COLOR: ${{env.SLACK_SUCCESS}}
-          SLACK_MESSAGE:  ${{ fromJson( steps.tag_id.outputs.release_body) }}
-          SLACK_TITLE: "Release Published to ${{github.event.inputs.environment}}: ${{steps.tag_id.outputs.release_name}}"
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          MSG_MINIMAL: true
-
       - name: Teams Release Notification
         if: steps.tag_id.outputs.release_id && github.event.inputs.environment == 'Production'
         uses: DFE-Digital/github-actions/send-to-teams-channel@master
@@ -106,15 +96,6 @@ jobs:
           status: good
           message: |
             ${{ fromJson(steps.tag_id.outputs.release_body) }}
-
-      - name: Slack Notification
-        if: failure() && github.event.inputs.environment == 'Production'
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_COLOR: ${{env.SLACK_ERROR}}
-          SLACK_TITLE: "Manual Release Failed: ${{steps.tag_id.outputs.release_name}}"
-          SLACK_MESSAGE: Failure deploying ${{github.event.inputs.environment}} release
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
       - name: Notify teams channel on job failure
         if: failure() && github.event.inputs.environment == 'production'

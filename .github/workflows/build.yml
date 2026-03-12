@@ -112,15 +112,6 @@ jobs:
           docker-sha: ${{ steps.sha.outputs.short }}
           snyk-token: ${{ secrets.SNYK_TOKEN }}
 
-      - name: Slack Notification
-        if: failure() && github.ref == 'refs/heads/master'
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_COLOR: ${{env.SLACK_ERROR}}
-          SLACK_MESSAGE: "There has been a failure building the application"
-          SLACK_TITLE: "Failure Building Application"
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-
       - name: Notify teams channel on job failure
         if: failure() && github.ref == 'refs/heads/master'
         uses: DFE-Digital/github-actions/send-to-teams-channel@master
@@ -486,16 +477,6 @@ jobs:
         with:
           release_id: ${{steps.tag_id.outputs.release_id}}
 
-      - name: Slack Release Notification
-        if: matrix.environment  == 'Production' && steps.tag_id.outputs.release_id
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_COLOR: ${{env.SLACK_SUCCESS}}
-          SLACK_MESSAGE: ${{ fromJson(steps.tag_id.outputs.release_body) }}
-          SLACK_TITLE: "Release Published: ${{steps.tag_id.outputs.release_name}}"
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          MSG_MINIMAL: true
-
       - name: Teams Release Notification
         if: matrix.environment  == 'Production' && steps.tag_id.outputs.release_id
         uses: DFE-Digital/github-actions/send-to-teams-channel@master
@@ -507,15 +488,6 @@ jobs:
           status: good
           message: |
             ${{ fromJson(steps.tag_id.outputs.release_body) }}
-
-      - name: Slack Notification
-        if: failure() && matrix.environment == 'Production'
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_COLOR: ${{env.SLACK_ERROR}}
-          SLACK_TITLE: Failure in Post-Development Deploy
-          SLACK_MESSAGE: Failure with initialising ${{matrix.environment}} deployment for ${{env.APPLICATION}}
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
       - name: Notify teams channel on job failure
         if: failure() && matrix.environment == 'Production'
@@ -573,15 +545,6 @@ jobs:
           rules_file_name: ".zap/rules.tsv"
           cmd_options: "-a"
 
-      - name: Slack Notification
-        if: failure()
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_COLOR: ${{env.SLACK_FAILURE}}
-          SLACK_MESSAGE: "Pipeline Failure carrying out OWASP Testing on https://${{env.APPLICATION_NAME}}-development.${{env.REVIEW_DOMAIN}}/"
-          SLACK_TITLE: "Failure: OWSAP Testing has failed on  Development"
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-
       - name: Notify teams channel on job failure
         if: failure()
         uses: DFE-Digital/github-actions/send-to-teams-channel@master
@@ -611,7 +574,6 @@ jobs:
           azure-client-id:  ${{ secrets.AZURE_CLIENT_ID  }}
           azure-tenant-id:  ${{ secrets.AZURE_TENANT_ID   }}
           azure-subscription-id:  ${{ secrets.AZURE_SUBSCRIPTION_ID   }}
-          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
           teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
           service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
 
@@ -640,6 +602,5 @@ jobs:
           azure-subscription-id:  ${{ secrets.AZURE_SUBSCRIPTION_ID   }}
           environment: ${{ matrix.domain_environment }}
           healthcheck: healthcheck
-          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
           teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
           service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
