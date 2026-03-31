@@ -88,6 +88,7 @@ Rails.application.configure do
 
   config.x.candidates.deactivate_applications = ENV['DEACTIVATE_CANDIDATES'].to_s.presence || false
   config.x.google_maps_key = ENV['GOOGLE_MAPS_KEY'].presence || Rails.application.credentials[:google_maps_key]
+  config.x.google_geocoding_key = ENV['GOOGLE_GEOCODING_KEY'].presence
 
   # dfe signin redirects back to https, so force it
   config.force_ssl = true
