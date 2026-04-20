@@ -25,7 +25,7 @@ RUN apk add -U --no-cache bash build-base git tzdata libxml2 libxml2-dev \
     chromium chromium-chromedriver
 
 # Upgrade libpng to 1.6.55-0 to address synk vuln https://security.snyk.io/vuln/SNYK-ALPINE321-LIBPNG-15338682
-RUN apk add -U --no-cache libpng=1.6.55-r0
+#RUN apk add -U --no-cache libpng=1.6.55-r0
 
 # Copy Entrypoint script
 COPY script/docker-entrypoint.sh .
