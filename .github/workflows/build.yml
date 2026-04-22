@@ -36,7 +36,7 @@ jobs:
         uses: DFE-Digital/github-actions/set-up-environment@master
 
       - name: Lint Dockerfile
-        uses: brpaz/hadolint-action@master
+        uses: brpaz/hadolint-action@2332a7b74a6de0dda2e2221d575162eba76ba5e5 # Pinned at v3.3.0
         with:
           dockerfile: "Dockerfile"
 
@@ -321,7 +321,7 @@ jobs:
         run: sudo sed -i "s?/app/app?/github/workspace/app?" ${{ github.workspace }}/out/${{ env.code-coverage-artifact-name }}/coverage.json
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarcloud-github-action@ffc3010689be73b8e5ae0c57ce35968afd7909e8 # Pinned at v5.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -438,7 +438,7 @@ jobs:
 
       - name: Determine DfE Sign In Message
         if: matrix.environment == 'Review'
-        uses: haya14busa/action-cond@v1
+        uses: haya14busa/action-cond@94f77f7a80cd666cb3155084e428254fea4281fd # Pinned at v1.2.1
         id: dsiMessage
         with:
           cond: ${{ steps.deploy.outputs.dsi-hostname != '' }}
@@ -447,7 +447,7 @@ jobs:
 
       - name: Post sticky pull request comment
         if: matrix.environment == 'Review'
-        uses: marocchino/sticky-pull-request-comment@v3
+        uses: marocchino/sticky-pull-request-comment@0ea0beb66eb9baf113663a64ec522f60e49231c0 # Pinned at v3.0.4
         with:
           recreate: true
           header: PR
@@ -457,7 +457,7 @@ jobs:
 
       - name: Add Review Label
         if: matrix.environment == 'Review' && contains(github.event.pull_request.user.login, 'dependabot') == false
-        uses: actions-ecosystem/action-add-labels@v1
+        uses: actions-ecosystem/action-add-labels@bd52874380e3909a1ac983768df6976535ece7f8 # Pinned at v1.1.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           labels: Review
@@ -471,7 +471,7 @@ jobs:
 
       - name: Publish Release
         if: matrix.environment  == 'Production' && steps.tag_id.outputs.release_id
-        uses: eregon/publish-release@v1
+        uses: eregon/publish-release@01df127f5e9a3c26935118e22e738d95b59d10ce # Pinned at v1.0.6 NOTE:This repo has been archived May 29 2025!
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -537,7 +537,7 @@ jobs:
             echo "SECURE_PASSWORD=$SECRET_VALUE" >> $GITHUB_OUTPUT
 
       - name: ZAP Scan
-        uses: zaproxy/action-full-scan@v0.13.0
+        uses: zaproxy/action-full-scan@3c58388149901b9a03b7718852c5ba889646c27c # Pinned at v0.13.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           docker_name: "ghcr.io/zaproxy/zaproxy:stable"
