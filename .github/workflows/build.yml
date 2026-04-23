@@ -36,7 +36,7 @@ jobs:
         uses: DFE-Digital/github-actions/set-up-environment@master
 
       - name: Lint Dockerfile
-        uses: brpaz/hadolint-action@master
+        uses: brpaz/hadolint-action@f49a60108f34b589e16e00be852f810e8ddb2484 # Pinned at head of master as of 10th March 2021
         with:
           dockerfile: "Dockerfile"
 
