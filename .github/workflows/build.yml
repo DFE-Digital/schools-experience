@@ -406,7 +406,7 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Fetch SECURE USERNAME
-        uses: azure/CLI@v2
+        uses: azure/CLI@v3
         id: fetch-username
         with:
           inlineScript: |
@@ -415,7 +415,7 @@ jobs:
             echo "SECURE_USERNAME=$SECRET_VALUE" >> $GITHUB_OUTPUT
 
       - name: Fetch SECURE PASSWORD
-        uses: azure/CLI@v2
+        uses: azure/CLI@v3
         id: fetch-password
         with:
           inlineScript: |
@@ -519,7 +519,7 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Fetch SECURE USERNAME
-        uses: azure/CLI@v2
+        uses: azure/CLI@v3
         id: fetch-username
         with:
           inlineScript: |
@@ -528,7 +528,7 @@ jobs:
             echo "SECURE_USERNAME=$SECRET_VALUE" >> $GITHUB_OUTPUT
 
       - name: Fetch SECURE PASSWORD
-        uses: azure/CLI@v2
+        uses: azure/CLI@v3
         id: fetch-password
         with:
           inlineScript: |
