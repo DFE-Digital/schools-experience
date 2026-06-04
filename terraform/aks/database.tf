@@ -11,7 +11,7 @@ module "postgres" {
   cluster_configuration_map      = module.cluster_data.configuration_map
   use_azure                      = var.deploy_azure_backing_services
   azure_enable_monitoring        = var.enable_monitoring
-  server_version                 = "14"
+  server_version                 = var.postgres_version
   azure_sku_name                 = var.postgres_flexible_server_sku
   azure_enable_backup_storage    = var.azure_enable_backup_storage
   azure_extensions               = ["POSTGIS", "address_standardizer", "postgis_raster", "uuid-ossp", "citext"]
