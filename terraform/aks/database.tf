@@ -17,7 +17,7 @@ module "postgres" {
   azure_extensions               = ["POSTGIS", "address_standardizer", "postgis_raster", "uuid-ossp", "citext"]
   azure_enable_high_availability = var.postgres_enable_high_availability
   azure_maintenance_window       = var.azure_maintenance_window
-  server_docker_image            = "postgis/postgis:14-3.4"
+  server_docker_image            = "postgis/postgis:17-3.6-alpine"
   create_database                = var.create_database
 }
 
