@@ -1,4 +1,7 @@
-FROM ruby:3.4.5-alpine3.21
+# To use or update to a ruby version, change BASE_RUBY_IMAGE
+ARG BASE_RUBY_IMAGE=ruby:3.4.7-alpine3.23
+
+FROM ${BASE_RUBY_IMAGE}
 
 ENV RAILS_ENV=production \
     NODE_ENV=production \
