@@ -39,5 +39,5 @@ jobs:
           validation-plan: ${{ matrix.validation_plan }}
           service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
           teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL_INFRA }}
-          gcp-wip: projects/737868692824/locations/global/workloadIdentityPools/refer-serious-misconduct/providers/refer-serious-misconduct
-          gcp-project-id: refer-serious-misconduct
+          gcp-wip: projects/574582782335/locations/global/workloadIdentityPools/schools-experience/providers/schools-experience
+          gcp-project-id: get-into-teaching
