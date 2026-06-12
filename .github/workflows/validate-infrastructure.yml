@@ -41,3 +41,5 @@ jobs:
           teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL_INFRA }}
           gcp-wip: projects/574582782335/locations/global/workloadIdentityPools/schools-experience/providers/schools-experience
           gcp-project-id: get-into-teaching
+          target-branch: master
+          sha-type: short
