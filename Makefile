@@ -94,15 +94,18 @@ composed-variables:
 
 terraform-init: composed-variables set-azure-account
 	# If running in validation (ci), force stable image except override image for validation (terraform-plan), not deploy
-	$(if $(and $(USE_STABLE_IMAGE_TAG),$(filter terraform-plan,$(MAKECMDGOALS))), \
+	$(if $(and \
+		$(filter pull_request,$(GITHUB_EVENT_NAME)), \
+		$(filter terraform-plan,$(MAKECMDGOALS)) \
+	), \
 		$(eval export IMAGE_TAG=master) \
-		$(eval export IMAGE_TAG_PREFIX=), \
+		$(eval export IMAGE_TAG_PREFIX=) \
 	)
 
 	# Otherwise fall back safely
 	$(if $(IMAGE_TAG), , $(eval IMAGE_TAG=master))
 
-	# Ensure prefix defaults correctly
+    # Only set prefix when NOT in validation mode
 	$(if $(IMAGE_TAG_PREFIX), , $(eval IMAGE_TAG_PREFIX=sha))
 
 	rm -rf terraform/aks/vendor/modules/aks
@@ -119,7 +122,6 @@ terraform-init: composed-variables set-azure-account
 	$(eval export TF_VAR_service_short=${SERVICE_SHORT})
 	$(if $(IMAGE_TAG_PREFIX), $(eval export TF_VAR_docker_image=${DOCKER_REPOSITORY}:${IMAGE_TAG_PREFIX}-${IMAGE_TAG}), \
         $(eval export TF_VAR_docker_image=${DOCKER_REPOSITORY}:${IMAGE_TAG}))
-
 
 terraform-plan: terraform-init
 	terraform -chdir=terraform/aks plan ${DETAILED_EXITCODE} -var-file "config/${CONFIG}.tfvars.json"
