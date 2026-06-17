@@ -44,7 +44,6 @@ Rails.application.config.content_security_policy do |policy|
   policy.default_src :self
   policy.base_uri :self
 
-
   policy.script_src :self,
                     "https://googletagmanager.com",
                     "https://www.googletagmanager.com",
