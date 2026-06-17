@@ -667,10 +667,10 @@ GEM
       semantic_range (>= 2.3.0)
     shoulda-matchers (6.2.0)
       activesupport (>= 5.2.0)
-    sidekiq (6.5.12)
-      connection_pool (>= 2.2.5, < 3)
+    sidekiq (6.5.5)
+      connection_pool (>= 2.2.2)
       rack (~> 2.0)
-      redis (>= 4.5.0, < 5)
+      redis (>= 4.5.0)
     sidekiq-cron (2.2.0)
       cronex (>= 0.13.0)
       fugit (~> 1.8, >= 1.11.1)
@@ -869,7 +869,7 @@ DEPENDENCIES
   sentry-sidekiq
   shakapacker (= 8.2.0)
   shoulda-matchers (~> 6.1)
-  sidekiq (< 7)
+  sidekiq (>= 6.5.5, < 6.5.6)
   sidekiq-cron
   simplecov
   spring
@@ -1139,7 +1139,7 @@ CHECKSUMS
   sentry-sidekiq (6.6.2) sha256=0552a74e8e3af7261efb23eebe9e5afb8fe186ec66245e1caaf1c6ff71ad1fa2
   shakapacker (8.2.0) sha256=52725d578889e959268ec59a99b1db204835b066a2d72bd032440aa299ee2462
   shoulda-matchers (6.2.0) sha256=a702c059c5f3bbda2295827231a28654e33063d7c4d409662980ec630207d8dd
-  sidekiq (6.5.12) sha256=b4f93b2204c42220d0b526a7b8e0c49b5f9da82c1ce1a05d2baf1e8f744c197f
+  sidekiq (6.5.5) sha256=34464ee79f53957b94a8e8b5241188c4fc3c5702b72e2c49a0f4ee38f0d4dab0
   sidekiq-cron (2.2.0) sha256=4de604412a733036130bd5f5fac12f31102f027c67aa21980b60c00eb2dfec41
   signet (0.19.0) sha256=537f3939f57f141f691e6069a97ec40f34fadafc4c7e5ba94edb06cf4350dd31
   simplecov (0.22.0) sha256=fe2622c7834ff23b98066bb0a854284b2729a569ac659f82621fc22ef36213a5
