@@ -37,7 +37,9 @@ gem 'rails_semantic_logger'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
-gem "sidekiq", "< 7"
+# NB: Do not update Sidekiq beyond version 6.5.5, as newer versions are incompatible
+# with the Redis instance we are using on AKS
+gem "sidekiq", ">= 6.5.5", "< 6.5.6"
 gem "sidekiq-cron"
 
 # Metrics
