@@ -42,30 +42,75 @@ end
 
 Rails.application.config.content_security_policy do |policy|
   policy.default_src :self
-
   policy.base_uri :self
-  policy.connect_src :self,
-                     "https://dc.services.visualstudio.com",
-                     "https://*.google-analytics.com",
-                     "https://*.analytics.google.com",
-                     "https://*.googletagmanager.com",
-                     "https://maps.googleapis.com",
-                     "googleapis.com",
-                     *connect_src
-  policy.frame_src :self, "https://www.googletagmanager.com" # GTM fallback
-  policy.img_src :self,
-                 "https://*.google-analytics.com",
-                 "https://*.googletagmanager.com"
-  policy.object_src :none
+
+
   policy.script_src :self,
+                    "https://googletagmanager.com",
+                    "https://www.googletagmanager.com",
+                    "https://tagmanager.google.com",
                     "https://*.googletagmanager.com",
+                    "https://www.googleadservices.com",
+                    "https://www.google.com",
+                    "https://pagead2.googlesyndication.com",
+                    "https://googleads.g.doubleclick.net",
                     "https://*.google-analytics.com",
                     "https://maps.googleapis.com",
                     "googleapis.com",
                     "https://code.jquery.com/jquery-3.2.1.slim.min.js", # needed for Flipper UI
                     "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js", # needed for Flipper UI
                     "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" # needed for Flipper UI
+
   policy.style_src :self,
+                   "https://googletagmanager.com",
+                   "https://tagmanager.google.com",
+                   "https://fonts.googleapis.com",
                    "'unsafe-inline'", # needed for Flipper UI
                    "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" # needed for Flipper UI
+
+  policy.img_src :self,
+                 "www.googletagmanager.com",
+                 "https://googletagmanager.com",
+                 "https://ssl.gstatic.com",
+                 "https://www.gstatic.com",
+                 "https://*.google-analytics.com",
+                 "https://*.googletagmanager.com",
+                 "https://*.g.doubleclick.net",
+                 "https://*.google.com",
+                 "https://*.google.co.uk",
+                 "https://googleads.g.doubleclick.net",
+                 "https://www.google.com",
+                 "https://pagead2.googlesyndication.com",
+                 "https://www.googleadservices.com",
+                 "https://google.com",
+                 "https://www.google.co.uk"
+
+  policy.connect_src :self,
+                     "www.googletagmanager.com",
+                     "www.google.com",
+                     "https://*.google-analytics.com",
+                     "https://*.analytics.google.com",
+                     "https://*.googletagmanager.com",
+                     "https://*.g.doubleclick.net",
+                     "https://*.google.com",
+                     "https://*.google.co.uk",
+                     "https://pagead2.googlesyndication.com",
+                     "https://www.googleadservices.com",
+                     "https://googleads.g.doubleclick.net",
+                     "https://ad.doubleclick.net",
+                     "https://www.google.com",
+                     "https://google.com",
+                     "https://www.google.co.uk",
+                     "https://maps.googleapis.com",
+                     "googleapis.com",
+                     *connect_src
+
+  policy.font_src :self,
+                  "https://fonts.gstatic.com",
+                  "data:"
+
+  policy.frame_src :self,
+                   "https://www.googletagmanager.com"
+
+  policy.object_src :none
 end
