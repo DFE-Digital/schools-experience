@@ -4,6 +4,7 @@ REGION=UK South
 SERVICE_NAME=get-school-experience
 SERVICE_SHORT=gse
 DOCKER_REPOSITORY=ghcr.io/dfe-digital/schools-experience
+IMAGE_TAG ?= master
 
 ifndef VERBOSE
 .SILENT:
@@ -61,7 +62,6 @@ production: production-cluster
 ci:
 	$(eval AUTO_APPROVE=-auto-approve)
 	$(eval SKIP_AZURE_LOGIN=true)
-	$(eval export USE_STABLE_IMAGE_TAG=true)
 
 clean:
 	[ ! -f fetch_config.rb ]  \
@@ -93,18 +93,6 @@ composed-variables:
 	$(eval STORAGE_ACCOUNT_NAME=${AZURE_RESOURCE_PREFIX}${SERVICE_SHORT}tfstate${CONFIG_SHORT}sa)
 
 terraform-init: composed-variables set-azure-account
-	# If running in validation (ci), force stable image except override image for validation (terraform-plan), not deploy
-	$(if $(and $(USE_STABLE_IMAGE_TAG),$(filter terraform-plan,$(MAKECMDGOALS))), \
-		$(eval export IMAGE_TAG=master) \
-		$(eval export IMAGE_TAG_PREFIX=), \
-	)
-
-	# Otherwise fall back safely
-	$(if $(IMAGE_TAG), , $(eval IMAGE_TAG=master))
-
-	# Ensure prefix defaults correctly
-	$(if $(IMAGE_TAG_PREFIX), , $(eval IMAGE_TAG_PREFIX=sha))
-
 	rm -rf terraform/aks/vendor/modules/aks
 	git -c advice.detachedHead=false clone --depth=1 --single-branch --branch ${TERRAFORM_MODULES_TAG} https://github.com/DFE-Digital/terraform-modules.git terraform/aks/vendor/modules/aks
 
@@ -117,9 +105,7 @@ terraform-init: composed-variables set-azure-account
 	$(eval export TF_VAR_config_short=${CONFIG_SHORT})
 	$(eval export TF_VAR_service_name=${SERVICE_NAME})
 	$(eval export TF_VAR_service_short=${SERVICE_SHORT})
-	$(if $(IMAGE_TAG_PREFIX), $(eval export TF_VAR_docker_image=${DOCKER_REPOSITORY}:${IMAGE_TAG_PREFIX}-${IMAGE_TAG}), \
-        $(eval export TF_VAR_docker_image=${DOCKER_REPOSITORY}:${IMAGE_TAG}))
-
+	$(eval export TF_VAR_docker_image=${DOCKER_REPOSITORY}:${IMAGE_TAG_PREFIX}-${IMAGE_TAG})
 
 terraform-plan: terraform-init
 	terraform -chdir=terraform/aks plan ${DETAILED_EXITCODE} -var-file "config/${CONFIG}.tfvars.json"
