@@ -4,6 +4,7 @@ REGION=UK South
 SERVICE_NAME=get-school-experience
 SERVICE_SHORT=gse
 DOCKER_REPOSITORY=ghcr.io/dfe-digital/schools-experience
+IMAGE_TAG ?= master
 
 ifndef VERBOSE
 .SILENT:
@@ -61,7 +62,6 @@ production: production-cluster
 ci:
 	$(eval AUTO_APPROVE=-auto-approve)
 	$(eval SKIP_AZURE_LOGIN=true)
-	$(eval export USE_STABLE_IMAGE_TAG=true)
 
 clean:
 	[ ! -f fetch_config.rb ]  \
@@ -93,8 +93,6 @@ composed-variables:
 	$(eval STORAGE_ACCOUNT_NAME=${AZURE_RESOURCE_PREFIX}${SERVICE_SHORT}tfstate${CONFIG_SHORT}sa)
 
 terraform-init: composed-variables set-azure-account
-	$(if ${IMAGE_TAG}, , $(eval IMAGE_TAG=master))
-
 	rm -rf terraform/aks/vendor/modules/aks
 	git -c advice.detachedHead=false clone --depth=1 --single-branch --branch ${TERRAFORM_MODULES_TAG} https://github.com/DFE-Digital/terraform-modules.git terraform/aks/vendor/modules/aks
 
