@@ -1,7 +1,7 @@
 variable "postgres_version" {
   description = "Version of PostgreSQL to use."
   type        = number
-  default     = 14
+  default     = 17
 }
 
 variable "cluster" {
