@@ -1,3 +1,9 @@
+variable "postgres_version" {
+  description = "Version of PostgreSQL to use."
+  type        = number
+  default     = 14
+}
+
 variable "cluster" {
   description = "AKS cluster where this app is deployed. Either 'test' or 'production'"
 }
