@@ -320,10 +320,9 @@ jobs:
       - name: Fixup report file paths
         run: sudo sed -i "s?/app/app?/github/workspace/app?" ${{ github.workspace }}/out/${{ env.code-coverage-artifact-name }}/coverage.json
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@ffc3010689be73b8e5ae0c57ce35968afd7909e8 # Pinned at 5.0.0
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v6
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
@@ -361,17 +360,26 @@ jobs:
           sha: ${{github.sha}}
 
       - name: Create a GitHub Release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master' && steps.tag_version.outputs.pr_found == 1
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master' && steps.tag_version.outputs.pr_found == '1'
         id: release
-        uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.tag_version.outputs.pr_number }}
-          body: ${{ steps.tag_version.outputs.pr_number }}
-          release_name: Release ${{ steps.tag_version.outputs.pr_number }}
-          commitish: ${{ github.sha}}
-          prerelease: false
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          release_response=$(gh api \
+            --method POST \
+            /repos/${{ github.repository }}/releases \
+            -f tag_name='${{ steps.tag_version.outputs.pr_number }}' \
+            -f target_commitish='${{ github.sha }}' \
+            -f name='Release ${{ steps.tag_version.outputs.pr_number }}' \
+            -f body='${{ steps.tag_version.outputs.pr_number }}' \
+            -F draft=true \
+            -F prerelease=false)
+
+          release_id=$(echo "$release_response" | jq -r '.id')
+
+          echo "id=$release_id" >> "$GITHUB_OUTPUT"
+
+          echo "Created release ID: $release_id"
 
       - name: Copy PR Info to Release
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'  && steps.release.outputs.id
@@ -470,15 +478,17 @@ jobs:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish Release
-        if: matrix.environment  == 'Production' && steps.tag_id.outputs.release_id
-        uses: eregon/publish-release@01df127f5e9a3c26935118e22e738d95b59d10ce # Pinned at v1.0.6 NOTE:This repo has been archived May 29 2025!
+        if: matrix.environment == 'production' && steps.tag_id.outputs.release_id
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          release_id: ${{steps.tag_id.outputs.release_id}}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api \
+            --method PATCH \
+            /repos/${{ github.repository }}/releases/${{ steps.tag_id.outputs.release_id }} \
+            -F draft=false
 
       - name: Teams Release Notification
-        if: matrix.environment  == 'Production' && steps.tag_id.outputs.release_id
+        if: matrix.environment == 'production' && steps.tag_id.outputs.release_id
         uses: DFE-Digital/github-actions/send-to-teams-channel@master
         with:
           teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
