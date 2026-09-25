@@ -1,5 +1,5 @@
 class Candidates::BookingFeedback < ApplicationRecord
-  enum effect_on_decision: {
+  enum :effect_on_decision, {
     negatively: 0,
     positively: 1,
     unaffected: 2,
