@@ -4,7 +4,7 @@ require 'geocoding_response_country'
 RSpec.describe GeocodingResponseCountry do
   describe "#name" do
     shared_examples "a known country" do |country|
-      let(:response) { Geocoder::Result::Test.new(address_components: [long_name: country]) }
+      let(:response) { Geocoder::Result::Test.new(address_components: [{ long_name: country }]) }
 
       subject do
         described_class.new(response).name
@@ -32,7 +32,7 @@ RSpec.describe GeocodingResponseCountry do
     end
 
     context "when unknown country" do
-      let(:canada_response) { Geocoder::Result::Test.new(address_components: [long_name: "Canada"]) }
+      let(:canada_response) { Geocoder::Result::Test.new(address_components: [{ long_name: "Canada" }]) }
 
       subject do
         described_class.new(canada_response).name
@@ -46,7 +46,7 @@ RSpec.describe GeocodingResponseCountry do
 
   describe "#not_serviced?" do
     shared_examples "a country that is not serviced" do |country|
-      let(:response) { Geocoder::Result::Test.new(address_components: [long_name: country]) }
+      let(:response) { Geocoder::Result::Test.new(address_components: [{ long_name: country }]) }
 
       subject do
         described_class.new(response).not_serviced?
@@ -74,7 +74,7 @@ RSpec.describe GeocodingResponseCountry do
     end
 
     context "when England" do
-      let(:response) { Geocoder::Result::Test.new(address_components: [long_name: "England"]) }
+      let(:response) { Geocoder::Result::Test.new(address_components: [{ long_name: "England" }]) }
 
       subject do
         described_class.new(response).not_serviced?
