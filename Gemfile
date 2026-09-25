@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby File.read(".ruby-version").chomp
+ruby file: ".ruby-version"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 # concurrent-ruby version managed by Rails (activesupport ~> 1.0)
