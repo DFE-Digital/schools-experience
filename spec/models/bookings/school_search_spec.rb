@@ -9,8 +9,8 @@ describe Bookings::SchoolSearch do
 
   let(:geocoder_manchester_search_result) do
     [
-      Geocoder::Result::Test.new("latitude" => 53.488, "longitude" => -2.242, name: 'Manchester, UK', address_components: [long_name: "England"]),
-      Geocoder::Result::Test.new("latitude" => 53.476, "longitude" => -2.229, name: 'Manchester, UK', address_components: [long_name: "England"])
+      Geocoder::Result::Test.new("latitude" => 53.488, "longitude" => -2.242, name: 'Manchester, UK', address_components: [{ long_name: "England" }]),
+      Geocoder::Result::Test.new("latitude" => 53.476, "longitude" => -2.229, name: 'Manchester, UK', address_components: [{ long_name: "England" }])
     ]
   end
 
@@ -68,7 +68,7 @@ describe Bookings::SchoolSearch do
                 "latitude" => 53.488,
                 "longitude" => -2.242,
                 name: 'United Kingdom',
-                "address_components" => ["long_name" => "England"]
+                "address_components" => [{ "long_name" => "England" }]
               )
             ]
           )

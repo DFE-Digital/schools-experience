@@ -64,10 +64,10 @@ gem "redis", "~> 4.7"
 
 gem 'kaminari'
 
-gem "multi_json"
 gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.15.1"
 gem 'dfe-autocomplete', require: 'dfe/autocomplete', github: 'DFE-Digital/dfe-autocomplete'
 gem 'dfe-reference-data', require: 'dfe/reference_data', github: 'DFE-Digital/dfe-reference-data', tag: 'v3.5.0'
+gem "multi_json"
 
 gem "rolify"
 
