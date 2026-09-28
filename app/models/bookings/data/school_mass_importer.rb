@@ -82,7 +82,7 @@ module Bookings
       end
 
       def nilify(val)
-        val.present? ? val.strip : nil
+        val.presence&.strip
       end
 
       def build_school(edubase_row)

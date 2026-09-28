@@ -1,11 +1,11 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby File.read(".ruby-version").chomp
+ruby file: ".ruby-version"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-# Required to fix a dependency issue with Rails upgrade to version 7.0.8 and the Logger error
-gem "concurrent-ruby", "1.3.4"
+# concurrent-ruby version managed by Rails (activesupport ~> 1.0)
+gem "concurrent-ruby"
 gem 'rails', '~> 7.2'
 
 gem 'json', '>= 2.3.0' # Fix for CVE-2020-10663
@@ -53,7 +53,7 @@ gem 'yabeda-sidekiq'
 gem 'dotenv-rails', '>= 2.7.6'
 
 gem 'govuk-components', '~> 5.11.0'
-gem 'govuk_design_system_formbuilder', '~> 6.2.0'
+gem 'govuk_design_system_formbuilder', '~> 6.2'
 gem 'notifications-ruby-client'
 
 gem 'acts_as_list'
@@ -67,6 +67,7 @@ gem 'kaminari'
 gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.15.1"
 gem 'dfe-autocomplete', require: 'dfe/autocomplete', github: 'DFE-Digital/dfe-autocomplete'
 gem 'dfe-reference-data', require: 'dfe/reference_data', github: 'DFE-Digital/dfe-reference-data', tag: 'v3.5.0'
+gem "multi_json"
 
 gem "rolify"
 

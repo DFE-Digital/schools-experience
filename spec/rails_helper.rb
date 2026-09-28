@@ -4,7 +4,9 @@ ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../config/environment', __dir__)
 # Prevent database truncation if the environment is production
 if Rails.env.production? || Rails.env.servertest? || Rails.env.staging?
+  # rubocop:disable Rails/Exit
   abort("The Rails environment is running in production mode!")
+  # rubocop:enable Rails/Exit
 end
 
 require 'rspec/rails'
@@ -35,7 +37,9 @@ end
 begin
   ActiveRecord::Migration.maintain_test_schema!
 rescue ActiveRecord::PendingMigrationError => e
+  # rubocop:disable Rails/Exit
   abort("There are pending migrations: #{e.to_s.strip}")
+  # rubocop:enable Rails/Exit
 end
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
@@ -72,7 +76,7 @@ RSpec.configure do |config|
   # Prevent unintended API access from Geocoder
   config.before :each do
     allow(Geocoder).to receive(:search).and_return([
-      Geocoder::Result::Test.new(name: 'Bury', latitude: 53.4794892, longitude: -2.2451148, address_components: [long_name: "England"])
+      Geocoder::Result::Test.new(name: 'Bury', latitude: 53.4794892, longitude: -2.2451148, address_components: [{ long_name: "England" }])
     ])
 
     # Clean up memoized values so they can be mocked per test

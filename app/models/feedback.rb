@@ -1,5 +1,5 @@
 class Feedback < ApplicationRecord
-  enum rating: {
+  enum :rating, {
     very_satisfied: 0,
     satisfied: 1,
     neither_satisfied_or_dissatisfied: 2,

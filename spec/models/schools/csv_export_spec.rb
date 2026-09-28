@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Schools::CsvExport do
-  let(:dates_range) { (Date.yesterday.beginning_of_day..Date.today.end_of_day) }
+  let(:dates_range) { Date.yesterday.beginning_of_day..Date.today.end_of_day }
 
   describe ".column" do
     described_class::HEADER.each_with_index do |col, index|

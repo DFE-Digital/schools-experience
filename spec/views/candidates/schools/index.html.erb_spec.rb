@@ -140,7 +140,7 @@ RSpec.describe "candidates/schools/index", type: :view do
         @search = Candidates::SchoolSearch.new
         @facet_tags = FacetTagsPresenter.new(@search.applied_filters)
 
-        geocoding_response = Geocoder::Result::Test.new(address_components: [long_name: country])
+        geocoding_response = Geocoder::Result::Test.new(address_components: [{ long_name: country }])
         country = GeocodingResponseCountry.new(geocoding_response)
         assign(:country, country)
         assign(:expanded_search_radius, true)
@@ -186,7 +186,7 @@ RSpec.describe "candidates/schools/index", type: :view do
           @search = Candidates::SchoolSearch.new
           @facet_tags = FacetTagsPresenter.new(@search.applied_filters)
 
-          geocoding_response = Geocoder::Result::Test.new(address_components: [long_name: country])
+          geocoding_response = Geocoder::Result::Test.new(address_components: [{ long_name: country }])
           country = GeocodingResponseCountry.new(geocoding_response)
           assign(:country, country)
           assign(:expanded_search_radius, true)

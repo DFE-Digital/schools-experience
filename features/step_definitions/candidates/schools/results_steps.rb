@@ -121,12 +121,12 @@ Given("there are no schools near my search location") do
 end
 
 Given("my search is within England") do
-  geocoder_result = [Geocoder::Result::Test.new('latitude' => 53.596, 'longitude' => -2.29, 'name' => 'Manchester, UK', "address_components" => ["long_name" => "England"])]
+  geocoder_result = [Geocoder::Result::Test.new('latitude' => 53.596, 'longitude' => -2.29, 'name' => 'Manchester, UK', "address_components" => [{ "long_name" => "England" }])]
   allow(Geocoder).to receive(:search).and_return(geocoder_result)
 end
 
 Given("my search is outside of England") do
-  geocoder_result = [Geocoder::Result::Test.new('latitude' => 53.596, 'longitude' => -2.29, 'name' => 'Cardiff, UK', "address_components" => ["long_name" => "Wales"])]
+  geocoder_result = [Geocoder::Result::Test.new('latitude' => 53.596, 'longitude' => -2.29, 'name' => 'Cardiff, UK', "address_components" => [{ "long_name" => "Wales" }])]
   allow(Geocoder).to receive(:search).and_return(geocoder_result)
 end
 
