@@ -6,7 +6,7 @@ ruby file: ".ruby-version"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 # concurrent-ruby version managed by Rails (activesupport ~> 1.0)
 gem "concurrent-ruby"
-gem 'rails', '~> 7.2'
+gem 'rails', '~> 8.0'
 
 gem 'json', '>= 2.3.0' # Fix for CVE-2020-10663
 
@@ -17,7 +17,7 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'pg_search'
 
 # PostGIS adapter for Active Record
-gem 'activerecord-postgis-adapter', '~> 10'
+gem 'activerecord-postgis-adapter', '~> 11.0'
 gem 'breasal'
 gem 'geocoder'
 
@@ -90,7 +90,7 @@ gem 'ice_cube'
 
 gem 'activerecord-import'
 
-gem "validates_timeliness", '~> 7'
+gem "validates_timeliness", '~> 8'
 
 gem "get_into_teaching_api_client_faraday", '>= 3.6.0', github: "DFE-Digital/get-into-teaching-api-ruby-client", require: "api/client"
 
