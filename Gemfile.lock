@@ -47,29 +47,31 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    actioncable (8.0.5.1)
-      actionpack (= 8.0.5.1)
-      activesupport (= 8.0.5.1)
+    action_text-trix (2.1.19)
+      railties
+    actioncable (8.1.4)
+      actionpack (= 8.1.4)
+      activesupport (= 8.1.4)
       nio4r (~> 2.0)
       websocket-driver (>= 0.6.1)
       zeitwerk (~> 2.6)
-    actionmailbox (8.0.5.1)
-      actionpack (= 8.0.5.1)
-      activejob (= 8.0.5.1)
-      activerecord (= 8.0.5.1)
-      activestorage (= 8.0.5.1)
-      activesupport (= 8.0.5.1)
+    actionmailbox (8.1.4)
+      actionpack (= 8.1.4)
+      activejob (= 8.1.4)
+      activerecord (= 8.1.4)
+      activestorage (= 8.1.4)
+      activesupport (= 8.1.4)
       mail (>= 2.8.0)
-    actionmailer (8.0.5.1)
-      actionpack (= 8.0.5.1)
-      actionview (= 8.0.5.1)
-      activejob (= 8.0.5.1)
-      activesupport (= 8.0.5.1)
+    actionmailer (8.1.4)
+      actionpack (= 8.1.4)
+      actionview (= 8.1.4)
+      activejob (= 8.1.4)
+      activesupport (= 8.1.4)
       mail (>= 2.8.0)
       rails-dom-testing (~> 2.2)
-    actionpack (8.0.5.1)
-      actionview (= 8.0.5.1)
-      activesupport (= 8.0.5.1)
+    actionpack (8.1.4)
+      actionview (= 8.1.4)
+      activesupport (= 8.1.4)
       nokogiri (>= 1.8.5)
       rack (>= 2.2.4)
       rack-session (>= 1.0.1)
@@ -80,47 +82,48 @@ GEM
     actionpack-cloudfront (1.2.0)
       actionpack (>= 4.2)
       railties (>= 4.2)
-    actiontext (8.0.5.1)
-      actionpack (= 8.0.5.1)
-      activerecord (= 8.0.5.1)
-      activestorage (= 8.0.5.1)
-      activesupport (= 8.0.5.1)
+    actiontext (8.1.4)
+      action_text-trix (~> 2.1.15)
+      actionpack (= 8.1.4)
+      activerecord (= 8.1.4)
+      activestorage (= 8.1.4)
+      activesupport (= 8.1.4)
       globalid (>= 0.6.0)
       nokogiri (>= 1.8.5)
-    actionview (8.0.5.1)
-      activesupport (= 8.0.5.1)
+    actionview (8.1.4)
+      activesupport (= 8.1.4)
       builder (~> 3.1)
       erubi (~> 1.11)
       rails-dom-testing (~> 2.2)
       rails-html-sanitizer (~> 1.6)
-    activejob (8.0.5.1)
-      activesupport (= 8.0.5.1)
+    activejob (8.1.4)
+      activesupport (= 8.1.4)
       globalid (>= 0.3.6)
-    activemodel (8.0.5.1)
-      activesupport (= 8.0.5.1)
-    activerecord (8.0.5.1)
-      activemodel (= 8.0.5.1)
-      activesupport (= 8.0.5.1)
+    activemodel (8.1.4)
+      activesupport (= 8.1.4)
+    activerecord (8.1.4)
+      activemodel (= 8.1.4)
+      activesupport (= 8.1.4)
       timeout (>= 0.4.0)
     activerecord-import (2.2.0)
       activerecord (>= 4.2)
-    activerecord-postgis-adapter (11.0.0)
-      activerecord (~> 8.0.0)
-      rgeo-activerecord (~> 8.0.0)
-    activestorage (8.0.5.1)
-      actionpack (= 8.0.5.1)
-      activejob (= 8.0.5.1)
-      activerecord (= 8.0.5.1)
-      activesupport (= 8.0.5.1)
+    activerecord-postgis-adapter (11.1.1)
+      activerecord (~> 8.1.0)
+      rgeo-activerecord (~> 8.1.0)
+    activestorage (8.1.4)
+      actionpack (= 8.1.4)
+      activejob (= 8.1.4)
+      activerecord (= 8.1.4)
+      activesupport (= 8.1.4)
       marcel (~> 1.0)
-    activesupport (8.0.5.1)
+    activesupport (8.1.4)
       base64
-      benchmark (>= 0.3)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.3.1)
       connection_pool (>= 2.2.5)
       drb
       i18n (>= 1.6, < 2)
+      json
       logger (>= 1.4.2)
       minitest (>= 5.1)
       securerandom (>= 0.3)
@@ -319,10 +322,10 @@ GEM
       os (>= 0.9, < 2.0)
       pstore (~> 0.1)
       signet (>= 0.16, < 2.a)
-    govuk-components (5.11.1)
+    govuk-components (6.5.0)
       html-attributes-utils (~> 1.0.0, >= 1.0.0)
       pagy (>= 6, < 10)
-      view_component (>= 3.18, < 3.24)
+      view_component (>= 4.9, < 4.16)
     govuk_design_system_formbuilder (6.5.0)
       actionview (>= 7.2)
       activemodel (>= 7.2)
@@ -450,7 +453,7 @@ GEM
     os (1.1.4)
     ostruct (0.6.3)
     package_json (0.1.0)
-    pagy (8.6.3)
+    pagy (9.4.0)
     parallel (1.28.0)
     parallel_tests (5.8.0)
       parallel
@@ -508,20 +511,20 @@ GEM
     rackup (1.0.1)
       rack (< 3)
       webrick
-    rails (8.0.5.1)
-      actioncable (= 8.0.5.1)
-      actionmailbox (= 8.0.5.1)
-      actionmailer (= 8.0.5.1)
-      actionpack (= 8.0.5.1)
-      actiontext (= 8.0.5.1)
-      actionview (= 8.0.5.1)
-      activejob (= 8.0.5.1)
-      activemodel (= 8.0.5.1)
-      activerecord (= 8.0.5.1)
-      activestorage (= 8.0.5.1)
-      activesupport (= 8.0.5.1)
+    rails (8.1.4)
+      actioncable (= 8.1.4)
+      actionmailbox (= 8.1.4)
+      actionmailer (= 8.1.4)
+      actionpack (= 8.1.4)
+      actiontext (= 8.1.4)
+      actionview (= 8.1.4)
+      activejob (= 8.1.4)
+      activemodel (= 8.1.4)
+      activerecord (= 8.1.4)
+      activestorage (= 8.1.4)
+      activesupport (= 8.1.4)
       bundler (>= 1.15.0)
-      railties (= 8.0.5.1)
+      railties (= 8.1.4)
     rails-controller-testing (1.0.5)
       actionpack (>= 5.0.1.rc1)
       actionview (>= 5.0.1.rc1)
@@ -542,9 +545,9 @@ GEM
       rack
       railties (>= 5.1)
       semantic_logger (~> 4.16)
-    railties (8.0.5.1)
-      actionpack (= 8.0.5.1)
-      activesupport (= 8.0.5.1)
+    railties (8.1.4)
+      actionpack (= 8.1.4)
+      activesupport (= 8.1.4)
       irb (~> 1.13)
       rackup (>= 1.0.0)
       rake (>= 12.2)
@@ -580,8 +583,8 @@ GEM
     retriable (3.1.2)
     rexml (3.4.4)
     rgeo (3.1.0)
-    rgeo-activerecord (8.0.0)
-      activerecord (>= 7.0)
+    rgeo-activerecord (8.1.0)
+      activerecord (>= 8.1, < 8.2)
       rgeo (>= 3.0)
     rolify (6.0.1)
     rspec (3.13.0)
@@ -742,10 +745,10 @@ GEM
     validates_timeliness (8.0.0)
       activemodel (>= 8.0.0, < 9)
       timeliness (>= 0.3.10, < 1)
-    view_component (3.23.2)
-      activesupport (>= 5.2.0, < 8.1)
+    view_component (4.15.0)
+      actionview (>= 7.1.0)
+      activesupport (>= 7.1.0)
       concurrent-ruby (~> 1)
-      method_source (~> 1.0)
     web-console (4.2.1)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -812,7 +815,7 @@ PLATFORMS
 DEPENDENCIES
   actionpack-cloudfront (>= 1.2.0)
   activerecord-import
-  activerecord-postgis-adapter (~> 11.0)
+  activerecord-postgis-adapter (~> 11.1)
   acts_as_list
   addressable
   amazing_print
@@ -840,7 +843,7 @@ DEPENDENCIES
   foreman
   geocoder
   get_into_teaching_api_client_faraday (>= 3.6.0)!
-  govuk-components (~> 5.11.0)
+  govuk-components (~> 6.0)
   govuk_design_system_formbuilder (~> 6.2)
   hashids
   ice_cube
@@ -866,7 +869,7 @@ DEPENDENCIES
   rack-attack
   rack-rewrite
   rack-timeout
-  rails (~> 8.0)
+  rails (~> 8.1)
   rails-controller-testing (>= 1.0.5)
   rails-erd
   rails_semantic_logger
@@ -905,20 +908,21 @@ DEPENDENCIES
   yabeda-sidekiq
 
 CHECKSUMS
-  actioncable (8.0.5.1) sha256=5adb700c605a7ef7628f87dc7a6da20cd5f0ceac782a59055c864ea51a77d7c7
-  actionmailbox (8.0.5.1) sha256=f8b72eadf53b3e285df8f2d1f6533012abf5a0a001180abe436aea3139eeaed6
-  actionmailer (8.0.5.1) sha256=c3d2b3f96e1989ea25f51699786a97fcb2536eb7abfc2a667cb8f2376ec08403
-  actionpack (8.0.5.1) sha256=a5595c9d824d68884ddc4d3965ab78c897760d3752e190df7efe897371caa1eb
+  action_text-trix (2.1.19) sha256=7012f59421009cf284aa651294896414d653a61a2417c9b8714c8476d2f74009
+  actioncable (8.1.4) sha256=cfcd72f8c861e01ccdc96d772ad8c5ad6ed0ea7c571aef81a794b6027eaa7f11
+  actionmailbox (8.1.4) sha256=9c4525e577ebb671ce558f3ea78b8a634f64e56a0e6e8d105b28b873793a06eb
+  actionmailer (8.1.4) sha256=f82d95d6762ae46ea38f221d3363639266af4f8e56d50e2bd367558674baf093
+  actionpack (8.1.4) sha256=245493cc51be195a7645e6fc184880fa7e5b32ff1a08e053ee31f58c76e30ea4
   actionpack-cloudfront (1.2.0) sha256=3a600433769ca67f1d984dcb643b9013f0c750108c409c8bc5f4877903647b18
-  actiontext (8.0.5.1) sha256=370e90d35feb4313fc18ccef658776427d5bdd13126f266933b828a77e2125b2
-  actionview (8.0.5.1) sha256=472a108b9cc2295c4ac3ff09b028045e619875801f48c556f0085210b9cb1440
-  activejob (8.0.5.1) sha256=142407a21b6c3cbc6ddd92ca111ac18ea5c40298eb94d81845cd897a072a6880
-  activemodel (8.0.5.1) sha256=559be32aa9c40db7a3ee0aef926d4508a9ebd22f96f7276c11326d21a7dff4a4
-  activerecord (8.0.5.1) sha256=9252968fce404d75eb17092498a440d472167f2f8deee32b4658d6552b1eeea7
+  actiontext (8.1.4) sha256=33ee99bea7da6af911fc7d98b17013a8e1ec62aa01b20b20e9a5366f40dbf644
+  actionview (8.1.4) sha256=eff1efd07c4d969abad288322b423bcb67fdbab5e324c91ca37352b80f226076
+  activejob (8.1.4) sha256=4ed5b2ed8d4cc5c8f5f09becfef8346f202a4884eee0c8c73cae5ac378824099
+  activemodel (8.1.4) sha256=9a0906c127bd118aa5f06157db12b8f750da83dccee72db2f658547a0ae7a0e8
+  activerecord (8.1.4) sha256=3b4957ea7f246c9231bd7faa909312eac03a9101aaf87977b6c52733ff00b04f
   activerecord-import (2.2.0) sha256=f8ca99b196e50775723d1f1d192c379f656378dc9f5628240992a0d78807fa4b
-  activerecord-postgis-adapter (11.0.0) sha256=1c81eac4fb02905a10fe444be9723afeb2ffbf3b69619e90167c7cab6648b71b
-  activestorage (8.0.5.1) sha256=239742932b2fdcf0ead175e0889dbd385a36da2168fd7bde023aaad88ef745f2
-  activesupport (8.0.5.1) sha256=329a4280c4fbcfcf338ae2cb9df28b0b14527929dba105e10b3604516d998710
+  activerecord-postgis-adapter (11.1.1) sha256=ae2b9bd88c9ed7bfd21583bf233345cd0f1cd58d3ef96d78d001470f944fbac2
+  activestorage (8.1.4) sha256=f4956f3ec9ee63e5e0b332b57c877cb627f82b56f4cc902279310d2aa285c7a8
+  activesupport (8.1.4) sha256=891dd3fe43c4fc8391934b237b1189bb1f661c932a84a840043db9d46a4e80df
   acts_as_list (1.2.6) sha256=8345380900b7bee620c07ad00991ccee59af3d8c9e8574f426e321da2865fdc8
   addressable (2.9.0) sha256=7fdf6ac3660f7f4e867a0838be3f6cf722ace541dd97767fa42bc6cfa980c7af
   aes_key_wrap (1.1.0) sha256=b935f4756b37375895db45669e79dfcdc0f7901e12d4e08974d5540c8e0776a5
@@ -1017,7 +1021,7 @@ CHECKSUMS
   google-cloud-errors (1.3.1) sha256=c0691d480c9770ab7e71d84898895fe022c9643e4b7ad2b1ee839914f691973a
   google-logging-utils (0.2.0) sha256=675462b4ea5affa825a3442694ca2d75d0069455a1d0956127207498fca3df7b
   googleauth (1.17.4) sha256=acc2cac2a6011048f149c922cbc6c9675719e165aa5000c7fa3876c480fe9ae3
-  govuk-components (5.11.1) sha256=47d9a0bea0f17dc28c66f4a73c7dc55600f674d5e42b354f31895fad59d8438c
+  govuk-components (6.5.0) sha256=9f2476ac0c64a15ce4afc5d331c5f318679401f6cb844876a03b2f120f47b45c
   govuk_design_system_formbuilder (6.5.0) sha256=ab8932ed72d49025418a4c91d062d221c4fcf761232c9af217ef8e71c3ae4485
   hashdiff (1.2.1) sha256=9c079dbc513dfc8833ab59c0c2d8f230fa28499cc5efb4b8dd276cf931457cd1
   hashids (1.0.6) sha256=a344c05f249417492bf48451a93770558834ff7a445e1b64ef112954a0293019
@@ -1076,7 +1080,7 @@ CHECKSUMS
   os (1.1.4) sha256=57816d6a334e7bd6aed048f4b0308226c5fb027433b67d90a9ab435f35108d3f
   ostruct (0.6.3) sha256=95a2ed4a4bd1d190784e666b47b2d3f078e4a9efda2fccf18f84ddc6538ed912
   package_json (0.1.0) sha256=20af98c0e45dadcd48b6f45a3324e948f578e7549365671b97faca4637770256
-  pagy (8.6.3) sha256=537b2ee3119f237dd6c4a0d0a35c67a77b9d91ebb9d4f85e31407c2686774fb2
+  pagy (9.4.0) sha256=db3f2e043f684155f18f78be62a81e8d033e39b9f97b1e1a8d12ad38d7bce738
   parallel (1.28.0) sha256=33e6de1484baf2524792d178b0913fc8eb94c628d6cfe45599ad4458c638c970
   parallel_tests (5.8.0) sha256=181898cbee2ffb1c796274ce31d27f792a421324609bfc7e9b5531d929d91eda
   parser (3.3.12.0) sha256=21a6d7f755d5a24dfbdc6e6b772e4e879a52e7631a88bc5a3a134606052c9828
@@ -1110,13 +1114,13 @@ CHECKSUMS
   rack-test (2.2.0) sha256=005a36692c306ac0b4a9350355ee080fd09ddef1148a5f8b2ac636c720f5c463
   rack-timeout (0.7.0) sha256=757337e9793cca999bb73a61fe2a7d4280aa9eefbaf787ce3b98d860749c87d9
   rackup (1.0.1) sha256=ba86604a28989fe1043bff20d819b360944ca08156406812dca6742b24b3c249
-  rails (8.0.5.1) sha256=c91cefbf38881876ddbe67b5e0246eb985d27d60c6bb1cd7034b4261de0ba495
+  rails (8.1.4) sha256=5f3ecdf9a2a3b79b2e31b8fee3b64a00f7284d76e5631f87d0e58e665911a33b
   rails-controller-testing (1.0.5) sha256=741448db59366073e86fc965ba403f881c636b79a2c39a48d0486f2607182e94
   rails-dom-testing (2.3.0) sha256=8acc7953a7b911ca44588bf08737bc16719f431a1cc3091a292bca7317925c1d
   rails-erd (1.7.2) sha256=0b17d0fba25d319d8da8af7a3e5e2149d02d6187cc7351e8be43423f07c48bcd
   rails-html-sanitizer (1.7.1) sha256=e797a7c9b01e567307e317c576b49ab4168017e63eea4dba9ce3cb587e2f22c2
   rails_semantic_logger (4.19.0) sha256=e75e562c68a32abb6a8615940afd7d40c082cff786b8d7b50ff1f7462eff3c16
-  railties (8.0.5.1) sha256=da1958e1d9dab04691a2f8721b3ff7fab323715d37f103c19972dedfd644d5c7
+  railties (8.1.4) sha256=b5e7a8e8984e33114d68af62227971960aae1e6c02bd7c9d826ffad97fff583c
   rainbow (3.1.1) sha256=039491aa3a89f42efa1d6dec2fc4e62ede96eb6acd95e52f1ad581182b79bc6a
   rake (13.4.2) sha256=cb825b2bd5f1f8e91ca37bddb4b9aaf345551b4731da62949be002fa89283701
   rb-fsevent (0.11.2) sha256=43900b972e7301d6570f64b850a5aa67833ee7d87b458ee92805d56b7318aefe
@@ -1132,7 +1136,7 @@ CHECKSUMS
   retriable (3.1.2) sha256=0a5a5d0ca4ba61a76fb31a17ab8f7f80281beb040c329d34dfc137a1398688e0
   rexml (3.4.4) sha256=19e0a2c3425dfbf2d4fc1189747bdb2f849b6c5e74180401b15734bc97b5d142
   rgeo (3.1.0) sha256=89c1804894b35acf65891e1f24e15bbf2fbd972d4183e63c444bb97c1ccaf5d5
-  rgeo-activerecord (8.0.0) sha256=c8a22f8dc568b875a734b5288d1dbad12ff846cd63a9a2e6b09decaac4ff3094
+  rgeo-activerecord (8.1.0) sha256=2a7aeab7eae2f2c41e8a8af7d008e8a23d8e6b2e5854e9ed701cf37b993f59a1
   rolify (6.0.1) sha256=fe45fbf70c4033ccada6f9ccc02b946eeaad044ea5d3e38546ae408d3adeb5b6
   rspec (3.13.0) sha256=d490914ac1d5a5a64a0e1400c1d54ddd2a501324d703b8cfe83f458337bab993
   rspec-core (3.13.3) sha256=25136507f4f9cf2e8977a2851e64e438b4331646054e345998714108745cdfe4
@@ -1194,7 +1198,7 @@ CHECKSUMS
   validate_email (0.1.6) sha256=9dfe9016d527b17a8d3a6e95e4dc50a125400eef899d13d4cc2a254393f82ee4
   validate_url (1.0.15) sha256=72fe164c0713d63a9970bd6700bea948babbfbdcec392f2342b6704042f57451
   validates_timeliness (8.0.0) sha256=4c621b5d938170d96c1668600547112ee2f433315677c0a16b8b89b2877c7696
-  view_component (3.23.2) sha256=3c2fed4b9e38bf074fa3d42ca55eedbb2cc070e0f3c31d7c13a50b0db530892b
+  view_component (4.15.0) sha256=2924e207b102c04ab51c4d318535f03f1c3aab3c81ecff99b1cc631b43e14eac
   web-console (4.2.1) sha256=e7bcf37a10ea2b4ec4281649d1cee461b32232d0a447e82c786e6841fd22fe20
   webfinger (1.2.0) sha256=7814ef1c85da47514f65c6e5ca14205fa9ce41ea2a70785e0c872842162852a2
   webmock (3.26.4) sha256=8d8da206d217ebe6968cfb09c77f4533c23074e1432bad865f3994eacbaad50d
