@@ -6,7 +6,7 @@ ruby file: ".ruby-version"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 # concurrent-ruby version managed by Rails (activesupport ~> 1.0)
 gem "concurrent-ruby"
-gem 'rails', '~> 8.0'
+gem 'rails', '~> 8.1'
 
 gem 'json', '>= 2.3.0' # Fix for CVE-2020-10663
 
@@ -17,7 +17,7 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'pg_search'
 
 # PostGIS adapter for Active Record
-gem 'activerecord-postgis-adapter', '~> 11.0'
+gem 'activerecord-postgis-adapter', '~> 11.1'
 gem 'breasal'
 gem 'geocoder'
 
@@ -52,7 +52,7 @@ gem 'yabeda-sidekiq'
 
 gem 'dotenv-rails', '>= 2.7.6'
 
-gem 'govuk-components', '~> 5.11.0'
+gem 'govuk-components', '~> 6.0'
 gem 'govuk_design_system_formbuilder', '~> 6.2'
 gem 'notifications-ruby-client'
 
