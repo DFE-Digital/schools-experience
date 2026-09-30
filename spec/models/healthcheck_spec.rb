@@ -124,12 +124,28 @@ RSpec.describe Healthcheck do
       it { is_expected.to be true }
     end
 
-    context "with non functional connection" do
-      it "returns false" do
-        [RuntimeError, Redis::CannotConnectError].each do |error|
-          allow_any_instance_of(Schools::DFESignInAPI::Organisations).to receive(:response).and_raise error
+    context "when the DfE Sign In API raises an error" do
+      {
+        "a 404 (Faraday::ResourceNotFound)" =>
+          Faraday::ResourceNotFound.new("the server responded with status 404"),
+        "a timeout (Faraday::TimeoutError)" =>
+          Faraday::TimeoutError.new,
+        "a connection failure (Faraday::ConnectionFailed)" =>
+          Faraday::ConnectionFailed.new("connection refused"),
+        "a server error (Faraday::ServerError)" =>
+          Faraday::ServerError.new("the server responded with status 500"),
+        "an invalid response (APIResponseError)" =>
+          Schools::DFESignInAPI::APIResponseError.new("invalid response from organisations API"),
+        "a request timeout (Rack::Timeout::RequestTimeoutException)" =>
+          Rack::Timeout::RequestTimeoutException.new({}),
+      }.each do |description, error|
+        context "with #{description}" do
+          before do
+            allow_any_instance_of(Schools::DFESignInAPI::Organisations)
+              .to receive(:response).and_raise(error)
+          end
 
-          is_expected.to be false
+          it { is_expected.to be false }
         end
       end
     end

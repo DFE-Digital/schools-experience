@@ -42,7 +42,7 @@ class Healthcheck
     res = Schools::DFESignInAPI::Organisations.new(ENV.fetch("DFE_SIGNIN_HEALTHCHECK_USER_ID", SecureRandom.uuid)).uuids
 
     ActiveModel::Type::Boolean.new.cast(res)
-  rescue RuntimeError, Rack::Timeout::RequestTimeoutException
+  rescue Faraday::Error, RuntimeError, Rack::Timeout::RequestTimeoutException
     false
   end
 
