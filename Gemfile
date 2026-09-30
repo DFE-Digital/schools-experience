@@ -59,7 +59,10 @@ gem 'notifications-ruby-client'
 gem 'acts_as_list'
 gem 'daemons'
 
-gem "connection_pool"
+# Pinned to < 3 until Sidekiq is upgraded to 7.x. Sidekiq 6.5.5's scheduler
+# calls ConnectionPool::TimedStack#pop with a positional arg, which
+# connection_pool 3.0 made keyword-only (raises ArgumentError otherwise).
+gem "connection_pool", "< 3"
 gem "redis", "~> 4.7"
 
 gem 'kaminari'
