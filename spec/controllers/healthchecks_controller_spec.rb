@@ -12,11 +12,8 @@ describe HealthchecksController, type: :request do
   before do
     allow(ENV).to receive(:[]).and_call_original
 
-    allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
-      receive(:enabled?).and_return(true)
-
-    allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
-      receive(:uuids).and_return([])
+    allow_any_instance_of(Schools::DFESignInAPI::Healthcheck).to \
+      receive(:up?).and_return(true)
 
     allow(ENV).to receive(:[]).with("REDIS_URL").and_return \
       "redis://localhost:6379/1"
@@ -59,30 +56,10 @@ describe HealthchecksController, type: :request do
       it { expect(response).to have_http_status(:error) }
     end
 
-    context 'with the DfE Sign In API timing out' do
+    context 'with the DfE Sign In healthcheck reporting down' do
       before do
-        # Override the healthy `uuids` stub so the real uuids -> response
-        # chain runs and surfaces the error raised from the client.
-        allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
-          receive(:uuids).and_call_original
-        allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
-          receive(:response).and_raise Faraday::TimeoutError
-
-        get healthcheck_path
-      end
-
-      it { expect(response.body).to include_json(dfe_auth: false) }
-      it { expect(response).to have_http_status(:error) }
-    end
-
-    context 'with the DfE Sign In API returning 404' do
-      before do
-        allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
-          receive(:uuids).and_call_original
-        allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
-          receive(:response).and_raise(
-            Faraday::ResourceNotFound.new("the server responded with status 404")
-          )
+        allow_any_instance_of(Schools::DFESignInAPI::Healthcheck).to \
+          receive(:up?).and_return(false)
 
         get healthcheck_path
       end
@@ -121,7 +98,6 @@ describe HealthchecksController, type: :request do
     context "with DEPLOYMENT_ID set" do
       before do
         allow(ENV).to receive(:fetch).with('DEPLOYMENT_ID').and_return('1997-08-29')
-        allow(ENV).to receive(:fetch).with('DFE_SIGNIN_HEALTHCHECK_USER_ID', anything)
 
         get deployment_path
       end
@@ -170,10 +146,12 @@ describe HealthchecksController, type: :request do
       it { expect(response).to have_http_status(:success) }
     end
 
-    context 'with no Auth Service' do
+    context 'with no Auth Service (DfE Sign In disabled)' do
       before do
-        allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
-          receive(:enabled?).and_return(false)
+        allow(Rails.application.config.x).to \
+          receive(:dfe_sign_in_api_enabled).and_return(false)
+        allow_any_instance_of(Schools::DFESignInAPI::Healthcheck).to \
+          receive(:up?).and_call_original
 
         get api_health_path
       end
@@ -193,10 +171,10 @@ describe HealthchecksController, type: :request do
       it { expect(response).to have_http_status(:error) }
     end
 
-    context 'with the DfE Sign In API failing' do
+    context 'with the DfE Sign In healthcheck reporting down' do
       before do
-        allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
-          receive(:uuids).and_raise Faraday::TimeoutError
+        allow_any_instance_of(Schools::DFESignInAPI::Healthcheck).to \
+          receive(:up?).and_return(false)
 
         get api_health_path
       end
