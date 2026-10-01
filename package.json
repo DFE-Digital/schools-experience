@@ -60,9 +60,8 @@
     "testEnvironment": "jsdom",
     "moduleDirectories": [
       "node_modules",
-      "app/webpacker",
-      "app/webpacker/controllers",
-      "app/webpacker/packs"
+      "app/javascript/utils",
+      "app/javascript/controllers"
     ],
     "transformIgnorePatterns": [
       "node_modules/?!(stimulus)"
