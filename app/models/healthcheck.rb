@@ -38,11 +38,8 @@ class Healthcheck
   end
 
   def test_dfe_signin_api
-    # DfE Sign In in development now requires a valid user to test with, rather than a randomly generated one
-    res = Schools::DFESignInAPI::Organisations.new(ENV.fetch("DFE_SIGNIN_HEALTHCHECK_USER_ID", SecureRandom.uuid)).uuids
-
-    ActiveModel::Type::Boolean.new.cast(res)
-  rescue Faraday::Error, RuntimeError, Rack::Timeout::RequestTimeoutException
+    Schools::DFESignInAPI::Healthcheck.new.up?
+  rescue StandardError, Rack::Timeout::RequestTimeoutException
     false
   end
 

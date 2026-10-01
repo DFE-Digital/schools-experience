@@ -110,49 +110,37 @@ RSpec.describe Healthcheck do
   end
 
   describe "#test_dfe_signin_api" do
-    before do
-      allow(Schools::DFESignInAPI::Organisations).to receive(:enabled?).and_return(true)
-    end
-
     subject { described_class.new.test_dfe_signin_api }
 
-    context "with working connection" do
+    context "when the DfE Sign In healthcheck reports up" do
       before do
-        allow_any_instance_of(Schools::DFESignInAPI::Organisations).to receive(:uuids).and_return({})
+        allow_any_instance_of(Schools::DFESignInAPI::Healthcheck).to receive(:up?).and_return(true)
       end
 
       it { is_expected.to be true }
     end
 
-    context "when the DfE Sign In API raises an error" do
-      {
-        "a 404 (Faraday::ResourceNotFound)" =>
-          Faraday::ResourceNotFound.new("the server responded with status 404"),
-        "a timeout (Faraday::TimeoutError)" =>
-          Faraday::TimeoutError.new,
-        "a connection failure (Faraday::ConnectionFailed)" =>
-          Faraday::ConnectionFailed.new("connection refused"),
-        "a server error (Faraday::ServerError)" =>
-          Faraday::ServerError.new("the server responded with status 500"),
-        "an invalid response (APIResponseError)" =>
-          Schools::DFESignInAPI::APIResponseError.new("invalid response from organisations API"),
-        "a request timeout (Rack::Timeout::RequestTimeoutException)" =>
-          Rack::Timeout::RequestTimeoutException.new({}),
-      }.each do |description, error|
-        context "with #{description}" do
-          before do
-            allow_any_instance_of(Schools::DFESignInAPI::Organisations)
-              .to receive(:response).and_raise(error)
-          end
-
-          it { is_expected.to be false }
-        end
+    context "when the DfE Sign In healthcheck reports down" do
+      before do
+        allow_any_instance_of(Schools::DFESignInAPI::Healthcheck).to receive(:up?).and_return(false)
       end
+
+      it { is_expected.to be false }
     end
 
-    context "with no configured connection" do
+    context "when the DfE Sign In healthcheck raises an unexpected StandardError" do
       before do
-        allow(Schools::DFESignInAPI::Organisations).to receive(:enabled?).and_return(false)
+        allow_any_instance_of(Schools::DFESignInAPI::Healthcheck)
+          .to receive(:up?).and_raise(TypeError, "no implicit conversion of nil into String")
+      end
+
+      it { is_expected.to be false }
+    end
+
+    context "when the request times out (Rack::Timeout::RequestTimeoutException)" do
+      before do
+        allow_any_instance_of(Schools::DFESignInAPI::Healthcheck)
+          .to receive(:up?).and_raise(Rack::Timeout::RequestTimeoutException.new({}))
       end
 
       it { is_expected.to be false }

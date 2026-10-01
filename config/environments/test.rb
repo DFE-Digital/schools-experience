@@ -107,6 +107,7 @@ Rails.application.configure do
   config.x.oidc_host = 'some-oidc-host.education.gov.uk'
 
   config.x.dfe_sign_in_api_host = 'some-signin-host.signin.education.gov.uk'
+  config.x.dfe_sign_in_help_host = 'some-signin-help-host.signin.education.gov.uk'
 
   config.x.dfe_sign_in_api_enabled = false
   config.x.dfe_sign_in_api_role_check_enabled = false
