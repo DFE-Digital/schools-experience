@@ -96,8 +96,8 @@ For the schools/admin login flow to complete locally, the pre-production DfE Sig
 
 ## Whats included in this App?
 
-- Rails 8 app with Shakapacker
-- Dart Sass (compiled via Shakapacker/webpack)
+- Rails 8 app with the Propshaft asset pipeline
+- JavaScript bundling with esbuild (jsbundling-rails) and CSS bundling with Dart Sass (cssbundling-rails)
 - [GOV.UK Frontend](https://github.com/alphagov/govuk-frontend)
 - [GOV.UK Lint](https://github.com/alphagov/rubocop-govuk)
 - Autoprefixer rails

@@ -3,8 +3,6 @@ require "active_support/core_ext/integer/time"
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  # Verifies that versions and hashed value of the package contents in the project's package.json
-  config.shakapacker.check_yarn_integrity = true
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In development log more information

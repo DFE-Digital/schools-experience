@@ -46,12 +46,9 @@ RUN gem install bundler --version='~> 2.6.8' && \
     rm -rf /root/.bundle/cache && \
     rm -rf /usr/local/bundle/cache
 
-# Add code and compile assets
+# Add code and compile assets (Propshaft digests the esbuild/Dart Sass builds)
 COPY . .
 RUN bundle exec rake assets:precompile SECRET_KEY_BASE=stubbed SKIP_REDIS=true
-
-# Create symlinks for CSS files without digest hashes for use in error pages
-RUN bundle exec rake assets:symlink_non_digested SECRET_KEY_BASE=stubbed SKIP_REDIS=true
 
 ARG COMMIT_SHA
 ENV SHA=${COMMIT_SHA}

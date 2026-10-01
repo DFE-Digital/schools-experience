@@ -89,7 +89,11 @@ RSpec.configure do |config|
   end
 
   config.before :suite do
-    Shakapacker.compile
+    # Build the esbuild + Dart Sass bundles so Propshaft can serve them in specs.
+    # In CI the Docker image already precompiled them, so only build when missing.
+    unless File.exist?(Rails.root.join("app/assets/builds/application.js"))
+      system("yarn build && yarn build:css", exception: true)
+    end
   end
 
   config.after :suite do

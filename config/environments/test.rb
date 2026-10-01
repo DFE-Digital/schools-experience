@@ -11,8 +11,6 @@ require Rails.root.join('spec', 'support', 'fake_get_into_teaching_api_client')
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  # Verifies that versions and hashed value of the package contents in the project's package.json
-  config.shakapacker.check_yarn_integrity = false
 
   # While tests run files are not watched, reloading is not necessary.
   config.enable_reloading = false
