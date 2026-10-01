@@ -321,7 +321,7 @@ jobs:
         run: sudo sed -i "s?/app/app?/github/workspace/app?" ${{ github.workspace }}/out/${{ env.code-coverage-artifact-name }}/coverage.json
 
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602 # Pinned at v6
+        uses: SonarSource/sonarqube-scan-action@ba9859eae8dd6bd29e412f25ddbbef3d032000f4 # Pinned at v8.2.2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
