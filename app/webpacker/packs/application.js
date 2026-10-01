@@ -1,8 +1,6 @@
 require.context("govuk-frontend/dist/govuk/assets");
 require.context('../images', true);
 
-import "../stylesheets/application.scss";
-
 import { initAll } from "govuk-frontend";
 initAll();
 
