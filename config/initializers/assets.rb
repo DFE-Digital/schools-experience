@@ -7,4 +7,4 @@ Rails.application.config.assets.version = "1.0"
 # the Propshaft load path lets Propshaft digest them and rewrite the /fonts/...
 # and /images/... url() references emitted by govuk-frontend's Sass (which uses
 # $govuk-assets-path: "/") to digested /assets/... paths.
-Rails.application.config.assets.paths << Rails.root.join("node_modules/govuk-frontend/dist/govuk/assets")
+Rails.application.config.assets.paths << Rails.root.join("node_modules", "govuk-frontend", "dist", "govuk", "assets")
