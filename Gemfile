@@ -26,9 +26,9 @@ gem 'puma', '~> 7.2.0'
 
 # Asset pipeline: Propshaft serves/digests assets; esbuild bundles JavaScript
 # (jsbundling-rails) and Dart Sass compiles CSS (cssbundling-rails).
-gem 'propshaft'
-gem 'jsbundling-rails'
 gem 'cssbundling-rails'
+gem 'jsbundling-rails'
+gem 'propshaft'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
