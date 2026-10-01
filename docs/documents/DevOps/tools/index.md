@@ -17,7 +17,7 @@ Though there are other teams that support specific components of the system, all
 ## Cloud Tools list
 
 1. Google
-2. Micrsoft Azure
+2. Microsoft Azure
 3. Sonarcloud
 4. Github
 5. Snyk

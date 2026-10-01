@@ -90,11 +90,13 @@ Rails.application.configure do
   config.x.google_maps_key = ENV['GOOGLE_MAPS_KEY'].presence || Rails.application.credentials[:google_maps_key]
   config.x.google_geocoding_key = ENV['GOOGLE_GEOCODING_KEY'].presence
 
-  # dfe signin redirects back to https, so force it
-  config.force_ssl = true
+  # DfE Sign-in redirects back over HTTPS. In local development, TLS is
+  # terminated by Caddy (see Caddyfile.dev), which reverse-proxies to Rails
+  # over plain HTTP at https://school-experience.localhost, so we no longer
+  # need to force SSL at the Rails layer.
 
   # dfe signin config, should be in credentials or env vars
-  config.x.base_url = 'https://localhost:3000'
+  config.x.base_url = ENV.fetch('DFE_SIGNIN_BASE_URL', 'https://school-experience.localhost')
   config.x.oidc_client_id = 'schoolexperience'
   config.x.oidc_client_secret = ENV['DFE_PP_SIGNIN_SECRET'] || Rails.application.credentials[:dfe_pp_signin_secret]
   config.x.oidc_host = 'pp-oidc.signin.education.gov.uk'
@@ -124,7 +126,7 @@ Rails.application.configure do
   config.x.git_api_endpoint = "https://getintoteachingapi-development.test.teacherservices.cloud/api"
   config.x.api_client_cache_store = ActiveSupport::Cache::MemoryStore.new
 
-  config.x.dfe_analytics = true
+  config.x.dfe_analytics = false
 
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true

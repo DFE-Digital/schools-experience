@@ -1,2 +1,3 @@
 server: bin/rails server
 assets: bin/shakapacker-dev-server
+caddy: caddy run --config Caddyfile.dev --adapter caddyfile

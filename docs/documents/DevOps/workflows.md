@@ -42,6 +42,3 @@ If a PR references a [Trello](https://trello.com/) card, then when the PR is sen
 
 ### [Manual Release](https://github.com/DFE-Digital/schools-experience/blob/master/.github/workflows/manual.yml)
 This workflow allows an operator to manually choose a built release from GitHub and deliver it to anyone of the Environments.
-
-### [Pull Request Labeler](https://github.com/DFE-Digital/schools-experience/blob/master/.github/workflows/labeler.yml)
-This workflow checks which code has been changed when a PR is created and labels the PR with the appropriate label set.  For example if terraform was changed then this would be labelled as a

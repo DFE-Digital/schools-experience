@@ -1,0 +1,10 @@
+school-experience.localhost {
+	# Shakapacker dev server: JS/CSS packs and the live-reload websocket.
+	# Routing these through Caddy keeps everything on one trusted origin, so
+	# the browser never has to trust a separate self-signed cert for :3035.
+	@webpack path /packs /packs/* /ws
+	reverse_proxy @webpack localhost:3035
+
+	# Rails app
+	reverse_proxy localhost:3000
+}

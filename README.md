@@ -1,6 +1,6 @@
 # DfE School Experience
 
-[![Build Status](https://dfe-ssp.visualstudio.com/School-Experience/_apis/build/status/School-Experience-CI?branchName=master)](https://dfe-ssp.visualstudio.com/School-Experience/_build/latest?definitionId=33&branchName=master)
+[![Build and Deploy](https://github.com/DFE-Digital/schools-experience/actions/workflows/build.yml/badge.svg)](https://github.com/DFE-Digital/schools-experience/actions/workflows/build.yml)
 
 ## Documentation
 
@@ -8,21 +8,22 @@ Legacy documentation is available on Confluence; whilst some of this is still re
 
 [Confluence Development page](https://dfedigital.atlassian.net/wiki/spaces/SE/pages/945618970/Development)
 
-We also have markdown pages within the `doc` folder of this git repo
+We also have markdown pages within the `docs/documents` folder of this git repo
 
-- [Environment Variables](doc/env-vars.md)
-- [Release process](doc/release-process.md)
-- [DfE Sign-in](doc/dfe-sigin.md)
-- [Gitis CRM](doc/gitis-crm.md)
-- [Candidate notifications](doc/candidate-notifications.md)
+- [Environment Variables](docs/documents/env-vars.md)
+- [Release process](docs/documents/release-process.md)
+- [DfE Sign-in](docs/documents/dfe-signin.md)
+- [Candidate notifications](docs/documents/candidate-notifications.md)
+- [Inviting users to Manage School Experience](docs/documents/mse-user-invite.md)
+- [DevOps processes and procedures](docs/documents/DevOps/index.md)
 
 ## Prerequisites
 
-- Ruby 3.1.4 - easiest with rbenv and ruby-build
-  - `brew install rbenv`
-  - `brew install ruby-build`
-  - `rbenv install 3.1.4`
-- Bundler 2.3.10 - `gem install bundler --version 2.3.10`
+- Ruby 4.0.7 (see `.ruby-version`) - easiest with [asdf](https://asdf-vm.com), which reads the versions pinned in `.tool-versions`
+  - `brew install asdf`
+  - Add the plugins: `asdf plugin add ruby`, `asdf plugin add nodejs`, `asdf plugin add terraform` and `asdf plugin add caddy`
+  - `asdf install` (installs the Ruby, Node, Terraform and Caddy versions pinned in `.tool-versions`)
+- Bundler 4.0.20 - `gem install bundler --version 4.0.20`
 - PostgreSQL with PostGIS extension
   - `brew install postgis`
   - `brew services start postgresql`
@@ -35,48 +36,68 @@ We also have markdown pages within the `doc` folder of this git repo
 
 ## Setting up the app in development
 
-1. Clone this repo
-2. Check your dependencies
-3. ruby -v
-4. node -v
-5. bundler -v
-6. yarn -v
-7. Run `bundle install` to install ruby dependencies
-8. Run `yarn install` to install node dependencies
-9. Run `bin/rails db:setup` to set up the database development and test schemas, and seed with test data.
-10. If you don't wish to use the first available Redis Database, set the `REDIS_URL`, eg in the `.env` file
-11. Create SSL certificates - `bundle exec rake dev:ssl:generate`
-12. Get a copy of `.env.local` from another team member
-13. Run `rspec` to run the spec tests.
-14. Run `cucumber` to run the cucumber tests.
-15. Run `yarn spec` to run the Javascript tests.
-16. Run `rails s` to launch the app on https://localhost:3000.
-17. If running with `RAILS_ENV=production`, Sidekiq is needed for background job processing
-    a. running `bundle exec sidekiq --config config/sidekiq.yml` will start a Sidekiq Worker
+### Quick start
 
-### If Chrome give a certificates error and will not let you proceed
+1. Install the [prerequisites](#prerequisites) above — `asdf` and its plugins (`asdf install`), plus PostgreSQL and Redis (both running).
+2. Clone this repo.
+3. Run `bin/setup`.
 
-1. Add the Root Certificate to macOS Keychain
+`bin/setup` installs the Ruby and JavaScript dependencies, creates `.env.local` from `.env.template`, prepares the database, imports sample school data, and launches the app with `bin/dev` at **https://school-experience.localhost**.
 
-   **_Via the CLI_**
+Fill in the blank secret values in `.env.local` (ask another team member, or retrieve them from the Azure key vault). The candidate-facing journey works without them; DfE Sign-in (the schools/admin area) needs them.
 
-   Run `sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain config/ssl/localhost.crt`
+Handy flags:
 
-   **_Via the UI_**
+- `bin/setup --skip-dev-data` — skip importing the sample school data
+- `bin/setup --skip-server` — set everything up without launching `bin/dev`
 
-   1. Double click on `./config/ssl/localhost.crt`
-   2. Right click and select "Get Info"
-   3. Open "Trust" Panel
-   4. Change "When using this certificate" to "Always Trust"
+### Manual setup
 
-2. Reload the webpage
-3. Open the "Advanced" pane at the bottom
-4. Click "Proceed to website"
+If you'd prefer to install things yourself, or differently:
+
+1. Install the Ruby and JavaScript dependencies: `bundle install` then `yarn install`.
+2. Copy `.env.template` to `.env.local` and fill in the secret values.
+3. Set up the database and seed test data: `bin/rails db:setup`.
+4. Make sure Caddy is installed (via `asdf` per the prerequisites, or `brew install caddy`) — it provides local HTTPS; see "Local HTTPS with Caddy" below.
+5. Launch the app with `bin/dev` (served at https://school-experience.localhost).
+
+If you don't wish to use the first available Redis database, set `REDIS_URL` (e.g. in the `.env` file).
+
+### Running the tests
+
+- `rspec` — Ruby specs
+- `cucumber` — Cucumber features
+- `yarn spec` — JavaScript tests
+
+### Background jobs
+
+When running with `RAILS_ENV=production`, Sidekiq is needed for background job processing:
+
+```bash
+bundle exec sidekiq --config config/sidekiq.yml
+```
+
+### Local HTTPS with Caddy
+
+DfE Sign-in only redirects back to a pre-registered HTTPS URL, so local development is served over HTTPS. Rather than binding Puma to a self-signed certificate, [Caddy](https://caddyserver.com/) sits in front and terminates TLS using its own locally-trusted CA (no browser certificate warnings), reverse-proxying to Rails (and the Shakapacker dev server) over plain HTTP. See [`Caddyfile.dev`](Caddyfile.dev).
+
+- `bin/dev` starts Rails, the Shakapacker dev server, and Caddy together via [`Procfile.dev`](Procfile.dev).
+- The app is served at **https://school-experience.localhost**. The `.localhost` TLD resolves to `127.0.0.1` automatically, so no `/etc/hosts` entry is needed.
+- The first run will ask for your password once so Caddy can install its local CA into the system trust store.
+
+To override the host (e.g. to fall back to `https://localhost:3000`), set `DFE_SIGNIN_BASE_URL` and adjust `Caddyfile.dev` accordingly.
+
+#### DfE Sign-in redirect URIs
+
+For the schools/admin login flow to complete locally, the pre-production DfE Sign-in service must have these registered for this client:
+
+- redirect URI: `https://school-experience.localhost/auth/callback`
+- post-logout redirect URI: `https://school-experience.localhost/schools`
 
 ## Whats included in this App?
 
-- Rails 7 app with Shakapacker
-- SassC (replacement for deprecated sass-rails)
+- Rails 8 app with Shakapacker
+- Dart Sass (compiled via Shakapacker/webpack)
 - [GOV.UK Frontend](https://github.com/alphagov/govuk-frontend)
 - [GOV.UK Lint](https://github.com/alphagov/rubocop-govuk)
 - Autoprefixer rails
@@ -90,7 +111,7 @@ We also have markdown pages within the `doc` folder of this git repo
 
 1. The Get school experience service (the candidate facing part), is publicly
    available but you'll need to setup School profiles to search for school.
-   1. That can be done from the [Manage school experience](https://localhost:3000/schools) service
+   1. That can be done from the [Manage school experience](https://school-experience.localhost/schools) service
 2. The Manage school experience service requires a DfE Sign In account attached
    to a School. You can sign up for an account from the login page, but you'll
    need to get the DfE Sign-in team to approve you for a school.
@@ -109,7 +130,7 @@ then lint check your commits prior to committing.
 ## Configuring the application
 
 This can be controlled from various environment variables, see
-[Env Vars](doc/env-vars.md) for more information.
+[Env Vars](docs/documents/env-vars.md) for more information.
 
 ## Monitoring health and deployment version
 
