@@ -142,6 +142,10 @@ Rails.application.configure do
     'api.signin.education.gov.uk'
   end
 
+  config.x.dfe_sign_in_help_host = ENV.fetch('DFE_SIGNIN_HELP_ENDPOINT') do
+    'help.signin.education.gov.uk'
+  end
+
   truthy_strings = %w[true 1 yes]
 
   config.x.dfe_sign_in_api_enabled = ENV['DFE_SIGNIN_API_ENABLED']&.in?(truthy_strings)
