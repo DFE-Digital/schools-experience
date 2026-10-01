@@ -1,0 +1,71 @@
+// GOV.UK Frontend asset URLs resolve to /fonts/... and /images/... which
+// Propshaft rewrites to digested /assets/... paths at precompile time
+// (node_modules/govuk-frontend/dist/govuk/assets is on config.assets.paths).
+// This replaces the Shakapacker-era custom frontend-font-url/frontend-image-url
+// functions, which only existed to satisfy webpack's ~assets resolution.
+$govuk-assets-path: "/";
+
+$govuk-new-typography-scale: false;
+
+$govuk-global-styles: true;
+$govuk-grid-widths: (
+  one-twelth: 8.3333%,
+  two-twelths: 16.6666%,
+  five-twelths: 41.6666%,
+  seven-twelths: 58.3333%,
+  ten-twelths: 83.3333%,
+  eleven-twelths: 91.6666%,
+  one-quarter: 25%,
+  one-third: 33.3333%,
+  one-half: 50%,
+  two-thirds: 66.6666%,
+  three-quarters: 75%,
+  full: 100%
+);
+
+@import "govuk-frontend/dist/govuk/index";
+@import "dfe-autocomplete/src/dfe-autocomplete";
+@import "global-styles" ;
+@import "candidate";
+@import "contents-list" ;
+@import "cookie-banner" ;
+@import "form-extensions" ;
+@import "facet-tags" ;
+@import "feature-flags" ;
+@import "school-search" ;
+@import "pagination" ;
+@import "application-preview" ;
+@import "placement-preference" ;
+@import "subject-and-date-information" ;
+@import "subject-preference" ;
+@import "stimulus/all" ;
+@import "testing-fixes" ;
+@import "school-placement-requests" ;
+@import "school-bookings" ;
+@import "school-dashboard" ;
+@import "alert-counters" ;
+@import "school-placement-dates" ;
+@import "school-preview" ;
+@import "school-profile" ;
+@import "service-update" ;
+@import "on-boarding" ;
+@import "map" ;
+
+.govuk-visually-hidden, .govuk-visually-hidden-focusable {
+    position: absolute!important;
+    width: 1px!important;
+    height: 1px!important;
+    margin: 0!important;
+    overflow: hidden!important;
+    clip: rect(0 0 0 0)!important;
+    -webkit-clip-path: inset(50%)!important;
+    clip-path: inset(50%)!important;
+    white-space: nowrap!important;
+}
+.govuk-visually-hidden {
+    padding: 0!important;
+    border: 0!important;
+}
+.govuk-accordion__controls {
+  margin-bottom: 1em;
+}
