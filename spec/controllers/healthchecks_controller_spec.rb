@@ -59,16 +59,36 @@ describe HealthchecksController, type: :request do
       it { expect(response).to have_http_status(:error) }
     end
 
-    context 'with unhealthy Auth Service' do
+    context 'with the DfE Sign In API timing out' do
       before do
-        allow_any_instance_of(Schools::DFESignInAPI::Client).to \
+        # Override the healthy `uuids` stub so the real uuids -> response
+        # chain runs and surfaces the error raised from the client.
+        allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
+          receive(:uuids).and_call_original
+        allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
           receive(:response).and_raise Faraday::TimeoutError
 
         get healthcheck_path
       end
 
-      xit { expect(response.body).to include_json(auth: false) }
-      xit { expect(response).to have_http_status(:error) }
+      it { expect(response.body).to include_json(dfe_auth: false) }
+      it { expect(response).to have_http_status(:error) }
+    end
+
+    context 'with the DfE Sign In API returning 404' do
+      before do
+        allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
+          receive(:uuids).and_call_original
+        allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
+          receive(:response).and_raise(
+            Faraday::ResourceNotFound.new("the server responded with status 404")
+          )
+
+        get healthcheck_path
+      end
+
+      it { expect(response.body).to include_json(dfe_auth: false) }
+      it { expect(response).to have_http_status(:error) }
     end
 
     context 'with unhealthy API' do
@@ -173,7 +193,7 @@ describe HealthchecksController, type: :request do
       it { expect(response).to have_http_status(:error) }
     end
 
-    context 'with unhealthy Auth Service' do
+    context 'with the DfE Sign In API failing' do
       before do
         allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
           receive(:uuids).and_raise Faraday::TimeoutError
@@ -181,20 +201,8 @@ describe HealthchecksController, type: :request do
         get api_health_path
       end
 
-      xit { expect(response).to have_attributes body: 'unhealthy' }
-      xit { expect(response).to have_http_status(:error) }
-    end
-
-    context 'with unhealthy Auth Service' do
-      before do
-        allow_any_instance_of(Schools::DFESignInAPI::Client).to \
-          receive(:response).and_raise Faraday::TimeoutError
-
-        get api_health_path
-      end
-
-      xit { expect(response).to have_attributes body: 'unhealthy' }
-      xit { expect(response).to have_http_status(:error) }
+      it { expect(response).to have_attributes body: 'unhealthy' }
+      it { expect(response).to have_http_status(:error) }
     end
 
     context 'with unhealthy Cache' do
