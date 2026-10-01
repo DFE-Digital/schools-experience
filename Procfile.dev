@@ -1,5 +1,4 @@
 server: bin/rails server
-assets: bin/shakapacker-dev-server
 css: yarn build:css --watch
 js: yarn build --watch
 caddy: caddy run --config Caddyfile.dev --adapter caddyfile
