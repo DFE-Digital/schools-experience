@@ -126,7 +126,7 @@ Rails.application.configure do
   config.x.git_api_endpoint = "https://getintoteachingapi-development.test.teacherservices.cloud/api"
   config.x.api_client_cache_store = ActiveSupport::Cache::MemoryStore.new
 
-  config.x.dfe_analytics = true
+  config.x.dfe_analytics = false
 
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
