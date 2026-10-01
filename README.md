@@ -45,33 +45,31 @@ We also have markdown pages within the `doc` folder of this git repo
 8. Run `yarn install` to install node dependencies
 9. Run `bin/rails db:setup` to set up the database development and test schemas, and seed with test data.
 10. If you don't wish to use the first available Redis Database, set the `REDIS_URL`, eg in the `.env` file
-11. Create SSL certificates - `bundle exec rake dev:ssl:generate`
+11. Install [Caddy](https://caddyserver.com/docs/install) (e.g. `brew install caddy`). It terminates HTTPS locally so the DfE Sign-in callback works — see "Local HTTPS with Caddy" below.
 12. Get a copy of `.env.local` from another team member
 13. Run `rspec` to run the spec tests.
 14. Run `cucumber` to run the cucumber tests.
 15. Run `yarn spec` to run the Javascript tests.
-16. Run `rails s` to launch the app on https://localhost:3000.
+16. Run `bin/dev` to launch the app on https://school-experience.localhost.
 17. If running with `RAILS_ENV=production`, Sidekiq is needed for background job processing
     a. running `bundle exec sidekiq --config config/sidekiq.yml` will start a Sidekiq Worker
 
-### If Chrome give a certificates error and will not let you proceed
+### Local HTTPS with Caddy
 
-1. Add the Root Certificate to macOS Keychain
+DfE Sign-in only redirects back to a pre-registered HTTPS URL, so local development is served over HTTPS. Rather than binding Puma to a self-signed certificate, [Caddy](https://caddyserver.com/) sits in front and terminates TLS using its own locally-trusted CA (no browser certificate warnings), reverse-proxying to Rails (and the Shakapacker dev server) over plain HTTP. See [`Caddyfile.dev`](Caddyfile.dev).
 
-   **_Via the CLI_**
+- `bin/dev` starts Rails, the Shakapacker dev server, and Caddy together via [`Procfile.dev`](Procfile.dev).
+- The app is served at **https://school-experience.localhost**. The `.localhost` TLD resolves to `127.0.0.1` automatically, so no `/etc/hosts` entry is needed.
+- The first run will ask for your password once so Caddy can install its local CA into the system trust store.
 
-   Run `sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain config/ssl/localhost.crt`
+To override the host (e.g. to fall back to `https://localhost:3000`), set `DFE_SIGNIN_BASE_URL` and adjust `Caddyfile.dev` accordingly.
 
-   **_Via the UI_**
+#### DfE Sign-in redirect URIs
 
-   1. Double click on `./config/ssl/localhost.crt`
-   2. Right click and select "Get Info"
-   3. Open "Trust" Panel
-   4. Change "When using this certificate" to "Always Trust"
+For the schools/admin login flow to complete locally, the pre-production DfE Sign-in service must have these registered for this client:
 
-2. Reload the webpage
-3. Open the "Advanced" pane at the bottom
-4. Click "Proceed to website"
+- redirect URI: `https://school-experience.localhost/auth/callback`
+- post-logout redirect URI: `https://school-experience.localhost/schools`
 
 ## Whats included in this App?
 

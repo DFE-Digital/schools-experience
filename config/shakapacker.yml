@@ -23,10 +23,13 @@ development:
 
   # Reference: https://webpack.js.org/configuration/dev-server/
   dev_server:
-    server: https
+    # TLS is handled by Caddy (see Caddyfile.dev); the dev server itself runs
+    # over plain HTTP and is reverse-proxied at https://school-experience.localhost,
+    # so packs and the live-reload websocket share the app's trusted origin.
+    server: http
     host: localhost
     port: 3035
-    public: localhost:3035
+    public: school-experience.localhost
     # Hot Module Replacement updates modules while the application is running without a full reload
     hmr: false
     # Inline should be set to true if using HMR
@@ -37,11 +40,12 @@ development:
     client:
       # Should we show a full-screen overlay in the browser when there are compiler errors or warnings?
       overlay: true
-      # May also be a string
-      # webSocketURL:
-      #  hostname: "0.0.0.0"
-      #  pathname: "/ws"
-      #  port: 8080
+      # Connect the live-reload websocket back through Caddy (https origin).
+      webSocketURL:
+        hostname: school-experience.localhost
+        protocol: wss
+        port: 443
+        pathname: /ws
     # Should we use gzip compression?
     compress: true
     disable_host_check: true
