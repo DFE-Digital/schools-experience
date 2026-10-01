@@ -38,8 +38,13 @@ development:
     # Defaults to the inverse of hmr. Uncomment to manually set this.
     # live_reload: true
     client:
-      # Should we show a full-screen overlay in the browser when there are compiler errors or warnings?
-      overlay: true
+      # Show the full-screen overlay for compiler/runtime errors, but not for
+      # warnings (e.g. the govuk-frontend SCSS deprecation warnings), which
+      # otherwise trigger the "Compiled with problems:" overlay on every build.
+      overlay:
+        errors: true
+        warnings: false
+        runtimeErrors: true
       # Connect the live-reload websocket back through Caddy (https origin).
       webSocketURL:
         hostname: school-experience.localhost
