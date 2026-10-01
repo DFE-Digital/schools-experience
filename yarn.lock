@@ -8634,7 +8634,7 @@ __metadata:
     postcss-preset-env: "npm:^6.7.2"
     sass: "npm:^1.97.3"
     sass-loader: "npm:^16.0.4"
-    semver: "npm:^7.7.3"
+    semver: "npm:^7.8.5"
     shakapacker: "npm:8.2.0"
     stimulus: "npm:^3.2.2"
     style-loader: "npm:^4.0.0"
@@ -8674,7 +8674,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.3.5":
+"semver@npm:^7.3.5, semver@npm:^7.8.5":
   version: 7.8.5
   resolution: "semver@npm:7.8.5"
   bin:
@@ -8683,7 +8683,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.5.3, semver@npm:^7.5.4, semver@npm:^7.7.3":
+"semver@npm:^7.5.3, semver@npm:^7.5.4":
   version: 7.7.3
   resolution: "semver@npm:7.7.3"
   bin:
