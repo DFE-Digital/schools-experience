@@ -15,7 +15,9 @@ default: &default
   # Reload manifest.json on all requests so we reload latest compiled packs
   cache_manifest: false
 
-  extract_css: true
+  # CSS is now compiled by Dart Sass and served by Propshaft; webpack builds JS
+  # only. Nothing imports stylesheets into the packs any more.
+  extract_css: false
 
 development:
   <<: *default
@@ -78,8 +80,8 @@ production:
   # Production depends on precompilation of packs prior to booting for performance.
   compile: false
 
-  # Extract and emit a css file
-  extract_css: true
+  # CSS is now compiled by Dart Sass and served by Propshaft; webpack builds JS only.
+  extract_css: false
 
   # Cache manifest.json for performance
   cache_manifest: true
