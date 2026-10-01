@@ -27,6 +27,13 @@ gem 'puma', '~> 7.2.0'
 # Transpile app-like JavaScript. Read more: https://github.com/shakacode/shakapacker
 gem 'shakapacker', '8.2.0'
 
+# Modern asset pipeline, installed in parallel with Shakapacker during the
+# webpack -> Propshaft migration (see docs/plans/*-shakapacker-to-propshaft-plan.md).
+# Not yet wired into the layout; builds run alongside the existing webpack build.
+gem 'propshaft'
+gem 'jsbundling-rails'
+gem 'cssbundling-rails'
+
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 

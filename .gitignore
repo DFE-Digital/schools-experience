@@ -17,6 +17,12 @@
 /bin/konduit.sh
 
 /public/assets
+/app/assets/builds/*
+!/app/assets/builds/.keep
+# Some contributors have bun installed; cssbundling/jsbundling may pick it up
+# locally. Docker/CI use yarn (yarn.lock is the source of truth), so keep any
+# local bun lockfile out of the repo.
+/bun.lock
 .byebug_history
 
 # Ignore master key for decrypting credentials and more.
