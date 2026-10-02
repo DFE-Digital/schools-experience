@@ -104,7 +104,7 @@ shared_examples "notify recipient restriction handling" do
       personalisation_json: personalisation.to_json
   end
 
-  # The exact messages GOV.UK Notify returns for a team-only/trial-mode key.
+  # The messages GOV.UK Notify returns for a team-only / trial-mode key.
   let(:team_only_message) { "Cannot send to this recipient using a team-only API key." }
   let(:trial_mode_message) do
     "Cannot send to this recipient when service is in trial mode " \
@@ -112,18 +112,17 @@ shared_examples "notify recipient restriction handling" do
   end
   let(:other_bad_request_message) { "template_id is not a valid UUID" }
 
-  # Builds a Notify client that raises a 400 BadRequestError carrying the given
-  # message, for both email and sms sends.
+  # Builds a Notify client whose send raises a 400 BadRequestError carrying a
+  # Notify-shaped JSON body, so the message the client builds matches reality
+  # ("BadRequestError: <message>") rather than a bare string.
   def erroring_client(message)
+    body = { errors: [{ error: "BadRequestError", message: message }], status_code: 400 }.to_json
     Class.new do
       define_method(:initialize) { |_api_key = nil| }
-      define_method(:send_email) do |*_args|
-        raise Notifications::Client::BadRequestError,
-          OpenStruct.new(body: message, code: 400)
-      end
-      define_method(:send_sms) do |*_args|
-        raise Notifications::Client::BadRequestError,
-          OpenStruct.new(body: message, code: 400)
+      %i[send_email send_sms].each do |method_name|
+        define_method(method_name) do |*_args|
+          raise Notifications::Client::BadRequestError, OpenStruct.new(body: body, code: 400)
+        end
       end
     end
   end
@@ -134,27 +133,25 @@ shared_examples "notify recipient restriction handling" do
     allow(NotifyService.instance).to receive(:notification_class) { notify_class }
     allow(described_class.queue_adapter).to receive :enqueue_at
     allow(Sentry).to receive :capture_exception
-    allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new(rails_env))
+    allow(Rails.env).to receive(:production?).and_return(production)
   end
 
   context 'outside production' do
-    let(:rails_env) { 'staging' }
+    let(:production) { false }
 
     context 'team-only API key error' do
       let(:notify_class) { erroring_client(team_only_message) }
 
-      it 'does not raise' do
+      it 'swallows the error without raising, retrying or alerting' do
         expect { job.perform_now }.not_to raise_error
-      end
-
-      it 'does not retry the job' do
-        job.perform_now
         expect(described_class.queue_adapter).not_to have_received(:enqueue_at)
+        expect(Sentry).not_to have_received(:capture_exception)
       end
 
-      it 'does not alert monitoring' do
+      it 'logs that delivery was skipped' do
+        allow(Rails.logger).to receive(:warn)
         job.perform_now
-        expect(Sentry).not_to have_received(:capture_exception)
+        expect(Rails.logger).to have_received(:warn).with(a_string_including("Skipping Notify delivery"))
       end
     end
 
@@ -165,6 +162,15 @@ shared_examples "notify recipient restriction handling" do
         expect { job.perform_now }.not_to raise_error
         expect(described_class.queue_adapter).not_to have_received(:enqueue_at)
         expect(Sentry).not_to have_received(:capture_exception)
+      end
+    end
+
+    context 'restriction message in a different case' do
+      let(:notify_class) { erroring_client(team_only_message.upcase) }
+
+      it 'still swallows the error (case-insensitive match)' do
+        expect { job.perform_now }.not_to raise_error
+        expect(described_class.queue_adapter).not_to have_received(:enqueue_at)
       end
     end
 
@@ -179,7 +185,7 @@ shared_examples "notify recipient restriction handling" do
   end
 
   context 'in production' do
-    let(:rails_env) { 'production' }
+    let(:production) { true }
 
     context 'team-only API key error' do
       let(:notify_class) { erroring_client(team_only_message) }

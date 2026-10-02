@@ -8,6 +8,6 @@ class Notify::EmailJob < Notify::BaseJob
     alert_monitoring e
     raise RetryableError, e.message
   rescue Notifications::Client::BadRequestError => e
-    handle_recipient_restriction_error e
+    handle_recipient_restriction_error e, template_id: template_id
   end
 end
