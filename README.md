@@ -75,8 +75,8 @@ We also have markdown pages within the `doc` folder of this git repo
 
 ## Whats included in this App?
 
-- Rails 7 app with Shakapacker
-- SassC (replacement for deprecated sass-rails)
+- Rails 8 app with the Propshaft asset pipeline
+- JavaScript bundling with esbuild (jsbundling-rails) and CSS bundling with Dart Sass (cssbundling-rails)
 - [GOV.UK Frontend](https://github.com/alphagov/govuk-frontend)
 - [GOV.UK Lint](https://github.com/alphagov/rubocop-govuk)
 - Autoprefixer rails

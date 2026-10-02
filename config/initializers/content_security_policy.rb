@@ -35,11 +35,6 @@ Rails.application.config.content_security_policy_nonce_directives = %w[script-sr
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy-Report-Only
 # Rails.application.config.content_security_policy_report_only = true
 
-# Allow connections to webpack-dev-server
-if Rails.env.development?
-  connect_src = ['https://localhost:3035', 'wss://localhost:3035']
-end
-
 Rails.application.config.content_security_policy do |policy|
   policy.default_src :self
   policy.base_uri :self
@@ -100,8 +95,7 @@ Rails.application.config.content_security_policy do |policy|
                      "https://google.com",
                      "https://www.google.co.uk",
                      "https://maps.googleapis.com",
-                     "googleapis.com",
-                     *connect_src
+                     "googleapis.com"
 
   policy.font_src :self,
                   "https://fonts.gstatic.com",

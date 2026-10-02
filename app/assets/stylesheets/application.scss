@@ -1,13 +1,10 @@
-@function frontend-font-url($filename) {
-  @return url("~assets/fonts/" + $filename);
-}
+// GOV.UK Frontend asset URLs resolve to /fonts/... and /images/... which
+// Propshaft rewrites to digested /assets/... paths at precompile time
+// (node_modules/govuk-frontend/dist/govuk/assets is on config.assets.paths).
+// This replaces the Shakapacker-era custom frontend-font-url/frontend-image-url
+// functions, which only existed to satisfy webpack's ~assets resolution.
+$govuk-assets-path: "/";
 
-@function frontend-image-url($filename) {
-  @return url("~assets/images/" + $filename);
-}
-
-$govuk-font-url-function: frontend-font-url;
-$govuk-image-url-function: frontend-image-url;
 $govuk-new-typography-scale: false;
 
 $govuk-global-styles: true;
@@ -26,9 +23,8 @@ $govuk-grid-widths: (
   full: 100%
 );
 
-@import "~govuk-frontend/dist/govuk/index";
+@import "govuk-frontend/dist/govuk/index";
 @import "dfe-autocomplete/src/dfe-autocomplete";
-@import "accessible-autocomplete" ;
 @import "global-styles" ;
 @import "candidate";
 @import "contents-list" ;

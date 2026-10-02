@@ -24,8 +24,11 @@ gem 'geocoder'
 # Use Puma as the app server
 gem 'puma', '~> 7.2.0'
 
-# Transpile app-like JavaScript. Read more: https://github.com/shakacode/shakapacker
-gem 'shakapacker', '8.2.0'
+# Asset pipeline: Propshaft serves/digests assets; esbuild bundles JavaScript
+# (jsbundling-rails) and Dart Sass compiles CSS (cssbundling-rails).
+gem 'cssbundling-rails'
+gem 'jsbundling-rails'
+gem 'propshaft'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'

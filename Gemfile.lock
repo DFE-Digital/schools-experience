@@ -181,6 +181,8 @@ GEM
     cronex (0.15.0)
       tzinfo
       unicode (>= 0.4.4.5)
+    cssbundling-rails (1.4.3)
+      railties (>= 6.0.0)
     csv (3.3.6)
     cucumber (9.2.1)
       builder (~> 3.2)
@@ -269,7 +271,6 @@ GEM
     faraday_middleware-circuit_breaker (0.6.0)
       faraday (>= 0.9, < 3.0)
       stoplight (>= 2.1, < 4.0)
-    ffi (1.17.4)
     ffi (1.17.4-aarch64-linux-gnu)
     ffi (1.17.4-aarch64-linux-musl)
     ffi (1.17.4-arm-linux-gnu)
@@ -352,6 +353,8 @@ GEM
       prism (>= 1.3.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
+    jsbundling-rails (1.3.1)
+      railties (>= 6.0.0)
     json (2.21.2)
     json-jwt (1.15.3.1)
       activesupport (>= 4.2)
@@ -452,7 +455,6 @@ GEM
       webfinger (~> 1.2)
     os (1.1.4)
     ostruct (0.6.3)
-    package_json (0.1.0)
     pagy (9.4.0)
     parallel (1.28.0)
     parallel_tests (5.8.0)
@@ -476,6 +478,10 @@ GEM
     prettyprint (0.2.0)
     prism (1.9.0)
     prometheus-client (4.2.2)
+    propshaft (1.3.2)
+      actionpack (>= 7.0.0)
+      activesupport (>= 7.0.0)
+      rack
     pry (0.16.0)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -500,8 +506,6 @@ GEM
       httpclient
       json-jwt (>= 1.11.0)
       rack (>= 2.1.0)
-    rack-proxy (0.7.7)
-      rack
     rack-rewrite (1.5.1)
     rack-session (1.0.2)
       rack (< 3)
@@ -668,7 +672,6 @@ GEM
       websocket (~> 1.0)
     semantic_logger (4.17.0)
       concurrent-ruby (~> 1.0)
-    semantic_range (3.1.0)
     sentry-rails (6.6.2)
       railties (>= 5.2.0)
       sentry-ruby (~> 6.6.2)
@@ -679,12 +682,6 @@ GEM
     sentry-sidekiq (6.6.2)
       sentry-ruby (~> 6.6.2)
       sidekiq (>= 5.0)
-    shakapacker (8.2.0)
-      activesupport (>= 5.2)
-      package_json
-      rack-proxy (>= 0.6.1)
-      railties (>= 5.2)
-      semantic_range (>= 2.3.0)
     shoulda-matchers (6.2.0)
       activesupport (>= 5.2.0)
     sidekiq (6.5.5)
@@ -829,6 +826,7 @@ DEPENDENCIES
   capybara-screenshot
   concurrent-ruby
   connection_pool (< 3)
+  cssbundling-rails
   cucumber (>= 9.2.1)
   cucumber-rails (>= 3.1.1)
   daemons
@@ -849,6 +847,7 @@ DEPENDENCIES
   ice_cube
   invisible_captcha (>= 2.0.0)
   irb
+  jsbundling-rails
   json (>= 2.3.0)
   kaminari
   listen (>= 3.8.0)
@@ -863,6 +862,7 @@ DEPENDENCIES
   pg (>= 0.18, < 2.0)
   pg_search
   phonelib
+  propshaft
   pry-byebug
   pry-rails
   puma (~> 7.2.0)
@@ -888,7 +888,6 @@ DEPENDENCIES
   sentry-rails
   sentry-ruby
   sentry-sidekiq
-  shakapacker (= 8.2.0)
   shoulda-matchers (~> 6.1)
   sidekiq (>= 6.5.5, < 6.5.6)
   sidekiq-cron
@@ -951,6 +950,7 @@ CHECKSUMS
   crack (1.0.1) sha256=ff4a10390cd31d66440b7524eb1841874db86201d5b70032028553130b6d4c7e
   crass (1.0.7) sha256=94868719948664c89ddcaf0a37c65048413dfcb1c869470a5f7a7ceb5390b295
   cronex (0.15.0) sha256=21c794e085fad2951c4f2e279f440340a35ba2297e0b738f22f263f69fbe2186
+  cssbundling-rails (1.4.3) sha256=53aecd5a7d24ac9c8fcd92975acd0e830fead4ee4583d3d3d49bb64651946e41
   csv (3.3.6) sha256=aba61e7e507a66f03d45cb1f3c4b6359861c3504038b422962875dce099e4456
   cucumber (9.2.1) sha256=fa4161391485bca15362871c04c241e8c761580d0ad52ec54703368ecd0b7131
   cucumber-ci-environment (10.0.1) sha256=bb6e3fcec85c981dff4561997e8675a7123eead5fe9e587d2ad7568adbe18631
@@ -996,7 +996,6 @@ CHECKSUMS
   faraday-retry (1.0.4) sha256=dc659233777fabf96c69c2ffe56c0a5d2c102af90321a42cc6c90157bcd716aa
   faraday_middleware (1.2.1) sha256=d45b78c8ee864c4783fbc276f845243d4a7918a67301c052647bacabec0529e9
   faraday_middleware-circuit_breaker (0.6.0) sha256=965239939030ae0332dfe24d8f22257b03d14954c0a2facb8a59a304fc9ca9a4
-  ffi (1.17.4) sha256=bcd1642e06f0d16fc9e09ac6d49c3a7298b9789bcb58127302f934e437d60acf
   ffi (1.17.4-aarch64-linux-gnu) sha256=b208f06f91ffd8f5e1193da3cae3d2ccfc27fc36fba577baf698d26d91c080df
   ffi (1.17.4-aarch64-linux-musl) sha256=9286b7a615f2676245283aef0a0a3b475ae3aae2bb5448baace630bb77b91f39
   ffi (1.17.4-arm-linux-gnu) sha256=d6dbddf7cb77bf955411af5f187a65b8cd378cb003c15c05697f5feee1cb1564
@@ -1034,6 +1033,7 @@ CHECKSUMS
   invisible_captcha (2.3.0) sha256=309ee5a5e891ecfb732c85b12f1aa9252a648df6f2761b3b41205e824e30ff15
   io-console (0.9.4) sha256=a403304f32928ee85e56d457b4612ca43f2703b561a3258844992bd24085fbb1
   irb (1.18.0) sha256=de9454a0703a54704b9811a5ef31a60c86949fbf4013fcf244fabc7c775248e3
+  jsbundling-rails (1.3.1) sha256=0fa03f6d051c694cbf55a022d8be53399879f2c4cf38b2968f86379c62b1c2ca
   json (2.21.2) sha256=1f1d3b7cf2b3ba1a69beca0bb6db13d5438b80bff3cd54cdaaa620b9b07c1c6a
   json-jwt (1.15.3.1) sha256=92b27378212b6aa72aba93a537eabd7f7ac7ad38e12b638863cd7727e0dcb08f
   jwt (3.3.0) sha256=44cc34fbc341c148233cf66641522b4bce0dfb1ce55e8073f05c56f44f4ee546
@@ -1079,7 +1079,6 @@ CHECKSUMS
   openid_connect (1.4.2) sha256=887dab7309d559bcbe5a89130a85940f9dd1e07785dadc3edc661772776c33cd
   os (1.1.4) sha256=57816d6a334e7bd6aed048f4b0308226c5fb027433b67d90a9ab435f35108d3f
   ostruct (0.6.3) sha256=95a2ed4a4bd1d190784e666b47b2d3f078e4a9efda2fccf18f84ddc6538ed912
-  package_json (0.1.0) sha256=20af98c0e45dadcd48b6f45a3324e948f578e7549365671b97faca4637770256
   pagy (9.4.0) sha256=db3f2e043f684155f18f78be62a81e8d033e39b9f97b1e1a8d12ad38d7bce738
   parallel (1.28.0) sha256=33e6de1484baf2524792d178b0913fc8eb94c628d6cfe45599ad4458c638c970
   parallel_tests (5.8.0) sha256=181898cbee2ffb1c796274ce31d27f792a421324609bfc7e9b5531d929d91eda
@@ -1097,6 +1096,7 @@ CHECKSUMS
   prettyprint (0.2.0) sha256=2bc9e15581a94742064a3cc8b0fb9d45aae3d03a1baa6ef80922627a0766f193
   prism (1.9.0) sha256=7b530c6a9f92c24300014919c9dcbc055bf4cdf51ec30aed099b06cd6674ef85
   prometheus-client (4.2.2) sha256=95e195e33a669ceef69928adae23a51bbf4953083bbe7144aa509a356e4e83ff
+  propshaft (1.3.2) sha256=1d56a3e56a92c21bfc29caf07406b5386b00d4c47ddf357cf989a5a234b1389e
   pry (0.16.0) sha256=d76c69065698ed1f85e717bd33d7942c38a50868f6b0673c636192b3d1b6054e
   pry-byebug (3.12.0) sha256=594e094ae8a8390a7ad4c7b36ae36e13304ed02664c67417d108dc5f7213d1b7
   pry-rails (0.3.11) sha256=a69e28e24a34d75d1f60bcf241192a54253f8f7ef8a62cba1e75750a9653593d
@@ -1108,7 +1108,6 @@ CHECKSUMS
   rack (2.2.24) sha256=ef16526a0d871c43753452338c754040a664c8b41bf0dd7450b85f7772adca5f
   rack-attack (6.8.0) sha256=f2499fdebf85bcc05573a22dff57d24305ac14ec2e4156cd3c28d47cafeeecf2
   rack-oauth2 (1.21.3) sha256=4e72a79dd6a866692e84422a552b27c38a5a1918ded06661e04910f2bbe676ba
-  rack-proxy (0.7.7) sha256=446a4b57001022145d5c3ba73b775f66a2260eaf7420c6907483141900395c8a
   rack-rewrite (1.5.1) sha256=682079619b15e4a8084377ce12887b2d14cdafff6b23120db3dca4ddc2e13456
   rack-session (1.0.2) sha256=a02115e5420b4de036839b9811e3f7967d73446a554b42aa45106af335851d76
   rack-test (2.2.0) sha256=005a36692c306ac0b4a9350355ee080fd09ddef1148a5f8b2ac636c720f5c463
@@ -1163,11 +1162,9 @@ CHECKSUMS
   securerandom (0.4.1) sha256=cc5193d414a4341b6e225f0cb4446aceca8e50d5e1888743fac16987638ea0b1
   selenium-webdriver (4.49.0) sha256=b430f091a3cababb356b6f6132e0e4f385b017819355f563557e1537819edc89
   semantic_logger (4.17.0) sha256=c54b60d8596abe2e22bd4f20648d4f6c46e4287fba357779c7932335c8d130e9
-  semantic_range (3.1.0) sha256=9fc01ee40f2e5f81042e95d421837f688177dd603753b5eab41ff9bba50a34a1
   sentry-rails (6.6.2) sha256=cb49aa43e6eb235d162d365c671b3fd24b7f9037df59b4a49af5af60868ab1ed
   sentry-ruby (6.6.2) sha256=a64aaf757d10058598fe5871de925b2a5a3d78273feb9bca23fff843accc6cd6
   sentry-sidekiq (6.6.2) sha256=0552a74e8e3af7261efb23eebe9e5afb8fe186ec66245e1caaf1c6ff71ad1fa2
-  shakapacker (8.2.0) sha256=52725d578889e959268ec59a99b1db204835b066a2d72bd032440aa299ee2462
   shoulda-matchers (6.2.0) sha256=a702c059c5f3bbda2295827231a28654e33063d7c4d409662980ec630207d8dd
   sidekiq (6.5.5) sha256=34464ee79f53957b94a8e8b5241188c4fc3c5702b72e2c49a0f4ee38f0d4dab0
   sidekiq-cron (2.4.0) sha256=25595c5aee0c16d13a89466e5108af047fa4cfbf388199b39e1a600ca39472d4
