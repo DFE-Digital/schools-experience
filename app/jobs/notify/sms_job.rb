@@ -7,5 +7,7 @@ class Notify::SmsJob < Notify::BaseJob
   rescue Notifications::Client::ServerError => e
     alert_monitoring e
     raise RetryableError, e.message
+  rescue Notifications::Client::BadRequestError => e
+    handle_recipient_restriction_error e
   end
 end

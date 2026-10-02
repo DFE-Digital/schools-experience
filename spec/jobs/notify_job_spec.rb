@@ -238,4 +238,5 @@ describe Notify::SmsJob, type: :job do
   end
 
   it_behaves_like "notify_job"
+  it_behaves_like "notify recipient restriction handling"
 end
