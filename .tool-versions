@@ -1,3 +1,4 @@
 terraform 1.14.5
 ruby      4.0.7
 nodejs    24.13.0
+caddy     2.7.6

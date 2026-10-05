@@ -26,7 +26,7 @@ class Encryptor
 private
 
   def hashids
-    salt = (ENV["SECRET_KEY_BASE"] || Rails.application.credentials.secret_key_base)[0..31]
+    salt = (ENV["SECRET_KEY_BASE"] || Rails.application.credentials.secret_key_base || Rails.application.secret_key_base)[0..31]
     Hashids.new(salt)
   end
 end

@@ -1,4 +1,4 @@
-require.context("govuk-frontend/dist/govuk/assets");
+require.context("../../../node_modules/govuk-frontend/dist/govuk/assets", true);
 require.context('../images', true);
 
 import "../stylesheets/application.scss";

@@ -35,19 +35,13 @@ pidfile ENV.fetch("PIDFILE", "tmp/pids/server.pid")
 # Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart
 
-if Rails.env.development?
-  cert = Rails.root.join('config', 'ssl', 'localhost.crt')
-  key = Rails.root.join('config', 'ssl', 'localhost.key')
-  worker_timeout 3600
+# In development, TLS is terminated by Caddy (see Caddyfile.dev), which
+# reverse-proxies HTTPS requests on https://school-experience.localhost to
+# Puma listening here over plain HTTP. The longer worker timeout keeps the
+# process alive while debugging.
+worker_timeout 3600 if Rails.env.development?
 
-  unless File.exist?(cert) && File.exist?(key)
-    raise "No SSL certificate found, run `rails dev:ssl:generate` to proceed"
-  end
-
-  ssl_bind '127.0.0.1', listen_port, cert: cert, key: key, verify_mode: 'none'
-else
-  port listen_port
-end
+port listen_port
 
 # Metrics
 activate_control_app
