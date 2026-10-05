@@ -86,6 +86,127 @@ shared_examples "notify_job" do
   end
 end
 
+shared_examples "notify recipient restriction handling" do
+  include ActiveJob::TestHelper
+
+  let :personalisation do
+    { school_name: "A School", confirmation_link: "ABC123" }
+  end
+
+  let :template_id do
+    '11111111-aaaa-1111-aaaa-111111111111'
+  end
+
+  let :job do
+    described_class.new \
+      to: recipient,
+      template_id: template_id,
+      personalisation_json: personalisation.to_json
+  end
+
+  # The messages GOV.UK Notify returns for a team-only / trial-mode key.
+  let(:team_only_message) { "Cannot send to this recipient using a team-only API key." }
+  let(:trial_mode_message) do
+    "Cannot send to this recipient when service is in trial mode " \
+      "– see https://www.notifications.service.gov.uk/trial-mode"
+  end
+  let(:other_bad_request_message) { "template_id is not a valid UUID" }
+
+  # Builds a Notify client whose send raises a 400 BadRequestError carrying a
+  # Notify-shaped JSON body, so the message the client builds matches reality
+  # ("BadRequestError: <message>") rather than a bare string.
+  def erroring_client(message)
+    body = { errors: [{ error: "BadRequestError", message: message }], status_code: 400 }.to_json
+    Class.new do
+      define_method(:initialize) { |_api_key = nil| }
+      %i[send_email send_sms].each do |method_name|
+        define_method(method_name) do |*_args|
+          raise Notifications::Client::BadRequestError, OpenStruct.new(body: body, code: 400)
+        end
+      end
+    end
+  end
+
+  around { |example| perform_enqueued_jobs { example.run } }
+
+  before do
+    allow(NotifyService.instance).to receive(:notification_class) { notify_class }
+    allow(described_class.queue_adapter).to receive :enqueue_at
+    allow(Sentry).to receive :capture_exception
+    allow(Rails.env).to receive(:production?).and_return(production)
+  end
+
+  context 'outside production' do
+    let(:production) { false }
+
+    context 'team-only API key error' do
+      let(:notify_class) { erroring_client(team_only_message) }
+
+      it 'swallows the error without raising, retrying or alerting' do
+        expect { job.perform_now }.not_to raise_error
+        expect(described_class.queue_adapter).not_to have_received(:enqueue_at)
+        expect(Sentry).not_to have_received(:capture_exception)
+      end
+
+      it 'logs that delivery was skipped' do
+        allow(Rails.logger).to receive(:warn)
+        job.perform_now
+        expect(Rails.logger).to have_received(:warn).with(a_string_including("Skipping Notify delivery"))
+      end
+    end
+
+    context 'trial mode error' do
+      let(:notify_class) { erroring_client(trial_mode_message) }
+
+      it 'swallows the error without retrying or alerting' do
+        expect { job.perform_now }.not_to raise_error
+        expect(described_class.queue_adapter).not_to have_received(:enqueue_at)
+        expect(Sentry).not_to have_received(:capture_exception)
+      end
+    end
+
+    context 'restriction message in a different case' do
+      let(:notify_class) { erroring_client(team_only_message.upcase) }
+
+      it 'still swallows the error (case-insensitive match)' do
+        expect { job.perform_now }.not_to raise_error
+        expect(described_class.queue_adapter).not_to have_received(:enqueue_at)
+      end
+    end
+
+    context 'any other bad request error' do
+      let(:notify_class) { erroring_client(other_bad_request_message) }
+
+      it 'lets the error propagate to be retried' do
+        job.perform_now
+        expect(described_class.queue_adapter).to have_received(:enqueue_at)
+      end
+    end
+  end
+
+  context 'in production' do
+    let(:production) { true }
+
+    context 'team-only API key error' do
+      let(:notify_class) { erroring_client(team_only_message) }
+
+      it 'lets the error propagate to be retried' do
+        job.perform_now
+        expect(described_class.queue_adapter).to have_received(:enqueue_at)
+      end
+    end
+
+    context 'trial mode error' do
+      let(:notify_class) { erroring_client(trial_mode_message) }
+
+      it 'lets the error propagate to be retried' do
+        job.perform_now
+        expect(described_class.queue_adapter).to have_received(:enqueue_at)
+      end
+    end
+  end
+end
+
 describe Notify::BaseJob, type: :job do
   context "#perform" do
     it "should fail with NotImplementedError'" do
@@ -107,6 +228,7 @@ describe Notify::EmailJob, type: :job do
   end
 
   it_behaves_like "notify_job"
+  it_behaves_like "notify recipient restriction handling"
 end
 
 describe Notify::SmsJob, type: :job do
@@ -122,4 +244,5 @@ describe Notify::SmsJob, type: :job do
   end
 
   it_behaves_like "notify_job"
+  it_behaves_like "notify recipient restriction handling"
 end
