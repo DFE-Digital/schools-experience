@@ -21,7 +21,7 @@ module Schools::BookingsHelper
       if booking.cancelled?
         tag.strong 'Cancelled', class: 'govuk-tag govuk-tag--red'
       else
-        tag.strong 'Not set', class: 'govuk-tag govuk-tag--light-blue'
+        tag.strong 'Not set', class: 'govuk-tag govuk-tag--teal'
       end
     end
   end
