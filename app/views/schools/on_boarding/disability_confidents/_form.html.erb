@@ -12,7 +12,7 @@
       <%= f.govuk_radio_buttons_fieldset :is_disability_confident, legend: { tag: "h2", size: "l" } do %>
 
         <div>
-          <%= image_pack_tag 'static/images/disability-confident-small.png', alt: 'Disability confident logo' %>
+          <%= image_tag 'disability-confident-small.png', alt: 'Disability confident logo' %>
         </div>
 
         <%= f.govuk_radio_button :is_disability_confident, "true", link_errors: true %>

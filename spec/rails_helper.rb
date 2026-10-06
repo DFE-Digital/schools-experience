@@ -4,9 +4,7 @@ ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../config/environment', __dir__)
 # Prevent database truncation if the environment is production
 if Rails.env.production? || Rails.env.servertest? || Rails.env.staging?
-  # rubocop:disable Rails/Exit
   abort("The Rails environment is running in production mode!")
-  # rubocop:enable Rails/Exit
 end
 
 require 'rspec/rails'
@@ -37,9 +35,7 @@ end
 begin
   ActiveRecord::Migration.maintain_test_schema!
 rescue ActiveRecord::PendingMigrationError => e
-  # rubocop:disable Rails/Exit
   abort("There are pending migrations: #{e.to_s.strip}")
-  # rubocop:enable Rails/Exit
 end
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
@@ -89,7 +85,11 @@ RSpec.configure do |config|
   end
 
   config.before :suite do
-    Shakapacker.compile
+    # Build the esbuild + Dart Sass bundles so Propshaft can serve them in specs.
+    # In CI the Docker image already precompiled them, so only build when missing.
+    unless File.exist?(Rails.root.join("app/assets/builds/application.js"))
+      system("yarn build && yarn build:css", exception: true)
+    end
   end
 
   config.after :suite do

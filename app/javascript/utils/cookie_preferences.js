@@ -1,4 +1,4 @@
-const Cookies = require('js-cookie')
+import Cookies from 'js-cookie'
 
 export class CookiePreferences {
   settings = null
@@ -8,11 +8,11 @@ export class CookiePreferences {
   }
 
   get categories() {
-    return global.cookie_categories
+    return window.cookie_categories
   }
 
   get cookieName() {
-    return global.cookie_preference_key
+    return window.cookie_preference_key
   }
 
   readSettings() {

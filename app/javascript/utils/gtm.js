@@ -1,4 +1,4 @@
-import { CookiePreferences } from 'cookie_preferences'
+import { CookiePreferences } from './cookie_preferences'
 
 export default class Gtm {
   constructor(id, nonce) {

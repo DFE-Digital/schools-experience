@@ -63,6 +63,16 @@ Style/HashSyntax:
 Rails/DynamicFindBy:
   Enabled: false
 
+# Rails/Exit's default Include is **/app/**/*.rb (+ config, lib). In CI the repo
+# is mounted at /app, so that glob matches spec/ too and flags the standard
+# Rails abort() guards in rails_helper.rb. An inline `# rubocop:disable` can't
+# win here: outside /app the cop doesn't match, so the directive is reported as
+# redundant locally. A file-level Exclude is path-independent and applies in
+# both places.
+Rails/Exit:
+  Exclude:
+    - spec/rails_helper.rb
+
 Rails/FilePath:
   EnforcedStyle: arguments
 
