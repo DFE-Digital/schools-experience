@@ -3532,10 +3532,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"govuk-frontend@npm:5.13.0":
-  version: 5.13.0
-  resolution: "govuk-frontend@npm:5.13.0"
-  checksum: 10c0/af1c1495c9b543b442709a8131f4455019e07cd9eeea31a4a43b098496047d3468ed3c162d9b246b178c4a3d4214f64b85360bceea95406b188b3d42353593d4
+"govuk-frontend@npm:6.5.1":
+  version: 6.5.1
+  resolution: "govuk-frontend@npm:6.5.1"
+  checksum: 10c0/3654d9bf8f185923fe76a6c1da8fabfc8fee59a15ab1f3b1ed663a095a543546c570848b6cd483b66af6c11879e0b98650526627c44090a50c79f74b020f1bae
   languageName: node
   linkType: hard
 
@@ -5302,7 +5302,7 @@ __metadata:
     dfe-autocomplete: "github:DFE-Digital/dfe-autocomplete"
     esbuild: "npm:^0.28.2"
     express: "npm:5.2.1"
-    govuk-frontend: "npm:5.13.0"
+    govuk-frontend: "npm:6.5.1"
     jest: "npm:^29.7.0"
     jest-environment-jsdom: "npm:^30.2.0"
     js-cookie: "npm:^3.0.5"
