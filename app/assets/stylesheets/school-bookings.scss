@@ -23,7 +23,7 @@
   }
 
   .status .govuk-tag {
-    background-color: govuk-colour('dark-grey');
+    background-color: govuk-colour("black", $variant: "tint-25");
   }
 
   .request-options {
@@ -64,7 +64,7 @@ table#bookings {
 
 .govuk-tag {
   &.govuk-tag--default {
-    background-color: govuk-colour('dark-grey');
+    background-color: govuk-colour("black", $variant: "tint-25");
   }
 
   &.govuk-tag--available {

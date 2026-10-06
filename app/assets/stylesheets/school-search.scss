@@ -45,7 +45,7 @@
   .school-result {
     padding: 0 govuk-spacing(4) 0 govuk-spacing(6);
     margin: govuk-spacing(4) 0;
-    border-left: 5px solid govuk-colour('turquoise');
+    border-left: 5px solid govuk-colour('teal');
 
     dl.govuk-summary-list {
       margin-bottom: 1rem;
@@ -87,10 +87,10 @@
 
 .filter-list {
   margin-bottom: govuk-spacing(4);
-  background-color: govuk-colour("light-grey");
+  background-color: govuk-colour("black", $variant: "tint-95");
 
   .filter {
-    border-bottom: 1px solid govuk-colour("mid-grey");
+    border-bottom: 1px solid govuk-colour("black", $variant: "tint-80");
     padding: 10px;
     margin: 10px 0px;
 
