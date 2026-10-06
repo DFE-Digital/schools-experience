@@ -32,5 +32,11 @@ RSpec.describe CloudFrontIpFilter do
       it { expect(subject.call("15.207.13.1")).to be false }
       it { expect(subject.call("15.207.13.127")).to be false }
     end
+
+    context "with a malformed ip (e.g. blank X-Forwarded-For token)" do
+      it { expect { subject.call("") }.not_to raise_error }
+      it { expect(subject.call("")).to be false }
+      it { expect(subject.call("not-an-ip")).to be false }
+    end
   end
 end
