@@ -17,6 +17,10 @@ private
     cloudfront_proxies.any? do |range|
       range.include? ip
     end
+  rescue IPAddr::InvalidAddressError
+    # Malformed X-Forwarded-For entries (e.g. empty tokens from a stray
+    # comma) reach here as invalid addresses; treat them as untrusted.
+    false
   end
 
   def cloudfront_proxies
