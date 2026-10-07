@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="govuk-template govuk-template--rebranded">
+<html lang="en" class="govuk-template">
   <head>
     <%= render 'shared/application/javascript_cookie_preferences' %>
     <%= javascript_include_tag 'application', 'gtm', defer: true, data: { "gtm-id": gtm_id, "gtm-nonce": content_security_policy_nonce, "gtm-enabled": gtm_enabled? } %>
@@ -9,9 +9,10 @@
     <%= display_meta_tags %>
     <%= tag :meta, name: 'viewport', content: 'width=device-width, initial-scale=1' %>
     <%= tag :meta, property: 'og:image', content: image_url('images/govuk-opengraph-image.png') %>
-    <%= tag :meta, name: 'theme-color', content: '#0b0c0c' %>
-    <%= favicon_link_tag image_path('images/favicon.ico') %>
-    <%= favicon_link_tag image_path('images/govuk-icon-mask.svg'), rel: 'mask-icon', type: 'image/svg', color: "#0b0c0c" %>
+    <%= tag :meta, name: 'theme-color', content: '#1d70b8' %>
+    <%= favicon_link_tag image_path('images/favicon.ico'), rel: 'icon', sizes: '48x48' %>
+    <%= favicon_link_tag image_path('images/favicon.svg'), rel: 'icon', sizes: 'any', type: 'image/svg+xml' %>
+    <%= favicon_link_tag image_path('images/govuk-icon-mask.svg'), rel: 'mask-icon', type: 'image/svg', color: "#1d70b8" %>
     <%= favicon_link_tag image_path('images/govuk-icon-180.png'), rel: 'govuk-icon-180', type: 'image/png', size: '180x180' %>
     <%= favicon_link_tag image_path('images/govuk-icon-192.png'), rel: 'govuk-icon-192', type: 'image/png', size: '192x192' %>
     <%= favicon_link_tag image_path('images/govuk-icon-512.png'), rel: 'govuk-icon-512', type: 'image/png', size: '512x512' %>

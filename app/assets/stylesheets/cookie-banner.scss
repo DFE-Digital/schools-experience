@@ -20,7 +20,7 @@
         // darken when hovering because the light blue background doesn't
         // provide enough contrast
         &:hover {
-          color: darken($govuk-link-colour, 15%);
+          color: govuk-colour("blue", $variant: "shade-25");
         }
       }
     }

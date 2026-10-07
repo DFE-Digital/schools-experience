@@ -34,7 +34,7 @@
   }
 
   &__title {
-    @include govuk-font($size: 14, $line-height: 1.2, $weight: bold);
+    @include govuk-font($size: 16, $line-height: 1.2, $weight: bold);
     cursor: pointer;
     display: block;
     overflow: hidden;
