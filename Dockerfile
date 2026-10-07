@@ -14,18 +14,14 @@ WORKDIR /app
 RUN addgroup -S appgroup -g 20001 && adduser -S appuser -G appgroup -u 10001
 
 
-# remove upgrade zlib-dev & busybox when ruby:3.1.0-alpine3.15 base image is updated to address snyk vuln https://snyk.io/vuln/SNYK-ALPINE315-ZLIB-2434420
-# also https://security.snyk.io/vuln/SNYK-ALPINE315-NCURSES-2952568
+# zlib is a transitive dependency (Ruby's zlib ext + nodejs/chromium/libxml2), so it can't be
+# removed, only patched. Alpine 3.23 ships zlib 1.3.2-r0, still vulnerable to CVE-2026-85091 (High),
+# so pin the patched build: https://security.snyk.io/vuln/SNYK-ALPINE323-ZLIB-20541565
 # hadolint ignore=DL3018
-RUN apk update && apk add -Uu --no-cache zlib-dev busybox ncurses
-
-# hadolint ignore=DL3018
-RUN apk add -U --no-cache bash build-base git tzdata libxml2 libxml2-dev \
+RUN apk add -U --no-cache "zlib>=1.3.2-r1" \
+    bash build-base git tzdata libxml2 libxml2-dev \
     libffi-dev yaml-dev gcompat gcc postgresql-libs postgresql-dev nodejs npm yarn \
     chromium chromium-chromedriver
-
-# Upgrade libpng to 1.6.55-0 to address synk vuln https://security.snyk.io/vuln/SNYK-ALPINE321-LIBPNG-15338682
-#RUN apk add -U --no-cache libpng=1.6.55-r0
 
 # Copy Entrypoint script
 COPY script/docker-entrypoint.sh .
