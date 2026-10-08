@@ -239,7 +239,7 @@ GEM
     factory_bot_rails (6.5.1)
       factory_bot (~> 6.5)
       railties (>= 6.1.0)
-    faraday (1.10.4)
+    faraday (1.10.6)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
@@ -684,10 +684,10 @@ GEM
       sidekiq (>= 5.0)
     shoulda-matchers (6.2.0)
       activesupport (>= 5.2.0)
-    sidekiq (6.5.5)
-      connection_pool (>= 2.2.2)
+    sidekiq (6.5.10)
+      connection_pool (>= 2.2.5, < 3)
       rack (~> 2.0)
-      redis (>= 4.5.0)
+      redis (>= 4.5.0, < 5)
     sidekiq-cron (2.4.0)
       cronex (>= 0.13.0)
       fugit (~> 1.8, >= 1.11.1)
@@ -889,7 +889,7 @@ DEPENDENCIES
   sentry-ruby
   sentry-sidekiq
   shoulda-matchers (~> 6.1)
-  sidekiq (>= 6.5.5, < 6.5.6)
+  sidekiq (>= 6.5.5, < 6.5.11)
   sidekiq-cron
   simplecov
   spring
@@ -981,7 +981,7 @@ CHECKSUMS
   et-orbi (1.4.2) sha256=bb555dae668419cb24caa2a293a170e58be6d4df1e017c51f5030bdc133cd20c
   factory_bot (6.6.0) sha256=1fc1b3b5620ec980a6a27aec1b6ec8c250ca82962e970e8a40f93e8d388d4b89
   factory_bot_rails (6.5.1) sha256=d3cc4851eae4dea8a665ec4a4516895045e710554d2b5ac9e68b94d351bc6d68
-  faraday (1.10.4) sha256=a384c541cde688d68bf85055723aecb4100c3fa41b53beb2011b245960ab2f19
+  faraday (1.10.6) sha256=7ff4802a6b312876a2241b3e641ce0d5045e168dd871b422c35b505e5261ad4d
   faraday-em_http (1.0.0) sha256=7a3d4c7079789121054f57e08cd4ef7e40ad1549b63101f38c7093a9d6c59689
   faraday-em_synchrony (1.0.1) sha256=bf3ce45dcf543088d319ab051f80985ea6d294930635b7a0b966563179f81750
   faraday-encoding (0.0.6) sha256=d7b9216c8ce26d0deb96c865524fd9d6cbe27a9f884b75697c87110196274654
@@ -1166,7 +1166,7 @@ CHECKSUMS
   sentry-ruby (6.6.2) sha256=a64aaf757d10058598fe5871de925b2a5a3d78273feb9bca23fff843accc6cd6
   sentry-sidekiq (6.6.2) sha256=0552a74e8e3af7261efb23eebe9e5afb8fe186ec66245e1caaf1c6ff71ad1fa2
   shoulda-matchers (6.2.0) sha256=a702c059c5f3bbda2295827231a28654e33063d7c4d409662980ec630207d8dd
-  sidekiq (6.5.5) sha256=34464ee79f53957b94a8e8b5241188c4fc3c5702b72e2c49a0f4ee38f0d4dab0
+  sidekiq (6.5.10) sha256=1124e97d31a3dbc452a6aaea58f4cb279b29d713a40609c7fa8919b4390b2a71
   sidekiq-cron (2.4.0) sha256=25595c5aee0c16d13a89466e5108af047fa4cfbf388199b39e1a600ca39472d4
   signet (0.22.0) sha256=b76d495ccb07ad35dbc89f3e920665a9d8ed717141955034005d7843dcfe4780
   simplecov (0.22.0) sha256=fe2622c7834ff23b98066bb0a854284b2729a569ac659f82621fc22ef36213a5
