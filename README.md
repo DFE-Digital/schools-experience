@@ -19,7 +19,7 @@ We also have markdown pages within the `docs/documents` folder of this git repo
 
 ## Prerequisites
 
-- Ruby 4.0.7 (see `.ruby-version`) - easiest with [asdf](https://asdf-vm.com), which reads the versions pinned in `.tool-versions`
+- Ruby 4.0.9 (see `.ruby-version`) - easiest with [asdf](https://asdf-vm.com), which reads the versions pinned in `.tool-versions`
   - `brew install asdf`
   - Add the plugins: `asdf plugin add ruby`, `asdf plugin add nodejs`, `asdf plugin add terraform` and `asdf plugin add caddy`
   - `asdf install` (installs the Ruby, Node, Terraform and Caddy versions pinned in `.tool-versions`)
