@@ -23,7 +23,7 @@ We also have markdown pages within the `docs/documents` folder of this git repo
   - `brew install asdf`
   - Add the plugins: `asdf plugin add ruby`, `asdf plugin add nodejs`, `asdf plugin add terraform` and `asdf plugin add caddy`
   - `asdf install` (installs the Ruby, Node, Terraform and Caddy versions pinned in `.tool-versions`)
-- Bundler 4.0.20 - `gem install bundler --version 4.0.20`
+- Bundler 4.0.20 (the version pinned in `Gemfile.lock`) - `gem install bundler --version 4.0.20`
 - PostgreSQL with PostGIS extension
   - `brew install postgis`
   - `brew services start postgresql`
@@ -79,9 +79,9 @@ bundle exec sidekiq --config config/sidekiq.yml
 
 ### Local HTTPS with Caddy
 
-DfE Sign-in only redirects back to a pre-registered HTTPS URL, so local development is served over HTTPS. Rather than binding Puma to a self-signed certificate, [Caddy](https://caddyserver.com/) sits in front and terminates TLS using its own locally-trusted CA (no browser certificate warnings), reverse-proxying to Rails (and the Shakapacker dev server) over plain HTTP. See [`Caddyfile.dev`](Caddyfile.dev).
+DfE Sign-in only redirects back to a pre-registered HTTPS URL, so local development is served over HTTPS. Rather than binding Puma to a self-signed certificate, [Caddy](https://caddyserver.com/) sits in front and terminates TLS using its own locally-trusted CA (no browser certificate warnings), then reverse-proxies requests to Rails over plain HTTP. JavaScript and CSS are built by the esbuild and Sass watchers into `app/assets/builds` and served by Propshaft. See [`Caddyfile.dev`](Caddyfile.dev).
 
-- `bin/dev` starts Rails, the Shakapacker dev server, and Caddy together via [`Procfile.dev`](Procfile.dev).
+- `bin/dev` starts Rails, the esbuild JavaScript watcher, the Sass CSS watcher, and Caddy together via [`Procfile.dev`](Procfile.dev).
 - The app is served at **https://school-experience.localhost**. The `.localhost` TLD resolves to `127.0.0.1` automatically, so no `/etc/hosts` entry is needed.
 - The first run will ask for your password once so Caddy can install its local CA into the system trust store.
 
