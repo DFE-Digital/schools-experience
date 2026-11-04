@@ -19,6 +19,7 @@ module "postgres" {
   azure_maintenance_window       = var.azure_maintenance_window
   server_docker_image            = "postgis/postgis:17-3.6-alpine"
   create_database                = var.create_database
+  use_airbyte                    = var.pg_airbyte_enabled
 }
 
 module "redis-cache" {
