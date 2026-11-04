@@ -37,7 +37,9 @@ RUN npm install -g corepack@0.35.0  \
 # Install Gems removing artifacts
 COPY .ruby-version Gemfile Gemfile.lock ./
 # hadolint ignore=SC2046
-RUN gem install bundler --version='~> 2.6.8' && \
+RUN BUNDLER_VERSION="$(awk '/^BUNDLED WITH$/ { getline; gsub(/^[[:space:]]+|[[:space:]]+$/, ""); print; exit }' Gemfile.lock)" && \
+    test -n "$BUNDLER_VERSION" && \
+    gem install bundler --version="$BUNDLER_VERSION" && \
     bundle install --jobs=$(nproc --all) && \
     rm -rf /root/.bundle/cache && \
     rm -rf /usr/local/bundle/cache
