@@ -171,7 +171,7 @@ group :test do
   gem 'rubocop-capybara', '~> 2.21'
   gem 'rubocop-factory_bot', '~> 2.28'
   gem 'rubocop-rspec', '~> 3.5'
-  gem 'shoulda-matchers', '~> 6.1'
+  gem 'shoulda-matchers', '~> 8.0'
 
   gem 'capybara-screenshot'
   gem 'drb'
