@@ -1539,10 +1539,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@googlemaps/js-api-loader@npm:^1.16.8":
-  version: 1.16.8
-  resolution: "@googlemaps/js-api-loader@npm:1.16.8"
-  checksum: 10c0/c4159411f784253ef36c8a674756716637fcf50f7bf0600e7a5298c20229f3962f5fb73d8011dc478b60baea369c0d730db6ad13baa4e43cfc5444379a1ee75d
+"@googlemaps/js-api-loader@npm:^2.1.3":
+  version: 2.1.3
+  resolution: "@googlemaps/js-api-loader@npm:2.1.3"
+  dependencies:
+    "@types/google.maps": "npm:^3.65.3"
+  checksum: 10c0/332cddce733684d568a0643a4b6a80f91c3fbaa19a6857263c1c10862d1bbacfecbbc400d22f5f44c1a77d953a126ee25c7d42b8cb876a270ae2c10bfcbac209
   languageName: node
   linkType: hard
 
@@ -2221,6 +2223,13 @@ __metadata:
   dependencies:
     "@babel/types": "npm:^7.3.0"
   checksum: 10c0/39abd9c0f8858efe3fa955f52d24ec8d953582080702cea29fd5592e697ac624e04e81da3c2b2be8f4f1387350e651802b4f1c481a9f64b002d144bd2152142b
+  languageName: node
+  linkType: hard
+
+"@types/google.maps@npm:^3.65.3":
+  version: 3.66.9
+  resolution: "@types/google.maps@npm:3.66.9"
+  checksum: 10c0/4632b42cc1e056f532ac67e5c0d3daa1d3a9a74da494e3db4adaf528ef9f866557736b03e4ea58586e024f38bdca69c37053ce068ee315274aa00d1d586ecd23
   languageName: node
   linkType: hard
 
@@ -5267,7 +5276,7 @@ __metadata:
   dependencies:
     "@babel/core": "npm:7"
     "@babel/preset-env": "npm:7"
-    "@googlemaps/js-api-loader": "npm:^1.16.8"
+    "@googlemaps/js-api-loader": "npm:^2.1.3"
     "@hotwired/stimulus": "npm:^3.2.2"
     "@stimulus/polyfills": "npm:^2.0.0"
     "@types/babel__core": "npm:7"
