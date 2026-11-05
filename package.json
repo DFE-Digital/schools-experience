@@ -12,7 +12,7 @@
     "core-js": "^3.51.0",
     "custom-event-polyfill": "^1.0.7",
     "dfe-autocomplete": "github:DFE-Digital/dfe-autocomplete",
-    "express": "5.2.1",
+    "express": "5.3.0",
     "govuk-frontend": "6.5.1",
     "js-cookie": "^3.0.7",
     "json5": "2.2.3",
