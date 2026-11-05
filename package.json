@@ -9,7 +9,7 @@
     "@stimulus/polyfills": "^2.0.0",
     "@types/babel__core": "7",
     "accessible-autocomplete": "^3.0.2",
-    "core-js": "^3.40.0",
+    "core-js": "^3.51.0",
     "custom-event-polyfill": "^1.0.7",
     "dfe-autocomplete": "github:DFE-Digital/dfe-autocomplete",
     "express": "5.2.1",
