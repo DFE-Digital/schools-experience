@@ -18,7 +18,7 @@ RUN addgroup -S appgroup -g 20001 && adduser -S appuser -G appgroup -u 10001
 # removed, only patched. Alpine 3.23 ships zlib 1.3.2-r0, still vulnerable to CVE-2026-85091 (High),
 # so pin the patched build: https://security.snyk.io/vuln/SNYK-ALPINE323-ZLIB-20541565
 # hadolint ignore=DL3018
-RUN apk add -U --no-cache "zlib>=1.3.2-r1" \
+RUN apk add -U --no-cache "zlib>=1.3.2-r1" "libexpat>=2.10.0-r0" \
     bash build-base git tzdata libxml2 libxml2-dev \
     libffi-dev yaml-dev gcompat gcc postgresql-libs postgresql-dev nodejs npm yarn \
     chromium chromium-chromedriver
