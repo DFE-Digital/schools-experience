@@ -2367,6 +2367,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"accessible-autocomplete@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "accessible-autocomplete@npm:3.0.2"
+  peerDependencies:
+    preact: ^8.0.0
+  peerDependenciesMeta:
+    preact:
+      optional: true
+  checksum: 10c0/23be53e61c1fde637cc04a1e842ff01ad8a76e6137473fcce975f5350ab23b075003b3f0544745b822e01de3f919cca83859e68a84e8119ae2567aa3b3c2e6b6
+  languageName: node
+  linkType: hard
+
 "agent-base@npm:^7.1.0, agent-base@npm:^7.1.2":
   version: 7.1.4
   resolution: "agent-base@npm:7.1.4"
@@ -5271,7 +5283,7 @@ __metadata:
     "@hotwired/stimulus": "npm:^3.2.2"
     "@stimulus/polyfills": "npm:^2.0.0"
     "@types/babel__core": "npm:7"
-    accessible-autocomplete: "npm:^3.0.1"
+    accessible-autocomplete: "npm:^3.0.2"
     core-js: "npm:^3.40.0"
     custom-event-polyfill: "npm:^1.0.7"
     dfe-autocomplete: "github:DFE-Digital/dfe-autocomplete"
