@@ -130,3 +130,6 @@ locals {
   postgres_ssl_mode = var.enable_postgres_ssl ? "require" : "disable"
   app_name_suffix   = var.app_name == null ? var.environment : var.app_name
 }
+
+# pg_airbyte_enabled used in the postgres module
+variable "pg_airbyte_enabled" { default = false }
