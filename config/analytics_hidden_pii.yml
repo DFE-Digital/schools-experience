@@ -1,7 +1,5 @@
 ---
 :shared:
-  :users_roles:
-  - user_id
   :users:
   - id
   - sub
