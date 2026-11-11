@@ -1,11 +1,13 @@
 GIT
   remote: https://github.com/DFE-Digital/dfe-analytics.git
-  revision: 7618b23697e91ab1ababee5234faaa260f6c873e
-  tag: v1.15.1
+  revision: df1c6f6e3befab6e2eb600a1a64731dc83d863a6
+  tag: v1.16.3
   specs:
-    dfe-analytics (1.15.1)
+    dfe-analytics (1.16.3)
       google-cloud-bigquery (~> 1.38)
-      httparty (~> 0.21)
+      googleauth (~> 1.17)
+      httparty (~> 0.24)
+      json (< 3)
       multi_xml (~> 0.6.0)
       request_store_rails (~> 2)
 
@@ -966,7 +968,7 @@ CHECKSUMS
   database_cleaner-core (2.0.1) sha256=8646574c32162e59ed7b5258a97a208d3c44551b854e510994f24683865d846c
   date (3.5.1) sha256=750d06384d7b9c15d562c76291407d89e368dda4d4fff957eb94962d325a0dc0
   declarative (0.0.20) sha256=8021dd6cb17ab2b61233c56903d3f5a259c5cf43c80ff332d447d395b17d9ff9
-  dfe-analytics (1.15.1)
+  dfe-analytics (1.16.3)
   dfe-autocomplete (0.1.0)
   dfe-reference-data (3.5.0)
   diff-lcs (1.6.1) sha256=12a5a83f3e37a8e2f4427268e305914d5f1879f22b4e73bb1a09f76a3dd86cd4

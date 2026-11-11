@@ -70,3 +70,8 @@
   :feedbacks:
   - reason_for_using_service_explanation
   - unsuccessful_visit_explanation
+  :users_roles:
+  - user_id
+  - role_id
+  - created_at
+  - updated_at
