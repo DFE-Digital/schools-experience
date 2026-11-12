@@ -30,6 +30,9 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
+  candidates:
+    school_searches:
+      unreadable_location: We could not read the location in this link. Enter a town, city or postcode again.
   errors:
    format: "%{message}"
    messages:
