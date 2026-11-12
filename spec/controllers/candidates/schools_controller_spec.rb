@@ -68,6 +68,17 @@ RSpec.describe Candidates::SchoolsController, type: :request do
         before { get candidates_schools_path(query_params_with_location) }
 
         specify { expect(response).to have_http_status(:success) }
+        specify { expect(response.body).to include(I18n.t('candidates.school_searches.unreadable_location')) }
+      end
+
+      context 'when the location token raises Hashids::InputError' do
+        before { get candidates_schools_path(query_params.merge(location: 'bad!token')) }
+
+        specify { expect(response).to have_http_status(:success) }
+        specify { expect(response.body).to include(I18n.t('candidates.school_searches.unreadable_location')) }
+        specify { expect(response.body).not_to include('bad!token') }
+        specify { expect(assigns(:search).latitude).to be_nil }
+        specify { expect(assigns(:facet_tags)).to be_nil }
       end
 
       context 'when coordinates are present and location is blank' do
