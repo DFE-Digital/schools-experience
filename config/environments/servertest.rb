@@ -18,7 +18,7 @@ Rails.application.configure do
   config.x.google_geocoding_key = nil
 
   # dfe signin config, should be in credentials or env vars
-  config.x.base_url = "https://localhost:#{ENV.fetch('PORT', 3000)}"
+  config.x.base_url = "http://localhost:#{ENV.fetch('PORT', 3000)}"
   config.x.oidc_client_id = 'schoolexperience'
   config.x.oidc_client_secret = Rails.application.credentials[:dfe_pp_signin_secret]
   config.x.oidc_host = 'pp-oidc.signin.education.gov.uk'

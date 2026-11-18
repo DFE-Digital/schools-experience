@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_04_080002) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "address_standardizer"
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
   enable_extension "postgis"
 
   create_table "bookings_bookings", force: :cascade do |t|
@@ -206,7 +206,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_04_080002) do
     t.integer "max_fee"
     t.integer "page"
     t.integer "number_of_results", default: 0
-    t.geography "coordinates", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
+    t.geography "coordinates", limit: {srid: 4326, type: "st_point", geographic: true}
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.uuid "analytics_tracking_uuid"
@@ -225,7 +225,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_04_080002) do
 
   create_table "bookings_schools", force: :cascade do |t|
     t.string "name", limit: 128, null: false
-    t.geography "coordinates", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
+    t.geography "coordinates", limit: {srid: 4326, type: "st_point", geographic: true}
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.integer "fee", default: 0, null: false
@@ -457,7 +457,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_04_080002) do
     t.index ["sub"], name: "index_users_on_sub", unique: true
   end
 
-  create_table "users_roles", id: false, force: :cascade do |t|
+  create_table "users_roles", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "role_id"
     t.datetime "created_at", null: false
