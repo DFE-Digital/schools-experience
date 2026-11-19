@@ -294,6 +294,7 @@
   - updated_at
   - bookings_candidate_id
   :users_roles:
+  - id
   - user_id
   - role_id
   - created_at
