@@ -105,6 +105,7 @@ runs:
     - name: Smoke tests
       shell: bash
       run: |
+               sleep 3s # Allow time for Kubernetes to swap images
                tests/confidence/healthcheck.sh ${{env.deploy_url}}  "${{ steps.sha.outputs.short }}"
       env:
         HTTPAUTH_USERNAME: ${{ inputs.secure-username }}
