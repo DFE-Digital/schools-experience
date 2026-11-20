@@ -42,6 +42,60 @@ RSpec.describe Candidates::SchoolSearch do
     end
   end
 
+  describe '.new_decrypt' do
+    let(:message) { I18n.t('candidates.school_searches.unreadable_location') }
+
+    shared_examples 'unreadable location' do
+      it 'is invalid with a location error that survives revalidation' do
+        expect(subject.errors[:location]).to eq([message])
+        2.times { expect(subject).not_to be_valid }
+        expect(subject.errors[:location]).to eq([message])
+      end
+
+      it 'clears the location and coordinates without geocoding' do
+        allow(Bookings::SchoolSearch).to receive(:new)
+        expect(subject.location).to be_nil
+        expect(subject.latitude).to be_nil
+        expect(subject.longitude).to be_nil
+        expect(subject.valid_search?).to be(false)
+        expect(Bookings::SchoolSearch).not_to have_received(:new)
+      end
+    end
+
+    context 'when the token raises Hashids::InputError' do
+      subject { described_class.new_decrypt(location: 'bad!token', latitude: '53.4', longitude: '-2.2') }
+
+      it { expect { Encryptor.decrypt('bad!token') }.to raise_error(Hashids::InputError) }
+
+      include_examples 'unreadable location'
+    end
+
+    context 'when the token decodes to an empty value' do
+      subject { described_class.new_decrypt(location: 'Rochdale', latitude: '53.4', longitude: '-2.2') }
+
+      it { expect(Encryptor.decrypt('Rochdale')).to eq('') }
+
+      include_examples 'unreadable location'
+    end
+
+    it 'decodes a valid location' do
+      search = described_class.new_decrypt(location: Encryptor.encrypt('Manchester'))
+      expect(search.location).to eq('Manchester')
+      expect(search.errors[:location]).to be_empty
+    end
+
+    it 'keeps coordinate-only searches' do
+      search = described_class.new_decrypt(latitude: '53.4', longitude: '-2.2')
+      expect(search.latitude).to eq('53.4')
+      expect(search.valid_search?).to be(true)
+    end
+
+    it 'propagates unrelated exceptions' do
+      allow(Encryptor).to receive(:decrypt).and_raise(StandardError, 'boom')
+      expect { described_class.new_decrypt(location: 'x') }.to raise_error(StandardError, 'boom')
+    end
+  end
+
   context 'delegation' do
     it { expect(subject).to delegate_method(:valid?).to(:school_search) }
     it { expect(subject).to delegate_method(:errors).to(:school_search) }
