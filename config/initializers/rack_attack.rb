@@ -47,6 +47,21 @@ module Rack
     end
   end
 
+  # Fail open: if the Redis-backed counters/bans are unavailable, report the
+  # error and let the request through rather than 500ing every request.
+  # Wraps the rule decisions (not #call) so downstream app errors are never swallowed.
+  module FailOpenConfiguration
+    %i[safelisted? blocklisted? throttled? tracked?].each do |method|
+      define_method(method) do |request|
+        super(request)
+      rescue *TRANSIENT_REDIS_ERRORS => e
+        Sentry.capture_exception(e, level: :warning)
+        false
+      end
+    end
+  end
+  Rack::Attack::Configuration.prepend(FailOpenConfiguration)
+
   # Redirect to custom response for throttled requests
   Rack::Attack.throttled_responder = lambda do |_env|
     [301, { "Location" => '/429' }, []]

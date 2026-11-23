@@ -11,6 +11,25 @@ describe "Rate limiting" do
     end
   end
 
+  describe "when the rate limit store is unavailable" do
+    before do
+      allow(Rack::Attack.cache).to receive(:count).and_raise(Errno::ETIMEDOUT)
+      allow(Sentry).to receive(:capture_exception)
+    end
+
+    it "lets the request through and reports the error" do
+      key = Candidates::Feedback.model_name.param_key
+      post candidates_feedbacks_path,
+           params: { key => attributes_for(:candidates_feedback) },
+           headers: { "REMOTE_ADDR" => ip }
+
+      expect(response.status).not_to eq(301)
+      expect(response).not_to have_http_status(:internal_server_error)
+      expect(Sentry).to have_received(:capture_exception)
+        .with(an_instance_of(Errno::ETIMEDOUT), level: :warning)
+    end
+  end
+
   describe "registrations endpoints rate limiting" do
     before do
       allow_any_instance_of(Candidates::Registrations::ConfirmationEmailsController).to \
