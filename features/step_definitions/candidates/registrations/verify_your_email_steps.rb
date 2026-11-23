@@ -24,13 +24,12 @@ Given "there are no registration sessions" do
   # We need to do this so when we fetch out the session key in the next step
   # it's always the key we expect as there's only going to be one
   # this will probably break parralel tests
-  Redis.current.keys("test:registrations*").each(&Redis.current.method(:del))
+  CandidateRegistration.delete_all
 end
 
 Given("I follow the verify link in the confirmation email") do
   # this will probably break parralel tests
-  session_key = Redis.current.keys('test:registrations:*').last
-  uuid = JSON.parse(Redis.current.get(session_key)).fetch('uuid')
+  uuid = CandidateRegistration.order(:updated_at).last.registration_data.fetch('uuid')
 
   visit path_for('verify your email with token',
     school: @school, session_token: @session_token, uuid: uuid)

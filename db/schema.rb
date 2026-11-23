@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_23_170100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "address_standardizer"
   enable_extension "pg_catalog.plpgsql"
@@ -279,6 +279,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
     t.boolean "secondary_subject", default: true, null: false
     t.index ["hidden"], name: "index_bookings_subjects_on_hidden"
     t.index ["name"], name: "index_bookings_subjects_on_name", unique: true
+  end
+
+  create_table "browser_sessions", force: :cascade do |t|
+    t.string "session_id", null: false
+    t.binary "session_data", null: false
+    t.datetime "expires_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["expires_at"], name: "index_browser_sessions_on_expires_at"
+    t.index ["session_id"], name: "index_browser_sessions_on_session_id", unique: true
+  end
+
+  create_table "candidate_registrations", force: :cascade do |t|
+    t.string "uuid", null: false
+    t.text "registration_data", null: false
+    t.datetime "expires_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["expires_at"], name: "index_candidate_registrations_on_expires_at"
+    t.index ["uuid"], name: "index_candidate_registrations_on_uuid", unique: true
   end
 
   create_table "candidates_booking_feedbacks", force: :cascade do |t|

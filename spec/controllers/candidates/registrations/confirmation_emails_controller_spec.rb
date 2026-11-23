@@ -33,7 +33,7 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
     before { allow(Feature).to receive(:enabled?).with(:skip_candidate_confirmation_emails) { skip_confirmation_emails } }
 
     context 'skipped step' do
-      before { registration_store.send :delete, 'some-uuid' } # ensure key not left lying around
+      before { CandidateRegistration.where(uuid: 'some-uuid').delete_all } # ensure key not left lying around
 
       let :registration_session do
         FactoryBot.build :registration_session, with: []

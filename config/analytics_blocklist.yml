@@ -70,3 +70,17 @@
   :feedbacks:
   - reason_for_using_service_explanation
   - unsuccessful_visit_explanation
+  :browser_sessions:
+  - id
+  - session_id
+  - session_data
+  - expires_at
+  - created_at
+  - updated_at
+  :candidate_registrations:
+  - id
+  - uuid
+  - registration_data
+  - expires_at
+  - created_at
+  - updated_at

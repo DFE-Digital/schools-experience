@@ -94,7 +94,7 @@ Rails.application.configure do
     "Cache-Control" => "no-store, no-cache"
   )
 
-  # Use Redis for Session and cache if REDIS_URL or REDIS_CACHE_URL is set
+  # Use Redis for the cache if REDIS_URL or REDIS_CACHE_URL is set
   config.cache_store = :redis_cache_store,
                        {
                          url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL'].presence,
@@ -109,9 +109,9 @@ Rails.application.configure do
                          end
                        }
 
-  config.session_store :cache_store,
+  config.session_store :database_store,
     key: 'schoolex-session',
-    expire_after: 3.hours, # Sets explicit TTL for Session Redis keys
+    expire_after: 3.hours, # Sliding expiry, enforced on read as well as by cleanup
     same_site: :lax
 
   config.active_job.queue_adapter = :sidekiq

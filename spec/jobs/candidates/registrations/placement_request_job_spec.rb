@@ -79,7 +79,7 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
         ).to have_received :despatch_later!
       end
 
-      it 'deletes the registration session from redis' do
+      it 'deletes the registration session' do
         expect { registration_store.retrieve! registration_session.uuid }.to \
           raise_error Candidates::Registrations::RegistrationStore::SessionNotFound
       end

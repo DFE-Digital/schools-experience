@@ -17,7 +17,7 @@ describe Candidates::Registrations::SendEmailConfirmationJob, type: :job do
   end
 
   after do
-    # Clean up redis
+    # Clean up
     Candidates::Registrations::RegistrationStore.instance.delete! uuid
   end
 

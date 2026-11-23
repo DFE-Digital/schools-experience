@@ -9,20 +9,51 @@ describe Candidates::Registrations::RegistrationStore do
     FactoryBot.build :registration_session, uuid: 'sekret'
   end
 
+  let(:legacy_key) { "test:registrations:sekret" }
+
   subject { described_class.instance }
+
+  after { redis.del legacy_key }
 
   context '#store!' do
     let! :returned_uuid do
       subject.store! session
     end
 
-    it 'stores the key in redis correctly' do
-      expect(redis.get("test:registrations:sekret")).to eq \
-        session.to_json
+    it 'stores the registration JSON in the database unchanged' do
+      expect(CandidateRegistration.find_by!(uuid: 'sekret').registration_data).to \
+        eq session.to_json
     end
 
-    it 'stores the key with the correct ttl' do
-      expect(redis.ttl("test:registrations:sekret")).to eq 86_400
+    it 'stores the registration with a one day expiry' do
+      expect(CandidateRegistration.find_by!(uuid: 'sekret').expires_at).to \
+        be_within(5.seconds).of(1.day.from_now)
+    end
+
+    it 'does not write to redis' do
+      expect(redis.exists?(legacy_key)).to eq false
+    end
+  end
+
+  context '#store! when the registration already exists' do
+    it 'replaces the data and renews the expiry' do
+      subject.store! session
+      CandidateRegistration.update_all expires_at: 1.minute.from_now
+      session.flag_as_completed!
+      subject.store! session
+
+      expect(CandidateRegistration.where(uuid: 'sekret').count).to eq 1
+      expect(subject.retrieve!('sekret')).to be_completed
+      expect(CandidateRegistration.find_by!(uuid: 'sekret').expires_at).to \
+        be_within(5.seconds).of(1.day.from_now)
+    end
+
+    it 'revives an expired record under the same uuid' do
+      subject.store! session
+      CandidateRegistration.update_all expires_at: 1.minute.ago
+      subject.store! session
+
+      expect(subject.has_registration?('sekret')).to eq true
     end
   end
 
@@ -56,6 +87,15 @@ describe Candidates::Registrations::RegistrationStore do
       expect(returned).to eq session
     end
 
+    it 'treats an expired registration as missing without cleanup' do
+      CandidateRegistration.update_all expires_at: 1.second.ago
+
+      expect { subject.retrieve! 'sekret' }.to raise_error \
+        described_class::SessionNotFound
+      expect(subject.has_registration?('sekret')).to eq false
+      expect(CandidateRegistration.count).to eq 1
+    end
+
     it 'preserves date times when deserializing' do
       expect(returned.placement_preference.created_at.to_i).to \
         eq session.placement_preference.created_at.to_i
@@ -79,9 +119,67 @@ describe Candidates::Registrations::RegistrationStore do
         subject.delete! "sekret"
       end
 
-      it 'removes the key from redis' do
-        expect(redis.get("test:registrations:sekret")).to eq nil
+      it 'removes the registration from the database' do
+        expect(CandidateRegistration.where(uuid: 'sekret')).to be_empty
       end
+
+      it 'cannot be deleted twice' do
+        expect { subject.delete! 'sekret' }.to raise_error \
+          described_class::SessionNotFound
+      end
+    end
+
+    context 'when the registration has expired' do
+      it 'raises' do
+        CandidateRegistration.update_all expires_at: 1.second.ago
+
+        expect { subject.delete! 'sekret' }.to raise_error \
+          described_class::SessionNotFound
+      end
+    end
+  end
+
+  # Registrations created before the move to the database are still in Redis
+  context 'legacy registrations stored in redis' do
+    before do
+      redis.set legacy_key, session.to_json, ex: 3_600
+    end
+
+    it 'is found and moved to the database with its remaining lifetime' do
+      expect(subject.retrieve!('sekret')).to eq session
+
+      record = CandidateRegistration.find_by!(uuid: 'sekret')
+      expect(record.expires_at).to be_within(10.seconds).of(1.hour.from_now)
+      expect(redis.exists?(legacy_key)).to eq false
+    end
+
+    it 'is reported by has_registration?' do
+      expect(subject.has_registration?('sekret')).to eq true
+    end
+
+    it 'does not overwrite a newer database record' do
+      subject.store! session
+      newer = FactoryBot.build :registration_session, uuid: 'sekret'
+      newer.flag_as_completed!
+      subject.store! newer
+
+      expect(subject.retrieve!('sekret')).to be_completed
+    end
+
+    it 'is removed from redis by delete! so it cannot come back' do
+      subject.delete! 'sekret'
+
+      expect(redis.exists?(legacy_key)).to eq false
+      expect { subject.retrieve! 'sekret' }.to raise_error \
+        described_class::SessionNotFound
+    end
+
+    it 'is deleted along with a database copy' do
+      subject.store! session
+      subject.delete! 'sekret'
+
+      expect(redis.exists?(legacy_key)).to eq false
+      expect(subject.has_registration?('sekret')).to eq false
     end
   end
 

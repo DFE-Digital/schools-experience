@@ -27,3 +27,7 @@ add_availability_job:
 send_entity_table_checks_to_bigquery:
   cron: "30 0 * * *"  # Every day at 00:30.
   class: "DfE::Analytics::EntityTableCheckJob"
+
+delete_expired_sessions_job:
+  cron: "15 * * * *" # hourly, at 15 minutes past
+  class: "Cron::DeleteExpiredSessionsJob"
