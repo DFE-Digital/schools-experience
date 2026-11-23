@@ -109,13 +109,17 @@ module ActionDispatch
         true
       end
 
+      # signed_cookie only ever goes false -> true. Another request (possibly on
+      # a pod in a later phase) may have upgraded the row since this one loaded it.
       def update_row(req, sid, session, options)
-        BrowserSession.live.where(session_id: sid.private_id).update_all(
+        updated = BrowserSession.live.where(session_id: sid.private_id).update_all(
           session_data: BrowserSession.dump(session),
-          signed_cookie: sign_cookie?(req),
+          signed_cookie: Arel.sql(sign_cookie?(req) ? "TRUE" : "signed_cookie"),
           expires_at: expiry(options),
           updated_at: Time.current
         ).positive?
+        adopt_row_signing(req, sid) if updated
+        updated
       end
 
       def upsert_row(req, sid, session, options)
@@ -126,8 +130,22 @@ module ActionDispatch
             signed_cookie: sign_cookie?(req),
             expires_at: expiry(options)
           },
-          unique_by: :session_id
+          unique_by: :session_id,
+          on_duplicate: Arel.sql(
+            "session_data = excluded.session_data, " \
+            "signed_cookie = (browser_sessions.signed_cookie OR excluded.signed_cookie), " \
+            "expires_at = excluded.expires_at, updated_at = excluded.updated_at"
+          )
         )
+        adopt_row_signing(req, sid)
+      end
+
+      # If the row is signed, the response cookie must be too, whatever this
+      # request arrived with, or the browser would be left with a rejected cookie.
+      def adopt_row_signing(req, sid)
+        return unless BrowserSession.where(session_id: sid.private_id).pick(:signed_cookie)
+
+        req.set_header(SIGNED_COOKIE, true)
       end
 
       def expiry(options)

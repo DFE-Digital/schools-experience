@@ -113,6 +113,29 @@ describe ActionDispatch::Session::DatabaseStore do
     end
   end
 
+  describe "signing is monotonic across phases", storage_phase: "dual" do
+    it "does not downgrade a row another pod signed after this request loaded it" do
+      store.write_session(request, sid, { "a" => 1 }, options)
+      req, = load
+      expect(req.get_header(described_class::SIGNED_COOKIE)).to be_nil
+      BrowserSession.update_all(signed_cookie: true) # a database-phase pod upgrades it meanwhile
+
+      store.write_session(req, sid, { "a" => 2 }, options)
+
+      expect(BrowserSession.sole.signed_cookie).to be true
+      expect(req.get_header(described_class::SIGNED_COOKIE)).to be true
+    end
+
+    it "does not downgrade on an upsert of an already signed row" do
+      store.write_session(request, sid, { "a" => 1 }, options)
+      BrowserSession.update_all(signed_cookie: true)
+
+      store.write_session(ActionDispatch::Request.empty, sid, { "a" => 2 }, options)
+
+      expect(BrowserSession.sole.signed_cookie).to be true
+    end
+  end
+
   describe "in the dual phase", storage_phase: "dual" do
     it "reads only the database, never reviving a session from redis" do
       Rails.cache.write redis_key, { "marker" => "redis" }, expires_in: 1.hour
