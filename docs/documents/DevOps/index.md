@@ -14,3 +14,7 @@ layout: page
 1. TOC
 {:toc}
 
+## Security
+
+- [Security scan triage](security-scanning.md): how ZAP scan findings were triaged, including the CSP hardening and the remaining scanner follow-up.
+

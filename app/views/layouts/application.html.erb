@@ -18,6 +18,8 @@
     <%= favicon_link_tag image_path('images/govuk-icon-512.png'), rel: 'govuk-icon-512', type: 'image/png', size: '512x512' %>
     <%= favicon_link_tag image_path('images/govuk-opengraph-image.png'), rel: 'apple-touch-icon', type: 'image/png' %>
     <%= stylesheet_link_tag 'application', media: 'all', defer: true %>
+    <%# Google Maps copies this nonce onto the styles it injects; a nonce on a link alone is not enough. %>
+    <style nonce="<%= content_security_policy_nonce %>"></style>
     <%= yield :head %>
   </head>
 
