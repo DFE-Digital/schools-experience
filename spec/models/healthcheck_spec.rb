@@ -85,7 +85,7 @@ RSpec.describe Healthcheck do
 
     context "with broken connection" do
       it "returns false" do
-        [Errno::ETIMEDOUT, Redis::CannotConnectError].each do |error|
+        [Errno::ETIMEDOUT, Redis::CannotConnectError, OpenSSL::SSL::SSLError, IOError].each do |error|
           allow(REDIS).to receive(:ping).and_raise error
           expect(subject).to be false
         end

@@ -99,6 +99,10 @@ Rails.application.configure do
                        {
                          url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL'].presence,
                          reconnect_attempts: 1,
+                         reconnect_delay: 0.5,
+                         reconnect_delay_max: 0.5,
+                         read_timeout: 1,
+                         write_timeout: 1,
                          tcp_keepalive: 60,
                          error_handler: lambda do |method:, returning:, exception:|
                            Sentry.capture_exception(exception)
