@@ -32,7 +32,7 @@ module Candidates
     attribute :distance, :integer, default: 10
     attribute :max_fee
 
-    delegate :location_name, :country, :has_coordinates?, :valid?, :errors, to: :school_search
+    delegate :location_name, :country, :has_coordinates?, to: :school_search
     delegate :whitelisted_urns, :whitelisted_urns?, to: Bookings::SchoolSearch
 
     class << self
@@ -42,6 +42,45 @@ module Candidates
 
       def distances
         DISTANCES
+      end
+
+      def new_decrypt(attributes)
+        unreadable = false
+
+        decrypted = attributes.to_h.each_with_object({}) do |(key, value), hash|
+          next hash[key] = value unless encrypt?(key)
+
+          begin
+            decoded = ::Encryptor.decrypt(value)
+            unreadable ||= value.present? && decoded.blank?
+            hash[key] = decoded
+          rescue Hashids::InputError
+            unreadable = true
+          end
+        end
+
+        return new(decrypted) unless unreadable
+
+        new(decrypted.except(*%w[location latitude longitude], :location, :latitude, :longitude))
+          .tap(&:mark_location_unreadable)
+      end
+    end
+
+    def mark_location_unreadable
+      @location_unreadable = true
+    end
+
+    def valid?(*args)
+      return false if @location_unreadable
+
+      school_search.valid?(*args)
+    end
+
+    def errors
+      return school_search.errors unless @location_unreadable
+
+      @errors ||= ActiveModel::Errors.new(self).tap do |errors|
+        errors.add(:location, I18n.t('candidates.school_searches.unreadable_location'))
       end
     end
 
