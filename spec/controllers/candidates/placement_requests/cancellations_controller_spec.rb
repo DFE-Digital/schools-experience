@@ -328,6 +328,17 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
         "/candidates/placement_requests/#{placement_request.token}/cancellation"
     end
 
+    context 'when the request has not been cancelled' do
+      let :placement_request do
+        create :placement_request
+      end
+
+      it 'redirects to the new action' do
+        expect(response).to redirect_to \
+          new_candidates_placement_request_cancellation_path(placement_request.token)
+      end
+    end
+
     context 'when cancelled by the candidate' do
       let :placement_request do
         create :placement_request, :cancelled
