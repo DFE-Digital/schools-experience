@@ -14,6 +14,19 @@ of OAuth2.
 4. An API call is made to Sign-in using token for authentication, that api call
    retrieves the users details.
 
+### Expired application session during callback
+
+The OIDC `state` value is stored in the application session when sign-in starts.
+If that saved value is missing or blank when the callback arrives (for example
+because the session expired before the user returned from Sign-in), the callback
+is discarded and the user is sent to the school dashboard to restart sign-in.
+This is logged as a warning and is not reported to Sentry, and no code exchange,
+userinfo request or role check happens for that callback.
+
+A callback where the saved `state` is present but the callback's `state` is
+missing, blank or different is treated as a genuine state mismatch. It is
+reported to Sentry and the user is redirected to the authentication failure page.
+
 ## Organisations, Services, Roles
 
 In addition to Authentication, DfE Sign-in can also handle Authorisation. This

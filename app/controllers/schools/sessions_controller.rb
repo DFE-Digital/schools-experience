@@ -53,6 +53,7 @@ module Schools
       return redirect_to schools_dashboard_path if user_signed_in?
 
       check_for_errors(params[:error])
+      check_saved_state_present!(session[:state])
       check_state(session[:state], params[:state])
 
       client = get_oidc_client
@@ -94,6 +95,17 @@ module Schools
       unless Schools::DFESignInAPI::Roles.new(user_uuid, organisation_uuid).has_school_experience_role?
         raise InsufficientPrivilegesError, "missing school experience administrator role - #{user_uuid} : #{organisation_uuid}"
       end
+    end
+
+    # A callback arriving after the application session has expired (or been
+    # lost) has no saved state to compare against. Treat it as a session expiry
+    # so the user restarts sign-in, rather than as a genuine state mismatch.
+    def check_saved_state_present!(session_state)
+      return if session_state.present?
+
+      Rails.logger.warn("Saved DfE Sign-in state missing from session, restarting login process")
+
+      raise SessionExpiredError
     end
 
     def check_state(session_state, params_state)
