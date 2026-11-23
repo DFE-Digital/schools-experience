@@ -6,6 +6,11 @@ module Candidates
 
       def show
         @cancellation = placement_request.cancellation
+
+        if @cancellation.nil?
+          redirect_to new_candidates_placement_request_cancellation_path \
+            placement_request.token
+        end
       end
 
       def new
