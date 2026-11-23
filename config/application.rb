@@ -41,6 +41,9 @@ module SchoolExperience
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks action_dispatch])
 
+    # Phase of the Redis -> database move for sessions and registrations
+    config.x.session_storage = ENV.fetch("SESSION_STORAGE", "redis")
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

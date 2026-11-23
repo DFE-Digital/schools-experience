@@ -139,47 +139,115 @@ describe Candidates::Registrations::RegistrationStore do
     end
   end
 
-  # Registrations created before the move to the database are still in Redis
-  context 'legacy registrations stored in redis' do
-    before do
+  context 'in the redis phase', storage_phase: 'redis' do
+    it 'stores in redis with a one day expiry and shadows to the database' do
+      subject.store! session
+
+      expect(redis.get(legacy_key)).to eq session.to_json
+      expect(redis.ttl(legacy_key)).to be_within(5).of(1.day.to_i)
+      expect(CandidateRegistration.find_by!(uuid: 'sekret').registration_data).to eq session.to_json
+    end
+
+    it 'reads a registration written only by pre-database code' do
       redis.set legacy_key, session.to_json, ex: 3_600
-    end
 
-    it 'is found and moved to the database with its remaining lifetime' do
       expect(subject.retrieve!('sekret')).to eq session
-
-      record = CandidateRegistration.find_by!(uuid: 'sekret')
-      expect(record.expires_at).to be_within(10.seconds).of(1.hour.from_now)
-      expect(redis.exists?(legacy_key)).to eq false
-    end
-
-    it 'is reported by has_registration?' do
       expect(subject.has_registration?('sekret')).to eq true
     end
 
-    it 'does not overwrite a newer database record' do
+    it 'ignores a database copy that redis no longer has' do
       subject.store! session
-      newer = FactoryBot.build :registration_session, uuid: 'sekret'
-      newer.flag_as_completed!
-      subject.store! newer
+      redis.del legacy_key
 
-      expect(subject.retrieve!('sekret')).to be_completed
-    end
-
-    it 'is removed from redis by delete! so it cannot come back' do
-      subject.delete! 'sekret'
-
-      expect(redis.exists?(legacy_key)).to eq false
-      expect { subject.retrieve! 'sekret' }.to raise_error \
-        described_class::SessionNotFound
-    end
-
-    it 'is deleted along with a database copy' do
-      subject.store! session
-      subject.delete! 'sekret'
-
-      expect(redis.exists?(legacy_key)).to eq false
+      expect { subject.retrieve! 'sekret' }.to raise_error described_class::SessionNotFound
       expect(subject.has_registration?('sekret')).to eq false
+    end
+
+    it 'deletes both copies and cannot be deleted twice' do
+      subject.store! session
+      subject.delete! 'sekret'
+
+      expect(redis.exists?(legacy_key)).to eq false
+      expect(CandidateRegistration.where(uuid: 'sekret')).to be_empty
+      expect { subject.delete! 'sekret' }.to raise_error described_class::SessionNotFound
+    end
+  end
+
+  context 'in the dual phase', storage_phase: 'dual' do
+    it 'stores in the database and mirrors to redis for pre-database code' do
+      subject.store! session
+
+      expect(CandidateRegistration.find_by!(uuid: 'sekret').registration_data).to eq session.to_json
+      expect(redis.get(legacy_key)).to eq session.to_json
+      expect(redis.ttl(legacy_key)).to be_within(5).of(1.day.to_i)
+    end
+
+    it 'reads the database and never revives a record from redis' do
+      subject.store! session
+      CandidateRegistration.delete_all
+
+      expect { subject.retrieve! 'sekret' }.to raise_error described_class::SessionNotFound
+      expect(subject.has_registration?('sekret')).to eq false
+    end
+
+    it 'treats an expired database record as missing even though redis still has it' do
+      subject.store! session
+      CandidateRegistration.update_all expires_at: 1.second.ago
+
+      expect { subject.retrieve! 'sekret' }.to raise_error described_class::SessionNotFound
+      expect { subject.delete! 'sekret' }.to raise_error described_class::SessionNotFound
+    end
+
+    it 'deletes both copies' do
+      subject.store! session
+      subject.delete! 'sekret'
+
+      expect(redis.exists?(legacy_key)).to eq false
+      expect(CandidateRegistration.where(uuid: 'sekret')).to be_empty
+    end
+  end
+
+  context 'in the database phase' do
+    it 'neither reads nor writes redis' do
+      redis.set legacy_key, session.to_json, ex: 3_600
+
+      expect { subject.retrieve! 'sekret' }.to raise_error described_class::SessionNotFound
+
+      subject.store! other = FactoryBot.build(:registration_session, uuid: 'other')
+      expect(redis.exists?("test:registrations:#{other.uuid}")).to eq false
+      expect(redis.exists?(legacy_key)).to eq true
+    ensure
+      redis.del "test:registrations:other"
+    end
+  end
+
+  # Needs real concurrent connections, so the example can't be wrapped in a
+  # transaction
+  context 'when a delete overlaps a store', storage_phase: 'dual' do
+    self.use_transactional_tests = false
+    after do
+      CandidateRegistration.delete_all
+      # the session factory creates a school, type and dates outside a rolled-back transaction
+      ActiveRecord::Base.connection.execute("TRUNCATE bookings_school_types CASCADE")
+    end
+
+    it 'cannot leave a deleted registration behind in either store' do
+      writing = Queue.new
+      slow_set = redis.method(:set)
+      allow(redis).to receive(:set) do |*args, **kwargs|
+        writing << :in_store
+        sleep 0.3
+        slow_set.call(*args, **kwargs)
+      end
+
+      registration = session
+      store = Thread.new { subject.store! registration }
+      writing.pop
+      subject.delete! 'sekret'
+      store.join
+
+      expect(redis.exists?(legacy_key)).to eq false
+      expect(CandidateRegistration.where(uuid: 'sekret')).to be_empty
     end
   end
 

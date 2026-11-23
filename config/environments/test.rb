@@ -72,6 +72,8 @@ Rails.application.configure do
                          namespace: 'test-cache'
                        }
 
+  config.x.session_storage = ENV.fetch("SESSION_STORAGE", "database")
+
   config.session_store :database_store,
     key: 'schoolex-test-session',
     expire_after: 1.hour # Sliding expiry, enforced on read as well as by cleanup

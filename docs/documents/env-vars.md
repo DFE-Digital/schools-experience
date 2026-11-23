@@ -90,6 +90,8 @@ If required Exceptions Notifications can be sent to Sentry.
 
 REDIS_URL - url for Redis server, defaults to local Redis server
 
+`SESSION_STORAGE` - where sessions and unfinished registrations live while moving from Redis to the database: `redis` (default), `dual` or `database`. See [session storage cutover](session-storage-cutover.md)
+
 ## Redirection
 
 `CANONICAL_DOMAIN` - if set, connections via a different domain are redirected to the canonical one

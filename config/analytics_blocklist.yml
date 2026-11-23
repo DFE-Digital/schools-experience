@@ -74,6 +74,7 @@
   - id
   - session_id
   - session_data
+  - signed_cookie
   - expires_at
   - created_at
   - updated_at

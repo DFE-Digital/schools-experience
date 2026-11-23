@@ -1,11 +1,11 @@
-# Reads and writes unfinished registrations to the candidate_registrations
-# table, keyed by the registration's UUID.
+# Reads and writes unfinished registrations, keyed by the registration's UUID.
 #
-# TRANSITION: registrations created before the move to the database still live
-# in Redis (one day TTL). Reads that miss the database fall back to Redis and
-# move the record across; deletes remove both copies. Writes never touch Redis,
-# so a database record always supersedes a legacy one. Remove the legacy_*
-# methods once a day has passed since deploying.
+# Registrations live in the candidate_registrations table. While moving off
+# Redis, SessionStorage.phase decides where they are read from and whether
+# Redis is still written (see docs/documents/session-storage-cutover.md).
+# Records are never copied between stores on read: every write and delete
+# updates both stores together under one advisory lock, so a delete can't be
+# undone by a concurrent copy and the stores never disagree about a deletion.
 module Candidates
   module Registrations
     class RegistrationStore
@@ -26,19 +26,19 @@ module Candidates
           raise NoKey, "`registration_session#uuid` can't be blank"
         end
 
-        CandidateRegistration.upsert(
-          {
-            uuid: key,
-            registration_data: serialize(registration_session),
-            expires_at: @ttl.seconds.from_now
-          },
-          unique_by: :uuid
-        )
+        value = serialize(registration_session)
+
+        CandidateRegistration.with_advisory_lock(key) do
+          CandidateRegistration.upsert(
+            { uuid: key, registration_data: value, expires_at: @ttl.seconds.from_now },
+            unique_by: :uuid
+          )
+          legacy_redis.set(legacy_key(key), value, ex: @ttl) if SessionStorage.redis_written?
+        end
       end
 
       def retrieve!(uuid)
-        value = live_registrations.find_by(uuid: uuid)&.registration_data
-        value ||= migrate_legacy_registration(uuid)
+        value = read(uuid)
         raise SessionNotFound unless value
 
         deserialize(value)
@@ -47,22 +47,32 @@ module Candidates
       # If we're trying to delete keys that no longer exist we're probably
       # doing something wrong and should find out!
       def delete!(uuid)
-        deleted = live_registrations.where(uuid: uuid).delete_all
-        deleted += legacy_redis.del(legacy_key(uuid)) unless uuid.nil?
+        deleted = CandidateRegistration.with_advisory_lock(uuid) do
+          from_database = CandidateRegistration.live.where(uuid: uuid).delete_all
+          from_redis = SessionStorage.redis_written? ? legacy_redis.del(legacy_key(uuid)) : 0
+          SessionStorage.redis_authoritative? ? from_redis : from_database
+        end
         raise SessionNotFound if deleted.zero?
 
         true
       end
 
       def has_registration?(uuid)
-        live_registrations.exists?(uuid: uuid) ||
+        if SessionStorage.redis_authoritative?
           legacy_redis.exists?(legacy_key(uuid))
+        else
+          CandidateRegistration.live.exists?(uuid: uuid)
+        end
       end
 
     private
 
-      def live_registrations
-        CandidateRegistration.live
+      def read(uuid)
+        if SessionStorage.redis_authoritative?
+          legacy_redis.get(legacy_key(uuid))
+        else
+          CandidateRegistration.live.find_by(uuid: uuid)&.registration_data
+        end
       end
 
       def serialize(session)
@@ -79,32 +89,6 @@ module Candidates
 
       def legacy_key(uuid)
         "#{Rails.env}:registrations:#{uuid}"
-      end
-
-      # Copies a Redis registration into the database, keeping its remaining
-      # lifetime, then removes the Redis copy. The insert never overwrites an
-      # existing row, so a newer database record always wins.
-      def migrate_legacy_registration(uuid)
-        key = legacy_key(uuid)
-        value = legacy_redis.get(key)
-        return unless value
-
-        remaining = legacy_redis.ttl(key)
-        return if remaining == -2
-
-        remaining = @ttl if remaining.negative?
-
-        CandidateRegistration.insert(
-          {
-            uuid: uuid,
-            registration_data: value,
-            expires_at: remaining.seconds.from_now
-          },
-          unique_by: :uuid
-        )
-        legacy_redis.del(key)
-
-        live_registrations.find_by(uuid: uuid)&.registration_data
       end
     end
   end
