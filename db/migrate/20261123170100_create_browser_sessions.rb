@@ -3,7 +3,7 @@ class CreateBrowserSessions < ActiveRecord::Migration[8.1]
     create_table :browser_sessions do |t|
       # Rack's hashed "private" session id, never the cookie value itself
       t.string :session_id, null: false
-      t.binary :session_data, null: false
+      t.jsonb :session_data, null: false
       t.datetime :expires_at, null: false
       # Whether the browser holds a signed cookie. Rows written before signed
       # cookies were issued stay false so their unsigned cookie can be upgraded

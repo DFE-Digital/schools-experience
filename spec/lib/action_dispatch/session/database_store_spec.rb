@@ -81,7 +81,7 @@ describe ActionDispatch::Session::DatabaseStore do
     before { Rails.cache.write redis_key, { "marker" => "redis" }, expires_in: 1.hour }
 
     it "reads redis, ignoring the database" do
-      BrowserSession.create!(session_id: sid.private_id, session_data: BrowserSession.dump("marker" => "db"), expires_at: 1.hour.from_now)
+      BrowserSession.create!(session_id: sid.private_id, session_data: { "marker" => "db" }, expires_at: 1.hour.from_now)
 
       expect(load.last).to eq("marker" => "redis")
     end
@@ -91,7 +91,7 @@ describe ActionDispatch::Session::DatabaseStore do
       store.write_session(req, sid, data.merge("more" => 1), options)
 
       expect(Rails.cache.read(redis_key)).to eq("marker" => "redis", "more" => 1)
-      expect(BrowserSession.sole.payload).to eq("marker" => "redis", "more" => 1)
+      expect(BrowserSession.sole.session_data).to eq("marker" => "redis", "more" => 1)
     end
 
     it "is not restored by a request still using it after logout" do
@@ -147,7 +147,7 @@ describe ActionDispatch::Session::DatabaseStore do
       store.write_session(request, sid, { "a" => 1 }, options)
 
       expect(Rails.cache.read(redis_key)).to eq("a" => 1)
-      expect(BrowserSession.sole.payload).to eq("a" => 1)
+      expect(BrowserSession.sole.session_data).to eq("a" => 1)
     end
 
     it "fails the write, leaving no database-only state, when the redis mirror fails" do

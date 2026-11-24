@@ -1,23 +1,4 @@
 {
-  "ignored_warnings": [
-    {
-      "warning_type": "Remote Code Execution",
-      "warning_code": 25,
-      "fingerprint": "36651b70b67365087bb770d3bd39c09d66d045ebc8d743ceaab9a854f1a15e16",
-      "check_name": "Deserialize",
-      "message": "Use of `Marshal.load` may be dangerous",
-      "file": "app/models/browser_session.rb",
-      "line": 16,
-      "code": "Marshal.load(session_data)",
-      "location": {
-        "type": "method",
-        "class": "BrowserSession",
-        "method": "payload"
-      },
-      "user_input": null,
-      "confidence": "Weak",
-      "note": "PR #3602: preserve the former Rails CacheStore session hash, including Date values, symbol keys and nested Ruby types; JSON is not a drop-in replacement. DatabaseStore writes this column only through BrowserSession.dump (Marshal.dump of the server-side session hash); no cookie or request supplies serialized bytes. Payloads are excluded from analytics. This accepts the application/database trust boundary, not arbitrary input: database write compromise could exploit Marshal.load. Reassess if raw payload imports or another writer are added."
-    }
-  ],
-  "brakeman_version": "8.1.0"
+  "ignored_warnings": [],
+  "brakeman_version": "8.0.6"
 }

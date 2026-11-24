@@ -5,10 +5,7 @@ class Cron::DeleteExpiredSessionsJob < ApplicationJob
 
   def perform
     [CandidateRegistration, BrowserSession].each do |model|
-      loop do
-        deleted = model.where(id: model.expired.limit(BATCH_SIZE).select(:id)).delete_all
-        break if deleted < BATCH_SIZE
-      end
+      model.expired.in_batches(of: BATCH_SIZE, &:delete_all)
     end
   end
 end

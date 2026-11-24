@@ -283,7 +283,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_23_170100) do
 
   create_table "browser_sessions", force: :cascade do |t|
     t.string "session_id", null: false
-    t.binary "session_data", null: false
+    t.jsonb "session_data", null: false
     t.datetime "expires_at", null: false
     t.boolean "signed_cookie", default: false, null: false
     t.datetime "created_at", null: false

@@ -36,7 +36,7 @@ describe "Database backed sessions", type: :request do
   def legacy_row(public_id, signed_cookie: false)
     BrowserSession.create!(
       session_id: private_id(public_id),
-      session_data: BrowserSession.dump("cookie_preference_referer" => referer),
+      session_data: { "cookie_preference_referer" => referer },
       signed_cookie: signed_cookie,
       expires_at: 1.hour.from_now
     )
@@ -48,7 +48,7 @@ describe "Database backed sessions", type: :request do
     row = BrowserSession.sole
     expect(row.session_id).to eq private_id(verified(raw))
     expect(row).to be_signed_cookie
-    expect(row.payload).to include("cookie_preference_referer" => referer)
+    expect(row.session_data).to include("cookie_preference_referer" => referer)
     expect(row.expires_at).to be_within(1.minute).of(1.hour.from_now)
   end
 
@@ -59,7 +59,7 @@ describe "Database backed sessions", type: :request do
 
     expect(BrowserSession.sole.session_id).to eq first_row_id
     expect(current_public_id).to eq verified(raw)
-    expect(BrowserSession.sole.payload).to include("flash")
+    expect(BrowserSession.sole.session_data).to include("flash")
   end
 
   it "ignores a tampered signed cookie" do

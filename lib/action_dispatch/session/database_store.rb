@@ -85,7 +85,7 @@ module ActionDispatch
         # An unsigned cookie is only honoured for a row from before signing
         return if row.signed_cookie? && req.get_header(SIGNED_COOKIE) == false
 
-        row.payload
+        row.session_data
       end
 
       def write_database_authoritative(req, sid, session, options)
@@ -113,7 +113,7 @@ module ActionDispatch
       # a pod in a later phase) may have upgraded the row since this one loaded it.
       def update_row(req, sid, session, options)
         updated = BrowserSession.live.where(session_id: sid.private_id).update_all(
-          session_data: BrowserSession.dump(session),
+          session_data: session,
           signed_cookie: Arel.sql(sign_cookie?(req) ? "TRUE" : "signed_cookie"),
           expires_at: expiry(options),
           updated_at: Time.current
@@ -126,7 +126,7 @@ module ActionDispatch
         BrowserSession.upsert(
           {
             session_id: sid.private_id,
-            session_data: BrowserSession.dump(session),
+            session_data: session,
             signed_cookie: sign_cookie?(req),
             expires_at: expiry(options)
           },
