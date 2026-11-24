@@ -113,3 +113,8 @@ section.govuk-se-letter {
 ul.govuk-se-spaced-list li {
   @include govuk-responsive-margin(2, "bottom");
 }
+
+.gtm-noscript-hidden {
+  display: none;
+  visibility: hidden;
+}

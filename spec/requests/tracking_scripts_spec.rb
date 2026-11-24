@@ -23,6 +23,8 @@ describe "Tracking Scripts", type: :request do
 
       it { is_expected.to match(gtm_script) }
       it { is_expected.to include(gtm_noscript) }
+      it { is_expected.to include(%(class="gtm-noscript-hidden")) }
+      it { is_expected.not_to match(/<iframe[^>]*style=/) }
     end
 
     context "When GTM_ID is not present in the environment" do

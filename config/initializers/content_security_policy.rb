@@ -28,7 +28,7 @@
 Rails.application.config.content_security_policy_nonce_generator = ->(_request) { SecureRandom.base64(16) }
 
 # Set the nonce only to specific directives
-Rails.application.config.content_security_policy_nonce_directives = %w[script-src]
+Rails.application.config.content_security_policy_nonce_directives = %w[script-src style-src]
 
 # Report CSP violations to a specified URI
 # For further information see the following documentation:
@@ -53,19 +53,14 @@ Rails.application.config.content_security_policy do |policy|
                     "https://*.google-analytics.com",
                     "https://maps.googleapis.com",
                     "https://www.google-analytics.com",
-                    "googleapis.com",
-                    "https://code.jquery.com/jquery-3.2.1.slim.min.js", # needed for Flipper UI
-                    "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js", # needed for Flipper UI
-                    "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" # needed for Flipper UI
+                    "googleapis.com"
 
   policy.style_src :self,
                    "https://www.google.com",
                    "https://www.googletagmanager.com",
                    "https://googletagmanager.com",
                    "https://tagmanager.google.com",
-                   "https://fonts.googleapis.com",
-                   "'unsafe-inline'", # needed for Flipper UI
-                   "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" # needed for Flipper UI
+                   "https://fonts.googleapis.com"
 
   policy.img_src :self, :data,
                  "https://www.googletagmanager.com",
