@@ -202,6 +202,153 @@ describe Schools::SessionsController, type: :request do
         expect(subject).to redirect_to(schools_dashboard_path)
       end
     end
+
+    context 'when the saved application session state is missing' do
+      include_context 'oidc callback'
+
+      let(:return_url) { '/schools/dashboard' }
+      let(:callback_state) { 'd18ce84b-423e-4696-bee4-b74caa47163e' }
+      let(:callback) { "/auth/callback?code=#{code}&state=#{callback_state}&session_state=#{session_state}" }
+      let(:saved_state) { nil }
+
+      before do
+        session_hash[:state] = saved_state
+        allow(Rails.logger).to receive(:warn).and_call_original
+        allow(Rails.logger).to receive(:error).and_call_original
+      end
+
+      subject(:call_callback) { get callback }
+
+      shared_examples 'a recovery that discards the callback' do
+        specify 'redirects to the dashboard so sign-in restarts' do
+          call_callback
+          expect(response).to redirect_to(schools_dashboard_path)
+        end
+
+        specify 'logs a warning without raw state, code or params' do
+          call_callback
+          expect(Rails.logger).to have_received(:warn).with('Saved DfE Sign-in state missing from session, restarting login process')
+          expect(Rails.logger).not_to have_received(:error)
+        end
+
+        specify 'does not capture an exception in Sentry' do
+          expect(Sentry).not_to receive(:capture_exception)
+          call_callback
+        end
+
+        specify 'does not exchange the code or fetch userinfo' do
+          call_callback
+          expect(WebMock).not_to have_requested(:post, "https://#{Rails.configuration.x.oidc_host}/token")
+          expect(WebMock).not_to have_requested(:get, "https://#{Rails.configuration.x.oidc_host}/me")
+        end
+
+        specify 'does not populate authenticated session data' do
+          call_callback
+          expect(session[:current_user]).to be_nil
+          expect(session[:urn]).to be_nil
+          expect(session[:id_token]).to be_nil
+        end
+      end
+
+      context 'when the saved state is absent and the callback has a state' do
+        let(:saved_state) { nil }
+
+        it_behaves_like 'a recovery that discards the callback'
+      end
+
+      context 'when the saved state is an empty string' do
+        let(:saved_state) { '' }
+
+        it_behaves_like 'a recovery that discards the callback'
+      end
+
+      context 'when the saved state is blank and the callback has no state' do
+        let(:saved_state) { '' }
+        let(:callback) { "/auth/callback?code=#{code}&session_state=#{session_state}" }
+
+        it_behaves_like 'a recovery that discards the callback'
+      end
+
+      context 'when both the saved and callback states are blank' do
+        let(:saved_state) { '' }
+        let(:callback_state) { '' }
+
+        it_behaves_like 'a recovery that discards the callback'
+      end
+
+      context 'when the saved state is absent and the callback state is absent' do
+        let(:saved_state) { nil }
+        let(:callback) { "/auth/callback?code=#{code}&session_state=#{session_state}" }
+
+        it_behaves_like 'a recovery that discards the callback'
+      end
+
+      context 'when the recovery redirect is followed with a usable session' do
+        let(:saved_state) { nil }
+
+        specify 'starts sign-in again with a nonblank state and nonce' do
+          call_callback
+          get schools_dashboard_path
+
+          authorization_uri = URI.parse(response.location)
+          query = Rack::Utils.parse_query(authorization_uri.query)
+
+          expect(authorization_uri.host).to eql(Rails.configuration.x.oidc_host)
+          expect(authorization_uri.path).to eql('/auth')
+          expect(query['state']).to be_present
+          expect(query['state']).to eql(session_hash[:state])
+          expect(query['nonce']).to be_present
+          expect(query['nonce']).to eql(session_hash[:nonce])
+        end
+      end
+    end
+
+    context 'when the saved application session state is present' do
+      include_context 'oidc callback'
+
+      let(:return_url) { '/schools/dashboard' }
+      let(:saved_state) { 'd18ce84b-423e-4696-bee4-b74caa47163e' }
+      let(:state) { saved_state }
+
+      before do
+        session_hash[:state] = saved_state
+        allow(Rails.logger).to receive(:error).and_call_original
+      end
+
+      subject(:call_callback) { get callback }
+
+      {
+        'missing' => nil,
+        'blank' => '',
+        'different' => 'aaaaaaaa-bbbb-1111-2222-333333333333'
+      }.each do |description, callback_state|
+        context "when the callback state is #{description}" do
+          let(:callback) { "/auth/callback?code=#{code}&state=#{callback_state}&session_state=#{session_state}" }
+
+          specify 'redirects to the auth failed page' do
+            call_callback
+            expect(response).to redirect_to(schools_errors_auth_failed_path)
+          end
+
+          specify 'captures a StateMismatchError in Sentry' do
+            expect(Sentry).to receive(:capture_exception).with(an_instance_of(Schools::StateMismatchError))
+            call_callback
+          end
+
+          specify 'does not exchange the code' do
+            allow(Sentry).to receive(:capture_exception)
+            call_callback
+            expect(WebMock).not_to have_requested(:post, "https://#{Rails.configuration.x.oidc_host}/token")
+          end
+
+          specify 'does not populate authenticated session data' do
+            allow(Sentry).to receive(:capture_exception)
+            call_callback
+            expect(session[:current_user]).to be_nil
+          end
+        end
+      end
+    end
   end
 
   describe '#logout' do
