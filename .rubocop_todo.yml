@@ -14,25 +14,6 @@ Gemspec/DevelopmentDependencies:
   Exclude:
     - "node_modules/dfe-autocomplete/dfe-autocomplete.gemspec"
 
-# Offense count: 79
-# Configuration parameters: CountAsOne.
-RSpec/ExampleLength:
-  Max: 31
-
-# Offense count: 164
-RSpec/MultipleExpectations:
-  Max: 11
-
-# Offense count: 362
-# Configuration parameters: AllowSubject.
-RSpec/MultipleMemoizedHelpers:
-  Max: 15
-
-# Offense count: 708
-# Configuration parameters: AllowedGroups.
-RSpec/NestedGroups:
-  Max: 6
-
 # Offense count: 8
 # Configuration parameters: Database, Include.
 # SupportedDatabases: mysql, postgresql

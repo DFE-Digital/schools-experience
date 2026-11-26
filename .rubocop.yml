@@ -51,6 +51,20 @@ RSpec/ImplicitSubject:
 RSpec/NamedSubject:
   Enabled: false
 
+# These ceilings accommodate the largest existing specs while preventing further
+# growth; examples beyond them should be simplified rather than raising the caps.
+RSpec/ExampleLength:
+  Max: 31
+
+RSpec/MultipleExpectations:
+  Max: 11
+
+RSpec/MultipleMemoizedHelpers:
+  Max: 15
+
+RSpec/NestedGroups:
+  Max: 6
+
 Style/StringLiterals:
   Enabled: false
 
