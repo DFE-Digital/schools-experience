@@ -15,11 +15,10 @@ describe Schools::OnBoarding::FeesController, type: :request do
     before do
       allow(Feature).to receive(:enabled?).with(:task_progress_on_boarding)
         .and_return(task_progress_on_boarding)
+get '/schools/on_boarding/fees/new'
+
     end
 
-    before do
-      get '/schools/on_boarding/fees/new'
-    end
 
     it 'assigns the model' do
       expect(assigns(:fees)).to eq Schools::OnBoarding::Fees.new(dbs_fees_specified: false)

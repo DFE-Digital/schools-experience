@@ -203,7 +203,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
       end
 
       it 'returns true' do
-        expect(subject.primary_key_stages_offered?).to eq true
+        expect(subject.primary_key_stages_offered?).to be true
       end
     end
 
@@ -214,7 +214,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
       end
 
       it 'returns false' do
-        expect(subject.primary_key_stages_offered?).to eq false
+        expect(subject.primary_key_stages_offered?).to be false
       end
     end
   end
@@ -252,7 +252,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
       end
 
       it 'returns true' do
-        expect(subject.subjects_offered?).to eq true
+        expect(subject.subjects_offered?).to be true
       end
     end
 
@@ -262,7 +262,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
       end
 
       it 'returns false' do
-        expect(subject.subjects_offered?).to eq false
+        expect(subject.subjects_offered?).to be false
       end
     end
   end

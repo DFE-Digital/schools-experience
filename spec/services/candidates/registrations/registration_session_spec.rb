@@ -110,13 +110,15 @@ describe Candidates::Registrations::RegistrationSession do
     end
 
     context 'when education in session' do
+      subject { session.education }
+
       let :session do
         FactoryBot.build :registration_session, :with_education
       end
 
-      subject { session.education }
 
       it { is_expected.to be_a Candidates::Registrations::Education }
+
       it do
         expect(subject.attributes.except('created_at', 'updated_at')).to \
           eq FactoryBot.build(:education).attributes.except('created_at', 'updated_at')
@@ -153,12 +155,13 @@ describe Candidates::Registrations::RegistrationSession do
     end
 
     context 'when teaching_preference is in the session' do
+      subject { session.teaching_preference }
+
       let :session do
         FactoryBot.build \
           :registration_session, :with_teaching_preference, :with_school
       end
 
-      subject { session.teaching_preference }
 
       it { is_expected.to be_a Candidates::Registrations::TeachingPreference }
 
@@ -191,11 +194,13 @@ describe Candidates::Registrations::RegistrationSession do
 
   context '#flag_as_pending_email_confirmation!' do
     context 'when registration is not complete' do
-      let(:urn) { 11_048 }
-      let!(:school) { create(:bookings_school, urn: 11_048) }
       subject do
         described_class.new("urn" => urn)
       end
+
+      let(:urn) { 11_048 }
+      let!(:school) { create(:bookings_school, urn: 11_048) }
+
 
       it 'raises an error' do
         expect { subject.flag_as_pending_email_confirmation! }.to \
@@ -317,7 +322,7 @@ describe Candidates::Registrations::RegistrationSession do
 
         it 'returns an instance with non subject specific date' do
           expect(subject_and_date_information.placement_date).to eq placement_date
-          expect(subject_and_date_information.placement_date_subject).to be nil
+          expect(subject_and_date_information.placement_date_subject).to be_nil
         end
       end
     end

@@ -10,12 +10,13 @@ describe Schools::PlacementDates::PlacementDetail, type: :model do
             .is_less_than_or_equal_to(180)
         )
       end
+
       it { expect(subject).to validate_presence_of(:start_availability_offset) }
 
       it "is greater than #end_availability_offset" do
         subject.end_availability_offset = 1
         is_expected.to allow_value(2).for :start_availability_offset
-        is_expected.to_not allow_values(0, 1).for :start_availability_offset
+        is_expected.not_to allow_values(0, 1).for :start_availability_offset
       end
     end
 
@@ -27,6 +28,7 @@ describe Schools::PlacementDates::PlacementDetail, type: :model do
             .is_less_than_or_equal_to(100)
         )
       end
+
       it { expect(subject).to validate_presence_of(:end_availability_offset) }
     end
 
@@ -38,6 +40,7 @@ describe Schools::PlacementDates::PlacementDetail, type: :model do
             .is_less_than(100)
         )
       end
+
       it { expect(subject).to validate_presence_of(:duration) }
     end
 
@@ -48,12 +51,13 @@ describe Schools::PlacementDates::PlacementDetail, type: :model do
 
     context '#supports_subjects' do
       context "when placement dates school has primary and secondary phases" do
+        subject { described_class.new_from_date placement_date }
+
         include_context 'with phases'
 
         let(:school) { create(:bookings_school, :primary, :secondary) }
         let(:placement_date) { create :bookings_placement_date, bookings_school: school }
 
-        subject { described_class.new_from_date placement_date }
 
         it { is_expected.to allow_values(true, false).for :supports_subjects }
         it { is_expected.not_to allow_value(nil).for :supports_subjects }
@@ -72,8 +76,10 @@ describe Schools::PlacementDates::PlacementDetail, type: :model do
   end
 
   context '#save' do
-    let(:placement_date) { create :bookings_placement_date }
     subject { described_class.new }
+
+    let(:placement_date) { create :bookings_placement_date }
+
 
     context 'invalid' do
       before { allow(subject).to receive(:valid?).and_return(false) }
@@ -84,6 +90,8 @@ describe Schools::PlacementDates::PlacementDetail, type: :model do
     end
 
     context 'valid' do
+      subject { described_class.new(attributes) }
+
       let(:placement_date) { create :bookings_placement_date }
       let(:attributes) do
         {
@@ -103,14 +111,13 @@ describe Schools::PlacementDates::PlacementDetail, type: :model do
                supports_subjects: false
       end
 
-      subject { described_class.new(attributes) }
 
       it 'updates the placement_date subjects to the selected_subjects' do
         expect(placement_date.start_availability_offset).to eq 100
         expect(placement_date.end_availability_offset).to eq 100
         expect(placement_date.duration).to eq 100
-        expect(placement_date.virtual).to eq false
-        expect(placement_date.supports_subjects).to eq false
+        expect(placement_date.virtual).to be false
+        expect(placement_date.supports_subjects).to be false
       end
     end
   end

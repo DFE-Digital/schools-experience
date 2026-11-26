@@ -5,11 +5,12 @@ describe Schools::SessionsController, type: :request do
   include_context "logged in DfE user"
   context '#new' do
     context 'when in-app school changing is enabled' do
+      subject { get new_schools_switch_path }
+
       before do
         allow(Schools::ChangeSchool).to receive(:allow_school_change_in_app?).and_return(true)
       end
 
-      subject { get new_schools_switch_path }
 
       it { expect(subject).to redirect_to(schools_change_path) }
     end
@@ -17,9 +18,9 @@ describe Schools::SessionsController, type: :request do
     context 'when in-app school changing is disabled' do
       before do
         allow(Schools::ChangeSchool).to receive(:allow_school_change_in_app?).and_return(false)
+get new_schools_switch_path
       end
 
-      before { get new_schools_switch_path }
 
       specify 'should clear the user from the session' do
         expect(session[:current_user]).to be_nil

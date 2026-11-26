@@ -11,6 +11,8 @@ describe Bookings::Data::GiasReconciler do
   end
 
   describe "#identify_onboarded_closed" do
+    subject { instance.identify_onboarded_closed }
+
     let(:onboarded_school) { create(:bookings_school, :onboarded) }
     let(:onboarded_disabled_school) { create(:bookings_school, :onboarded, :disabled) }
     let(:school_1) { create(:bookings_school) }
@@ -25,12 +27,13 @@ describe Bookings::Data::GiasReconciler do
       CSV
     end
 
-    subject { instance.identify_onboarded_closed }
 
     it { is_expected.to contain_exactly(onboarded_school, onboarded_disabled_school) }
   end
 
   describe "#find_reopened_urns" do
+    subject { instance.find_reopened_urns([closed_school_1.urn]) }
+
     let(:closed_school_1) { create(:bookings_school) }
     let(:closed_school_2) { create(:bookings_school) }
     let(:closed_school_3) { create(:bookings_school) }
@@ -47,7 +50,6 @@ describe Bookings::Data::GiasReconciler do
       CSV
     end
 
-    subject { instance.find_reopened_urns([closed_school_1.urn]) }
 
     it { is_expected.to eq({ closed_school_1.urn => [reopened_school_1.urn, reopened_school_2.urn] }) }
   end

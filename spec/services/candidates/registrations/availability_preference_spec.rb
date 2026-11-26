@@ -1,20 +1,21 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::AvailabilityPreference, type: :model do
+  let! :today do
+    Time.zone.today
+  end
+
   it_behaves_like 'a registration step'
 
   include_context 'Stubbed candidates school'
 
-  let! :today do
-    Time.zone.today
-  end
 
   context 'attributes' do
     it { is_expected.to respond_to :availability }
   end
 
   context 'validations' do
-    before :each do
+    before do
       availability_preference.validate
     end
 

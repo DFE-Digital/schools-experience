@@ -1,16 +1,22 @@
 require 'rails_helper'
 
 describe Bookings::Gitis::SchoolExperience, type: :model do
+  let(:subject_name) { "Maths" }
+  let(:subject_id) { 275_000_001 }
+  let(:gitis_id) { SecureRandom.uuid }
+
   describe "validations" do
+    subject { described_class.from_placement_request(model, status) }
+
     let(:model) { create(:placement_request, :booked) }
     let(:status) { :requested }
-    subject { described_class.from_placement_request(model, status) }
+
 
     before { allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to receive(:add_school_experience) }
 
     context "with valid arguments" do
       it "does not throw error" do
-        expect { subject }.to_not raise_error
+        expect { subject }.not_to raise_error
       end
     end
 
@@ -54,9 +60,6 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
     expect { described_class.new(any_args) }.to raise_exception NoMethodError
   end
 
-  let(:gitis_id) { SecureRandom.uuid }
-  let(:subject_id) { 275_000_001 }
-  let(:subject_name) { "Maths" }
 
   shared_examples "a successful API post" do
     before do
@@ -75,6 +78,8 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
   end
 
   context 'with a Bookings::PlacementRequest' do
+    subject { described_class.from_placement_request(placement_request, status) }
+
     let(:status) { :requested }
     let(:placement_request) { create(:placement_request, :with_incomplete_booking) }
 
@@ -86,7 +91,6 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
       )
     end
 
-    subject { described_class.from_placement_request(placement_request, status) }
 
     context "with flexible dates" do
       it_behaves_like "a successful API post"
@@ -95,6 +99,7 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
     context "with fixed dates" do
       let(:placement_date) { create(:bookings_placement_date, bookings_school: placement_request.school) }
       let(:date) { placement_date.date }
+
       before do
         expected_school_experience.date_of_school_experience = date
         expected_school_experience.duration_of_placement_in_days = 1
@@ -106,6 +111,8 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
   end
 
   context "with a Bookings::Booking" do
+    subject { described_class.from_booking(booking, status) }
+
     let(:status) { :confirmed }
     let(:booking) { create(:bookings_booking, :accepted) }
 
@@ -119,7 +126,6 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
       )
     end
 
-    subject { described_class.from_booking(booking, status) }
 
     context "without existing subject" do
       it_behaves_like "a successful API post"
@@ -128,6 +134,7 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
     context "with existing subject" do
       let(:booking) { create(:bookings_booking, :with_existing_subject, :accepted) }
       let(:subject_name) { booking.bookings_subject.name }
+
       before do
         expected_school_experience.teaching_subject_id = subject_id
       end
@@ -137,6 +144,7 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
 
     context "when attended" do
       let(:status) { :completed }
+
       before do
         booking.update!(attended: true)
         expected_school_experience.status = 222_750_005

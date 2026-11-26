@@ -12,6 +12,7 @@ describe Schools::ConfirmAttendanceController, type: :request do
 
   describe '#show' do
     subject { get(schools_confirm_attendance_path) }
+
     it 'renders the show template' do
       expect(subject).to render_template(:show)
     end
@@ -50,7 +51,7 @@ describe Schools::ConfirmAttendanceController, type: :request do
       end
     end
 
-    subject! do
+    subject! do # rubocop:disable RSpec/LeadingSubject -- Request must run after API stubs and bookings are set up.
       put(
         schools_confirm_attendance_path,
         params: {

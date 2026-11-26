@@ -67,6 +67,8 @@ describe Candidates::VerificationCode do
     end
 
     describe "#issue_verification_code" do
+      subject { instance.issue_verification_code }
+
       let(:code) { nil }
 
       let(:request) do
@@ -77,7 +79,6 @@ describe Candidates::VerificationCode do
         )
       end
 
-      subject { instance.issue_verification_code }
 
       before do
         allow_any_instance_of(GetIntoTeachingApiClient::CandidatesApi).to \

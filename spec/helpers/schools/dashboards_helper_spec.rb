@@ -2,10 +2,12 @@ require 'rails_helper'
 
 describe Schools::DashboardsHelper, type: 'helper' do
   describe '#numbered_circle' do
+    subject { Nokogiri.parse(circle) }
+
     let(:text) { '15' }
     let(:aria_label) { 'upcoming bookings' }
     let(:circle) { numbered_circle(text, aria_label: aria_label) }
-    subject { Nokogiri.parse(circle) }
+
 
     context 'id' do
       context 'when not set' do
@@ -17,6 +19,7 @@ describe Schools::DashboardsHelper, type: 'helper' do
       context 'when set' do
         let(:id) { 'what-a-nice-circle' }
         let(:circle) { numbered_circle(text, id: id, aria_label: aria_label) }
+
         specify 'should be set to the overridden value' do
           expect(subject.at_css('div.numbered-circle')['id']).to eql(id)
         end
@@ -35,17 +38,22 @@ describe Schools::DashboardsHelper, type: 'helper' do
 
     context 'with 0' do
       subject { numbered_circle 0, aria_label: 'test' }
+
       it { is_expected.to be_nil }
 
       context 'and show_if_zero set' do
-        let(:circle) { numbered_circle 0, aria_label: 'x', show_if_zero: true }
         subject { Nokogiri.parse circle }
+
+        let(:circle) { numbered_circle 0, aria_label: 'x', show_if_zero: true }
+
+
         it { is_expected.to have_css 'div', text: '0' }
       end
     end
 
     context 'with nil' do
       subject { numbered_circle nil, aria_label: 'test' }
+
       it { is_expected.to be_nil }
     end
   end
@@ -55,6 +63,7 @@ describe Schools::DashboardsHelper, type: 'helper' do
 
     context 'when on' do
       let(:school) { build(:bookings_school) }
+
       specify "should be 'on' when on is true" do
         expect(subject).to eql('on')
       end
@@ -62,6 +71,7 @@ describe Schools::DashboardsHelper, type: 'helper' do
 
     context 'when off' do
       let(:school) { build(:bookings_school, :disabled) }
+
       specify "should be 'off' when on is false" do
         expect(subject).to eql('off')
       end
@@ -70,8 +80,10 @@ describe Schools::DashboardsHelper, type: 'helper' do
 
   context '#show_no_placement_dates_warning?' do
     context 'when availability preference is fixed and dates are available' do
-      let(:school) { create(:bookings_school, :with_fixed_availability_preference, :with_placement_dates) }
       subject { show_no_placement_dates_warning?(school) }
+
+      let(:school) { create(:bookings_school, :with_fixed_availability_preference, :with_placement_dates) }
+
 
       specify 'should be false' do
         expect(subject).to be false
@@ -79,8 +91,10 @@ describe Schools::DashboardsHelper, type: 'helper' do
     end
 
     context 'when availability preference is flexible and dates are available' do
-      let(:school) { create(:bookings_school, :with_placement_dates) }
       subject { show_no_placement_dates_warning?(school) }
+
+      let(:school) { create(:bookings_school, :with_placement_dates) }
+
 
       specify 'should be false' do
         expect(subject).to be false
@@ -88,8 +102,10 @@ describe Schools::DashboardsHelper, type: 'helper' do
     end
 
     context 'when availability preference is fixed and dates are not available' do
-      let(:school) { create(:bookings_school, :with_fixed_availability_preference) }
       subject { show_no_placement_dates_warning?(school) }
+
+      let(:school) { create(:bookings_school, :with_fixed_availability_preference) }
+
 
       specify 'should be true' do
         expect(subject).to be true
@@ -99,6 +115,7 @@ describe Schools::DashboardsHelper, type: 'helper' do
 
   context '#not_onboarded_warning' do
     let(:school) { create(:bookings_school) }
+
     context 'when the school has placement requests' do
       let!(:pr) { create(:bookings_placement_request, school: school) }
 
@@ -127,9 +144,10 @@ describe Schools::DashboardsHelper, type: 'helper' do
   end
 
   describe "#in_school_group?" do
+    subject { helper }
+
     let(:sample) { SchoolGroup::SCHOOL_URNS_IN_GROUP.sample }
 
-    subject { helper }
 
     it { is_expected.to be_in_school_group(sample) }
     it { is_expected.to be_in_school_group(sample.to_s) }

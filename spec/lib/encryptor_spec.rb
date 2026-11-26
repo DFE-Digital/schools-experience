@@ -17,9 +17,10 @@ RSpec.describe Encryptor do
   end
 
   describe ".decrypt_hash" do
+    subject { described_class.decrypt(encrypted_value) }
+
     let(:encrypted_value) { described_class.encrypt(value) }
 
-    subject { described_class.decrypt(encrypted_value) }
 
     it { is_expected.to eq(value) }
 

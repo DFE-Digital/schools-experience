@@ -11,6 +11,7 @@ describe CookiePreference, type: :model do
 
     context 'required should be editable' do
       before { subject.required = false }
+
       it { is_expected.to have_attributes required: true }
     end
   end
@@ -29,6 +30,7 @@ describe CookiePreference, type: :model do
 
   describe 'methods' do
     before { freeze_time }
+
     it { is_expected.to have_attributes cookie_key: 'cookie_preference-v1' }
     it { is_expected.to have_attributes expires: 1.year.from_now }
   end
@@ -38,18 +40,21 @@ describe CookiePreference, type: :model do
 
     context 'with true' do
       let(:all) { true }
+
       it { is_expected.to have_attributes required: true }
       it { is_expected.to have_attributes analytics: true }
     end
 
     context 'with 1' do
       let(:all) { '1' }
+
       it { is_expected.to have_attributes required: true }
       it { is_expected.to have_attributes analytics: true }
     end
 
     context 'with something else' do
       let(:all) { '0' }
+
       it { is_expected.to have_attributes required: true }
       it { is_expected.to have_attributes analytics: nil }
     end
@@ -57,12 +62,16 @@ describe CookiePreference, type: :model do
 
   describe '#to_json' do
     subject { described_class.new.to_json }
+
     it { is_expected.to eql({ 'analytics' => nil, 'required' => true }.to_json) }
   end
 
   describe '.from_json' do
-    let(:json) { { analytics: true }.to_json }
     subject { described_class.from_json(json) }
+
+    let(:json) { { analytics: true }.to_json }
+
+
     it { is_expected.to have_attributes analytics: true }
   end
 
@@ -71,11 +80,13 @@ describe CookiePreference, type: :model do
 
     context 'with cookie' do
       let(:cookie) { { analytics: true }.to_json }
+
       it { is_expected.to have_attributes analytics: true }
     end
 
     context 'without cookie' do
       let(:cookie) { nil }
+
       it { is_expected.to have_attributes analytics: nil }
     end
   end
@@ -90,9 +101,10 @@ describe CookiePreference, type: :model do
   end
 
   describe '.cookies' do
+    subject { described_class.cookies }
+
     before { allow(ENV).to receive(:[]).and_call_original }
 
-    subject { described_class.cookies }
 
     context "analytics cookies" do
       it { is_expected.to include({ analytics: %w[_ga _gid ai_session ai_user] }) }
@@ -113,6 +125,7 @@ describe CookiePreference, type: :model do
 
     context 'with analytics rejected' do
       let(:preference) { described_class.new(analytics: false) }
+
       it { is_expected.to be_empty }
     end
   end
@@ -122,6 +135,7 @@ describe CookiePreference, type: :model do
 
     context 'with analytics accepted' do
       let(:preference) { described_class.new(analytics: true) }
+
       it { is_expected.to be_empty }
     end
 
@@ -137,7 +151,8 @@ describe CookiePreference, type: :model do
 
   describe '.category' do
     subject { described_class.category '_ga' }
-    it { is_expected.to eql(:analytics) }
+
+    it { is_expected.to be(:analytics) }
   end
 
   describe '.allowed?' do
@@ -146,16 +161,19 @@ describe CookiePreference, type: :model do
 
       context 'for neither accepted nor rejected' do
         let(:params) { {} }
+
         it { is_expected.to be false }
       end
 
       context 'for accepted' do
         let(:params) { { analytics: true } }
+
         it { is_expected.to be true }
       end
 
       context 'for rejected' do
         let(:params) { { analytics: false } }
+
         it { is_expected.to be false }
       end
     end
@@ -165,16 +183,19 @@ describe CookiePreference, type: :model do
 
       context 'without neither accepted or rejected' do
         let(:params) { {} }
+
         it { is_expected.to be false }
       end
 
       context 'with accepted' do
         let(:params) { { analytics: true } }
+
         it { is_expected.to be true }
       end
 
       context 'with rejected' do
         let(:params) { { analytics: false } }
+
         it { is_expected.to be false }
       end
     end

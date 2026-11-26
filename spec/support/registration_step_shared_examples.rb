@@ -1,4 +1,8 @@
 shared_examples 'a registration step' do
+  subject do
+    described_class.new(urn: school.urn)
+  end
+
   let! :datetime do
     DateTime.now
   end
@@ -7,9 +11,6 @@ shared_examples 'a registration step' do
     datetime + 1.day
   end
 
-  subject do
-    described_class.new(urn: school.urn)
-  end
 
   context 'methods' do
     it { is_expected.to respond_to :persisted? }
@@ -25,13 +26,13 @@ shared_examples 'a registration step' do
 
     context '#created_at' do
       it 'is nil' do
-        expect(subject.created_at).to eq nil
+        expect(subject.created_at).to be_nil
       end
     end
 
     context '#updated_at' do
       it 'is nil' do
-        expect(subject.updated_at).to eq nil
+        expect(subject.updated_at).to be_nil
       end
     end
 

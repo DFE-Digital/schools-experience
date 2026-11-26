@@ -2,6 +2,8 @@ require "rails_helper"
 
 describe Cron::IdentifyClosedSchoolsJob, type: :job do
   describe "#perform" do
+    subject(:perform) { described_class.new.perform }
+
     let(:email_double) { instance_double(NotifyEmail::ClosedOnboardedSchoolsSummary, despatch_later!: nil) }
     let(:closed_school_1) { create(:bookings_school, :onboarded) }
     let(:closed_school_2) { create(:bookings_school, :onboarded) }
@@ -25,7 +27,6 @@ describe Cron::IdentifyClosedSchoolsJob, type: :job do
       CSV
     end
 
-    subject(:perform) { described_class.new.perform }
 
     before do
       temp_csv = Tempfile.new

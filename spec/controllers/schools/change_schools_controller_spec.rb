@@ -15,24 +15,27 @@ describe Schools::ChangeSchoolsController, type: :request do
   end
 
   describe '#show' do
-    before do
-      allow_any_instance_of(described_class).to \
-        receive(:current_urn) { current_urn }
-    end
-
     subject do
       get '/schools/change'
       response
     end
 
+    before do
+      allow_any_instance_of(described_class).to \
+        receive(:current_urn) { current_urn }
+    end
+
+
     context 'with URN set' do
       let(:current_urn) { old_school.urn }
+
       it { is_expected.to have_http_status :success }
       it { is_expected.to have_rendered :show }
     end
 
     context 'with no URN set' do
       let(:current_urn) { nil }
+
       it { is_expected.to have_http_status :success }
       it { is_expected.to have_rendered :show }
     end
@@ -42,7 +45,10 @@ describe Schools::ChangeSchoolsController, type: :request do
     let(:params) { { schools_change_school: { change_to_urn: new_school.urn } } }
 
     context 'when internal school chooser is enabled' do
+      subject { post('/schools/change', params: params) }
+
       let(:urns) { [old_school, new_school].map(&:urn) }
+      let(:change_school_page) { get '/schools/change' }
 
       before do
         allow_any_instance_of(Schools::DFESignInAPI::RoleCheckedOrganisations).to \
@@ -51,8 +57,7 @@ describe Schools::ChangeSchoolsController, type: :request do
             SecureRandom.uuid => new_school.urn
       end
 
-      let(:change_school_page) { get '/schools/change' }
-      subject { post('/schools/change', params: params) }
+
 
       context 'when the request access to another school option is chosen' do
         let(:params) { { schools_change_school: { change_to_urn: "request access" } } }
@@ -75,13 +80,14 @@ describe Schools::ChangeSchoolsController, type: :request do
     end
 
     context 'when internal changing is disabled' do
+      subject { post('/schools/change', params: params) }
+
       let(:enable_school_change) { false }
       let(:change_school_page) { get '/schools/change' }
 
-      subject { post('/schools/change', params: params) }
 
       specify 'should fail with a 403: forbidden' do
-        expect(subject).to eql(403)
+        expect(subject).to be(403)
       end
     end
 
@@ -102,7 +108,7 @@ describe Schools::ChangeSchoolsController, type: :request do
           receive(:has_school_experience_role?).and_return(true)
       end
 
-      subject! { post('/schools/change', params: params) }
+      subject! { post('/schools/change', params: params) } # rubocop:disable RSpec/LeadingSubject -- Request must run after role setup.
 
       it { is_expected.to redirect_to(schools_dashboard_path) }
 

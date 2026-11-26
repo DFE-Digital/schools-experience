@@ -95,9 +95,11 @@ describe Bookings::Booking do
         end
 
         context 'error messages' do
+          subject { invalid_pd.errors.full_messages }
+
           let(:message) { 'Date must be in the future' }
           let(:invalid_pd) { build(:bookings_placement_date, date: 3.weeks.ago).tap(&:valid?) }
-          subject { invalid_pd.errors.full_messages }
+
 
           specify 'should show a suitable error message' do
             is_expected.to include(message)
@@ -106,16 +108,20 @@ describe Bookings::Booking do
       end
 
       context 'updating placement date with same date' do
-        let(:booking) { create(:bookings_booking) }
         subject { booking.errors.to_hash }
+
+        let(:booking) { create(:bookings_booking) }
+
 
         context 'defaults to being allowed' do
           before { booking.valid? }
+
           it { is_expected.to be_empty }
         end
 
         context 'is disallowed if updating_date is enabled' do
           before { booking.valid?(:updating_date) }
+
           it { is_expected.to be_any }
           it { is_expected.to include(date: ["Date has not been changed"]) }
         end
@@ -167,6 +173,7 @@ describe Bookings::Booking do
     it { is_expected.to belong_to(:bookings_school) }
     it { is_expected.to have_one(:candidate_cancellation).through(:bookings_placement_request) }
     it { is_expected.to have_one(:school_cancellation).through(:bookings_placement_request) }
+
     it do
       is_expected.to have_one(:candidate_feedback)
         .class_name("Candidates::BookingFeedback")
@@ -194,6 +201,8 @@ describe Bookings::Booking do
 
   describe 'Scopes' do
     describe '.cancelled' do
+      subject { described_class.cancelled }
+
       let! :not_cancelled do
         FactoryBot.create :bookings_booking
       end
@@ -206,12 +215,13 @@ describe Bookings::Booking do
         FactoryBot.create :bookings_booking, :cancelled_by_candidate
       end
 
-      subject { described_class.cancelled }
 
-      it { is_expected.to match_array [booking_cancelled_by_school, booking_cancelled_by_candidate] }
+      it { is_expected.to contain_exactly(booking_cancelled_by_school, booking_cancelled_by_candidate) }
     end
 
     describe '.not_cancelled' do
+      subject { described_class.not_cancelled }
+
       let! :not_cancelled do
         FactoryBot.create :bookings_booking
       end
@@ -224,12 +234,13 @@ describe Bookings::Booking do
         FactoryBot.create :bookings_booking, :cancelled_by_candidate
       end
 
-      subject { described_class.not_cancelled }
 
-      it { is_expected.to match_array [not_cancelled] }
+      it { is_expected.to contain_exactly(not_cancelled) }
     end
 
     describe '.previous' do
+      subject { described_class.previous.to_a }
+
       let!(:previous_bookings) do
         [
           FactoryBot.build(:bookings_booking, date: 1.week.ago),
@@ -247,7 +258,6 @@ describe Bookings::Booking do
         ]
       end
 
-      subject { described_class.previous.to_a }
 
       specify 'should include dates today or before' do
         expect(subject).to match_array(previous_bookings)
@@ -259,6 +269,8 @@ describe Bookings::Booking do
     end
 
     describe '.future' do
+      subject { described_class.future }
+
       let!(:previous_bookings) do
         [
           FactoryBot.build(:bookings_booking, date: 1.week.ago),
@@ -278,7 +290,6 @@ describe Bookings::Booking do
         end
       end
 
-      subject { described_class.future }
 
       specify 'should not include dates before today' do
         expect(subject).not_to include(*previous_bookings)
@@ -312,14 +323,15 @@ describe Bookings::Booking do
     end
 
     describe '.with_unviewed_candidate_cancellation' do
+      subject { described_class.with_unviewed_candidate_cancellation }
+
       let!(:new_booking) { create :bookings_booking }
       let!(:with_viewed_candidate_cancellation) { create :bookings_booking, :with_viewed_candidate_cancellation }
       let!(:with_unviewed_candidate_cancellation) { create :bookings_booking, :cancelled_by_candidate }
       let!(:with_unviewed_school_cancellation) { create :bookings_booking, :cancelled_by_school }
 
-      subject { described_class.with_unviewed_candidate_cancellation }
 
-      it { is_expected.to match_array [with_unviewed_candidate_cancellation] }
+      it { is_expected.to contain_exactly(with_unviewed_candidate_cancellation) }
     end
 
     describe '.historical' do
@@ -332,11 +344,13 @@ describe Bookings::Booking do
           let!(:previous_accepted) do
             create(:bookings_booking, :previous, :accepted)
           end
+
           it { is_expected.to include(previous_accepted) }
         end
 
         context 'which have not been accepted' do
           let!(:previous_unaccepted) { create(:bookings_booking, :previous) }
+
           it { is_expected.not_to include(previous_unaccepted) }
         end
 
@@ -368,11 +382,13 @@ describe Bookings::Booking do
       context 'for future bookings' do
         context 'which have been accepted' do
           let!(:future_accepted) { create(:bookings_booking, :accepted) }
+
           it { is_expected.not_to include(future_accepted) }
         end
 
         context 'which have not been accepted' do
           let!(:future_unaccepted) { create(:bookings_booking) }
+
           it { is_expected.not_to include(future_unaccepted) }
         end
 
@@ -404,6 +420,7 @@ describe Bookings::Booking do
 
       describe '.tomorrow' do
         after { described_class.for_tomorrow }
+
         specify 'should call .days_in_the_future with 1 days' do
           expect(described_class).to receive(:for_days_in_the_future).with(1.day)
         end
@@ -411,6 +428,7 @@ describe Bookings::Booking do
 
       describe '.one_week_from_now' do
         after { described_class.for_one_week_from_now }
+
         specify 'should call .days_in_the_future with 7 days' do
           expect(described_class).to receive(:for_days_in_the_future).with(7.days)
         end
@@ -420,11 +438,12 @@ describe Bookings::Booking do
 
   describe '#placement_start_date_with_duration' do
     context 'when the placement request has a flexible date' do
+      subject { described_class.new date: date }
+
       let! :date do
         Time.zone.today
       end
 
-      subject { described_class.new date: date }
 
       specify 'should return the date formatted to GOV.UK style' do
         expect(subject.placement_start_date_with_duration).to eq \
@@ -433,6 +452,8 @@ describe Bookings::Booking do
     end
 
     context 'when the placement request has a fixed date' do
+      subject { described_class.new(date: date, duration: 2, bookings_placement_request: placement_request) }
+
       let! :date do
         Time.zone.today
       end
@@ -440,7 +461,6 @@ describe Bookings::Booking do
       let(:placement_date) { create(:bookings_placement_date) }
       let(:placement_request) { create(:placement_request, placement_date: placement_date) }
 
-      subject { described_class.new(date: date, duration: 2, bookings_placement_request: placement_request) }
 
       specify 'should return a the date formatted to GOV.UK style with duration' do
         expect(subject.placement_start_date_with_duration).to eq \
@@ -460,11 +480,13 @@ describe Bookings::Booking do
   describe '#in_future?' do
     context 'for upcoming booking' do
       subject { build :bookings_booking }
+
       it { is_expected.to be_in_future }
     end
 
     context 'for previous booking' do
       subject { build :bookings_booking, :previous }
+
       it { is_expected.not_to be_in_future }
     end
   end
@@ -472,16 +494,19 @@ describe Bookings::Booking do
   context '#cancellable?' do
     context 'for uncancelled future booking' do
       subject { create(:bookings_booking, :accepted) }
+
       it { is_expected.to be_cancellable }
     end
 
     context 'for cancelled booking' do
       subject { create(:bookings_booking, :cancelled_by_school) }
+
       it { is_expected.not_to be_cancellable }
     end
 
     context 'for past booking' do
       subject { create(:bookings_booking, :previous) }
+
       it { is_expected.not_to be_cancellable }
     end
   end
@@ -489,24 +514,31 @@ describe Bookings::Booking do
   context '#cancellable?' do
     context 'for uncancelled future booking' do
       subject { create(:bookings_booking, :accepted) }
+
       it { is_expected.to be_editable_date }
     end
 
     context 'for cancelled booking' do
       subject { create(:bookings_booking, :cancelled_by_school) }
+
       it { is_expected.not_to be_editable_date }
     end
 
     context 'for past booking' do
       subject { create(:bookings_booking, :previous) }
+
       it { is_expected.not_to be_editable_date }
     end
   end
 
   describe '.from_placement_request' do
-    specify { expect(described_class).to respond_to(:from_placement_request) }
-    let(:placement_request) { create(:bookings_placement_request, placement_date: placement_date) }
     subject { described_class.from_placement_request(placement_request) }
+
+    let(:placement_request) { create(:bookings_placement_request, placement_date: placement_date) }
+
+    specify { expect(described_class).to respond_to(:from_placement_request) }
+
+
 
     context 'when experience type is vaguely specified' do
       let(:placement_request) { create(:placement_request, experience_type: 'both') }

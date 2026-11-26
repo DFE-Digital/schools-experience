@@ -15,9 +15,11 @@ describe Candidates::Registrations::ContactInformation, type: :model do
 
   context 'validations' do
     context 'building' do
+      let(:too_long_msg) { 'Address line 1 must be 250 characters or fewer' }
+
       it { is_expected.to validate_presence_of :building }
 
-      let(:too_long_msg) { 'Address line 1 must be 250 characters or fewer' }
+
       it { is_expected.to validate_length_of(:building).is_at_most(250).with_message(too_long_msg) }
     end
 
@@ -40,16 +42,20 @@ describe Candidates::Registrations::ContactInformation, type: :model do
     end
 
     context 'postcode' do
+      let(:too_long_msg) { 'Postcode must be 20 characters or fewer' }
+
       it { is_expected.to validate_presence_of :postcode }
 
-      let(:too_long_msg) { 'Postcode must be 20 characters or fewer' }
+
       it { is_expected.to validate_length_of(:postcode).is_at_most(20).with_message(too_long_msg) }
     end
 
     context 'phone' do
+      let(:too_long_msg) { 'Phone number must be 50 digits or fewer' }
+
       it { is_expected.to validate_presence_of :phone }
 
-      let(:too_long_msg) { 'Phone number must be 50 digits or fewer' }
+
       it { is_expected.to validate_length_of(:phone).is_at_most(50).with_message(too_long_msg) }
 
       context 'phone is present' do
@@ -60,6 +66,7 @@ describe Candidates::Registrations::ContactInformation, type: :model do
         context 'valid numbers' do
           valid_numbers.each do |number|
             subject { described_class.new phone: number }
+
             before { subject.validate }
 
             it "permits #{number}" do
@@ -71,6 +78,7 @@ describe Candidates::Registrations::ContactInformation, type: :model do
         context 'invalid numbers' do
           invalid_numbers.each do |number|
             subject { described_class.new phone: number }
+
             before { subject.validate }
 
             it "doesn't permit #{number}" do
@@ -82,6 +90,7 @@ describe Candidates::Registrations::ContactInformation, type: :model do
         context 'blank number' do
           blank_numbers.each do |number|
             subject { described_class.new phone: number }
+
             before { subject.validate }
 
             it "doesn't permit #{number}" do
@@ -94,6 +103,7 @@ describe Candidates::Registrations::ContactInformation, type: :model do
 
     context 'postcode is present' do
       let(:too_long_msg) { 'Postcode must be 20 characters or fewer' }
+
       it { is_expected.to validate_length_of(:postcode).is_at_most(20).with_message(too_long_msg) }
 
       valid_postcodes = [
@@ -118,6 +128,7 @@ describe Candidates::Registrations::ContactInformation, type: :model do
       context 'valid postcodes' do
         valid_postcodes.each do |postcode|
           subject { described_class.new postcode: postcode }
+
           before { subject.validate }
 
           it "permits #{postcode}" do
@@ -129,6 +140,7 @@ describe Candidates::Registrations::ContactInformation, type: :model do
       context 'invalid postcodes' do
         invalid_postcodes.each do |postcode|
           subject { described_class.new postcode: postcode }
+
           before { subject.validate }
 
           it "permits #{postcode}" do
@@ -140,6 +152,7 @@ describe Candidates::Registrations::ContactInformation, type: :model do
       context 'blank postcodes' do
         blank_postcodes.each do |postcode|
           subject { described_class.new postcode: postcode }
+
           before { subject.validate }
 
           it "permits #{postcode}" do

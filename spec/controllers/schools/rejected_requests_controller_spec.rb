@@ -26,6 +26,7 @@ describe Schools::RejectedRequestsController, type: :request do
 
   describe '#show' do
     let(:rejected) { create :placement_request, :cancelled_by_school, school: school }
+
     before { get schools_rejected_request_path(rejected) }
 
     it { expect(response).to have_http_status(:success) }

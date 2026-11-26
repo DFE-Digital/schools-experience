@@ -32,6 +32,8 @@ describe Schools::PlacementRequests::Acceptance::MakeChangesController, type: :r
     let(:experience_type) { "inschool" }
 
     context 'with valid params' do
+      subject { Bookings::Booking.last }
+
       let(:params) do
         {
           bookings_booking: {
@@ -45,7 +47,6 @@ describe Schools::PlacementRequests::Acceptance::MakeChangesController, type: :r
         }
       end
 
-      subject { Bookings::Booking.last }
 
       specify 'should add supplied params to a booking' do
         expect(subject.date).to eql(future_date)

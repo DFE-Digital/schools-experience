@@ -38,12 +38,13 @@ describe Schools::PrepopulateSchoolProfile, type: :model do
   end
 
   describe ".enabled?" do
+    subject { described_class }
+
     before do
       allow(Rails.configuration.x).to receive(:dfe_sign_in_api_enabled) { true }
       allow(Rails.configuration.x).to receive(:dfe_sign_in_api_school_change_enabled) { true }
     end
 
-    subject { described_class }
 
     it { is_expected.to be_enabled }
 

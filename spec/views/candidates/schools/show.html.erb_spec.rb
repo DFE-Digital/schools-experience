@@ -14,16 +14,16 @@ RSpec.describe "candidates/schools/show", type: :view do
       render
     end
 
-    it "will include the schools name" do
+    it "includes the schools name" do
       expect(rendered).to have_css('h1', text: school.name)
     end
 
-    it "will provide a link to apply" do
+    it "provides a link to apply" do
       link = new_candidates_school_registrations_personal_information_path(school)
       expect(rendered).to have_css("a.govuk-button[href=\"#{link}\"]")
     end
 
-    it "will include dress code information" do
+    it "includes dress code information" do
       expect(rendered).to have_css("#dress-code")
     end
 
@@ -55,7 +55,7 @@ RSpec.describe "candidates/schools/show", type: :view do
       render
     end
 
-    it "will include the schools name" do
+    it "includes the schools name" do
       expect(rendered).to have_css('h1', text: school.name)
     end
 

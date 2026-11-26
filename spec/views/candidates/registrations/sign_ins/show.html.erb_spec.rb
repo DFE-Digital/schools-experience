@@ -17,7 +17,7 @@ RSpec.describe "candidates/registrations/sign_ins/show", type: :view do
     render
   end
 
-  it "will notify the user their message has been sent" do
+  it "notifies the user their message has been sent" do
     expect(rendered).to have_css('h1', text: /already registered with us/i)
     expect(rendered).to have_css('li', text: 'test@testymctest.com')
     expect(rendered).to \

@@ -12,6 +12,7 @@ describe "Displaying the cookie banner", type: :request do
 
   context 'on subsequent visits (when the cookie_preference is present)' do
     let(:preference) { CookiePreference.new(analytics: true) }
+
     before { cookies[preference.cookie_key] = { value: preference.to_json } }
 
     specify 'the page should not display the cookie banner' do

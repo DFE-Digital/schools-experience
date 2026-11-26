@@ -6,13 +6,14 @@ describe Schools::OnBoarding::ExperienceOutline, type: :model do
   end
 
   context '.new_from_bookings_school' do
+    subject { described_class.new_from_bookings_school school }
+
     let :school do
       FactoryBot.build \
         :bookings_school,
         :with_placement_info
     end
 
-    subject { described_class.new_from_bookings_school school }
 
     it "sets candidate_experience to the school's placement_info" do
       expect(subject.candidate_experience).to eq school.placement_info

@@ -53,8 +53,8 @@ describe Schools::DFESignInAPI::Client do
     before { allow(Feature).to receive(:enabled?).with(:rolecheck) { true } }
 
     context 'when the client is disabled' do
-      before { allow(subject).to receive(:enabled?).and_return(false) }
-      before { allow(ENV).to receive(:fetch).and_return(true) }
+      before { allow(subject).to receive(:enabled?).and_return(false)
+allow(ENV).to receive(:fetch).and_return(true)  }
 
       specify 'should be disabled' do
         expect(subject).not_to be_role_check_enabled
@@ -63,8 +63,9 @@ describe Schools::DFESignInAPI::Client do
 
     context 'when the client is enabled' do
       subject { described_class }
-      before { allow(subject).to receive(:enabled?).and_return(true) }
-      before { allow(Rails.application.config.x).to receive(:dfe_sign_in_api_role_check_enabled).and_return(true) }
+
+      before { allow(subject).to receive(:enabled?).and_return(true)
+allow(Rails.application.config.x).to receive(:dfe_sign_in_api_role_check_enabled).and_return(true)  }
 
       context 'when role check is disabled' do
         before { allow(Feature).to receive(:enabled?).with(:rolecheck) { false } }
@@ -99,17 +100,18 @@ describe Schools::DFESignInAPI::Client do
   end
 
   describe 'error handling' do
+    subject { TestAPI.new.data }
+
     let(:testdata) { { hello: 'world' } }
     let(:apihost) { "https://some-test-api-host.signin.education.gov.uk" }
 
     before do
       allow(ENV).to receive(:fetch).and_return('123')
 
-      allow(Schools::DFESignInAPI::Client).to \
+      allow(described_class).to \
         receive(:enabled?).and_return true
     end
 
-    subject { TestAPI.new.data }
 
     {
       400 => Faraday::ClientError,
@@ -157,7 +159,7 @@ describe Schools::DFESignInAPI::Client do
             .to_timeout
         end
 
-        it 'will raise an error' do
+        it 'raises an error' do
           expect { subject }.to raise_exception Faraday::ConnectionFailed
         end
       end

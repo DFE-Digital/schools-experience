@@ -23,6 +23,7 @@ describe Schools::WithdrawnRequestsController, type: :request do
 
   describe '#show' do
     let(:withdrawn) { create :placement_request, :cancelled, school: school }
+
     before { get schools_withdrawn_request_path(withdrawn) }
 
     it { expect(response).to have_http_status(:success) }

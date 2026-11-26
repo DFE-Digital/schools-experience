@@ -39,7 +39,7 @@ describe Feature do
       ]
     end
 
-    it "returns a list of #{Feature}" do
+    it "returns a list of #{described_class}" do
       expect(subject.all).to match_array expected_features
     end
   end
@@ -52,16 +52,16 @@ describe Feature do
 
   describe ".new" do
     context "when environment not in Rails configured environments" do
-      let(:bad_environment_feature) { Feature.new("bad", "bad", %w[does_not_exist]) }
+      let(:bad_environment_feature) { described_class.new("bad", "bad", %w[does_not_exist]) }
 
-      it "raises #{Feature::IncorrectEnvironmentError} " do
+      it "raises #{Feature::IncorrectEnvironmentError}" do
         expect { bad_environment_feature }.to raise_error(Feature::IncorrectEnvironmentError)
       end
     end
   end
 
   describe ".enabled_for?" do
-    subject { Feature.new("feature_name", "description", %w[development]) }
+    subject { described_class.new("feature_name", "description", %w[development]) }
 
     context "when enabled for the environment" do
       it "returns true" do

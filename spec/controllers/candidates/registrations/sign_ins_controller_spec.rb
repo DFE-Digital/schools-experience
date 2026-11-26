@@ -23,7 +23,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
 
     before { get candidates_school_registrations_sign_in_path(school_id) }
 
-    it "should return HTTP success" do
+    it "returns HTTP success" do
       expect(response).to have_http_status(:success)
     end
   end
@@ -48,12 +48,12 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
     context "with a valid code" do
       before { perform_request }
 
-      it "will redirect_to ContactInformation step" do
+      it "redirect_toes ContactInformation step" do
         expect(response).to \
           redirect_to new_candidates_school_registrations_contact_information_path(school_id)
       end
 
-      it "will create a confirmed candidate" do
+      it "creates a confirmed candidate" do
         candidate = Bookings::Candidate.find_by(gitis_uuid: sign_up.candidate_id)
         expect(candidate).to be_confirmed
       end
@@ -64,7 +64,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
 
       before { perform_request }
 
-      it "will show error screen" do
+      it "shows error screen" do
         expect(response).to have_http_status(:success)
         expect(response.body).to include("Please enter the latest verification code sent to your email address")
       end
@@ -78,7 +78,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
           receive(:delete_registration_sessions!)
       end
 
-      it "will redirect_to ContactInformation step" do
+      it "redirect_toes ContactInformation step" do
         perform_request
 
         expect(response).to \
@@ -91,7 +91,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
 
       let(:sign_up) { build(:api_schools_experience_sign_up_with_name, candidate_id: gitis_contact_attrs[:candidate_id]) }
 
-      it "will not create another Candidate and redirect_to ConfirmationInformation step" do
+      it "does not create another Candidate and redirect_to ConfirmationInformation step" do
         expect { perform_request }.not_to(change { Bookings::Candidate.count })
 
         expect(response).to \
@@ -104,12 +104,12 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
 
       before { perform_request }
 
-      it "will redirect_to ContactInformation step" do
+      it "redirect_toes ContactInformation step" do
         expect(response).to \
           redirect_to new_candidates_school_registrations_contact_information_path(school_id)
       end
 
-      it "will have confirmed candidate" do
+      it "has confirmed candidate" do
         candidate = Bookings::Candidate.find_by(gitis_uuid: sign_up.candidate_id)
         expect(candidate).to be_confirmed
       end
@@ -128,7 +128,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
       end
     end
 
-    it "will issue a verification code and redirect to the show page" do
+    it "issues a verification code and redirect to the show page" do
       perform_request
 
       expect(response).to \

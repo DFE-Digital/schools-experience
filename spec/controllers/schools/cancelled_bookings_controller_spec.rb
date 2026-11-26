@@ -14,6 +14,7 @@ describe Schools::CancelledBookingsController, type: :request do
   describe '#index' do
     let(:cancelled_by_school) { create_list(:bookings_booking, 3, :cancelled_by_school, bookings_school: school) }
     let(:cancelled_by_candidate) { create_list(:bookings_booking, 2, :cancelled_by_candidate, bookings_school: school) }
+
     before { get schools_cancelled_bookings_path }
 
     it { expect(response).to have_http_status(:success) }
@@ -26,6 +27,7 @@ describe Schools::CancelledBookingsController, type: :request do
 
   describe '#show' do
     let(:cancelled_booking) { create :bookings_booking, :cancelled_by_school, bookings_school: school }
+
     before { get schools_cancelled_booking_path(cancelled_booking) }
 
     it { expect(response).to have_http_status(:success) }

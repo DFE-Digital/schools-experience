@@ -52,11 +52,13 @@ describe Bookings::PlacementDate, type: :model do
         end
 
         context 'error messages' do
+          subject { invalid_pd.errors.full_messages }
+
           let(:message) { 'Date must be in the future' }
           let(:invalid_pd) { build(:bookings_placement_date, date: 3.weeks.ago) }
 
           before { invalid_pd.valid? }
-          subject { invalid_pd.errors.full_messages }
+
 
           specify 'should show a suitable error message' do
             is_expected.to include(message)
@@ -65,6 +67,7 @@ describe Bookings::PlacementDate, type: :model do
 
         context 'updating expired placement dates' do
           let(:expired_pd) { build(:bookings_placement_date, :active, :in_the_past) }
+
           before do
             expired_pd.bookings_school = school
             expired_pd.save(validate: false)
@@ -72,7 +75,7 @@ describe Bookings::PlacementDate, type: :model do
 
           specify 'should allow updates' do
             expect(expired_pd.update(active: false)).to be(true)
-            expect(expired_pd).to_not be_active
+            expect(expired_pd).not_to be_active
           end
         end
 
@@ -98,6 +101,7 @@ describe Bookings::PlacementDate, type: :model do
 
     context '#max_bookings_count' do
       before { subject.published_at = Time.zone.today }
+
       it do
         is_expected.to \
           validate_numericality_of(:max_bookings_count).is_greater_than(0).allow_nil
@@ -152,15 +156,15 @@ describe Bookings::PlacementDate, type: :model do
     context '.bookable_date' do
       subject { described_class.bookable_date }
 
-      it 'should include future dates' do
+      it 'includes future dates' do
         is_expected.to include(future_date)
       end
 
-      it 'should not include past dates' do
+      it 'does not include past dates' do
         is_expected.not_to include(past_date)
       end
 
-      it 'should include dates on today' do
+      it 'includes dates on today' do
         is_expected.not_to include(today_date)
       end
     end
@@ -206,13 +210,13 @@ describe Bookings::PlacementDate, type: :model do
       it 'does not include placements that closed today' do
         travel_to Date.new(2022, 1, 9)
 
-        is_expected.to_not include(create(:bookings_placement_date, date: Date.new(2022, 1, 10), end_availability_offset: 1))
+        is_expected.not_to include(create(:bookings_placement_date, date: Date.new(2022, 1, 10), end_availability_offset: 1))
       end
 
       it 'does not include placements closed to candidates in the past' do
         travel_to Date.new(2022, 1, 10)
 
-        is_expected.to_not include(create(:bookings_placement_date, date: Date.new(2022, 1, 20), end_availability_offset: 15))
+        is_expected.not_to include(create(:bookings_placement_date, date: Date.new(2022, 1, 20), end_availability_offset: 15))
       end
 
       it 'includes placements that opened today' do
@@ -224,7 +228,7 @@ describe Bookings::PlacementDate, type: :model do
       it 'does not include placements that open tomorrow' do
         travel_to Date.new(2022, 1, 8)
 
-        is_expected.to_not include(create(:bookings_placement_date, date: Date.new(2022, 1, 10), start_availability_offset: 1))
+        is_expected.not_to include(create(:bookings_placement_date, date: Date.new(2022, 1, 10), start_availability_offset: 1))
       end
 
       it 'includes placements that opened in the past' do
@@ -236,6 +240,7 @@ describe Bookings::PlacementDate, type: :model do
 
     context '.available' do
       after { described_class.available }
+
       specify 'should combine the future, active, published, open_to_candidates, and in_date_order scopes' do
         expect(described_class).to receive_message_chain(:published, :active, :bookable_date, :inside_availability_window, :in_date_order)
       end
@@ -246,7 +251,7 @@ describe Bookings::PlacementDate, type: :model do
       let!(:un_publised) { create :bookings_placement_date, published_at: nil }
 
       specify 'should return only the published placement_dates' do
-        expect(described_class.published).to match_array [published]
+        expect(described_class.published).to contain_exactly(published)
       end
     end
   end
@@ -260,9 +265,6 @@ describe Bookings::PlacementDate, type: :model do
   end
 
   describe "#publish" do
-    let(:recurrences) { [] }
-    let(:date) { 3.weeks.from_now.next_occurring(:monday) }
-
     subject(:published_placement_date) do
       freeze_time
 
@@ -270,6 +272,10 @@ describe Bookings::PlacementDate, type: :model do
         pd.publish!(recurrences)
       end
     end
+
+    let(:recurrences) { [] }
+    let(:date) { 3.weeks.from_now.next_occurring(:monday) }
+
 
     it { is_expected.to be_active }
     it { is_expected.to be_publishable }
@@ -287,6 +293,8 @@ describe Bookings::PlacementDate, type: :model do
   end
 
   describe "#recur" do
+    subject { placement_date.recur(Date.new(2022, 1, 3)) }
+
     let(:placement_date) { create(:bookings_placement_date, bookings_school: school) }
 
     before do
@@ -295,7 +303,6 @@ describe Bookings::PlacementDate, type: :model do
       placement_date.save!
     end
 
-    subject { placement_date.recur(Date.new(2022, 1, 3)) }
 
     it { is_expected.to have_attributes(placement_date.attributes.except("created_at", "updated_at", "id", "date")) }
     it { is_expected.to have_attributes(date: Date.new(2022, 1, 3)) }

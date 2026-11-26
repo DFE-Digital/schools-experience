@@ -35,11 +35,10 @@ describe Candidates::Registrations::TeachingPreferencesController, type: :reques
 
       before do
         registration_session.save teaching_preference
+get '/candidates/schools/11048/registrations/teaching_preference/new'
+
       end
 
-      before do
-        get '/candidates/schools/11048/registrations/teaching_preference/new'
-      end
 
       it 'assigns the model with the existing attributes' do
         expect(assigns(:teaching_preference).attributes).to eq \
@@ -108,11 +107,10 @@ describe Candidates::Registrations::TeachingPreferencesController, type: :reques
 
     before do
       registration_session.save exisitng_teaching_preference
+get '/candidates/schools/11048/registrations/teaching_preference/edit'
+
     end
 
-    before do
-      get '/candidates/schools/11048/registrations/teaching_preference/edit'
-    end
 
     it 'assigns the model with existing attributes' do
       expect(assigns(:teaching_preference).attributes).to eq \
@@ -128,11 +126,6 @@ describe Candidates::Registrations::TeachingPreferencesController, type: :reques
     let :exisitng_teaching_preference do
       FactoryBot.build :teaching_preference
     end
-
-    before do
-      registration_session.save exisitng_teaching_preference
-    end
-
     let :teaching_preference_params do
       {
         candidates_registrations_teaching_preference: \
@@ -141,9 +134,13 @@ describe Candidates::Registrations::TeachingPreferencesController, type: :reques
     end
 
     before do
-      patch '/candidates/schools/11048/registrations/teaching_preference',
+      registration_session.save exisitng_teaching_preference
+patch '/candidates/schools/11048/registrations/teaching_preference',
         params: teaching_preference_params
+
     end
+
+
 
     context 'invalid' do
       let :teaching_preference do

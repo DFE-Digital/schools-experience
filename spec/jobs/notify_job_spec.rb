@@ -209,7 +209,7 @@ end
 
 describe Notify::BaseJob, type: :job do
   context "#perform" do
-    it "should fail with NotImplementedError'" do
+    it "fails with NotImplementedError'" do
       expect { subject.perform }.to raise_error(NotImplementedError, 'You must implement the perform method')
     end
   end

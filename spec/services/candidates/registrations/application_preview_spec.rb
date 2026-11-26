@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::ApplicationPreview do
+  subject do
+    described_class.new registration_session
+  end
+
   let :has_dbs_check do
     true
   end
@@ -69,9 +73,6 @@ describe Candidates::Registrations::ApplicationPreview do
       'candidates_registrations_subject_and_date_information' => subject_and_date_information.attributes
   end
 
-  subject do
-    described_class.new registration_session
-  end
 
   context '#full_name' do
     it 'returns the correct value' do

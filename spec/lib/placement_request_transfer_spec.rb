@@ -8,9 +8,10 @@ RSpec.describe PlacementRequestTransfer do
   let(:school_id) { school.id }
 
   describe "#transfer!" do
+    subject(:transfer) { instance.transfer! }
+
     let(:instance) { described_class.new(placement_request_id, school_id) }
 
-    subject(:transfer) { instance.transfer! }
 
     it { expect { transfer }.to change { placement_request.reload.school }.to(school) }
 

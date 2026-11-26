@@ -75,7 +75,7 @@ Then("I should be on the {string} page for my chosen school") do |string|
 end
 
 Then("I should see the duration listed in each radio button label") do
-  page.all('label').each do |label|
+  page.all('label').each do |label| # rubocop:disable Rails/FindEach -- Capybara collections are arrays.
     expect(label.text).to match("(1 day)")
   end
 end

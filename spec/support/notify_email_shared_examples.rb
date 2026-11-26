@@ -18,6 +18,10 @@ shared_examples_for "sms template" do |template_id, personalisation|
 end
 
 shared_examples_for "notify template" do |template_id, personalisation|
+  subject do
+    described_class.new(to: to, **personalisation || {})
+  end
+
   before do
     stub_const(
       'Notify::API_KEY',
@@ -25,9 +29,6 @@ shared_examples_for "notify template" do |template_id, personalisation|
     )
   end
 
-  subject do
-    described_class.new(to: to, **personalisation || {})
-  end
 
   before do
     allow(NotifyService.instance).to receive(:notification_class) { NotifyFakeClient }
@@ -44,7 +45,7 @@ shared_examples_for "notify template" do |template_id, personalisation|
   end
 
   describe 'Initialization' do
-    personalisation&.each do |k, _|
+    personalisation&.each_key do |k|
       specify "should raise an error if supplied without :#{k}" do
         { to: to }.merge(personalisation.except(k)).tap do |args|
           expect { described_class.new(args) }.to raise_error(ArgumentError, /required keywords:.*#{k}/)
@@ -54,7 +55,7 @@ shared_examples_for "notify template" do |template_id, personalisation|
   end
 
   describe 'Attributes' do
-    personalisation&.each do |k, _|
+    personalisation&.each_key do |k|
       specify "should respond to #{k}" do
         expect(subject).to respond_to(k)
       end
@@ -65,9 +66,9 @@ shared_examples_for "notify template" do |template_id, personalisation|
     describe '#despatch_later!' do
       before do
         allow(Notify::BaseJob).to receive(:perform_later).and_return(true)
+subject.despatch_later!
       end
 
-      before { subject.despatch_later! }
 
       specify 'it enqueues the email delivery job' do
         subject.to.each do |address|
@@ -83,6 +84,7 @@ shared_examples_for "notify template" do |template_id, personalisation|
 
   describe 'Template' do
     subject { described_class.new(to: to, **personalisation || {}) }
+
     let(:template_path) { [Rails.root, "app", "notify", template_folder] }
 
     let(:template) do
@@ -115,20 +117,6 @@ end
 
 shared_examples_for "email template from application preview" do |args|
   describe ".from_application_preview" do
-    before do
-      stub_const(
-        'Notify::API_KEY',
-        ["somekey", SecureRandom.uuid, SecureRandom.uuid].join("-")
-      )
-    end
-
-    specify { expect(described_class).to respond_to(:from_application_preview) }
-
-    let!(:school) { create(:bookings_school, :with_fixed_availability_preference, urn: 11_048) }
-    let(:rs) { build(:registration_session, urn: 11_048) }
-    let(:to) { "morris.szyslak@moes.net" }
-    let(:ap) { Candidates::Registrations::ApplicationPreview.new(rs) }
-
     subject do
       if args
         described_class.from_application_preview(to, ap, *args)
@@ -136,6 +124,22 @@ shared_examples_for "email template from application preview" do |args|
         described_class.from_application_preview(to, ap)
       end
     end
+
+    before do
+      stub_const(
+        'Notify::API_KEY',
+        ["somekey", SecureRandom.uuid, SecureRandom.uuid].join("-")
+      )
+    end
+
+    let(:ap) { Candidates::Registrations::ApplicationPreview.new(rs) }
+    let(:to) { "morris.szyslak@moes.net" }
+    let(:rs) { build(:registration_session, urn: 11_048) }
+    let!(:school) { create(:bookings_school, :with_fixed_availability_preference, urn: 11_048) }
+
+    specify { expect(described_class).to respond_to(:from_application_preview) }
+
+
 
     it { is_expected.to be_a(described_class) }
 
@@ -195,6 +199,7 @@ shared_examples_for "email template from application preview" do |args|
 
         context 'when the school has set dates' do
           let(:rs) { build(:registration_session, :with_school, urn: 11_048) }
+
           specify 'bookings_placement_date_id is correctly-assigned' do
             expect(subject.placement_availability).to eql(Bookings::PlacementDate.last.to_s)
           end

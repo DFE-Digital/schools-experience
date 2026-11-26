@@ -71,7 +71,7 @@ describe Schools::OnBoarding::DbsFeesController, type: :request do
       end
 
       it "doesn't mark the step as complete" do
-        expect(school_profile.reload.dbs_fee_step_completed).to_not be true
+        expect(school_profile.reload.dbs_fee_step_completed).not_to be true
       end
 
       it 'rerenders the new form' do

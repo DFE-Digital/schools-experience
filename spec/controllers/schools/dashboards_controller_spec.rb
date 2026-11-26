@@ -10,7 +10,7 @@ describe Schools::DashboardsController, type: :request do
     context 'when logged in' do
       include_context "logged in DfE user"
 
-      subject! { get '/schools/dashboard' }
+      subject! { get '/schools/dashboard' } # rubocop:disable RSpec/LeadingSubject -- Request must run after login setup.
 
       it 'sets the correct school' do
         expect(assigns(:school)).to eq(school)
@@ -23,13 +23,15 @@ describe Schools::DashboardsController, type: :request do
 
     context 'when not logged in' do
       subject { get '/schools/dashboard' }
+
       it_behaves_like "a protected page"
     end
   end
 
   context "when the school doesn't exist" do
-    include_context "logged in DfE user"
     subject { get '/schools/dashboard' }
+
+    include_context "logged in DfE user"
 
     before do
       @current_user_school.destroy!

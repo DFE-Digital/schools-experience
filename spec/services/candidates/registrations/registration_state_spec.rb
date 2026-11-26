@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::RegistrationState do
+  subject { described_class.new registration_session }
+
   let :school do
     create :bookings_school, urn: 11_048
   end
@@ -13,7 +15,6 @@ describe Candidates::Registrations::RegistrationState do
     create :bookings_school, availability_preference_fixed: true
   end
 
-  subject { described_class.new registration_session }
 
   context '#steps' do
     context 'for a school with flexible dates' do

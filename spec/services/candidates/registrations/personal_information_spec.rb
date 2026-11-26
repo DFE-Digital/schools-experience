@@ -14,6 +14,8 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
   end
 
   context 'validations' do
+    let(:too_long_msg) { 'Email must be 100 characters or fewer' }
+
     it { is_expected.to validate_presence_of :first_name }
     it { is_expected.to validate_presence_of :last_name }
 
@@ -27,13 +29,14 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
         .with_message('Last name must be 50 characters or fewer')
     end
 
-    let(:too_long_msg) { 'Email must be 100 characters or fewer' }
+
     it { is_expected.to validate_presence_of :email }
     it { is_expected.to validate_length_of(:email).is_at_most(100).with_message(too_long_msg) }
     it { is_expected.to validate_email_format_of(:email) }
 
     context 'when read only' do
       subject { described_class.new read_only: true }
+
       it { is_expected.not_to validate_presence_of :first_name }
       it { is_expected.not_to validate_presence_of :last_name }
       it { is_expected.to validate_presence_of :email }
@@ -41,6 +44,8 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
   end
 
   describe "#issue_verification_code" do
+    subject { pinfo.issue_verification_code }
+
     let(:pinfo) { build(:personal_information) }
     let(:request) do
       GetIntoTeachingApiClient::ExistingCandidateRequest.new(
@@ -50,7 +55,6 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
       )
     end
 
-    subject { pinfo.issue_verification_code }
 
     before do
       allow_any_instance_of(GetIntoTeachingApiClient::CandidatesApi).to \
@@ -84,7 +88,7 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
         subject { described_class.new }
 
         it 'returns nil' do
-          expect(subject.full_name).to eq nil
+          expect(subject.full_name).to be_nil
         end
       end
 
@@ -99,6 +103,8 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
   end
 
   describe 'with read_only set to true' do
+    subject { pinfo }
+
     let(:pinfo) { described_class.new(read_only: true) }
 
     before do
@@ -108,7 +114,6 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
         email: 'test@test.com'
     end
 
-    subject { pinfo }
 
     it { is_expected.to have_attributes first_name: nil }
     it { is_expected.to have_attributes last_name: nil }

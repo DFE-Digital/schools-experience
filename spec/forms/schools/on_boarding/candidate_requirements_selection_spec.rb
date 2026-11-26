@@ -28,7 +28,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelection, type: :model do
       end
 
       it 'removes maximum_distance_from_school' do
-        expect(subject.maximum_distance_from_school).to be nil
+        expect(subject.maximum_distance_from_school).to be_nil
       end
     end
 
@@ -51,7 +51,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelection, type: :model do
       end
 
       it 'removes photo_identification_details' do
-        expect(subject.photo_identification_details).to be nil
+        expect(subject.photo_identification_details).to be_nil
       end
     end
 
@@ -74,7 +74,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelection, type: :model do
       end
 
       it 'removes other_details' do
-        expect(subject.other_details).to be nil
+        expect(subject.other_details).to be_nil
       end
     end
   end
@@ -97,6 +97,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelection, type: :model do
     context 'maximum_distance_from_school' do
       context 'when the live_locally is selected' do
         before { subject.selected_requirements = %w[live_locally] }
+
         it { is_expected.to validate_presence_of :maximum_distance_from_school }
       end
 
@@ -108,6 +109,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelection, type: :model do
     context 'photo_identification_details' do
       context 'when provide_photo_identification is selected' do
         before { subject.selected_requirements = %w[provide_photo_identification] }
+
         it { is_expected.to validate_presence_of :photo_identification_details }
       end
 
@@ -119,6 +121,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelection, type: :model do
     context 'other details' do
       context 'when other is selected' do
         before { subject.selected_requirements = %w[other] }
+
         it { is_expected.to validate_presence_of :other_details }
       end
 

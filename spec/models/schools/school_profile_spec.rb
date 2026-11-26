@@ -238,12 +238,13 @@ describe Schools::SchoolProfile, type: :model do
 
   context 'associations' do
     context 'subjects' do
-      let(:bookings_school) { create(:bookings_school) }
       subject { described_class.create!(bookings_school: bookings_school) }
 
+      let(:bookings_school) { create(:bookings_school) }
       let :bookings_subject do
         FactoryBot.create :bookings_subject
       end
+
 
       before do
         subject.subjects << bookings_subject
@@ -782,9 +783,10 @@ describe Schools::SchoolProfile, type: :model do
   end
 
   describe "#dup" do
+    subject(:duplicate) { profile.dup }
+
     let(:profile) { create(:school_profile, :completed) }
 
-    subject(:duplicate) { profile.dup }
 
     it "duplicates the profile and related subjects" do
       expected_attributes = profile.attributes.without(%w[id created_at updated_at])
@@ -828,10 +830,11 @@ describe Schools::SchoolProfile, type: :model do
   end
 
   describe "#current_step" do
+    subject { school_profile.current_step(previous_step) }
+
     let(:previous_step) { nil }
     let(:school_profile) { build(:school_profile) }
 
-    subject { school_profile.current_step(previous_step) }
 
     it { is_expected.to be(:dbs_requirement) }
 
@@ -848,9 +851,10 @@ describe Schools::SchoolProfile, type: :model do
   end
 
   describe "#completed?" do
+    subject { school_profile }
+
     let(:school_profile) { build(:school_profile) }
 
-    subject { school_profile }
 
     it { is_expected.not_to be_completed }
 

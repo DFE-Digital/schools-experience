@@ -21,22 +21,20 @@ describe NotifyEmail::CandidateBookingReminder do
     cancellation_url: "#{Rails.configuration.x.base_url}/candiates/cancel/abc-123"
 
   describe ".from_booking" do
+    subject { described_class.from_booking(to, time_until_booking, booking, cancellation_url) }
+
     before do
       stub_const(
         'Notify::API_KEY',
         ["somekey", SecureRandom.uuid, SecureRandom.uuid].join("-")
       )
+allow(booking).to receive(:candidate_name).and_return(candidate_name)
+allow(booking).to receive(:candidate_name).and_return(candidate_name)
+
+
     end
 
-    specify { expect(described_class).to respond_to(:from_booking) }
-
-    let(:time_until_booking) { "2 weeks" }
-    let!(:school) { create(:bookings_school) }
-    let!(:profile) { create(:bookings_profile, school: school) }
-    let(:to) { "morris.szyslak@moes.net" }
-    let(:candidate_name) { "morris.szyslak" }
-
-    let!(:pr) { create(:bookings_placement_request, school: school) }
+    let!(:cancellation_url) { "#{Rails.configuration.x.base_url}/candidates/cancel/#{booking.token}" }
     let!(:booking) do
       create(
         :bookings_booking,
@@ -44,14 +42,20 @@ describe NotifyEmail::CandidateBookingReminder do
         bookings_placement_request: pr
       )
     end
+    let!(:pr) { create(:bookings_placement_request, school: school) }
+    let(:candidate_name) { "morris.szyslak" }
+    let(:to) { "morris.szyslak@moes.net" }
+    let!(:profile) { create(:bookings_profile, school: school) }
+    let!(:school) { create(:bookings_school) }
+    let(:time_until_booking) { "2 weeks" }
 
-    before do
-      allow(booking).to receive(:candidate_name).and_return(candidate_name)
-    end
 
-    let!(:cancellation_url) { "#{Rails.configuration.x.base_url}/candidates/cancel/#{booking.token}" }
+    specify { expect(described_class).to respond_to(:from_booking) }
 
-    subject { described_class.from_booking(to, time_until_booking, booking, cancellation_url) }
+
+
+
+
 
     it { is_expected.to be_a(described_class) }
 

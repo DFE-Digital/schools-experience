@@ -1,8 +1,10 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::RegistrationAsPlacementRequest do
-  let(:urn) { 11_048 }
   subject { described_class.new session }
+
+  let(:urn) { 11_048 }
+
 
   pii = {
     "full_name" => 'Testy McTest',
@@ -41,9 +43,9 @@ describe Candidates::Registrations::RegistrationAsPlacementRequest do
 
       context 'PII' do
         # Redundant given the next spec, but going for clarity!
-        pii.each do |k, _|
+        pii.each_key do |k|
           it "removes #{k}" do
-            expect(subject.attributes[k]).to eq nil
+            expect(subject.attributes[k]).to be_nil
           end
         end
       end
@@ -90,9 +92,9 @@ describe Candidates::Registrations::RegistrationAsPlacementRequest do
 
       context 'PII' do
         # Redundant given the next spec, but going for clarity!
-        pii.each do |k, _|
+        pii.each_key do |k|
           it "removes #{k}" do
-            expect(subject.attributes[k]).to eq nil
+            expect(subject.attributes[k]).to be_nil
           end
         end
       end

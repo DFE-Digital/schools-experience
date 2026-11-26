@@ -2,6 +2,8 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::DFESignInAPI::Organisations do
+  subject { described_class.new(user_guid) }
+
   include_context "logged in DfE user"
 
   let(:uuid_map) do
@@ -10,7 +12,6 @@ describe Schools::DFESignInAPI::Organisations do
     end
   end
 
-  subject { Schools::DFESignInAPI::Organisations.new(user_guid) }
 
   before do
     allow(described_class).to receive(:enabled?).and_return(true)
@@ -48,7 +49,7 @@ describe Schools::DFESignInAPI::Organisations do
   end
 
   describe 'error_handling' do
-    subject { Schools::DFESignInAPI::Organisations.new(user_guid) }
+    subject { described_class.new(user_guid) }
 
     describe 'when an invalid response is returned' do
       before do

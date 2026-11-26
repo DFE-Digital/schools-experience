@@ -15,11 +15,12 @@ describe Schools::OnBoarding::KeyStageList, type: :model do
   end
 
   context '.new_from_bookings_school' do
+    subject { described_class.new_from_bookings_school school }
+
     let :school do
       FactoryBot.build :bookings_school, :with_primary_key_stage_info
     end
 
-    subject { described_class.new_from_bookings_school school }
 
     it 'sets the attributes from the bookings_school' do
       expect(subject.early_years).to be true

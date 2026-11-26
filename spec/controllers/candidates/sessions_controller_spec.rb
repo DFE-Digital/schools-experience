@@ -67,6 +67,7 @@ RSpec.describe Candidates::SessionsController, type: :request do
 
     context 'with missing details' do
       let(:invalid_creds) { { candidates_session: { email: 'invalid' } } }
+
       before { post candidates_signin_path, params: invalid_creds }
 
       it "returns http redirect to /candidates" do
@@ -98,7 +99,7 @@ RSpec.describe Candidates::SessionsController, type: :request do
         expect(response).to redirect_to(candidates_dashboard_path)
       end
 
-      it "will create a confirmed candidate" do
+      it "creates a confirmed candidate" do
         candidate = Bookings::Candidate.find_by(gitis_uuid: sign_up.candidate_id)
         expect(candidate).to be_confirmed
       end
@@ -109,7 +110,7 @@ RSpec.describe Candidates::SessionsController, type: :request do
 
       before { perform_request }
 
-      it "will show error screen" do
+      it "shows error screen" do
         expect(response).to have_http_status(:success)
         expect(response.body).to include("Please enter the latest verification code sent to your email address")
       end
@@ -122,7 +123,7 @@ RSpec.describe Candidates::SessionsController, type: :request do
     before { get candidates_signout_path }
 
     it "empties the gitis_contact session and redirects to the dashboard sign in" do
-      expect(session[:gitis_contact]).to be nil
+      expect(session[:gitis_contact]).to be_nil
       expect(response).to redirect_to(candidates_dashboard_path)
     end
   end

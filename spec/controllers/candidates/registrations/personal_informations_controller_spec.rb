@@ -126,7 +126,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
         end
 
         it "does not send a verification email" do
-          expect(NotifyFakeClient.deliveries.length).to eql(0)
+          expect(NotifyFakeClient.deliveries.length).to be(0)
         end
 
         it 'redirects to the next step' do

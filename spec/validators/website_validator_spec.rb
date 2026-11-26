@@ -9,7 +9,7 @@ describe WebsiteValidator do
   end
 
   context 'invalid websites' do
-    let(:validator) { WebsiteValidator.new(attributes: { name: 'invalid website' }) }
+    let(:validator) { described_class.new(attributes: { name: 'invalid website' }) }
 
     ['www.bbc.co.uk', 'huw.edwards@bbc.co.uk', 'huw@bbc', 'bbc', 'http://bbc'].each do |invalid_website|
       it "#{invalid_website} should not be valid" do
@@ -20,7 +20,7 @@ describe WebsiteValidator do
   end
 
   context 'valid websites' do
-    let(:validator) { WebsiteValidator.new(attributes: { name: 'valid website' }) }
+    let(:validator) { described_class.new(attributes: { name: 'valid website' }) }
 
     ['https://www.bbc.co.uk', 'http://bbc.co.uk', 'http://news.bbc.co.uk'].each do |valid_website|
       it "#{valid_website} should be valid" do

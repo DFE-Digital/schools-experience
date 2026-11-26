@@ -5,12 +5,6 @@ describe Schools::OnBoarding::AccessNeedsPoliciesController, type: :request do
   include_context "logged in DfE user"
 
   let(:task_progress_on_boarding) { false }
-
-  before do
-    allow(Feature).to receive(:enabled?).with(:task_progress_on_boarding)
-      .and_return(task_progress_on_boarding)
-  end
-
   let! :school_profile do
     FactoryBot.create \
       :school_profile,
@@ -30,6 +24,12 @@ describe Schools::OnBoarding::AccessNeedsPoliciesController, type: :request do
       :with_access_needs_detail,
       :with_disability_confident
   end
+
+  before do
+    allow(Feature).to receive(:enabled?).with(:task_progress_on_boarding)
+      .and_return(task_progress_on_boarding)
+  end
+
 
   context '#new' do
     before do

@@ -8,6 +8,7 @@ RSpec.describe Bookings::Phase, type: :model do
   describe "Validation" do
     context "Name" do
       it { is_expected.to validate_presence_of(:name) }
+
       it do
         is_expected.to validate_length_of(:name)
           .is_at_least(2)

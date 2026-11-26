@@ -2,6 +2,8 @@ shared_examples "an IP-based rate limited endpoint" do |desc, limit, period|
   include ActiveSupport::Testing::TimeHelpers
 
   describe desc do
+    subject { response.status }
+
     let(:memory_store) { ActiveSupport::Cache.lookup_store(:memory_store) }
 
     before do
@@ -9,7 +11,6 @@ shared_examples "an IP-based rate limited endpoint" do |desc, limit, period|
       request_count.times { perform_request }
     end
 
-    subject { response.status }
 
     context "when fewer than rate limit" do
       let(:request_count) { limit - 1 }

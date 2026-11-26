@@ -5,13 +5,13 @@ describe Candidates::School do
     before { @school = create(:bookings_school) }
 
     context('with valid identifier') do
-      it "will return school" do
+      it "returns school" do
         expect(described_class.find(@school.to_param)).to eq(@school)
       end
     end
 
     context('with invalid URN') do
-      it "will raise ActiveRecord::RecordNotFound" do
+      it "raises ActiveRecord::RecordNotFound" do
         expect {
           described_class.find('abc123')
         }.to raise_exception(ActiveRecord::RecordNotFound)
@@ -28,7 +28,7 @@ describe Candidates::School do
       @phases = described_class.phases
     end
 
-    it 'should return an array of Phases ordered by the age period' do
+    it 'returns an array of Phases ordered by the age period' do
       expect(@phases).to eq([
         [@first.id, @first.name],
         [@second.id, @second.name],
@@ -45,7 +45,7 @@ describe Candidates::School do
       @subjects = described_class.subjects
     end
 
-    it "should return a alphabetical array of subjects" do
+    it "returns a alphabetical array of subjects" do
       expect(@subjects).to eq([
         [@earlier.id, @earlier.name],
         [@later.id, @later.name]

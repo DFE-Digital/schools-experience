@@ -4,11 +4,12 @@ require 'geocoding_response_country'
 RSpec.describe GeocodingResponseCountry do
   describe "#name" do
     shared_examples "a known country" do |country|
-      let(:response) { Geocoder::Result::Test.new(address_components: [{ long_name: country }]) }
-
       subject do
         described_class.new(response).name
       end
+
+      let(:response) { Geocoder::Result::Test.new(address_components: [{ long_name: country }]) }
+
 
       it "returns '#{country}'" do
         expect(subject).to eq country
@@ -32,25 +33,27 @@ RSpec.describe GeocodingResponseCountry do
     end
 
     context "when unknown country" do
-      let(:canada_response) { Geocoder::Result::Test.new(address_components: [{ long_name: "Canada" }]) }
-
       subject do
         described_class.new(canada_response).name
       end
 
+      let(:canada_response) { Geocoder::Result::Test.new(address_components: [{ long_name: "Canada" }]) }
+
+
       it "returns nil" do
-        expect(subject).to be nil
+        expect(subject).to be_nil
       end
     end
   end
 
   describe "#not_serviced?" do
     shared_examples "a country that is not serviced" do |country|
-      let(:response) { Geocoder::Result::Test.new(address_components: [{ long_name: country }]) }
-
       subject do
         described_class.new(response).not_serviced?
       end
+
+      let(:response) { Geocoder::Result::Test.new(address_components: [{ long_name: country }]) }
+
 
       it "returns true" do
         expect(subject).to be true
@@ -74,11 +77,12 @@ RSpec.describe GeocodingResponseCountry do
     end
 
     context "when England" do
-      let(:response) { Geocoder::Result::Test.new(address_components: [{ long_name: "England" }]) }
-
       subject do
         described_class.new(response).not_serviced?
       end
+
+      let(:response) { Geocoder::Result::Test.new(address_components: [{ long_name: "England" }]) }
+
 
       it "returns false" do
         expect(subject).to be false

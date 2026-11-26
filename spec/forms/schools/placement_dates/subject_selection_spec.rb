@@ -65,7 +65,7 @@ describe Schools::PlacementDates::SubjectSelection, type: :model do
       it { is_expected.to(be_invalid) }
 
       it 'doesnt update the placement_date' do
-        expect(placement_date.published_at).to be nil
+        expect(placement_date.published_at).to be_nil
       end
     end
 

@@ -3,6 +3,8 @@ require 'rails_helper'
 describe Schools::ChangeSchool, type: :model do
   subject { change_school }
 
+  subject { change_school }
+
   let(:first_school) { create(:bookings_school, name: "B school") }
   let(:second_school) { create(:bookings_school, name: "A school") }
   let(:user_uuid) { SecureRandom.uuid }
@@ -31,7 +33,6 @@ describe Schools::ChangeSchool, type: :model do
       receive(:has_school_experience_role?) { user_has_role }
   end
 
-  subject { change_school }
 
   describe 'attributes' do
     it { is_expected.to respond_to :change_to_urn }
@@ -64,6 +65,7 @@ describe Schools::ChangeSchool, type: :model do
 
   describe '#school_uuid' do
     let(:change_to_urn) { second_school.urn }
+
     it { is_expected.to have_attributes school_uuid: uuid_map.keys[1] }
   end
 
@@ -83,7 +85,7 @@ describe Schools::ChangeSchool, type: :model do
     end
 
     context 'with valid urn' do
-      it 'should return school' do
+      it 'returns school' do
         is_expected.to eql second_school
       end
     end
@@ -98,10 +100,13 @@ describe Schools::ChangeSchool, type: :model do
   describe '#task_count_for_urn' do
     context 'with unexpected URN' do
       subject { change_school.task_count_for_urn 987_654 }
+
       it { is_expected.to be_nil }
     end
 
     context 'with known URN' do
+      subject { change_school.task_count_for_urn first_school.urn }
+
       before do
         create :placement_request, school: first_school
         create :placement_request, school: second_school
@@ -111,10 +116,9 @@ describe Schools::ChangeSchool, type: :model do
         end
       end
 
-      subject { change_school.task_count_for_urn first_school.urn }
 
-      it "should include count only for requested school" do
-        is_expected.to eql 2
+      it "includes count only for requested school" do
+        is_expected.to be 2
       end
     end
   end

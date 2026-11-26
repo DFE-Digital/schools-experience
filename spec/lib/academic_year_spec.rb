@@ -8,11 +8,13 @@ RSpec.describe AcademicYear do
 
       context "with date after the new academic year has started" do
         let(:date) { Date.parse("2021-10-12") }
+
         it { is_expected.to eql Date.parse("2021-09-01").at_beginning_of_day }
       end
 
       context "with date before the new academic year has started" do
         let(:date) { Date.parse("2021-08-12") }
+
         it { is_expected.to eql Date.parse("2020-09-01").at_beginning_of_day }
       end
     end
@@ -22,11 +24,13 @@ RSpec.describe AcademicYear do
 
       context "with date after the new academic year has started" do
         let(:time) { Time.zone.parse("2021-10-12") }
+
         it { is_expected.to eql Date.parse("2021-09-01").at_beginning_of_day }
       end
 
       context "with date before the new academic year has started" do
         let(:time) { Time.zone.parse("2021-08-12") }
+
         it { is_expected.to eql Date.parse("2020-09-01").at_beginning_of_day }
       end
     end

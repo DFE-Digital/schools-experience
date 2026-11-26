@@ -21,6 +21,8 @@ describe NotifyEmail::CandidateBookingConfirmation do
     cancellation_url: 'https://example.com/candiates/cancel/abc-123'
 
   describe ".from_booking" do
+    subject { described_class.from_booking(to, candidate_name, booking, cancellation_url) }
+
     before do
       stub_const(
         'Notify::API_KEY',
@@ -28,21 +30,21 @@ describe NotifyEmail::CandidateBookingConfirmation do
       )
     end
 
-    specify { expect(described_class).to respond_to(:from_booking) }
-
-    let!(:school) { create(:bookings_school, urn: 11_048) }
-    let!(:profile) { create(:bookings_profile, school: school) }
-    let(:to) { "morris.szyslak@moes.net" }
-    let(:candidate_name) { "morris.szyslak" }
-
-    let!(:pr) { create(:bookings_placement_request, school: school) }
+    let!(:cancellation_url) { "https://example.com/candidates/cancel/#{booking.token}" }
     let!(:booking) do
       create :bookings_booking, :accepted, bookings_placement_request: pr
     end
+    let!(:pr) { create(:bookings_placement_request, school: school) }
+    let(:candidate_name) { "morris.szyslak" }
+    let(:to) { "morris.szyslak@moes.net" }
+    let!(:profile) { create(:bookings_profile, school: school) }
+    let!(:school) { create(:bookings_school, urn: 11_048) }
 
-    let!(:cancellation_url) { "https://example.com/candidates/cancel/#{booking.token}" }
+    specify { expect(described_class).to respond_to(:from_booking) }
 
-    subject { described_class.from_booking(to, candidate_name, booking, cancellation_url) }
+
+
+
 
     it { is_expected.to be_a(described_class) }
 

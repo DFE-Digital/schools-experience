@@ -21,7 +21,7 @@ describe PagesController, type: :request do
       Rails.application.reload_routes!
     end
 
-    it "will show the maintenance page" do
+    it "shows the maintenance page" do
       get root_path
       expect(response).to have_http_status(:service_unavailable)
       expect(response).to have_attributes body: /service is unavailable/i

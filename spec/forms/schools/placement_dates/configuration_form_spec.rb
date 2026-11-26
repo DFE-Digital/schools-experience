@@ -49,9 +49,9 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
       end
 
       it 'returns a new subject selection without attributes set' do
-        expect(subject.available_for_all_subjects).to be nil
-        expect(subject.max_bookings_count).to be nil
-        expect(subject.has_limited_availability).to be nil
+        expect(subject.available_for_all_subjects).to be_nil
+        expect(subject.max_bookings_count).to be_nil
+        expect(subject.has_limited_availability).to be_nil
       end
     end
   end
@@ -140,7 +140,7 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
           end
 
           it 'sets published_at to nil' do
-            expect(placement_date.published_at).to eq nil
+            expect(placement_date.published_at).to be_nil
           end
         end
       end
@@ -217,17 +217,20 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
   context '#subject_specific?' do
     context 'when the date doesnt support subjects' do
       subject { described_class.new supports_subjects: false }
+
       it { is_expected.not_to be_subject_specific }
     end
 
     context 'when the date supports subject' do
       context 'when the date is available_for_all_subjects' do
         subject { described_class.new supports_subjects: true, available_for_all_subjects: true }
+
         it { is_expected.not_to be_subject_specific }
       end
 
       context 'when the date is not available_for_all_subjects' do
         subject { described_class.new supports_subjects: true, available_for_all_subjects: false }
+
         it { is_expected.to be_subject_specific }
       end
     end

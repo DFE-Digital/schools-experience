@@ -12,6 +12,7 @@ describe Schools::OnBoarding::TeacherTraining, type: :model do
 
     context 'when provides_teacher_training' do
       subject { described_class.new provides_teacher_training: true }
+
       it { is_expected.to validate_presence_of :teacher_training_details }
 
       context 'when teacher_training_url is present' do
@@ -30,12 +31,15 @@ describe Schools::OnBoarding::TeacherTraining, type: :model do
 
     context 'when not provides_teacher_training' do
       subject { described_class.new provides_teacher_training: false }
+
       it { is_expected.not_to validate_presence_of :teacher_training_details }
       it { is_expected.not_to validate_presence_of :teacher_training_url }
     end
   end
 
   context '.new_from_bookings_school' do
+    subject { described_class.new_from_bookings_school school }
+
     let :school do
       FactoryBot.build \
         :bookings_school,
@@ -44,7 +48,6 @@ describe Schools::OnBoarding::TeacherTraining, type: :model do
         teacher_training_provider: true
     end
 
-    subject { described_class.new_from_bookings_school school }
 
     it "sets provides_teacher_training" do
       expect(subject.provides_teacher_training).to be true

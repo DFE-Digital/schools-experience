@@ -26,6 +26,7 @@ describe Bookings::School, type: :model do
 
       context 'overwriting empty strings before validation' do
         subject { create(:bookings_school) }
+
         before do
           subject.availability_info = ''
           subject.valid?
@@ -47,18 +48,18 @@ describe Bookings::School, type: :model do
         "07865 432 321"
       ]
 
-      subject { Bookings::School.new }
+      subject { Bookings::School.new } # rubocop:disable RSpec/DescribedClass -- The nested symbol context changes described_class.
 
       context field_name do
         context 'valid' do
           valid_urls.each do |valid_url|
-            it { should allow_value(valid_url).for(field_name) }
+            it { is_expected.to allow_value(valid_url).for(field_name) }
           end
         end
 
         context 'invalid' do
           invalid_urls.each do |invalid_url|
-            it { should_not allow_value(invalid_url).for(field_name) }
+            it { is_expected.not_to allow_value(invalid_url).for(field_name) }
           end
         end
       end
@@ -82,13 +83,13 @@ describe Bookings::School, type: :model do
 
       context 'valid' do
         valid_addresses.each do |valid_address|
-          it { should allow_value(valid_address).for(:contact_email) }
+          it { is_expected.to allow_value(valid_address).for(:contact_email) }
         end
       end
 
       context 'invalid' do
         invalid_addresses.each do |invalid_address|
-          it { should_not allow_value(invalid_address).for(:contact_email) }
+          it { is_expected.not_to allow_value(invalid_address).for(:contact_email) }
         end
       end
     end
@@ -216,7 +217,7 @@ describe Bookings::School, type: :model do
   end
 
   describe 'Scopes' do
-    subject { Bookings::School }
+    subject { described_class }
 
     context 'Full text searching on Name' do
       # provided by FullTextSearch
@@ -428,6 +429,12 @@ describe Bookings::School, type: :model do
     end
 
     context 'Availability and placement dates' do
+      let!(:active_date) { create(:bookings_placement_date, bookings_school: fixed_with_dates) }
+      let!(:inactive_date) { create(:bookings_placement_date, bookings_school: fixed_without_dates, active: false) }
+      let!(:fixed_with_dates) { create(:bookings_school, :with_fixed_availability_preference) }
+      let!(:fixed_without_dates) { create(:bookings_school, :with_fixed_availability_preference) }
+      let!(:flexible_with_description) { create(:bookings_school) }
+
       specify { expect(described_class).to respond_to(:flexible) }
       specify { expect(described_class).to respond_to(:flexible_with_description) }
       specify { expect(described_class).to respond_to(:fixed) }
@@ -439,12 +446,7 @@ describe Bookings::School, type: :model do
       specify { expect(described_class.new).to have_db_column(:availability_preference_fixed).of_type(:boolean).with_options(default: false) }
       specify { expect(described_class.new).to have_db_column(:experience_type).of_type(:string).with_options(null: false, default: :inschool) }
 
-      let!(:flexible_with_description) { create(:bookings_school) }
-      let!(:fixed_without_dates) { create(:bookings_school, :with_fixed_availability_preference) }
-      let!(:fixed_with_dates) { create(:bookings_school, :with_fixed_availability_preference) }
 
-      let!(:inactive_date) { create(:bookings_placement_date, bookings_school: fixed_without_dates, active: false) }
-      let!(:active_date) { create(:bookings_placement_date, bookings_school: fixed_with_dates) }
 
       context '.flexible' do
         subject { described_class.flexible }
@@ -485,6 +487,7 @@ describe Bookings::School, type: :model do
 
       context '.fixed_with_available_dates' do
         subject { described_class.fixed_with_available_dates }
+
         specify 'should include schools that offer fixed dates and have available dates' do
           expect(subject).to include(fixed_with_dates)
         end
@@ -544,6 +547,7 @@ describe Bookings::School, type: :model do
       context 'when flexible' do
         context 'with availability_info' do
           subject { build(:bookings_school) }
+
           it { is_expected.to have_availability }
         end
       end
@@ -551,16 +555,19 @@ describe Bookings::School, type: :model do
       context 'when fixed' do
         context 'with no dates' do
           subject { build(:bookings_school, :with_fixed_availability_preference) }
+
           it { is_expected.not_to have_availability }
         end
 
         context 'with unavailable dates' do
           subject { create(:bookings_school, :with_fixed_availability_preference, :with_unavailable_placement_dates) }
+
           it { is_expected.not_to have_availability }
         end
 
         context 'with available dates' do
           subject { create(:bookings_school, :with_fixed_availability_preference, :with_placement_dates) }
+
           it { is_expected.to have_availability }
         end
       end
@@ -569,11 +576,13 @@ describe Bookings::School, type: :model do
     describe '#onboarded?' do
       context 'without profile' do
         subject { create(:bookings_school) }
+
         it { is_expected.not_to be_onboarded }
       end
 
       context 'with profile' do
         subject { create(:bookings_profile).school }
+
         it { is_expected.to be_onboarded }
       end
     end
@@ -585,6 +594,7 @@ describe Bookings::School, type: :model do
 
       context 'when the school is enabled' do
         subject { create(:bookings_school) }
+
         before { subject.enable! }
 
         specify 'the school should remain enabled' do
@@ -598,6 +608,7 @@ describe Bookings::School, type: :model do
 
       context 'when the school is disabled' do
         subject { create(:bookings_school, :disabled) }
+
         before { subject.enable! }
 
         specify 'should enable the school' do
@@ -618,6 +629,7 @@ describe Bookings::School, type: :model do
 
       context 'when the school is disabled' do
         subject { create(:bookings_school, :disabled) }
+
         before { subject.disable! }
 
         specify 'the school should remain disabled' do
@@ -631,6 +643,7 @@ describe Bookings::School, type: :model do
 
       context 'when the school is enabled' do
         subject { create(:bookings_school) }
+
         before { subject.disable! }
 
         specify 'should disable the school' do

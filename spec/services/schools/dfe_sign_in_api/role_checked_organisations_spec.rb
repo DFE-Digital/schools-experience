@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe Schools::DFESignInAPI::RoleCheckedOrganisations, type: :model do
+  subject { described_class.new(user_uuid) }
+
   let(:user_uuid) { SecureRandom.uuid }
   let(:org1) { SecureRandom.uuid }
   let(:org2) { SecureRandom.uuid }
@@ -25,10 +27,9 @@ describe Schools::DFESignInAPI::RoleCheckedOrganisations, type: :model do
       { double(rolecheck, has_school_experience_role?: true) }
   end
 
-  subject { described_class.new(user_uuid) }
 
   describe '#organisation_uuid_pairs' do
-    it "should only include uuids the user has a role over" do
+    it "onlies include uuids the user has a role over" do
       is_expected.to have_attributes \
         organisation_uuid_pairs: { org1 => 1, org3 => 3 }
     end

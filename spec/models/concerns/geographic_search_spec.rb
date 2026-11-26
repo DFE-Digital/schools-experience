@@ -35,9 +35,9 @@ describe 'Concerns' do
       context 'should use default value when supplied a nil radius' do
         before do
           allow(Conversions::Distance::Miles::ToMetres).to receive(:convert).and_return(50)
+subject.close_to(mcr_piccadilly, radius: nil)
         end
 
-        before { subject.close_to(mcr_piccadilly, radius: nil) }
 
         specify 'should use the specified default value when nil supplied' do
           expect(Conversions::Distance::Miles::ToMetres).to have_received(:convert).with(subject::DEFAULT_RADIUS)

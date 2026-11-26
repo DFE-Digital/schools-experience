@@ -300,9 +300,10 @@ describe Schools::OnBoarding::Wizard do
   end
 
   describe "#step_state" do
+    subject { instance.step_state(step) }
+
     let(:step) { :dbs_requirement }
 
-    subject { instance.step_state(step) }
 
     it { is_expected.to be(:not_started) }
 

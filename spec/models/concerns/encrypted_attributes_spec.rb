@@ -32,9 +32,10 @@ describe EncryptedAttributes do
   end
 
   describe ".new_decrypt" do
+    subject { test_model.new_decrypt(encrypted_attributes).attributes }
+
     let(:encrypted_attributes) { instance.encrypted_attributes }
 
-    subject { test_model.new_decrypt(encrypted_attributes).attributes }
 
     it { is_expected.to eq(instance.attributes) }
 

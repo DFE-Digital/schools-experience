@@ -8,8 +8,10 @@ class TestModel
 end
 
 describe EmailFormatValidator do
-  before { instance.valid? }
   subject { instance.errors.to_hash }
+
+  before { instance.valid? }
+
 
   context 'invalid addresses' do
     [

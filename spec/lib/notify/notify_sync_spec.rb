@@ -2,20 +2,20 @@ require 'rails_helper'
 require Rails.root.join("lib", "notify", "notify_sync")
 
 describe Notify::NotifySync do
+  subject do
+    described_class.new
+  end
+
   before do
     stub_const(
       'NotifySync::API_KEY',
       ["somekey", SecureRandom.uuid, SecureRandom.uuid].join("-")
     )
+allow(subject).to receive(:client).and_return(NotifyFakeClient.new)
+
   end
 
-  before do
-    allow(subject).to receive(:client).and_return(NotifyFakeClient.new)
-  end
 
-  subject do
-    described_class.new
-  end
 
   specify "template path should be app/notify/notify_email" do
     expect(described_class::TEMPLATE_PATH).to eql(

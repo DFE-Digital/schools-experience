@@ -65,7 +65,7 @@ describe Schools::PlacementDates::ConfigurationsController, type: :request do
       end
 
       it "doesn't update the placement_date" do
-        expect(placement_date.max_bookings_count).to be nil
+        expect(placement_date.max_bookings_count).to be_nil
       end
     end
 

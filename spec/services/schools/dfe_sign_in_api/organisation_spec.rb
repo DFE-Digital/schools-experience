@@ -2,6 +2,8 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::DFESignInAPI::Organisation do
+  subject { described_class.new(user_uuid, current_school_urn) }
+
   include_context "logged in DfE user"
 
   let(:user_uuid) { '123456' }
@@ -15,7 +17,6 @@ describe Schools::DFESignInAPI::Organisation do
   end
   let(:response) { organisations_data }
 
-  subject { described_class.new(user_uuid, current_school_urn) }
 
   before do
     allow(subject).to receive(:response).and_return(response)

@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe Schools::Attendance do
+  subject { attendance }
+
   let(:booking_1) { create(:bookings_booking, :accepted) }
   let(:booking_2) { create(:bookings_booking, :accepted) }
   let(:booking_3) { create(:bookings_booking, :accepted) }
@@ -33,7 +35,6 @@ describe Schools::Attendance do
       receive(:from_booking) { feedback_request_double }
   end
 
-  subject { attendance }
 
   describe '#initialize' do
     specify 'should correctly assign bookings' do
@@ -56,10 +57,10 @@ describe Schools::Attendance do
         bookings.each(&:reload)
       end
 
-      subject! { attendance.save }
+      subject! { attendance.save } # rubocop:disable RSpec/LeadingSubject -- Save must run after cancellation setup.
 
       specify 'should not update cancelled bookings' do
-        expect(booking_1.reload.attended).to be nil
+        expect(booking_1.reload.attended).to be_nil
       end
 
       specify 'sends feedback emails for attended (and not cancelled) bookings' do
@@ -81,15 +82,14 @@ describe Schools::Attendance do
       end
 
       specify 'attendance should have 1 error' do
-        expect(attendance.errors.messages.length).to eql 1
-        expect(attendance.errors.messages[:bookings_params].length).to eql 1
+        expect(attendance.errors.messages.length).to be 1
+        expect(attendance.errors.messages[:bookings_params].length).to be 1
         expect(attendance.errors.messages[:bookings_params].first).to \
           match(/unable to set attendance/i)
       end
 
       specify 'attendance.updated_bookings' do
-        expect(attendance.updated_bookings).to match_array \
-          [booking_2.id, booking_3.id]
+        expect(attendance.updated_bookings).to contain_exactly(booking_2.id, booking_3.id)
       end
     end
 
@@ -125,7 +125,7 @@ describe Schools::Attendance do
     end
 
     specify 'should correctly update bookings with param values' do
-      bookings_params.each do |id, _status|
+      bookings_params.each_key do |id|
         booking = Bookings::Booking.find(id)
 
         expect(Bookings::Gitis::SchoolExperience).to \

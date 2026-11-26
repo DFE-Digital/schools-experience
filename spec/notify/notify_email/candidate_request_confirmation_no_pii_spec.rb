@@ -14,6 +14,8 @@ describe NotifyEmail::CandidateRequestConfirmationNoPii do
     cancellation_url: 'https://example.com/'
 
   describe ".from_application_preview" do
+    subject { described_class.from_application_preview(to, ap, cancellation_url) }
+
     before do
       stub_const(
         'Notify::API_KEY',
@@ -21,15 +23,15 @@ describe NotifyEmail::CandidateRequestConfirmationNoPii do
       )
     end
 
+    let(:ap) { Candidates::Registrations::ApplicationPreview.new(rs) }
+    let(:cancellation_url) { 'https://example.com/placement_request/cancellations' }
+    let(:to) { "morris.szyslak@moes.net" }
+    let(:rs) { build(:registration_session) }
+    let!(:school) { create(:bookings_school, urn: 11_048) }
+
     specify { expect(described_class).to respond_to(:from_application_preview) }
 
-    let!(:school) { create(:bookings_school, urn: 11_048) }
-    let(:rs) { build(:registration_session) }
-    let(:to) { "morris.szyslak@moes.net" }
-    let(:cancellation_url) { 'https://example.com/placement_request/cancellations' }
-    let(:ap) { Candidates::Registrations::ApplicationPreview.new(rs) }
 
-    subject { described_class.from_application_preview(to, ap, cancellation_url) }
 
     it { is_expected.to be_a(described_class) }
 
@@ -77,6 +79,7 @@ describe NotifyEmail::CandidateRequestConfirmationNoPii do
           let(:school) { create(:bookings_school, :with_fixed_availability_preference) }
 
           let(:rs) { build(:registration_session, :with_school, urn: school.urn) }
+
           specify 'bookings_placement_date_id is correctly-assigned' do
             expect(subject.placement_availability).to eql(Bookings::PlacementDate.last.to_s)
           end

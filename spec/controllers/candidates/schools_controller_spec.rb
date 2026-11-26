@@ -104,9 +104,11 @@ RSpec.describe Candidates::SchoolsController, type: :request do
   end
 
   context "GET #show" do
+    subject! { req }
+
     let(:school) { create(:bookings_school) }
     let(:req) { get candidates_school_path(school) }
-    subject! { req }
+
 
     it "returns http success" do
       expect(response).to have_http_status(:success)
@@ -117,11 +119,12 @@ RSpec.describe Candidates::SchoolsController, type: :request do
     end
 
     it "assigns the the school" do
-      expect(assigns(:school)).to_not be_nil
+      expect(assigns(:school)).not_to be_nil
     end
 
     context 'counting' do
       let!(:count) { school.views }
+
       before { req }
 
       specify 'count should have increased when viewed' do
@@ -148,6 +151,7 @@ RSpec.describe Candidates::SchoolsController, type: :request do
         get candidates_schools_path
         response
       end
+
       it { is_expected.to redirect_to candidates_root_path }
     end
 
@@ -156,6 +160,7 @@ RSpec.describe Candidates::SchoolsController, type: :request do
         get candidates_school_path(school)
         response
       end
+
       it { is_expected.to redirect_to candidates_root_path }
     end
   end
@@ -170,20 +175,26 @@ RSpec.describe Candidates::SchoolsController, type: :request do
 
     describe '#show' do
       context 'when in whitelist' do
-        let(:whitelist) { school.urn.to_s }
         subject do
           get candidates_school_path(school)
           response
         end
+
+        let(:whitelist) { school.urn.to_s }
+
+
         it { is_expected.to have_rendered 'show' }
       end
 
       context 'when not in whitelist' do
-        let(:whitelist) { '-1' }
         subject do
           get candidates_school_path(school)
           response
         end
+
+        let(:whitelist) { '-1' }
+
+
         it { is_expected.to redirect_to candidates_root_path }
       end
     end

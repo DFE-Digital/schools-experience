@@ -10,7 +10,7 @@ RSpec.describe "candidates/sessions/new", type: :view do
       render
     end
 
-    it "will show the sign in form" do
+    it "shows the sign in form" do
       expect(rendered).to have_css('h1', text: 'Get school experience sign in')
       expect(rendered).to have_css('p', text: /we will send you a code/i)
       expect(rendered).to have_css("form")
@@ -27,7 +27,7 @@ RSpec.describe "candidates/sessions/new", type: :view do
       render
     end
 
-    it "will show the errors in the sign in form" do
+    it "shows the errors in the sign in form" do
       expect(rendered).to have_css('h1', text: 'Get school experience sign in')
       expect(rendered).to have_css('p', text: /we will send you a code/i)
       expect(rendered).to have_css("form")

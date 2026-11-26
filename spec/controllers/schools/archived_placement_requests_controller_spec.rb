@@ -14,12 +14,13 @@ describe Schools::ArchivedPlacementRequestsController, type: :request do
   describe '#index' do
     subject { response }
 
-    it { is_expected.to have_http_status :success }
-    it { is_expected.to render_template 'index' }
-
     before do
       get schools_archived_placement_requests_path
     end
+
+    it { is_expected.to have_http_status :success }
+    it { is_expected.to render_template 'index' }
+
 
     context 'when flex dates' do
       before { create :placement_request, created_at: 3.months.ago, school: school }

@@ -1,14 +1,15 @@
 require "rails_helper"
 
 describe "Tracking Scripts", type: :request do
-  let(:tracking_id) { "AAAAABBBBBCCCCCDDDDDEEEEE" }
-
-  before { allow(ENV).to receive(:[]).and_call_original }
-
   subject do
     get root_path
     response.body
   end
+
+  let(:tracking_id) { "AAAAABBBBBCCCCCDDDDDEEEEE" }
+
+  before { allow(ENV).to receive(:[]).and_call_original }
+
 
   describe "Google Tag Manager" do
     let(:tracking_id_key) { "GTM_ID" }

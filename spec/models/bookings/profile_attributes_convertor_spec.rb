@@ -5,13 +5,14 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
 
   describe "#profile_attrs" do
     context 'with completed profile' do
+      subject do
+        described_class.new(completed_attrs).attributes
+      end
+
       let(:completed_attrs) do
         build(:school_profile, :completed).attributes
       end
 
-      subject do
-        described_class.new(completed_attrs).attributes
-      end
 
       it { is_expected.to include(dbs_policy_conditions: 'required') }
       it { is_expected.to include(dbs_policy_details: 'Must have recent dbs check') }
@@ -66,6 +67,10 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
     end
 
     context 'with completed profile with blank fields' do
+      subject do
+        described_class.new(model_attrs).attributes
+      end
+
       let(:model_attrs) do
         model = build(:school_profile, :completed)
         model.dbs_requirement_dbs_policy_conditions = 'notrequired'
@@ -98,9 +103,6 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
         model.attributes
       end
 
-      subject do
-        described_class.new(model_attrs).attributes
-      end
 
       it { is_expected.to include(dbs_policy_conditions: 'notrequired') }
       it { is_expected.to include(dbs_policy_details: nil) }
@@ -141,12 +143,15 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
   end
 
   describe '#phase_ids' do
-    before { @early_years = create(:bookings_phase, :early_years) }
-    before { @primary = create(:bookings_phase, :primary) }
-    before { @secondary = create(:bookings_phase, :secondary) }
-    before { @college = create(:bookings_phase, :college) }
-    let(:attrs) { build(:school_profile, :completed).attributes }
     subject { described_class.new(attrs).phase_ids }
+
+    before { @early_years = create(:bookings_phase, :early_years)
+@primary = create(:bookings_phase, :primary)
+@secondary = create(:bookings_phase, :secondary)
+@college = create(:bookings_phase, :college)  }
+
+    let(:attrs) { build(:school_profile, :completed).attributes }
+
 
     it { is_expected.to include(@early_years.id) }
     it { is_expected.to include(@primary.id) }

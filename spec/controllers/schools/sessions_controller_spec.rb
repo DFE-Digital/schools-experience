@@ -75,7 +75,7 @@ describe Schools::SessionsController, type: :request do
     context 'when the user is not yet signed in' do
       include_context 'oidc callback'
 
-      subject! { get callback }
+      subject! { get callback } # rubocop:disable RSpec/LeadingSubject -- Request must run after OIDC setup.
 
       specify 'should redirect to the return url' do
         expect(response.body).to redirect_to(return_url)
@@ -101,7 +101,7 @@ describe Schools::SessionsController, type: :request do
           after { get callback }
 
           specify 'should raise an AuthFailed error' do
-            expect(response.status).to eql 302
+            expect(response.status).to be 302
             expect(response.redirect_url).to end_with('schools/errors/auth_failed')
           end
 
@@ -118,6 +118,7 @@ describe Schools::SessionsController, type: :request do
           }.each do |bad_state, description|
             context description do
               let(:callback) { "/auth/callback?code=#{code}&state=#{bad_state}&session_state=#{session_state}" }
+
               after { get callback }
 
               specify 'should raise StateMismatchError' do
@@ -125,7 +126,7 @@ describe Schools::SessionsController, type: :request do
               end
 
               specify 'should redirect to an error page' do
-                expect(response.status).to eql 302
+                expect(response.status).to be 302
                 expect(response.redirect_url).to end_with('schools/errors/auth_failed')
               end
             end
@@ -134,6 +135,7 @@ describe Schools::SessionsController, type: :request do
 
         context 'AuthFailedError' do
           let(:code) { nil }
+
           after { get callback }
 
           specify 'should raise AuthFailedError' do
@@ -141,7 +143,7 @@ describe Schools::SessionsController, type: :request do
           end
 
           specify 'should redirect to an error page' do
-            expect(response.status).to eql 302
+            expect(response.status).to be 302
             expect(response.redirect_url).to end_with('schools/errors/auth_failed')
           end
         end
@@ -156,7 +158,7 @@ describe Schools::SessionsController, type: :request do
         allow_any_instance_of(Schools::DFESignInAPI::Roles).to receive(:has_school_experience_role?).and_return(false)
       end
 
-      subject! { get callback }
+      subject! { get callback } # rubocop:disable RSpec/LeadingSubject -- Request must run after OIDC and role setup.
 
       specify 'should redirect to the insufficient privileges error page' do
         expect(subject).to redirect_to(schools_errors_insufficient_privileges_path)
@@ -168,6 +170,8 @@ describe Schools::SessionsController, type: :request do
     end
 
     context 'when the user is already logged in' do
+      subject { get auth_callback_path }
+
       include_context 'oidc callback'
 
       before do
@@ -176,7 +180,6 @@ describe Schools::SessionsController, type: :request do
         session_hash[:current_user] = OpenIDConnect::ResponseObject::UserInfo.new(sub: "abc1243", name: 'Milhouse')
       end
 
-      subject { get auth_callback_path }
 
       specify 'should redirect to the dashboard' do
         expect(subject).to redirect_to(schools_dashboard_path)
@@ -184,6 +187,8 @@ describe Schools::SessionsController, type: :request do
     end
 
     context 'when the session has timed out' do
+      subject { get expired_auth_callback_path }
+
       let(:message) { 'sessionexpired' }
       let(:expired_auth_callback_path) { "/auth/callback?error=#{message}" }
 
@@ -191,7 +196,6 @@ describe Schools::SessionsController, type: :request do
         allow(Rails.logger).to receive(:warn).and_return(true)
       end
 
-      subject { get expired_auth_callback_path }
 
       specify 'should log that the session has expired' do
         subject
@@ -204,6 +208,8 @@ describe Schools::SessionsController, type: :request do
     end
 
     context 'when the saved application session state is missing' do
+      subject(:call_callback) { get callback }
+
       include_context 'oidc callback'
 
       let(:return_url) { '/schools/dashboard' }
@@ -217,7 +223,6 @@ describe Schools::SessionsController, type: :request do
         allow(Rails.logger).to receive(:error).and_call_original
       end
 
-      subject(:call_callback) { get callback }
 
       shared_examples 'a recovery that discards the callback' do
         specify 'redirects to the dashboard so sign-in restarts' do
@@ -304,6 +309,8 @@ describe Schools::SessionsController, type: :request do
     end
 
     context 'when the saved application session state is present' do
+      subject(:call_callback) { get callback }
+
       include_context 'oidc callback'
 
       let(:return_url) { '/schools/dashboard' }
@@ -315,7 +322,6 @@ describe Schools::SessionsController, type: :request do
         allow(Rails.logger).to receive(:error).and_call_original
       end
 
-      subject(:call_callback) { get callback }
 
       {
         'missing' => nil,
@@ -355,18 +361,19 @@ describe Schools::SessionsController, type: :request do
     include_context "logged in DfE user"
 
     context 'when a session exists and there is an id_token' do
+      subject { get(logout_schools_session_path) }
+
       let(:oidc_host) { 'some-oidc-host' }
       let(:id_token) { 'abcdefg123456' }
 
-      before { get(root_path) }
-      subject { get(logout_schools_session_path) }
-
-      before do
-        allow(OpenIDConnect::Client).to receive(:new)
+      before { get(root_path)
+allow(OpenIDConnect::Client).to receive(:new)
           .and_return(OpenStruct.new(host: oidc_host))
-      end
 
-      before { session[:id_token] = id_token }
+session[:id_token] = id_token  }
+
+
+
 
       specify 'should redirect to the OpenID Connect end session endpoint with the correct query params' do
         expect(subject).to redirect_to(

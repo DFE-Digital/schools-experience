@@ -4,6 +4,7 @@ RSpec.describe Bookings::Subject, type: :model do
   describe "Validation" do
     context "Name" do
       it { is_expected.to validate_presence_of(:name) }
+
       it do
         is_expected.to validate_length_of(:name)
           .is_at_least(2)
@@ -12,6 +13,7 @@ RSpec.describe Bookings::Subject, type: :model do
 
       context 'Uniqueness' do
         subject { create(:bookings_subject) }
+
         it { is_expected.to validate_uniqueness_of(:name) }
       end
     end
@@ -52,31 +54,33 @@ RSpec.describe Bookings::Subject, type: :model do
 
   describe "Scopes" do
     describe 'default_scope' do
+      subject { described_class.all.to_a }
+
       let!(:visible) { create(:bookings_subject, hidden: false) }
       let!(:hidden) { create(:bookings_subject, hidden: true) }
 
-      subject { described_class.all.to_a }
 
-      it 'should include non-hidden subjects' do
+      it 'includes non-hidden subjects' do
         is_expected.to include(visible)
       end
 
-      it 'should not include hidden subjects' do
+      it 'does not include hidden subjects' do
         is_expected.not_to include(hidden)
       end
     end
 
     describe '.secondary' do
+      subject { described_class.secondary_subjects.to_a }
+
       let!(:secondary) { create(:bookings_subject, secondary_subject: true) }
       let!(:primary) { create(:bookings_subject, secondary_subject: false) }
 
-      subject { described_class.secondary_subjects.to_a }
 
-      it 'should include secondary subjects' do
+      it 'includes secondary subjects' do
         is_expected.to include(secondary)
       end
 
-      it 'should not include non-secondary subjects' do
+      it 'does not include non-secondary subjects' do
         is_expected.not_to include(primary)
       end
     end

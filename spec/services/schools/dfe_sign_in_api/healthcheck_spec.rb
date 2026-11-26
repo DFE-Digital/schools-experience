@@ -1,10 +1,11 @@
 require 'rails_helper'
 
 describe Schools::DFESignInAPI::Healthcheck do
+  subject { described_class.new.up? }
+
   let(:help_host) { Rails.configuration.x.dfe_sign_in_help_host }
   let(:url) { "https://#{help_host}/healthcheck" }
 
-  subject { described_class.new.up? }
 
   before do
     allow(Rails.application.config.x).to \

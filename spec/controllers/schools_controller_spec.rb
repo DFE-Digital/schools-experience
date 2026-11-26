@@ -3,15 +3,16 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe SchoolsController, type: :request do
   describe '#show' do
+    subject do
+      get '/schools'
+      response
+    end
+
     before do
       allow(ENV).to receive(:[]).and_call_original
       allow(ENV).to receive(:[]).with('DFE_SIGNIN_DEACTIVATED') { toggle }
     end
 
-    subject do
-      get '/schools'
-      response
-    end
 
     context 'when sign in is enabled' do
       let(:toggle) { 'false' }

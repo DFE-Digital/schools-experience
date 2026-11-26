@@ -60,11 +60,11 @@ describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailControl
       allow(NotifySms::CandidateBookingConfirmation).to receive(:new) do
         candidate_booking_confirmation_sms
       end
+patch schools_placement_request_acceptance_preview_confirmation_email_path(pr.id, params)
     end
 
     let(:params) { { bookings_booking: { candidate_instructions: 'Come to the main reception' } } }
 
-    before { patch schools_placement_request_acceptance_preview_confirmation_email_path(pr.id, params) }
 
     specify 'should send a candidate booking confirmation notification email' do
       expect(NotifyEmail::CandidateBookingConfirmation).to have_received(:from_booking)

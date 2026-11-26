@@ -66,6 +66,8 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
 
   context '#recurring_dates' do
     context "when daily" do
+      subject { described_class.new(attributes).recurring_dates }
+
       let(:next_monday) { Date.today.next_occurring(:monday) }
       let(:monday_after_next) { next_monday.next_occurring(:monday) }
       let(:attributes) do
@@ -76,7 +78,6 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
         }
       end
 
-      subject { described_class.new(attributes).recurring_dates }
 
       it 'returns a correct array of dates (skipping weekends)' do
         expect(subject).to eq [
@@ -92,6 +93,8 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
     end
 
     context "when weekly" do
+      subject { described_class.new(attributes).recurring_dates }
+
       let(:next_monday) { Date.today.next_occurring(:monday) }
       let(:attributes) do
         {
@@ -101,7 +104,6 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
         }
       end
 
-      subject { described_class.new(attributes).recurring_dates }
 
       it 'returns a correct array of dates' do
         expect(subject).to eq [
@@ -114,6 +116,8 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
     end
 
     context "when fortnightly" do
+      subject { described_class.new(attributes).recurring_dates }
+
       let(:next_monday) { Date.today.next_occurring(:monday) }
       let(:attributes) do
         {
@@ -123,7 +127,6 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
         }
       end
 
-      subject { described_class.new(attributes).recurring_dates }
 
       it 'returns a correct array of dates' do
         expect(subject).to eq [
@@ -134,6 +137,8 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
     end
 
     context "when custom" do
+      subject { described_class.new(attributes).recurring_dates }
+
       let(:next_monday) { Date.today.next_occurring(:monday) }
       let(:attributes) do
         {
@@ -144,7 +149,6 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
         }
       end
 
-      subject { described_class.new(attributes).recurring_dates }
 
       it 'returns a correct array of dates' do
         expect(subject).to eq [

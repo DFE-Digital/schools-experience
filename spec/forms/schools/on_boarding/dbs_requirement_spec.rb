@@ -20,7 +20,7 @@ describe Schools::OnBoarding::DbsRequirement, type: :model do
       end
 
       it 'removes no dbs_policy_details' do
-        expect(subject.no_dbs_policy_details).to be nil
+        expect(subject.no_dbs_policy_details).to be_nil
       end
     end
 
@@ -32,7 +32,7 @@ describe Schools::OnBoarding::DbsRequirement, type: :model do
       end
 
       it 'removes no dbs_policy_details' do
-        expect(subject.no_dbs_policy_details).to be nil
+        expect(subject.no_dbs_policy_details).to be_nil
       end
     end
 
@@ -44,7 +44,7 @@ describe Schools::OnBoarding::DbsRequirement, type: :model do
       end
 
       it 'removes dbs_policy_details' do
-        expect(subject.dbs_policy_details).to be nil
+        expect(subject.dbs_policy_details).to be_nil
       end
     end
   end
@@ -56,8 +56,8 @@ describe Schools::OnBoarding::DbsRequirement, type: :model do
       it { is_expected.to validate_presence_of :dbs_policy_details }
 
       context 'word counts' do
-        before { subject.dbs_policy_details = too_long_text }
-        before { subject.validate }
+        before { subject.dbs_policy_details = too_long_text
+subject.validate  }
 
         it "valdiates word count is no more than 50 words" do
           expect(subject.errors[:dbs_policy_details]).to \
@@ -72,8 +72,8 @@ describe Schools::OnBoarding::DbsRequirement, type: :model do
       it { is_expected.to validate_presence_of :dbs_policy_details_inschool }
 
       context 'word counts' do
-        before { subject.dbs_policy_details_inschool = too_long_text }
-        before { subject.validate }
+        before { subject.dbs_policy_details_inschool = too_long_text
+subject.validate  }
 
         it "valdiates word count is no more than 50 words" do
           expect(subject.errors[:dbs_policy_details_inschool]).to \
@@ -86,8 +86,8 @@ describe Schools::OnBoarding::DbsRequirement, type: :model do
       before { subject.dbs_policy_conditions = 'notrequired' }
 
       context 'word counts' do
-        before { subject.no_dbs_policy_details = too_long_text }
-        before { subject.validate }
+        before { subject.no_dbs_policy_details = too_long_text
+subject.validate  }
 
         it "valdiates word count is no more than 50 words" do
           expect(subject.errors[:no_dbs_policy_details]).to \

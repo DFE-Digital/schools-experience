@@ -60,7 +60,7 @@ describe Schools::PlacementRequestsController, type: :request do
       it 'assigns the placement_requests belonging to the school' do
         expect(assigns(:placement_requests)).to match_array school.placement_requests
         expect(assigns(:placement_requests).map(&:gitis_contact)).to all \
-          be_kind_of GetIntoTeachingApiClient::SchoolsExperienceSignUp
+          be_a GetIntoTeachingApiClient::SchoolsExperienceSignUp
       end
 
       it 'renders the index template' do
@@ -70,6 +70,7 @@ describe Schools::PlacementRequestsController, type: :request do
 
     context 'after placement requests have been accepted' do
       let(:booked) { placement_requests.last }
+
       before do
         create :bookings_booking, :accepted,
           bookings_placement_request: booked,
@@ -86,6 +87,7 @@ describe Schools::PlacementRequestsController, type: :request do
 
     context 'after placement requests have been rejected' do
       let(:rejected) { placement_requests.last }
+
       before do
         create :cancellation, :cancelled_by_school,
           placement_request: rejected
@@ -141,8 +143,6 @@ describe Schools::PlacementRequestsController, type: :request do
         FactoryBot.create :placement_request, school: school
       end
 
-      before { get "/schools/placement_requests/#{placement_request.id}" }
-
       it 'assigns the correct placement_request' do
         expect(assigns(:placement_request)).to eq placement_request
       end
@@ -161,8 +161,6 @@ describe Schools::PlacementRequestsController, type: :request do
         create :placement_request, :cancelled, school: school
       end
 
-      before { get "/schools/placement_requests/#{placement_request.id}" }
-
       it 'marks the cancellation as viewed' do
         expect(placement_request.reload.candidate_cancellation).to be_viewed
       end
@@ -170,6 +168,7 @@ describe Schools::PlacementRequestsController, type: :request do
 
     context 'cannot find the placement request' do
       subject { get(schools_placement_request_path(placement_request.id)) }
+
       let(:another_school) { create(:bookings_school) }
       let(:placement_request) { create(:bookings_placement_request, school: another_school) }
 

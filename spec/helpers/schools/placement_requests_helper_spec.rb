@@ -2,6 +2,8 @@ require "rails_helper"
 
 describe Schools::PlacementRequestsHelper, type: :helper do
   describe "#cancellation_reasons" do
+    subject { cancellation_reasons(cancellation) }
+
     let(:cancellation) do
       build(:cancellation,
         fully_booked: true,
@@ -9,7 +11,6 @@ describe Schools::PlacementRequestsHelper, type: :helper do
         reason: "Sorry!")
     end
 
-    subject { cancellation_reasons(cancellation) }
 
     it { is_expected.to have_css("ul li", count: 2) }
     it { is_expected.to have_css("li", text: "The date you requested is fully booked.") }

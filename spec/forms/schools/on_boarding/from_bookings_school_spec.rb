@@ -73,7 +73,7 @@ describe Schools::OnBoarding::FromBookingsSchool do
         it 'returns the correct attributes' do
           expect(
             subject['teacher_training'][:provides_teacher_training]
-          ).to eq true
+          ).to be true
         end
       end
 
@@ -85,7 +85,7 @@ describe Schools::OnBoarding::FromBookingsSchool do
         it 'returns the correct attributes' do
           expect(
             subject['experience_outline'][:provides_teacher_training]
-          ).to eq nil
+          ).to be_nil
         end
       end
     end

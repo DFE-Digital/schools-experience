@@ -1,10 +1,11 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::TeachingPreference, type: :model do
+  subject { described_class.new school: school }
+
   include_context 'Stubbed candidates school'
   it_behaves_like 'a registration step'
 
-  subject { described_class.new school: school }
 
   context 'attriubtes' do
     it { is_expected.to respond_to :school }
@@ -43,7 +44,7 @@ describe Candidates::Registrations::TeachingPreference, type: :model do
       end
 
       it "returns a validation error when second subject has the same value" do
-        is_expected.to_not allow_value("Biology").for :subject_second_choice
+        is_expected.not_to allow_value("Biology").for :subject_second_choice
       end
     end
   end

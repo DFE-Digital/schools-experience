@@ -106,7 +106,7 @@ end
 
 Then("every booking should contain a link to view more details") do
   within('#bookings') do
-    page.all('.booking').each do |sr|
+    page.all('.booking').each do |sr| # rubocop:disable Rails/FindEach -- Capybara collections are arrays.
       within(sr) do
         booking_id = sr['data-booking']
         expect(page).to have_link('View', href: schools_booking_path(booking_id))
@@ -117,7 +117,7 @@ end
 
 Then("every booking should contain a title starting with {string}") do |string|
   within('#bookings') do
-    page.all('.booking').each do |sr|
+    page.all('.booking').each do |sr| # rubocop:disable Rails/FindEach -- Capybara collections are arrays.
       within(sr) do
         expect(page).to have_css('h2', text: /#{string}/)
       end

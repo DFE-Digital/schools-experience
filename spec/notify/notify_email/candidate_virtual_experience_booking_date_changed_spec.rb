@@ -18,6 +18,8 @@ describe NotifyEmail::CandidateVirtualExperienceBookingDateChanged do
     new_date: '28 July 2019'
 
   describe ".from_booking" do
+    subject { described_class.from_booking(to, candidate_name, booking, cancellation_url, old_date) }
+
     before do
       stub_const(
         'Notify::API_KEY',
@@ -25,22 +27,22 @@ describe NotifyEmail::CandidateVirtualExperienceBookingDateChanged do
       )
     end
 
-    specify { expect(described_class).to respond_to(:from_booking) }
-
-    let!(:school) { create(:bookings_school, urn: 11_048) }
-    let!(:profile) { create(:bookings_profile, school: school) }
-    let(:to) { "morris.szyslak@example.com" }
-    let(:candidate_name) { "morris.szyslak" }
-    let(:old_date) { '09 October 2019' }
-
-    let!(:pr) { create(:bookings_placement_request, school: school) }
+    let!(:cancellation_url) { "https://example.com/candidates/cancel/#{booking.token}" }
     let!(:booking) do
       create :bookings_booking, :accepted, bookings_placement_request: pr
     end
+    let!(:pr) { create(:bookings_placement_request, school: school) }
+    let(:old_date) { '09 October 2019' }
+    let(:candidate_name) { "morris.szyslak" }
+    let(:to) { "morris.szyslak@example.com" }
+    let!(:profile) { create(:bookings_profile, school: school) }
+    let!(:school) { create(:bookings_school, urn: 11_048) }
 
-    let!(:cancellation_url) { "https://example.com/candidates/cancel/#{booking.token}" }
+    specify { expect(described_class).to respond_to(:from_booking) }
 
-    subject { described_class.from_booking(to, candidate_name, booking, cancellation_url, old_date) }
+
+
+
 
     it { is_expected.to be_a(described_class) }
 

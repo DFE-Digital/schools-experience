@@ -30,6 +30,8 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
   end
 
   describe '#update' do
+    subject { patch schools_booking_date_path(booking.id, params: params) }
+
     let(:new_date) { 3.weeks.from_now.to_date }
     let(:params) do
       { bookings_booking: { date: new_date.to_formatted_s(:govuk) } }
@@ -37,7 +39,6 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
 
     let(:old_date) { booking.date }
 
-    subject { patch schools_booking_date_path(booking.id, params: params) }
 
     specify 'should redirect to the booking page' do
       expect(subject).to redirect_to(schools_booking_date_path(booking))
@@ -67,9 +68,9 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
     context 'events' do
       before do
         allow(Event).to receive(:create).and_return(true)
+subject
       end
 
-      before { subject }
 
       specify 'should add an event' do
         expect(Event).to have_received(:create).with(
@@ -95,9 +96,9 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
 
         api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
         booking.gitis_contact = api.get_schools_experience_sign_up(booking.contact_uuid)
+subject
       end
 
-      before { subject }
 
       context "when it's an in school experience" do
         specify 'should send a candidate booking date changed email with the correct values' do
@@ -127,12 +128,13 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
     end
 
     context 'updating with same date' do
+      subject! { patch schools_booking_date_path(booking.id, params: params) }
+
       let(:date) { booking.date }
       let(:params) do
         { bookings_booking: { date: date.to_formatted_s(:govuk) } }
       end
 
-      subject! { patch schools_booking_date_path(booking.id, params: params) }
 
       specify("should render edit page") do
         expect(response).to have_http_status 200

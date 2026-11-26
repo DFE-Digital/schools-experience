@@ -11,11 +11,13 @@ describe Schools::OnBoarding::AccessNeedsPolicy, type: :model do
 
     context 'when has policy' do
       before { subject.has_access_needs_policy = true }
+
       it { is_expected.to validate_presence_of :url }
     end
 
     context 'when doesnt have policy' do
       before { subject.has_access_needs_policy = false }
+
       it { is_expected.not_to validate_presence_of :url }
     end
   end

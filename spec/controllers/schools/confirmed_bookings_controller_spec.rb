@@ -23,6 +23,7 @@ describe Schools::ConfirmedBookingsController, type: :request do
 
   describe '#show' do
     let(:booking) { create(:bookings_booking, :accepted, bookings_school: school) }
+
     before { get schools_booking_path(booking) }
 
     it { expect(response).to have_http_status(:success) }

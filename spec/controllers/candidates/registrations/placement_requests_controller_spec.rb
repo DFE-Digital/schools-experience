@@ -32,7 +32,7 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
   end
 
   context '#create' do
-    before :each do
+    before do
       @placement_request_count = Bookings::PlacementRequest.count
     end
 

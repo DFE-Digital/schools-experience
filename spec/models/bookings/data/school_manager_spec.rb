@@ -2,6 +2,8 @@ require 'rails_helper'
 require 'csv'
 
 describe Bookings::Data::SchoolManager do
+  subject { described_class.new(parsed_csv) }
+
   let(:urns) do
     [100_111, 100_112, 100_113]
   end
@@ -17,7 +19,6 @@ describe Bookings::Data::SchoolManager do
     CSV.parse(raw_csv, headers: true)
   end
 
-  subject { described_class.new(parsed_csv) }
 
   before do
     allow(Rails.logger).to receive(:info).and_return(true)

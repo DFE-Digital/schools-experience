@@ -129,7 +129,7 @@ RSpec.describe "candidates/schools/index", type: :view do
       let(:schools) { [build(:bookings_school)] }
 
       it "shows when more than one result" do
-        expect(rendered).to_not have_css 'div', text: 'Sorted by distance'
+        expect(rendered).not_to have_css 'div', text: 'Sorted by distance'
       end
     end
   end

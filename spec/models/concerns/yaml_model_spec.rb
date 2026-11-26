@@ -12,7 +12,7 @@ describe YamlModel, type: :model do
   let(:described_class) { YamlTestModel }
 
   describe '.data_path' do
-    it "should be assigned" do
+    it "is assigned" do
       expect(described_class.send(:data_path)).to eql \
         Rails.root.join('data', 'yaml_test_models')
     end
@@ -29,6 +29,7 @@ describe YamlModel, type: :model do
 
     describe '.find' do
       subject { described_class.find test_dob }
+
       it { is_expected.to have_attributes dob: Date.parse('1978-01-01') }
       it { is_expected.to have_attributes firstname: 'James' }
       it { is_expected.to have_attributes lastname: 'Smith' }
@@ -36,20 +37,27 @@ describe YamlModel, type: :model do
 
     describe '.ids' do
       subject { described_class.ids }
+
       it { is_expected.to eql [test_dob, second_dob] }
     end
 
     describe '#==' do
+      subject { described_class.new attrs }
+
       let(:attrs) { { dob: '19800620', firstname: 'Sarah', lastname: 'Jane' } }
       let(:other) { described_class.new attrs }
-      subject { described_class.new attrs }
+
+
       it { is_expected.to eq other }
     end
 
     describe '.all' do
+      subject { described_class.all }
+
       let(:first) { described_class.find test_dob }
       let(:second) { described_class.find second_dob }
-      subject { described_class.all }
+
+
       it { is_expected.to eq [first, second] }
     end
   end

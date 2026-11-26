@@ -1,8 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Candidates::PlacementPresenter do
-  let(:placement_request) { create(:placement_request) }
   subject { described_class.new(placement_request) }
+
+  let(:placement_request) { create(:placement_request) }
+
 
   describe '#date' do
     context 'when placement is booked' do
@@ -88,6 +90,7 @@ RSpec.describe Candidates::PlacementPresenter do
 
       context 'when the booking is cancelled by the school' do
         let(:placement_request) { create(:placement_request) }
+
         before do
           create(:bookings_booking, :accepted, :cancelled_by_school, bookings_placement_request: placement_request)
         end
@@ -100,6 +103,7 @@ RSpec.describe Candidates::PlacementPresenter do
 
       context 'when the booking is cancelled by the candidate' do
         let(:placement_request) { create(:placement_request) }
+
         before do
           create(:bookings_booking, :accepted, :cancelled_by_candidate, bookings_placement_request: placement_request)
         end

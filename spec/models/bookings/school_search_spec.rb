@@ -16,27 +16,32 @@ describe Bookings::SchoolSearch do
 
   describe 'Validation' do
     subject { described_class.new({}) }
+
     it { is_expected.to validate_length_of(:location).is_at_least(2) }
     it { is_expected.not_to be_valid }
 
     context 'with a query parameter' do
       subject { described_class.new({ query: "Somewhere" }) }
+
       it { is_expected.to be_valid }
     end
 
     context 'with a non-compliant UTF8 query string' do
       # NB: non-compliant UTF8 query strings are handled elsewhere in the codebase
       subject { described_class.new({ query: "Springfield\xa1" }) }
+
       it { is_expected.to be_valid }
     end
 
     context 'with a location hash' do
       subject { described_class.new({ location: { longitude: 1.1, latitude: 2.2 } }) }
+
       it { is_expected.to be_valid }
     end
 
     context 'with a location string' do
       subject { described_class.new({ location: "John o'Groats" }) }
+
       it { is_expected.to be_valid }
     end
   end
@@ -46,12 +51,13 @@ describe Bookings::SchoolSearch do
 
     context 'when Geocoder returns invalid results' do
       let(:expected_error) { Bookings::SchoolSearch::InvalidGeocoderResultError }
+
       before do
         allow(Geocoder).to receive(:search).and_return('something bad')
       end
 
       specify 'an error should be raised' do
-        expect { Bookings::SchoolSearch.new(query: '', location: 'France') }.to raise_error(expected_error)
+        expect { described_class.new(query: '', location: 'France') }.to raise_error(expected_error)
       end
     end
 
@@ -74,7 +80,7 @@ describe Bookings::SchoolSearch do
           )
         end
 
-        after { Bookings::SchoolSearch.new(location: 'Mumbai') }
+        after { described_class.new(location: 'Mumbai') }
 
         specify "should append the region to the Geocoder query" do
           expect(Geocoder).to receive(:search)
@@ -114,17 +120,19 @@ describe Bookings::SchoolSearch do
       end
 
       context 'When no conditions are supplied' do
-        subject { Bookings::SchoolSearch.new(query: '', location: '').results }
+        subject { described_class.new(query: '', location: '').results }
+
         specify 'results should include no schools' do
           expect(subject.count).to be_zero
         end
       end
 
       context 'Only enabled schools should be returned' do
+        subject { described_class.new(location: 'Manchester').results }
+
         let!(:enabled_school) { create(:bookings_school, :onboarded, coordinates: point_in_manchester) }
         let!(:disabled_school) { create(:bookings_school, :disabled, coordinates: point_in_manchester) }
 
-        subject { Bookings::SchoolSearch.new(location: 'Manchester').results }
 
         specify 'should return enabled schools' do
           expect(subject).to include(enabled_school)
@@ -140,7 +148,7 @@ describe Bookings::SchoolSearch do
 
         context 'When text and latitude and longitude are supplied' do
           subject do
-            Bookings::SchoolSearch.new(query: 'Springfield', location: {
+            described_class.new(query: 'Springfield', location: {
               latitude: coords.latitude, longitude: coords.longitude
             }).results
           end
@@ -156,7 +164,7 @@ describe Bookings::SchoolSearch do
 
         context 'When only lat and lon are supplied' do
           subject do
-            Bookings::SchoolSearch.new(
+            described_class.new(
               query: '',
               location: { latitude: coords.latitude, longitude: coords.longitude }
             ).results
@@ -177,12 +185,12 @@ describe Bookings::SchoolSearch do
 
         context 'When only latitude is supplied' do
           subject do
-            Bookings::SchoolSearch.new(query: '', location: {
+            described_class.new(query: '', location: {
               latitude: coords.latitude
             })
           end
 
-          it("should raise error") do
+          it("raises error") do
             expect {
               subject.results
             }.to raise_exception(Bookings::SchoolSearch::InvalidCoordinatesError)
@@ -191,12 +199,12 @@ describe Bookings::SchoolSearch do
 
         context 'When only longitude is supplied' do
           subject do
-            Bookings::SchoolSearch.new(query: '', location: {
+            described_class.new(query: '', location: {
               longitude: coords.longitude
             })
           end
 
-          it("should raise error") do
+          it("raises error") do
             expect {
               subject.results
             }.to raise_exception(Bookings::SchoolSearch::InvalidCoordinatesError)
@@ -211,7 +219,7 @@ describe Bookings::SchoolSearch do
           end
 
           context 'When text and location are supplied' do
-            subject { Bookings::SchoolSearch.new(query: 'Springfield', location: 'Manchester').results }
+            subject { described_class.new(query: 'Springfield', location: 'Manchester').results }
 
             specify 'results should include matching records' do
               expect(subject).to include(matching_school)
@@ -223,7 +231,7 @@ describe Bookings::SchoolSearch do
           end
 
           context 'When only a location is supplied' do
-            subject { Bookings::SchoolSearch.new(query: '', location: 'Manchester').results }
+            subject { described_class.new(query: '', location: 'Manchester').results }
 
             let!(:matching_school) do
               create(:bookings_school, :onboarded, name: "Springfield Primary School")
@@ -241,11 +249,12 @@ describe Bookings::SchoolSearch do
 
         context 'When Geocoder finds no location' do
           context 'When the query does not match a school' do
+            subject { described_class.new(location: 'Chippewa, Michigan').results }
+
             before do
               allow(Geocoder).to receive(:search).and_return([])
             end
 
-            subject { Bookings::SchoolSearch.new(location: 'Chippewa, Michigan').results }
 
             specify 'results should include all schools' do
               expect(subject.size).to be_zero
@@ -255,11 +264,12 @@ describe Bookings::SchoolSearch do
 
         context 'When Geocoder returns an invalid location' do
           context 'When the query matches a school' do
+            subject { described_class.new(location: 'Madrid') }
+
             before do
               allow(Geocoder).to receive(:search).and_return("ABC123")
             end
 
-            subject { Bookings::SchoolSearch.new(location: 'Madrid') }
 
             specify 'should fail with a InvalidGeocoderResultError' do
               expect { subject.results }.to raise_error(Bookings::SchoolSearch::InvalidGeocoderResultError)
@@ -281,12 +291,13 @@ describe Bookings::SchoolSearch do
         let!(:dbs_notrequired) { create(:bookings_profile, dbs_policy_conditions: 'notrequired') }
 
         context 'Filtering on subjects' do
+          subject { described_class.new(query: '', location: coords_in_manchester, subjects: maths.id).results }
+
           before do
             matching_school.subjects << maths
             non_matching_school.subjects << physics
           end
 
-          subject { Bookings::SchoolSearch.new(query: '', location: coords_in_manchester, subjects: maths.id).results }
 
           specify 'should return matching results' do
             expect(subject).to include(matching_school)
@@ -298,12 +309,13 @@ describe Bookings::SchoolSearch do
         end
 
         context 'Filtering on phases' do
+          subject { described_class.new(query: '', location: coords_in_manchester, phases: college.id).results }
+
           before do
             matching_school.phases << college
             non_matching_school.phases << secondary
           end
 
-          subject { Bookings::SchoolSearch.new(query: '', location: coords_in_manchester, phases: college.id).results }
 
           specify 'should return matching results' do
             expect(subject).to include(matching_school)
@@ -315,7 +327,7 @@ describe Bookings::SchoolSearch do
         end
 
         context 'Filtering on fees' do
-          subject { Bookings::SchoolSearch.new(query: '', location: coords_in_manchester, max_fee: 20).results }
+          subject { described_class.new(query: '', location: coords_in_manchester, max_fee: 20).results }
 
           specify 'should return matching results' do
             expect(subject).to include(matching_school)
@@ -327,6 +339,8 @@ describe Bookings::SchoolSearch do
         end
 
         context 'Filtering on dbs' do
+          subject { described_class.new(query: '', location: coords_in_manchester, dbs_policies: [2]).results }
+
           let!(:another_matching_school) do
             create(
               :bookings_school,
@@ -342,7 +356,6 @@ describe Bookings::SchoolSearch do
             non_matching_school.profile = dbs_required
           end
 
-          subject { Bookings::SchoolSearch.new(query: '', location: coords_in_manchester, dbs_policies: [2]).results }
 
           specify 'should return both schools requiring DBS for in school or not requiring DBS at all' do
             expect(subject).to include(matching_school, another_matching_school)
@@ -354,11 +367,12 @@ describe Bookings::SchoolSearch do
         end
 
         context 'Filtering on disability confident' do
+          subject { described_class.new(query: '', location: coords_in_manchester, disability_confident: '1').results }
+
           before do
             create(:bookings_profile, :without_supports_access_needs, school: non_matching_school)
           end
 
-          subject { Bookings::SchoolSearch.new(query: '', location: coords_in_manchester, disability_confident: '1').results }
 
           specify 'should return matching results' do
             expect(subject).to include(matching_school)
@@ -370,7 +384,7 @@ describe Bookings::SchoolSearch do
         end
 
         context 'Filtering on parking' do
-          subject { Bookings::SchoolSearch.new(query: '', location: coords_in_manchester, parking: '1').results }
+          subject { described_class.new(query: '', location: coords_in_manchester, parking: '1').results }
 
           specify 'should return matching results' do
             matching_school.profile.update(parking_provided: true)
@@ -385,20 +399,8 @@ describe Bookings::SchoolSearch do
       end
 
       context 'Chaining' do
-        let(:secondary) { create(:bookings_phase, name: "Secondary") }
-        let(:physics) { Bookings::Subject.find_by! name: "Physics" }
-
-        before do
-          allow(Geocoder).to receive(:search).and_return(geocoder_manchester_search_result)
-        end
-
-        before do
-          matching_school.phases << secondary
-          matching_school.subjects << physics
-        end
-
         subject do
-          Bookings::SchoolSearch.new(
+          described_class.new(
             query: 'Springf',
             location: 'Cheetham Hill',
             subjects: physics,
@@ -406,6 +408,18 @@ describe Bookings::SchoolSearch do
             max_fee: 20
           ).results
         end
+
+        let(:secondary) { create(:bookings_phase, name: "Secondary") }
+        let(:physics) { Bookings::Subject.find_by! name: "Physics" }
+
+        before do
+          allow(Geocoder).to receive(:search).and_return(geocoder_manchester_search_result)
+matching_school.phases << secondary
+          matching_school.subjects << physics
+
+        end
+
+
 
         specify 'should allow all search options and filters to work in conjunction' do
           expect(subject).to include(matching_school)
@@ -415,6 +429,10 @@ describe Bookings::SchoolSearch do
 
     context 'Ordering' do
       context 'Geographic ordering' do
+        subject do
+          described_class.new(query: '', location: 'Cheetham Hill', radius: 500).results
+        end
+
         let(:point_in_manchester) { Bookings::School::GEOFACTORY.point(-2.241, 53.481) }
         let(:point_in_leeds) { Bookings::School::GEOFACTORY.point(-1.548, 53.794) }
         let(:point_in_glasgow) { Bookings::School::GEOFACTORY.point(-4.219, 55.859) }
@@ -429,9 +447,6 @@ describe Bookings::SchoolSearch do
           allow(Geocoder).to receive(:search).and_return(geocoder_manchester_search_result)
         end
 
-        subject do
-          Bookings::SchoolSearch.new(query: '', location: 'Cheetham Hill', radius: 500).results
-        end
 
         specify 'schools should be ordered by distance, near to far' do
           expect(subject.map(&:name)).to eql([mcr_school, leeds_school, york_school, glasgow_school].map(&:name))
@@ -445,7 +460,7 @@ describe Bookings::SchoolSearch do
       let(:max_fee) { 20 }
 
       after do
-        Bookings::SchoolSearch.new(
+        described_class.new(
           location: 'Bury',
           phases: phases,
           subjects: subjects,
@@ -595,15 +610,16 @@ describe Bookings::SchoolSearch do
     end
 
     specify 'total count should match the number of matching schools' do
-      expect(Bookings::SchoolSearch.new(location: "Bury", radius: 50).total_count).to eql(matching_schools.length)
+      expect(described_class.new(location: "Bury", radius: 50).total_count).to eql(matching_schools.length)
     end
 
     context 'Saving results' do
+      subject { instance.tap(&:total_count) }
+
       let(:location) { "Bury" }
       let(:query) { nil }
-      let(:instance) { Bookings::SchoolSearch.new(location: location, query: query, radius: 50) }
+      let(:instance) { described_class.new(location: location, query: query, radius: 50) }
 
-      subject { instance.tap(&:total_count) }
 
       specify 'should save the record' do
         expect(subject).to be_persisted
@@ -630,18 +646,20 @@ describe Bookings::SchoolSearch do
       end
 
       context 'filtering' do
-        let(:phases) { [1, 2, 3] }
-        let(:subjects) { [2, 3, 4] }
-        let(:max_fee) { 30 }
-        let(:location) { "Birmingham" }
         subject do
-          Bookings::SchoolSearch.new(
+          described_class.new(
             location: location,
             phases: phases,
             subjects: subjects,
             max_fee: max_fee
           )
         end
+
+        let(:phases) { [1, 2, 3] }
+        let(:subjects) { [2, 3, 4] }
+        let(:max_fee) { 30 }
+        let(:location) { "Birmingham" }
+
 
         specify 'should record all search parameters' do
           expect(subject.phases).to eql(phases)
@@ -654,7 +672,7 @@ describe Bookings::SchoolSearch do
   end
 
   describe "#country" do
-    subject { Bookings::SchoolSearch.new(location: "Test") }
+    subject { described_class.new(location: "Test") }
 
     let(:scotland_search_result) do
       [
@@ -698,23 +716,27 @@ describe Bookings::SchoolSearch do
   end
 
   describe '#has_coordinates?' do
-    subject { Bookings::SchoolSearch.new(location: "Bury") }
+    subject { described_class.new(location: "Bury") }
 
     context 'when coordinates are present' do
       before { allow(subject).to receive(:coordinates).and_return(point_in_leeds) }
+
       it { is_expected.to have_coordinates }
     end
 
     context 'when coordinates are absent' do
       before { allow(subject).to receive(:coordinates).and_return([]) }
+
       it { is_expected.not_to have_coordinates }
     end
   end
 
   context 'whitelisted_urns' do
+    subject { school_search }
+
     let(:whitelist) { '1' }
     let(:school_search) { described_class.new(location: "Bury", radius: 10) }
-    subject { school_search }
+
 
     before do
       allow(ENV).to receive(:[]).and_call_original
@@ -726,10 +748,13 @@ describe Bookings::SchoolSearch do
     it { is_expected.to have_attributes radius: 1000 }
 
     context 'searching' do
+      subject { school_search.results.map(&:urn) }
+
       let(:schools) { create_list :bookings_school, 3, :onboarded }
       let(:school_urns) { schools.map(&:urn) }
       let(:whitelist) { school_urns.slice(0, 2).join(' ') }
-      subject { school_search.results.map(&:urn) }
+
+
       it { is_expected.to include school_urns[0] }
       it { is_expected.to include school_urns[1] }
       it { is_expected.not_to include school_urns[2] }
@@ -737,6 +762,7 @@ describe Bookings::SchoolSearch do
 
     context 'without whitelist' do
       let(:whitelist) { '' }
+
       it { is_expected.to have_attributes whitelisted_urns?: false }
       it { is_expected.to have_attributes whitelisted_urns: [] }
       it { is_expected.to have_attributes radius: 10 }

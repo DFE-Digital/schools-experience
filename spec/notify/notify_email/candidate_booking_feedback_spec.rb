@@ -8,6 +8,8 @@ describe NotifyEmail::CandidateBookingFeedbackRequest do
     feedback_url: "https://example.com/candiates/bookings/abc-123/feedback/new"
 
   describe ".from_booking" do
+    subject { described_class.from_booking(booking) }
+
     let(:booking) { create(:bookings_booking) }
     let(:candidate) { booking.bookings_placement_request.candidate }
 
@@ -16,7 +18,6 @@ describe NotifyEmail::CandidateBookingFeedbackRequest do
       candidate.gitis_uuid = candidate.gitis_contact.candidate_id
     end
 
-    subject { described_class.from_booking(booking) }
 
     context "correctly assigning attributes" do
       it "candidate_name is correctly-assigned" do

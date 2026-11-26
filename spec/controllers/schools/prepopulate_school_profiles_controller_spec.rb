@@ -6,6 +6,8 @@ describe Schools::PrepopulateSchoolProfilesController, type: :request do
   include_context "stub role check api"
 
   describe "#create" do
+    subject { post(schools_prepopulate_school_profiles_path, params: params) }
+
     before do
       allow_any_instance_of(Schools::DFESignInAPI::RoleCheckedOrganisations).to \
         receive(:organisation_uuid_pairs).and_return \
@@ -16,7 +18,6 @@ describe Schools::PrepopulateSchoolProfilesController, type: :request do
     let(:prepopulate_from_school) { create(:bookings_school, :with_school_profile, :onboarded) }
     let(:params) { { schools_prepopulate_school_profile: { prepopulate_from_urn: prepopulate_from_school.urn } } }
 
-    subject { post(schools_prepopulate_school_profiles_path, params: params) }
 
     it "prepopulates the school profile" do
       is_expected.to redirect_to(schools_on_boarding_progress_path)

@@ -1,8 +1,10 @@
 require 'rails_helper'
 
 describe Bookings::Gitis::MissingContact do
-  let(:uuid) { SecureRandom.uuid }
   subject { described_class.new uuid }
+
+  let(:uuid) { SecureRandom.uuid }
+
 
   it { is_expected.to have_attributes contactid: uuid, id: uuid }
   it { is_expected.to have_attributes firstname: 'Unavailable' }

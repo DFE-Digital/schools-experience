@@ -14,21 +14,25 @@ describe Bookings::Gitis::ContactFetcher do
 
     context 'correct merged' do
       let(:contact) { build(:api_schools_experience_sign_up_with_name, :merged) }
+
       it { is_expected.to be true }
     end
 
     context 'correct unmerged' do
       let(:contact) { build(:api_schools_experience_sign_up_with_name) }
+
       it { is_expected.to be false }
     end
 
     context 'merged without master' do
       let(:contact) { build(:api_schools_experience_sign_up_with_name, :merged, master_id: nil) }
+
       it { expect { subject }.to raise_exception described_class::InconsistentContactState }
     end
 
     context 'master but not merged' do
       let(:contact) { build(:api_schools_experience_sign_up_with_name, :merged, merged: false) }
+
       it { expect { subject }.to raise_exception described_class::InconsistentContactState }
     end
   end
@@ -76,8 +80,10 @@ describe Bookings::Gitis::ContactFetcher do
     end
 
     context 'for single record' do
-      let(:candidate) { create :candidate, gitis_uuid: merged.candidate_id }
       subject { fetcher.assign_to_model candidate }
+
+      let(:candidate) { create :candidate, gitis_uuid: merged.candidate_id }
+
 
       before do
         allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
@@ -90,28 +96,33 @@ describe Bookings::Gitis::ContactFetcher do
           receive(:get_schools_experience_sign_up).with(chained.candidate_id) { chained }
       end
 
-      it 'should locate the master contact record' do
+      it 'locates the master contact record' do
         is_expected.to have_attributes gitis_contact: first
       end
-      it 'should not update the gitis UUID to match the master contact record' do
+
+      it 'does not update the gitis UUID to match the master contact record' do
         is_expected.to have_attributes gitis_uuid: merged.candidate_id
       end
+
       it { is_expected.to have_attributes changes: {} }
 
       context 'with chained records' do
         let(:candidate) { create :candidate, gitis_uuid: chained.candidate_id }
 
-        it 'should locate the master contact record' do
+        it 'locates the master contact record' do
           is_expected.to have_attributes gitis_contact: first
         end
-        it 'should not update the gitis UUID to match the master contact record' do
+
+        it 'does not update the gitis UUID to match the master contact record' do
           is_expected.to have_attributes gitis_uuid: chained.candidate_id
         end
+
         it { is_expected.to have_attributes changes: {} }
       end
 
       context 'with max chained records' do
         let(:fourth) { build :api_schools_experience_sign_up_with_name, :merged, master_id: chained.candidate_id }
+        let(:candidate) { create :candidate, gitis_uuid: sixth.candidate_id }
         let(:fifth) { build :api_schools_experience_sign_up_with_name, :merged, master_id: fourth.candidate_id }
         let(:sixth) { build :api_schools_experience_sign_up_with_name, :merged, master_id: fifth.candidate_id }
 
@@ -124,14 +135,15 @@ describe Bookings::Gitis::ContactFetcher do
             receive(:get_schools_experience_sign_up).with(sixth.candidate_id) { sixth }
         end
 
-        let(:candidate) { create :candidate, gitis_uuid: sixth.candidate_id }
 
-        it 'should locate the master contact record' do
+        it 'locates the master contact record' do
           is_expected.to have_attributes gitis_contact: merged
         end
-        it 'should not update the gitis UUID to match the master contact record' do
+
+        it 'does not update the gitis UUID to match the master contact record' do
           is_expected.to have_attributes gitis_uuid: sixth.candidate_id
         end
+
         it { is_expected.to have_attributes changes: {} }
       end
     end
@@ -160,12 +172,12 @@ describe Bookings::Gitis::ContactFetcher do
       context 'assigning multiple records' do
         subject { fetcher.assign_to_models [candidate, second_candidate] }
 
-        it "will update contact ids" do
+        it "updates contact ids" do
           expect(subject.map(&:reload).map(&:gitis_uuid)).to \
             eq [chained.candidate_id, second.candidate_id]
         end
 
-        it "will return expected contacts" do
+        it "returns expected contacts" do
           expect(subject.map(&:gitis_contact)).to eq [first, second]
         end
       end
