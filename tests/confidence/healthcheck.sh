@@ -55,15 +55,27 @@ then
 else
     echo "HTTP Status is Healthy"
 
-    json=$(curl ${AUTHORITY}  -s -X GET ${FULL_URL})
+    # Old pods can still answer for a short time after a rollout, so retry until the new SHA is served
+    count=0
+    while true
+    do
+        json=$(curl ${AUTHORITY}  -s -X GET ${FULL_URL})
 
-    sha=$( echo ${json} | jq -r .app_sha)
-    if [ "${sha}" != "sha-${APP_SHA}"  ]
-    then
-        echo "APP SHA (${sha}) is not sha-${APP_SHA}"
-        rval=1
-    else
-        echo "APP SHA is correct"
-    fi
+        sha=$( echo ${json} | jq -r .app_sha)
+        if [ "${sha}" = "sha-${APP_SHA}"  ]
+        then
+            echo "APP SHA is correct"
+            break
+        elif [ ${count} -eq 10 ]
+        then
+            echo "APP SHA (${sha}) is not sha-${APP_SHA}"
+            rval=1
+            break
+        else
+            ((count++))
+            echo "APP SHA (${sha}) is not sha-${APP_SHA} yet, attempt ${count} of 10"
+            sleep 10
+        fi
+    done
 fi
 exit ${rval}
