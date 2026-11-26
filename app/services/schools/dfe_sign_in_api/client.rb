@@ -12,7 +12,7 @@ module Schools
         max: 2,
         methods: %i[get],
         exceptions:
-          ::Faraday::Request::Retry::DEFAULT_EXCEPTIONS + RETRY_EXCEPTIONS
+          ::Faraday::Retry::Middleware::DEFAULT_EXCEPTIONS + RETRY_EXCEPTIONS
       }.freeze
 
       def self.enabled?
@@ -50,9 +50,9 @@ module Schools
 
       def faraday
         Faraday.new do |f|
-          f.use Faraday::Response::RaiseError
-          f.adapter Faraday.default_adapter
           f.request :retry, RETRY_OPTIONS
+          f.response :raise_error
+          f.adapter Faraday.default_adapter
         end
       end
 

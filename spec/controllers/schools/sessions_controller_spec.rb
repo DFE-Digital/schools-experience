@@ -31,13 +31,12 @@ describe Schools::SessionsController, type: :request do
             'Accept' => '*/*',
             'Authorization' => 'Basic c2UtdGVzdDphYmMxMjM=',
             'Content-Type' => 'application/x-www-form-urlencoded',
-            'Date' => /.*/,
             'User-Agent' => /Rack::OAuth2/
           }
         )
         .to_return(
           status: 200,
-          headers: {},
+          headers: { 'Content-Type' => 'application/json' },
           body: {
             token_type: 'Bearer',
             access_token: access_token
@@ -49,13 +48,12 @@ describe Schools::SessionsController, type: :request do
           headers: {
             'Accept' => '*/*',
             'Authorization' => "Bearer #{access_token}",
-            'Date' => /.*/,
             'User-Agent' => /OpenIDConnect::AccessToken/
           }
         )
         .to_return(
           status: 200,
-          headers: {},
+          headers: { 'Content-Type' => 'application/json' },
           body: {
             organisation: {
               urn: urn,

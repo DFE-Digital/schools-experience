@@ -33,7 +33,7 @@ module Schools
 
       def faraday
         Faraday.new(request: { timeout: TIMEOUT_SECS, open_timeout: TIMEOUT_SECS }) do |f|
-          f.use Faraday::Response::RaiseError
+          f.response :raise_error
           f.adapter Faraday.default_adapter
         end
       end
