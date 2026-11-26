@@ -58,7 +58,6 @@ describe Schools::PlacementDates::PlacementDetail, type: :model do
         let(:school) { create(:bookings_school, :primary, :secondary) }
         let(:placement_date) { create :bookings_placement_date, bookings_school: school }
 
-
         it { is_expected.to allow_values(true, false).for :supports_subjects }
         it { is_expected.not_to allow_value(nil).for :supports_subjects }
       end
@@ -106,7 +105,6 @@ describe Schools::PlacementDates::PlacementDetail, type: :model do
                virtual: false,
                supports_subjects: false
       end
-
 
       it 'updates the placement_date subjects to the selected_subjects' do
         expect(placement_date.start_availability_offset).to eq 100

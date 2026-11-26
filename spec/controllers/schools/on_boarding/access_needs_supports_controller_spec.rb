@@ -25,10 +25,8 @@ describe Schools::OnBoarding::AccessNeedsSupportsController, type: :request do
         :with_key_stage_list,
         :with_description,
         :with_candidate_experience_schedule
-get '/schools/on_boarding/access_needs_support/new'
-
+      get '/schools/on_boarding/access_needs_support/new'
     end
-
 
     it 'assigns the model' do
       expect(assigns(:access_needs_support)).to \

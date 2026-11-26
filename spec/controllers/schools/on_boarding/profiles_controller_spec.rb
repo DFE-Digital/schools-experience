@@ -8,10 +8,8 @@ describe Schools::OnBoarding::ProfilesController, type: :request do
   context 'with an incomplete profile' do
     before do
       FactoryBot.create :school_profile
-get '/schools/on_boarding/profile'
-
+      get '/schools/on_boarding/profile'
     end
-
 
     it 'redirects to the first incompleted step' do
       expect(response).to \

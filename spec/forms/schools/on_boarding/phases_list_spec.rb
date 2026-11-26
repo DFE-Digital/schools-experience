@@ -104,7 +104,6 @@ describe Schools::OnBoarding::PhasesList, type: :model do
       FactoryBot.create :bookings_school, :with_primary_key_stage_info
     end
 
-
     it 'sets the attributes from the bookings_school' do
       expect(subject.primary?).to be true
       expect(subject.secondary?).to be false

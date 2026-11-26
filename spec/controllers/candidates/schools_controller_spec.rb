@@ -113,7 +113,6 @@ RSpec.describe Candidates::SchoolsController, type: :request do
     let(:school) { create(:bookings_school) }
     let(:req) { get candidates_school_path(school) }
 
-
     it "returns http success" do
       expect(response).to have_http_status(:success)
     end
@@ -186,7 +185,6 @@ RSpec.describe Candidates::SchoolsController, type: :request do
 
         let(:whitelist) { school.urn.to_s }
 
-
         it { is_expected.to have_rendered 'show' }
       end
 
@@ -197,7 +195,6 @@ RSpec.describe Candidates::SchoolsController, type: :request do
         end
 
         let(:whitelist) { '-1' }
-
 
         it { is_expected.to redirect_to candidates_root_path }
       end

@@ -19,7 +19,6 @@ describe Bookings::Data::SchoolManager do
     CSV.parse(raw_csv, headers: true)
   end
 
-
   before do
     allow(Rails.logger).to receive(:info).and_return(true)
   end

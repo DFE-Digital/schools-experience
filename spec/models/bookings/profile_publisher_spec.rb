@@ -9,7 +9,6 @@ RSpec.describe Bookings::ProfilePublisher, type: :model do
 
       let(:completed_profile) { create(:school_profile, :completed) }
 
-
       it { is_expected.to be_a described_class }
     end
 
@@ -45,11 +44,12 @@ RSpec.describe Bookings::ProfilePublisher, type: :model do
     end
 
     context "with a school that has Profile" do
-      subject { initial_profile; described_class.new(school, school_profile).update! }
+      subject do
+        initial_profile
+        described_class.new(school, school_profile).update!
+      end
 
       let(:initial_profile) { create(:bookings_profile, school: school) }
-
-
 
       it { is_expected.to be_a Bookings::Profile }
       it { is_expected.to be_persisted }

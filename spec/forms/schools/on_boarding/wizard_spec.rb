@@ -304,7 +304,6 @@ describe Schools::OnBoarding::Wizard do
 
     let(:step) { :dbs_requirement }
 
-
     it { is_expected.to be(:not_started) }
 
     context "when the step has been completed" do

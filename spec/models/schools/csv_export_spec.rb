@@ -44,7 +44,6 @@ RSpec.describe Schools::CsvExport do
 
       include_context "when the API signs up for requests"
 
-
       let(:first) { create(:bookings_booking).bookings_placement_request }
       let(:school) { first.school }
       let(:second) { create :bookings_placement_request, school: school }

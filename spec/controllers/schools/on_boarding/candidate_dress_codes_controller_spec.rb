@@ -25,10 +25,8 @@ describe Schools::OnBoarding::CandidateDressCodesController, type: :request do
         :with_only_early_years_phase,
         :with_key_stage_list,
         :with_description
-get new_schools_on_boarding_candidate_dress_code_path
-
+      get new_schools_on_boarding_candidate_dress_code_path
     end
-
 
     it 'assigns the model' do
       expect(assigns(:candidate_dress_code)).to \

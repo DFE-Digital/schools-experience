@@ -5,7 +5,6 @@ describe Bookings::Gitis::MissingContact do
 
   let(:uuid) { SecureRandom.uuid }
 
-
   it { is_expected.to have_attributes contactid: uuid, id: uuid }
   it { is_expected.to have_attributes firstname: 'Unavailable' }
   it { is_expected.to have_attributes lastname: 'Unavailable' }

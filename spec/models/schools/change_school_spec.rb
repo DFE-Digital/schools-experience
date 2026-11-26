@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe Schools::ChangeSchool, type: :model do
-
   subject { change_school }
 
   let(:first_school) { create(:bookings_school, name: "B school") }
@@ -29,7 +28,6 @@ describe Schools::ChangeSchool, type: :model do
     )
     allow(Schools::DFESignInAPI::Roles).to receive(:new).and_return(roles)
   end
-
 
   describe 'attributes' do
     it { is_expected.to respond_to :change_to_urn }
@@ -112,7 +110,6 @@ describe Schools::ChangeSchool, type: :model do
           pr.booking.update_columns date: Date.yesterday
         end
       end
-
 
       it "includes count only for requested school" do
         expect(subject).to be 2

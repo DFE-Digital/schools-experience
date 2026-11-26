@@ -59,7 +59,6 @@ RSpec.describe Bookings::Subject, type: :model do
       let!(:visible) { create(:bookings_subject, hidden: false) }
       let!(:hidden) { create(:bookings_subject, hidden: true) }
 
-
       it 'includes non-hidden subjects' do
         expect(subject).to include(visible)
       end
@@ -74,7 +73,6 @@ RSpec.describe Bookings::Subject, type: :model do
 
       let!(:secondary) { create(:bookings_subject, secondary_subject: true) }
       let!(:primary) { create(:bookings_subject, secondary_subject: false) }
-
 
       it 'includes secondary subjects' do
         expect(subject).to include(secondary)

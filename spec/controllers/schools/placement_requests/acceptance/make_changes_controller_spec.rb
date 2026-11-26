@@ -47,7 +47,6 @@ describe Schools::PlacementRequests::Acceptance::MakeChangesController, type: :r
         }
       end
 
-
       specify 'should add supplied params to a booking' do
         expect(subject.date).to eql(future_date)
         expect(subject.bookings_subject_id).to eql(bookings_subject.id)

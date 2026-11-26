@@ -41,7 +41,6 @@ RSpec.describe Candidates::SessionToken, type: :model do
 
     before { create(:candidate_session_token, :expired) }
 
-
     it "onlies return the valid token" do
       expect(subject).to eq([valid])
     end
@@ -52,9 +51,10 @@ RSpec.describe Candidates::SessionToken, type: :model do
 
     let!(:valid) { create(:candidate_session_token) }
 
-    before { create(:candidate_session_token, :expired)
-create(:candidate_session_token, created_at: 10.days.ago)  }
-
+    before do
+      create(:candidate_session_token, :expired)
+      create(:candidate_session_token, created_at: 10.days.ago)
+    end
 
     it "onlies return the valid token" do
       expect(subject).to eq([valid])
@@ -65,7 +65,6 @@ create(:candidate_session_token, created_at: 10.days.ago)  }
     subject { candidate.session_tokens.create }
 
     let(:candidate) { create(:candidate) }
-
 
     it { is_expected.to be_persisted }
     it { is_expected.to have_attribute(:token) }

@@ -48,7 +48,6 @@ describe Schools::OnBoarding::TeacherTraining, type: :model do
         teacher_training_provider: true
     end
 
-
     it "sets provides_teacher_training" do
       expect(subject.provides_teacher_training).to be true
     end

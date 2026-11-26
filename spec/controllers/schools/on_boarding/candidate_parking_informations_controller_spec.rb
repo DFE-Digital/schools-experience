@@ -26,10 +26,8 @@ describe Schools::OnBoarding::CandidateParkingInformationsController, type: :req
         :with_key_stage_list,
         :with_description,
         :with_candidate_dress_code
-get new_schools_on_boarding_candidate_parking_information_path
-
+      get new_schools_on_boarding_candidate_parking_information_path
     end
-
 
     it 'assigns the model' do
       expect(assigns(:candidate_parking_information)).to \

@@ -56,8 +56,10 @@ describe Schools::OnBoarding::DbsRequirement, type: :model do
       it { is_expected.to validate_presence_of :dbs_policy_details }
 
       context 'when counting words' do
-        before { subject.dbs_policy_details = too_long_text
-subject.validate  }
+        before do
+          subject.dbs_policy_details = too_long_text
+          subject.validate
+        end
 
         it "valdiates word count is no more than 50 words" do
           expect(subject.errors[:dbs_policy_details]).to \
@@ -72,8 +74,10 @@ subject.validate  }
       it { is_expected.to validate_presence_of :dbs_policy_details_inschool }
 
       context 'when counting words' do
-        before { subject.dbs_policy_details_inschool = too_long_text
-subject.validate  }
+        before do
+          subject.dbs_policy_details_inschool = too_long_text
+          subject.validate
+        end
 
         it "valdiates word count is no more than 50 words" do
           expect(subject.errors[:dbs_policy_details_inschool]).to \
@@ -86,8 +90,10 @@ subject.validate  }
       before { subject.dbs_policy_conditions = 'notrequired' }
 
       context 'when counting words' do
-        before { subject.no_dbs_policy_details = too_long_text
-subject.validate  }
+        before do
+          subject.no_dbs_policy_details = too_long_text
+          subject.validate
+        end
 
         it "valdiates word count is no more than 50 words" do
           expect(subject.errors[:no_dbs_policy_details]).to \

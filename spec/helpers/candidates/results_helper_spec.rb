@@ -13,7 +13,6 @@ describe Candidates::ResultsHelper, type: :helper do
   end
   let(:search) { Candidates::SchoolSearch.new(location: 'Manchester') }
 
-
   before do
     allow(Geocoder).to receive(:search).and_return(geocoder_manchester_search_result)
   end

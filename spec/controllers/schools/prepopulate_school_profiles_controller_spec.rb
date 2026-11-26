@@ -22,7 +22,6 @@ describe Schools::PrepopulateSchoolProfilesController, type: :request do
     let(:prepopulate_from_school) { create(:bookings_school, :with_school_profile, :onboarded) }
     let(:params) { { schools_prepopulate_school_profile: { prepopulate_from_urn: prepopulate_from_school.urn } } }
 
-
     it "prepopulates the school profile" do
       expect(subject).to redirect_to(schools_on_boarding_progress_path)
 

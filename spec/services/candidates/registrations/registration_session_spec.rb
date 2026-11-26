@@ -116,7 +116,6 @@ describe Candidates::Registrations::RegistrationSession do
         FactoryBot.build :registration_session, :with_education
       end
 
-
       it { is_expected.to be_a Candidates::Registrations::Education }
 
       it do
@@ -162,7 +161,6 @@ describe Candidates::Registrations::RegistrationSession do
           :registration_session, :with_teaching_preference, :with_school
       end
 
-
       it { is_expected.to be_a Candidates::Registrations::TeachingPreference }
 
       it do
@@ -201,7 +199,6 @@ describe Candidates::Registrations::RegistrationSession do
       let(:urn) { 11_048 }
 
       before { create(:bookings_school, urn: 11_048) }
-
 
       it 'raises an error' do
         expect { subject.flag_as_pending_email_confirmation! }.to \

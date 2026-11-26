@@ -11,7 +11,6 @@ shared_examples "an IP-based rate limited endpoint" do |desc, limit, period|
       request_count.times { perform_request }
     end
 
-
     context "when fewer than rate limit" do
       let(:request_count) { limit - 1 }
 

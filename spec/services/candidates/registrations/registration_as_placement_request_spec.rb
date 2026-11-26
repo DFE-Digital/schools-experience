@@ -5,7 +5,6 @@ describe Candidates::Registrations::RegistrationAsPlacementRequest do
 
   let(:urn) { 11_048 }
 
-
   pii = {
     "full_name" => 'Testy McTest',
     "email" => 'test@example.com',

@@ -36,7 +36,6 @@ describe EncryptedAttributes do
 
     let(:encrypted_attributes) { instance.encrypted_attributes }
 
-
     it { is_expected.to eq(instance.attributes) }
 
     context "when passed permitted ActionController::Parameters" do

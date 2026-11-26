@@ -9,7 +9,6 @@ RSpec.describe CloudFrontIpFilter do
       .to_return(status: 401) # will fallback to copy in Gem
   end
 
-
   let(:original) { ->(ip) { /192\.168\.1\./.match?(ip) } }
 
   describe "#call" do

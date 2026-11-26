@@ -18,7 +18,6 @@ describe LinkAndButtonHelper do
 
       let(:custom_text) { 'Proceed' }
 
-
       specify 'button should contain the provided text' do
         expect(subject).to have_css("#{tag}.govuk-button", text: custom_text)
       rescue RSpec::Expectations::ExpectationNotMetError
@@ -40,7 +39,6 @@ describe LinkAndButtonHelper do
       subject { helper.send(method, link_text, path, class: extra_classes) }
 
       let(:extra_classes) { %w[pink stripy] }
-
 
       specify 'should create a button link with extra provided classes' do
         expect(subject).to have_css("#{tag}.#{extra_classes.join('.')}")
@@ -67,7 +65,6 @@ describe LinkAndButtonHelper do
       subject { helper.send(method, path) { custom_text } }
 
       let(:custom_text) { 'Advance' }
-
 
       specify 'button should contain the text provided by the block' do
         expect(subject).to have_css("#{tag}.govuk-button", text: custom_text)

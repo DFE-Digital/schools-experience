@@ -14,7 +14,6 @@ describe Schools::OnBoarding::ExperienceOutline, type: :model do
         :with_placement_info
     end
 
-
     it "sets candidate_experience to the school's placement_info" do
       expect(subject.candidate_experience).to eq school.placement_info
     end

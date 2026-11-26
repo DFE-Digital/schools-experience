@@ -18,7 +18,6 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
 
   before { create(:bookings_school, urn: school_id) }
 
-
   describe 'GET #show' do
     include_context 'with a stubbed current registration'
 

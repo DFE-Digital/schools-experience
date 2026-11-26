@@ -71,7 +71,6 @@ describe CookiePreference, type: :model do
 
     let(:json) { { analytics: true }.to_json }
 
-
     it { is_expected.to have_attributes analytics: true }
   end
 
@@ -104,7 +103,6 @@ describe CookiePreference, type: :model do
     subject { described_class.cookies }
 
     before { allow(ENV).to receive(:[]).and_call_original }
-
 
     context "with analytics cookies" do
       it { is_expected.to include({ analytics: %w[_ga _gid ai_session ai_user] }) }

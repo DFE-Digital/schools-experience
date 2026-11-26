@@ -36,7 +36,6 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
 
       before { cancellation.save(context: :rejection) }
 
-
       it { is_expected.to include(base: ["Choose a reason for rejecting this candidate"]) }
 
       context "when there are rejection categories specified" do
@@ -73,7 +72,6 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
 
       let!(:cancellation) { create :cancellation }
 
-
       it { is_expected.not_to include cancellation }
 
       context 'when sent' do
@@ -90,7 +88,6 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
     let :placement_request do
       FactoryBot.create :placement_request, :cancelled
     end
-
 
     before do
       subject.validate
@@ -131,7 +128,6 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
     subject { placement_request.school_cancellation }
 
     let(:placement_request) { create(:placement_request, :cancelled_by_school) }
-
 
     context 'when the placement has been accepted' do
       let!(:booking) { create(:bookings_booking, bookings_placement_request: placement_request) }

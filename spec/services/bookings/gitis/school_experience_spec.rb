@@ -11,7 +11,6 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
     let(:model) { create(:placement_request, :booked) }
     let(:status) { :requested }
 
-
     context "with valid arguments" do
       it "does not throw error" do
         expect { subject }.not_to raise_error
@@ -58,7 +57,6 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
     expect { described_class.new(any_args) }.to raise_exception NoMethodError
   end
 
-
   shared_examples "a successful API post" do
     let(:schools_experience_api) { instance_double(GetIntoTeachingApiClient::SchoolsExperienceApi) }
     let(:lookup_items_api) { instance_double(GetIntoTeachingApiClient::LookupItemsApi) }
@@ -72,7 +70,6 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
         .to receive(:get_teaching_subjects)
         .and_return([build(:api_teaching_subject, id: subject_id, value: subject_name)])
       allow(schools_experience_api).to receive(:add_school_experience)
-
     end
 
     describe "#write_to_gitis_contact" do
@@ -98,7 +95,6 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
         school_name: placement_request.school.name
       )
     end
-
 
     context "with flexible dates" do
       it_behaves_like "a successful API post"
@@ -133,7 +129,6 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
         date_of_school_experience: booking.date
       )
     end
-
 
     context "without existing subject" do
       it_behaves_like "a successful API post"

@@ -27,8 +27,6 @@ describe 'schools/change_schools/show', type: :view do
       render
     end
 
-
-
     specify 'there should be one radio button per school' do
       expect(rendered).to have_css("input[type='radio']", count: all_schools.size)
     end
@@ -64,7 +62,6 @@ describe 'schools/change_schools/show', type: :view do
       render
     end
 
-
     specify 'should inform the user that changing is disabled' do
       expect(rendered).to match(/Changing school is not enabled/)
     end
@@ -81,7 +78,6 @@ describe 'schools/change_schools/show', type: :view do
       assign :schools, all_schools
       assign :change_school, change_school
 
-
       allow(Schools::ChangeSchool).to \
         receive_messages(allow_school_change_in_app?: true, request_approval_url: 'https://dfesignin.url')
 
@@ -90,7 +86,6 @@ describe 'schools/change_schools/show', type: :view do
       end
       render
     end
-
 
     specify 'there should be an request access option' do
       expect(rendered).to have_css("input[type='radio'][value='request access']")

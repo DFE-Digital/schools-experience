@@ -12,7 +12,6 @@ describe EmailFormatValidator do
 
   before { instance.valid? }
 
-
   context 'when invalid addresses' do
     [
       'test.com', 'test@@test.com', 'FFFF', 'test@test', 'test@test.'

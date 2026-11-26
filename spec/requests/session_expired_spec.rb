@@ -17,7 +17,6 @@ describe "Expired Session", type: :request do
       end
     end
 
-
     it { is_expected.to have_http_status(:success) }
     it { expect(perform_request.body).to include("Session expired") }
 

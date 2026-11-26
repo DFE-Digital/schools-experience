@@ -11,16 +11,14 @@ describe Schools::SessionsController, type: :request do
         allow(Schools::ChangeSchool).to receive(:allow_school_change_in_app?).and_return(true)
       end
 
-
       it { expect(subject).to redirect_to(schools_change_path) }
     end
 
     context 'when in-app school changing is disabled' do
       before do
         allow(Schools::ChangeSchool).to receive(:allow_school_change_in_app?).and_return(false)
-get new_schools_switch_path
+        get new_schools_switch_path
       end
-
 
       specify 'should clear the user from the session' do
         expect(session[:current_user]).to be_nil

@@ -36,7 +36,6 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
 
     let(:school) { create(:bookings_school, subjects: subjects) }
 
-
     context "when there are no subjects" do
       let(:subjects) { [] }
 
@@ -145,7 +144,6 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
       )
     end
 
-
     it { is_expected.to eq("First, Second, Third") }
   end
 
@@ -153,7 +151,6 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     subject { describe_current_search(search, **opts) }
 
     let(:opts) { {} }
-
 
     context 'with location search' do
       context 'when name supplied by search' do
@@ -236,7 +233,6 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
         coordinates: OpenStruct.new(latitude: latitude, longitude: longitude)
       )
     end
-
 
     it('returns a correct Google Maps for schools location') do
       expect(subject).to match(/<img /)
@@ -326,7 +322,6 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
         CONTENT
       end
 
-
       specify 'should create a list with the correct number of entries' do
         expect(subject).to have_css('ul.govuk-list--bullet > li', count: 3)
       end
@@ -342,7 +337,6 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
           and the ugly
         CONTENT
       end
-
 
       specify 'should create a list with the correct number of entries' do
         expect(subject).to have_css('ul.govuk-list--bullet > li', count: 2)

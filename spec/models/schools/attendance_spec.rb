@@ -35,7 +35,6 @@ describe Schools::Attendance do
       receive(:from_booking) { feedback_request_double }
   end
 
-
   describe '#initialize' do
     specify 'should correctly assign bookings' do
       expect(subject.bookings).to match_array(bookings)

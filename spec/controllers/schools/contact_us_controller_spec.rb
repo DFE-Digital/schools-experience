@@ -21,7 +21,6 @@ describe Schools::ContactUsController, type: :request do
     end
   end
 
-
   context "when signed in" do
     include_context "when a DfE user is logged in"
 

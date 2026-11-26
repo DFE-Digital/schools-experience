@@ -24,10 +24,8 @@ describe Schools::OnBoarding::DescriptionsController, type: :request do
         :with_other_fee,
         :with_only_early_years_phase,
         :with_key_stage_list
-get '/schools/on_boarding/description/new'
-
+      get '/schools/on_boarding/description/new'
     end
-
 
     it 'assigns the model' do
       expect(assigns(:description)).to eq Schools::OnBoarding::Description.new

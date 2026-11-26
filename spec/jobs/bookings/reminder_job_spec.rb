@@ -12,7 +12,6 @@ describe Bookings::ReminderJob, type: :job do
     allow(Bookings::Reminder).to receive(:new).with(booking, time_until_booking, time_until_booking_descriptive).and_return(reminder)
   end
 
-
   describe '#perform' do
     before { subject }
 

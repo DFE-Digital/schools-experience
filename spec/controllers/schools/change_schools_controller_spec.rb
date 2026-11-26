@@ -24,7 +24,6 @@ describe Schools::ChangeSchoolsController, type: :request do
       session_hash[:urn] = current_urn
     end
 
-
     context 'with URN set' do
       let(:current_urn) { old_school.urn }
 
@@ -60,8 +59,6 @@ describe Schools::ChangeSchoolsController, type: :request do
         allow(Schools::DFESignInAPI::RoleCheckedOrganisations).to receive(:new).and_return(organisations)
       end
 
-
-
       context 'when the request access to another school option is chosen' do
         let(:params) { { schools_change_school: { change_to_urn: "request access" } } }
 
@@ -88,7 +85,6 @@ describe Schools::ChangeSchoolsController, type: :request do
       let(:enable_school_change) { false }
       let(:change_school_page) { get '/schools/change' }
 
-
       specify 'should fail with a 403: forbidden' do
         expect(subject).to be(403)
       end
@@ -107,7 +103,6 @@ describe Schools::ChangeSchoolsController, type: :request do
           uuids: { new_school_uuid => new_school.urn }
         )
         allow(Schools::DFESignInAPI::Organisations).to receive(:new).and_return(organisations)
-
       end
 
       subject! { post('/schools/change', params: params) } # rubocop:disable RSpec/LeadingSubject -- Request must run after role setup.

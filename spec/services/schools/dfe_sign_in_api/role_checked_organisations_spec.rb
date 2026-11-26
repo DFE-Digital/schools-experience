@@ -27,7 +27,6 @@ describe Schools::DFESignInAPI::RoleCheckedOrganisations, type: :model do
       { instance_double(rolecheck, has_school_experience_role?: true) }
   end
 
-
   describe '#organisation_uuid_pairs' do
     it "onlies include uuids the user has a role over" do
       expect(subject).to have_attributes \

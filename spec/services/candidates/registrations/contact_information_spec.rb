@@ -19,7 +19,6 @@ describe Candidates::Registrations::ContactInformation, type: :model do
 
       it { is_expected.to validate_presence_of :building }
 
-
       it { is_expected.to validate_length_of(:building).is_at_most(250).with_message(too_long_msg) }
     end
 
@@ -46,7 +45,6 @@ describe Candidates::Registrations::ContactInformation, type: :model do
 
       it { is_expected.to validate_presence_of :postcode }
 
-
       it { is_expected.to validate_length_of(:postcode).is_at_most(20).with_message(too_long_msg) }
     end
 
@@ -54,7 +52,6 @@ describe Candidates::Registrations::ContactInformation, type: :model do
       let(:too_long_msg) { 'Phone number must be 50 digits or fewer' }
 
       it { is_expected.to validate_presence_of :phone }
-
 
       it { is_expected.to validate_length_of(:phone).is_at_most(50).with_message(too_long_msg) }
 

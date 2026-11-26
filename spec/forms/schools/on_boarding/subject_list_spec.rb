@@ -32,7 +32,6 @@ describe Schools::OnBoarding::SubjectList, type: :model do
         FactoryBot.create :bookings_subject
       end
 
-
       it 'is invalid' do
         expect(subject).not_to be_valid
         expect(subject.errors.full_messages).to eq ['Subject not available']
@@ -46,7 +45,6 @@ describe Schools::OnBoarding::SubjectList, type: :model do
     let :bookings_school do
       FactoryBot.create :bookings_school, :with_subjects
     end
-
 
     it 'sets the subjects from the bookings school' do
       expect(subject.subject_ids).to eq bookings_school.subject_ids

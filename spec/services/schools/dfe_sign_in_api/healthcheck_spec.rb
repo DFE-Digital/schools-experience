@@ -6,7 +6,6 @@ describe Schools::DFESignInAPI::Healthcheck do
   let(:help_host) { Rails.configuration.x.dfe_sign_in_help_host }
   let(:url) { "https://#{help_host}/healthcheck" }
 
-
   before do
     allow(Rails.application.config.x).to \
       receive(:dfe_sign_in_api_enabled).and_return(true)

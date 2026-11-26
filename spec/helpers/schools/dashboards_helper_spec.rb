@@ -8,7 +8,6 @@ describe Schools::DashboardsHelper, type: 'helper' do
     let(:aria_label) { 'upcoming bookings' }
     let(:circle) { numbered_circle(text, aria_label: aria_label) }
 
-
     context 'when id' do
       context 'when not set' do
         specify 'should be absent' do
@@ -45,7 +44,6 @@ describe Schools::DashboardsHelper, type: 'helper' do
         subject { Nokogiri.parse circle }
 
         let(:circle) { numbered_circle 0, aria_label: 'x', show_if_zero: true }
-
 
         it { is_expected.to have_css 'div', text: '0' }
       end
@@ -84,7 +82,6 @@ describe Schools::DashboardsHelper, type: 'helper' do
 
       let(:school) { create(:bookings_school, :with_fixed_availability_preference, :with_placement_dates) }
 
-
       specify 'should be false' do
         expect(subject).to be false
       end
@@ -95,7 +92,6 @@ describe Schools::DashboardsHelper, type: 'helper' do
 
       let(:school) { create(:bookings_school, :with_placement_dates) }
 
-
       specify 'should be false' do
         expect(subject).to be false
       end
@@ -105,7 +101,6 @@ describe Schools::DashboardsHelper, type: 'helper' do
       subject { show_no_placement_dates_warning?(school) }
 
       let(:school) { create(:bookings_school, :with_fixed_availability_preference) }
-
 
       specify 'should be true' do
         expect(subject).to be true
@@ -147,7 +142,6 @@ describe Schools::DashboardsHelper, type: 'helper' do
     subject { helper }
 
     let(:sample) { SchoolGroup::SCHOOL_URNS_IN_GROUP.sample }
-
 
     it { is_expected.to be_in_school_group(sample) }
     it { is_expected.to be_in_school_group(sample.to_s) }

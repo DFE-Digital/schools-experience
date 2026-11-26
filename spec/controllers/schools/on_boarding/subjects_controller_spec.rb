@@ -27,7 +27,6 @@ describe Schools::OnBoarding::SubjectsController, type: :request do
       .and_return(task_progress_on_boarding)
   end
 
-
   describe '#new' do
     before do
       get '/schools/on_boarding/subjects/new'

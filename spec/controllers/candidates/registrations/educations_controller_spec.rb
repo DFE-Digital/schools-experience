@@ -35,10 +35,8 @@ describe Candidates::Registrations::EducationsController, type: :request do
 
       before do
         registration_session.save education
-get '/candidates/schools/11048/registrations/education/new'
-
+        get '/candidates/schools/11048/registrations/education/new'
       end
-
 
       it 'assigns the model with existing attributes' do
         expect(assigns(:education).attributes.except('created_at')).to \
@@ -99,10 +97,8 @@ get '/candidates/schools/11048/registrations/education/new'
 
     before do
       registration_session.save education
-get '/candidates/schools/11048/registrations/education/edit'
-
+      get '/candidates/schools/11048/registrations/education/edit'
     end
-
 
     it 'assigns the model with existing attributes' do
       expect(assigns(:education).attributes).to eq education.attributes
@@ -124,7 +120,6 @@ get '/candidates/schools/11048/registrations/education/edit'
     before do
       registration_session.save existing_education
     end
-
 
     context 'when invalid' do
       before do
@@ -197,8 +192,6 @@ get '/candidates/schools/11048/registrations/education/edit'
       before do
         registration_session.save education
       end
-
-
 
       specify 'should set degree_stage_explaination to nil' do
         expect(registration_session.education.degree_stage_explaination).not_to be_nil

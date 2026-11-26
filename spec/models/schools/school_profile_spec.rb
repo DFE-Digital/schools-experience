@@ -245,7 +245,6 @@ describe Schools::SchoolProfile, type: :model do
         FactoryBot.create :bookings_subject
       end
 
-
       before do
         subject.subjects << bookings_subject
       end
@@ -787,7 +786,6 @@ describe Schools::SchoolProfile, type: :model do
 
     let(:profile) { create(:school_profile, :completed) }
 
-
     it "duplicates the profile and related subjects" do
       expected_attributes = profile.attributes.without(%w[id created_at updated_at])
       expect(duplicate).to have_attributes(expected_attributes)
@@ -835,7 +833,6 @@ describe Schools::SchoolProfile, type: :model do
     let(:previous_step) { nil }
     let(:school_profile) { build(:school_profile) }
 
-
     it { is_expected.to be(:dbs_requirement) }
 
     context "when the task_progress_on_boarding feature is enabled" do
@@ -854,7 +851,6 @@ describe Schools::SchoolProfile, type: :model do
     subject { school_profile }
 
     let(:school_profile) { build(:school_profile) }
-
 
     it { is_expected.not_to be_completed }
 

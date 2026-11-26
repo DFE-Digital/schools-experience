@@ -20,7 +20,6 @@ RSpec.describe "candidates/home/index", type: :view do
 
     before { assign :applications_deactivated, msg }
 
-
     it { is_expected.not_to have_css('a.govuk-button', text: 'Start now') }
     it { is_expected.to have_css('#candidate-applications-deactivated') }
     it { is_expected.to have_css('p', text: %r{\AThis is a test\z}) }
@@ -40,7 +39,6 @@ RSpec.describe "candidates/home/index", type: :view do
       allow(Rails.application.config.x.candidates).to \
         receive(:alert_notification).and_return msg
     end
-
 
     it { is_expected.to have_css('a.govuk-button', text: 'Start now') }
     it { is_expected.to have_css('#candidate-alert-notification') }

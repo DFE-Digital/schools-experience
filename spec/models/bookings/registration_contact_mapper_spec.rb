@@ -7,7 +7,6 @@ RSpec.describe Bookings::RegistrationContactMapper do
     let(:registration) { build(:registration_session) }
     let(:contact) { GetIntoTeachingApiClient::SchoolsExperienceSignUp.new }
 
-
     it { is_expected.to have_attributes(registration_session: registration) }
     it { is_expected.to have_attributes(gitis_contact: contact) }
   end
@@ -33,7 +32,6 @@ RSpec.describe Bookings::RegistrationContactMapper do
       ]
     end
     let(:mapper) { described_class.new(registration, contact) }
-
 
     it { is_expected.to have_attributes(first_name: registration.personal_information.first_name) }
     it { is_expected.to have_attributes(last_name: registration.personal_information.last_name) }
@@ -68,7 +66,6 @@ RSpec.describe Bookings::RegistrationContactMapper do
     let(:registration) { build(:registration_session) }
     let(:mapper) { described_class.new(registration, contact) }
 
-
     it { is_expected.to include("first_name" => contact.first_name) }
     it { is_expected.to include("last_name" => contact.last_name) }
     it { is_expected.to include("email" => contact.email) }
@@ -88,7 +85,6 @@ RSpec.describe Bookings::RegistrationContactMapper do
     let(:contact) { build(:api_schools_experience_sign_up_with_name) }
     let(:registration) { build(:registration_session) }
     let(:mapper) { described_class.new(registration, contact) }
-
 
     it { is_expected.to include("phone" => contact.telephone) }
     it { is_expected.to include("building" => contact.address_line1) }
@@ -120,7 +116,6 @@ RSpec.describe Bookings::RegistrationContactMapper do
     end
     let(:registration) { build(:registration_session) }
     let(:mapper) { described_class.new(registration, contact) }
-
 
     it { is_expected.to include('subject_first_choice' => maths.name) }
     it { is_expected.to include('subject_second_choice' => english.name) }

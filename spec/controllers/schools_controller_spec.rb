@@ -13,7 +13,6 @@ describe SchoolsController, type: :request do
       allow(ENV).to receive(:[]).with('DFE_SIGNIN_DEACTIVATED') { toggle }
     end
 
-
     context 'when sign in is enabled' do
       let(:toggle) { 'false' }
 

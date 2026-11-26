@@ -46,10 +46,6 @@ describe NotifyEmail::CandidateBookingDateChanged do
 
     specify { expect(described_class).to respond_to(:from_booking) }
 
-
-
-
-
     it { is_expected.to be_a(described_class) }
 
     context 'when assigning attributes' do

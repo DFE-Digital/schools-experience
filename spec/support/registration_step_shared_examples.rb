@@ -1,10 +1,8 @@
 # These shared examples isolate timestamp persistence from each form's validation rules.
-# rubocop:disable RSpec/SubjectStub
 shared_examples 'a registration step' do
   subject(:registration_step) do
     described_class.new(urn: school.urn)
   end
-  # rubocop:enable RSpec/SubjectStub
 
   let! :datetime do
     DateTime.now
@@ -13,7 +11,6 @@ shared_examples 'a registration step' do
   let! :new_datetime do
     datetime + 1.day
   end
-
 
   context 'when calling methods' do
     it { is_expected.to respond_to :persisted? }

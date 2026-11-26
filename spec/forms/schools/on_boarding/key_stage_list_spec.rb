@@ -21,7 +21,6 @@ describe Schools::OnBoarding::KeyStageList, type: :model do
       FactoryBot.build :bookings_school, :with_primary_key_stage_info
     end
 
-
     it 'sets the attributes from the bookings_school' do
       expect(subject.early_years).to be true
       expect(subject.key_stage_1).to be true

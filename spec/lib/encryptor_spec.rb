@@ -21,7 +21,6 @@ RSpec.describe Encryptor do
 
     let(:encrypted_value) { described_class.encrypt(value) }
 
-
     it { is_expected.to eq(value) }
 
     context "when nil" do

@@ -10,7 +10,6 @@ describe "Tracking Scripts", type: :request do
 
   before { allow(ENV).to receive(:[]).and_call_original }
 
-
   describe "Google Tag Manager" do
     let(:tracking_id_key) { "GTM_ID" }
     let(:gtm_script) { %r{<script src="/assets/gtm-.*\.js" defer="defer" data-gtm-id="#{tracking_id}" data-gtm-nonce=".*"></script>} }

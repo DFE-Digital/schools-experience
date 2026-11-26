@@ -78,7 +78,6 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
         }
       end
 
-
       it 'returns a correct array of dates (skipping weekends)' do
         expect(subject).to eq [
           next_monday,
@@ -104,7 +103,6 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
         }
       end
 
-
       it 'returns a correct array of dates' do
         expect(subject).to eq [
           next_monday,
@@ -127,7 +125,6 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
         }
       end
 
-
       it 'returns a correct array of dates' do
         expect(subject).to eq [
           next_monday,
@@ -148,7 +145,6 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
           custom_recurrence_days: %w[monday wednesday friday]
         }
       end
-
 
       it 'returns a correct array of dates' do
         expect(subject).to eq [

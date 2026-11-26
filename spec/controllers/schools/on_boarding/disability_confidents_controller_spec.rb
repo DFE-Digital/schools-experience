@@ -29,7 +29,6 @@ describe Schools::OnBoarding::DisabilityConfidentsController, type: :request do
       .and_return(task_progress_on_boarding)
   end
 
-
   describe '#new' do
     before do
       get '/schools/on_boarding/disability_confident/new'

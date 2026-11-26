@@ -3,10 +3,8 @@ require 'rails_helper'
 describe Schools::OnBoarding::CurrentStep do
   before do
     FactoryBot.create :bookings_phase, :secondary
-FactoryBot.create :bookings_phase, :college
-
+    FactoryBot.create :bookings_phase, :college
   end
-
 
   describe '.for' do
     let :returned_step do

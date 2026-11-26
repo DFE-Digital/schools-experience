@@ -53,8 +53,10 @@ describe Schools::DFESignInAPI::Client do
     before { allow(Feature).to receive(:enabled?).with(:rolecheck).and_return(true) }
 
     context 'when the client is disabled' do
-      before { allow(described_class).to receive(:enabled?).and_return(false)
-allow(ENV).to receive(:fetch).and_return(true)  }
+      before do
+        allow(described_class).to receive(:enabled?).and_return(false)
+        allow(ENV).to receive(:fetch).and_return(true)
+      end
 
       specify 'should be disabled' do
         expect(described_class).not_to be_role_check_enabled
@@ -62,8 +64,10 @@ allow(ENV).to receive(:fetch).and_return(true)  }
     end
 
     context 'when the client is enabled' do
-      before { allow(described_class).to receive(:enabled?).and_return(true)
-allow(Rails.application.config.x).to receive(:dfe_sign_in_api_role_check_enabled).and_return(true)  }
+      before do
+        allow(described_class).to receive(:enabled?).and_return(true)
+        allow(Rails.application.config.x).to receive(:dfe_sign_in_api_role_check_enabled).and_return(true)
+      end
 
       context 'when role check is disabled' do
         before { allow(Feature).to receive(:enabled?).with(:rolecheck).and_return(false) }
@@ -109,7 +113,6 @@ allow(Rails.application.config.x).to receive(:dfe_sign_in_api_role_check_enabled
       allow(described_class).to \
         receive(:enabled?).and_return true
     end
-
 
     {
       400 => Faraday::ClientError,

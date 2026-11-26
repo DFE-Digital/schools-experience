@@ -12,7 +12,6 @@ RSpec.describe PlacementRequestTransfer do
 
     let(:instance) { described_class.new(placement_request_id, school_id) }
 
-
     it { expect { transfer }.to change { placement_request.reload.school }.to(school) }
 
     context "when the placement request has been viewed" do

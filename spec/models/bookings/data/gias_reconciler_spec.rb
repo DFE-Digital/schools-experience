@@ -28,7 +28,6 @@ describe Bookings::Data::GiasReconciler do
       CSV
     end
 
-
     it { is_expected.to contain_exactly(onboarded_school, onboarded_disabled_school) }
   end
 
@@ -50,7 +49,6 @@ describe Bookings::Data::GiasReconciler do
         #{third_closed_school.urn},#{2.days.ago},999,1984,Main St Secondary
       CSV
     end
-
 
     it { is_expected.to eq({ first_closed_school.urn => [first_reopened_school.urn, second_reopened_school.urn] }) }
   end

@@ -55,6 +55,30 @@ Rails/BulkChangeTable:
     - db/migrate/20220810142124_make_availability_info_and_experience_type_not_nullable.rb
     - db/migrate/20220907093024_add_rejection_categories_to_bookings_placement_request_cancellations.rb
 
+# These migrations are already deployed; rewriting their operations could
+# change schema or data behavior for existing environments.
+Rails/NotNullColumn:
+  Exclude:
+    - db/migrate/20190131110800_add_importable_fields_to_bookings_schools.rb
+    - db/migrate/20190205091721_add_bookings_school_type_id_to_bookings_schools.rb
+    - db/migrate/20190225114124_add_availability_to_placement_requests.rb
+    - db/migrate/20190417081149_add_bookings_school_id_to_schools_school_profile.rb
+    - db/migrate/20190426154201_link_bookings_placement_dates_to_bookings_schools.rb
+    - db/migrate/20190524133255_add_cancelled_by_to_cancellations.rb
+
+Rails/ReversibleMigration:
+  Exclude:
+    - db/migrate/20190125085522_make_bookings_schools_fees_default_to_zero.rb
+    - db/migrate/20190125144531_make_subject_and_phase_names_not_nullable.rb
+    - db/migrate/20190225092622_remove_access_needs_and_access_needs_details_from_candidates_registrations_placmenet_requests.rb
+    - db/migrate/20190418180420_allow_bookings_placement_requests_availability_to_be_null.rb
+    - db/migrate/20190426154201_link_bookings_placement_dates_to_bookings_schools.rb
+    - db/migrate/20190510173936_allow_null_for_bookings_profiles_experience_details.rb
+    - db/migrate/20190628082805_set_bookings_schools_enabeld_flag_to_false_by_default.rb
+    - db/migrate/20190724092556_make_bookings_school_contact_email_not_null.rb
+    - db/migrate/20190820073225_make_bookings_profile_dbs_required_nullable.rb
+    - db/migrate/20191031105854_remove_column_default_from_bookings_placement_dates_subject_specific.rb
+
 Metrics/BlockLength:
   Exclude:
     - config/**/*

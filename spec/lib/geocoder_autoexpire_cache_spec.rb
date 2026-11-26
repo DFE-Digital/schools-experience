@@ -8,7 +8,6 @@ describe GeocoderAutoexpireCache do
   let(:key) { "some_key" }
   let(:value) { "some_value" }
 
-
   it 'correctlies set the value' do
     subject[key] = value
     expect(subject[key]).to eql(value)
@@ -17,9 +16,8 @@ describe GeocoderAutoexpireCache do
   context 'when expiry defaults to 1 month' do
     before do
       allow(subject.store).to receive(:write).and_return(true)
-subject[key] = value
+      subject[key] = value
     end
-
 
     it 'sets the ttl of new records to a month in the future' do
       expect(subject.store).to have_received(:write).with(key, value, expires_in: 1.month)

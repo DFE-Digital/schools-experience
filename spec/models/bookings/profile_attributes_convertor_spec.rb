@@ -13,7 +13,6 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
         build(:school_profile, :completed).attributes
       end
 
-
       it { is_expected.to include(dbs_policy_conditions: 'required') }
       it { is_expected.to include(dbs_policy_details: 'Must have recent dbs check') }
 
@@ -103,7 +102,6 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
         model.attributes
       end
 
-
       it { is_expected.to include(dbs_policy_conditions: 'notrequired') }
       it { is_expected.to include(dbs_policy_details: nil) }
       it { is_expected.to include(individual_requirements: 'None') }
@@ -158,7 +156,6 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
     end
 
     let(:attrs) { build(:school_profile, :completed).attributes }
-
 
     it { expect(subject).to include(phases[:early_years].id) }
     it { expect(subject).to include(phases[:primary].id) }

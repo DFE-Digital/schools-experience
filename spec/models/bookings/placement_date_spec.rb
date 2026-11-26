@@ -59,7 +59,6 @@ describe Bookings::PlacementDate, type: :model do
 
           before { invalid_pd.valid? }
 
-
           specify 'should show a suitable error message' do
             expect(subject).to include(message)
           end
@@ -294,7 +293,6 @@ describe Bookings::PlacementDate, type: :model do
     let(:recurrences) { [] }
     let(:date) { 3.weeks.from_now.next_occurring(:monday) }
 
-
     it { is_expected.to be_active }
     it { is_expected.to be_publishable }
     it { expect(published_placement_date.published_at.to_date).to eq(Date.today) }
@@ -320,7 +318,6 @@ describe Bookings::PlacementDate, type: :model do
       placement_date.subject_ids = school.subjects.pluck(:id)
       placement_date.save!
     end
-
 
     it { is_expected.to have_attributes(placement_date.attributes.except("created_at", "updated_at", "id", "date")) }
     it { is_expected.to have_attributes(date: Date.new(2022, 1, 3)) }

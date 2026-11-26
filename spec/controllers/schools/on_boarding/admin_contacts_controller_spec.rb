@@ -31,10 +31,8 @@ describe Schools::OnBoarding::AdminContactsController, type: :request do
         :with_access_needs_policy,
         :with_experience_outline,
         :with_teacher_training
-get '/schools/on_boarding/admin_contact/new'
-
+      get '/schools/on_boarding/admin_contact/new'
     end
-
 
     it 'assigns the model' do
       expect(assigns(:admin_contact)).to \

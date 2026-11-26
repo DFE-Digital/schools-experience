@@ -10,7 +10,6 @@ describe FeatureFlagsController, type: :request do
 
     before { get feature_flags_path }
 
-
     it "shows a table with the correct markers" do
       assert_response :success
 

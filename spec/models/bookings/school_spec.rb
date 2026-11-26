@@ -429,8 +429,10 @@ describe Bookings::School, type: :model do
     end
 
     context 'when availability and placement dates' do
-      before { create(:bookings_placement_date, bookings_school: fixed_with_dates)
-create(:bookings_placement_date, bookings_school: fixed_without_dates, active: false)  }
+      before do
+        create(:bookings_placement_date, bookings_school: fixed_with_dates)
+        create(:bookings_placement_date, bookings_school: fixed_without_dates, active: false)
+      end
 
       let!(:fixed_with_dates) { create(:bookings_school, :with_fixed_availability_preference) }
       let!(:fixed_without_dates) { create(:bookings_school, :with_fixed_availability_preference) }
@@ -446,8 +448,6 @@ create(:bookings_placement_date, bookings_school: fixed_without_dates, active: f
       specify { expect(described_class.new).to have_db_column(:availability_info).of_type(:text).with_options(null: false, default: I18n.t("defaults.bookings_school.availability_info")) }
       specify { expect(described_class.new).to have_db_column(:availability_preference_fixed).of_type(:boolean).with_options(default: false) }
       specify { expect(described_class.new).to have_db_column(:experience_type).of_type(:string).with_options(null: false, default: :inschool) }
-
-
 
       describe '.flexible' do
         subject { described_class.flexible }
@@ -710,7 +710,6 @@ create(:bookings_placement_date, bookings_school: fixed_without_dates, active: f
         end
 
         context 'when secondary but not primary' do
-
           specify { expect(school).not_to be_has_primary_and_secondary_phases }
         end
 

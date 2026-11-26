@@ -6,10 +6,10 @@ describe Schools::ArchivedPlacementRequestsController, type: :request do
 
   let(:school) { Bookings::School.find_by! urn: urn }
 
-  before { create :bookings_profile, school: school
-school.subjects << create_list(:bookings_subject, 1)
-   }
-
+  before do
+    create :bookings_profile, school: school
+    school.subjects << create_list(:bookings_subject, 1)
+  end
 
   describe '#index' do
     subject { response }
@@ -20,7 +20,6 @@ school.subjects << create_list(:bookings_subject, 1)
 
     it { is_expected.to have_http_status :success }
     it { is_expected.to render_template 'index' }
-
 
     context 'when flex dates' do
       before { create :placement_request, created_at: 3.months.ago, school: school }

@@ -76,7 +76,6 @@ RSpec.describe Healthcheck do
         "redis://localhost:6379/1"
     end
 
-
     context "with working connection" do
       before do
         allow(REDIS).to receive(:ping).and_return("PONG")
@@ -156,7 +155,6 @@ RSpec.describe Healthcheck do
 
     include_context "when the API is healthy"
 
-
     it { is_expected.to include :deployment_id }
     it { is_expected.to include :app_sha }
     it { is_expected.to include :dfe_auth }
@@ -171,7 +169,6 @@ RSpec.describe Healthcheck do
     subject { JSON.parse described_class.new.to_json }
 
     include_context "when the API is healthy"
-
 
     it { is_expected.to include "deployment_id" }
     it { is_expected.to include "app_sha" }

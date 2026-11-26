@@ -71,6 +71,8 @@ end
 shared_context "when a DfE user is logged in for a school with a profile" do
   include_context "when a DfE user is logged in"
 
+  let(:school) { current_user_school }
+
   before do
     current_user_school.tap do |s|
       s.subjects << FactoryBot.create_list(:bookings_subject, 2)

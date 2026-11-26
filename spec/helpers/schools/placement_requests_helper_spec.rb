@@ -11,7 +11,6 @@ describe Schools::PlacementRequestsHelper, type: :helper do
         reason: "Sorry!")
     end
 
-
     it { is_expected.to have_css("ul li", count: 2) }
     it { is_expected.to have_css("li", text: "The date you requested is fully booked.") }
     it { is_expected.to have_css("li", text: "Sorry!") }

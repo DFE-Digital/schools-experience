@@ -15,7 +15,6 @@ describe Candidates::Registrations::RegistrationState do
     create :bookings_school, availability_preference_fixed: true
   end
 
-
   describe '#steps' do
     context 'with a school that has flexible dates' do
       let :registration_session do

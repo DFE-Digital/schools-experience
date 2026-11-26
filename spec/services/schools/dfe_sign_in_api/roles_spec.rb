@@ -43,7 +43,6 @@ describe Schools::DFESignInAPI::Roles do
           )
       end
 
-
       specify "should raise an 'no organisation' error" do
         expect(subject.has_school_experience_role?).to be false
       end
@@ -56,7 +55,6 @@ describe Schools::DFESignInAPI::Roles do
         stub_request(:get, "https://some-signin-host.signin.education.gov.uk/services/#{dfe_signin_admin_service_id}/organisations/#{dfe_signin_school_urn}/users/#{user_guid}")
           .to_return(status: 200, body: '{}', headers: {})
       end
-
 
       specify "should raise an 'invalid response' error" do
         expect { subject.has_school_experience_role? }.to raise_error(Schools::DFESignInAPI::APIResponseError, /invalid response from roles API/)

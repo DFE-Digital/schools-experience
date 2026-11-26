@@ -73,7 +73,6 @@ describe Candidates::Registrations::ApplicationPreview do
       'candidates_registrations_subject_and_date_information' => subject_and_date_information.attributes
   end
 
-
   describe '#full_name' do
     it 'returns the correct value' do
       expect(subject.full_name).to eq "Testy McTest"

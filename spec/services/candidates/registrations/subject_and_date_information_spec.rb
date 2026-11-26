@@ -21,7 +21,6 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
 
     let(:school) { create(:bookings_school, availability_preference_fixed: true) }
 
-
     describe 'when the associated school has fixed availability' do
       before { subject.urn = create(:bookings_school, :with_fixed_availability_preference).urn }
 
@@ -38,7 +37,6 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
 
         let(:placement_date) { create(:bookings_placement_date, subject_specific: false) }
 
-
         it { is_expected.not_to validate_presence_of :bookings_subject_id }
       end
 
@@ -53,7 +51,6 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
         let(:english) { Bookings::Subject.find_by(name: 'English') }
 
         before { school.subjects << [maths] }
-
 
         context 'without date subject specified' do
           subject do
@@ -93,11 +90,12 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
     subject(:registration_step) { described_class.new(urn: school.urn) }
 
     describe '#placement_date' do
-      before { allow(Bookings::PlacementDate).to receive(:find_by).and_return('a')
-registration_step.bookings_placement_date_id = 1 }
+      before do
+        allow(Bookings::PlacementDate).to receive(:find_by).and_return('a')
+        registration_step.bookings_placement_date_id = 1
+      end
 
       it { is_expected.to respond_to(:placement_date) }
-
 
       specify 'should find the placement date via its id' do
         subject.placement_date
@@ -106,15 +104,13 @@ registration_step.bookings_placement_date_id = 1 }
     end
 
     describe '#placement_date_subject' do
-      before { allow(Bookings::PlacementDateSubject).to receive(:find_by).and_return('a')
-subject.bookings_placement_date_id = 1
+      before do
+        allow(Bookings::PlacementDateSubject).to receive(:find_by).and_return('a')
+        subject.bookings_placement_date_id = 1
         subject.bookings_subject_id = 2
-       }
-
+      end
 
       it { is_expected.to respond_to(:placement_date_subject) }
-
-
 
       specify 'should find the placement date via its id' do
         subject.placement_date_subject
@@ -142,8 +138,6 @@ subject.bookings_placement_date_id = 1
       end
 
       it { is_expected.to respond_to(:placement_date_subject) }
-
-
 
       specify 'should join the placement date and placement date subject ids separated by an underscore' do
         expect(subject.date_and_subject_ids).to eql(bookings_placement_dates_subject.date_and_subject_id)

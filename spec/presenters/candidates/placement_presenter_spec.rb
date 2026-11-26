@@ -5,7 +5,6 @@ RSpec.describe Candidates::PlacementPresenter do
 
   let(:placement_request) { create(:placement_request) }
 
-
   describe '#date' do
     context 'when placement is booked' do
       let(:placement_request) { create(:placement_request, :booked) }

@@ -84,7 +84,6 @@ describe Bookings::Gitis::ContactFetcher do
 
       let(:candidate) { create :candidate, gitis_uuid: merged.candidate_id }
 
-
       before do
         api_client = stubbed_api_client(GetIntoTeachingApiClient::SchoolsExperienceApi)
         allow(api_client).to \
@@ -136,7 +135,6 @@ describe Bookings::Gitis::ContactFetcher do
           allow(api_client).to \
             receive(:get_schools_experience_sign_up).with(sixth.candidate_id) { sixth }
         end
-
 
         it 'locates the master contact record' do
           expect(subject).to have_attributes gitis_contact: merged

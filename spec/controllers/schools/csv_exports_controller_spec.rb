@@ -6,7 +6,6 @@ describe Schools::CsvExportsController, type: :request do
 
   include_context "when a DfE user is logged in for a school with a profile"
 
-
   describe "#show" do
     let(:page_request) { get schools_csv_export_path }
 

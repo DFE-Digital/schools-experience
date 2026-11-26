@@ -12,7 +12,6 @@ describe Schools::PlacementRequests::UnderConsiderationController, type: :reques
 
     include_context "when a DfE user is logged in"
 
-
     context 'when there is a placement request' do
       let!(:pr) { create(:bookings_placement_request, school: current_user_school) }
       let(:placement_request_id) { pr.id }

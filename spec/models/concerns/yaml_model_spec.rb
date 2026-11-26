@@ -47,7 +47,6 @@ describe YamlModel, type: :model do
       let(:attrs) { { dob: '19800620', firstname: 'Sarah', lastname: 'Jane' } }
       let(:other) { described_class.new attrs }
 
-
       it { is_expected.to eq other }
     end
 
@@ -56,7 +55,6 @@ describe YamlModel, type: :model do
 
       let(:first) { described_class.find test_dob }
       let(:second) { described_class.find second_dob }
-
 
       it { is_expected.to eq [first, second] }
     end

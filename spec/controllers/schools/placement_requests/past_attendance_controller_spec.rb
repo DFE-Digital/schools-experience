@@ -25,7 +25,6 @@ describe Schools::PlacementRequests::PastAttendanceController, type: :request do
                                           candidate: booking.bookings_placement_request.candidate
     end
 
-
     it { is_expected.to have_http_status :success }
     it { is_expected.to render_template 'index' }
   end

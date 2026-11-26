@@ -35,10 +35,8 @@ describe Candidates::Registrations::TeachingPreferencesController, type: :reques
 
       before do
         registration_session.save teaching_preference
-get '/candidates/schools/11048/registrations/teaching_preference/new'
-
+        get '/candidates/schools/11048/registrations/teaching_preference/new'
       end
-
 
       it 'assigns the model with the existing attributes' do
         expect(assigns(:teaching_preference).attributes).to eq \
@@ -107,10 +105,8 @@ get '/candidates/schools/11048/registrations/teaching_preference/new'
 
     before do
       registration_session.save exisitng_teaching_preference
-get '/candidates/schools/11048/registrations/teaching_preference/edit'
-
+      get '/candidates/schools/11048/registrations/teaching_preference/edit'
     end
-
 
     it 'assigns the model with existing attributes' do
       expect(assigns(:teaching_preference).attributes).to eq \
@@ -135,12 +131,9 @@ get '/candidates/schools/11048/registrations/teaching_preference/edit'
 
     before do
       registration_session.save exisitng_teaching_preference
-patch '/candidates/schools/11048/registrations/teaching_preference',
-        params: teaching_preference_params
-
+      patch '/candidates/schools/11048/registrations/teaching_preference',
+              params: teaching_preference_params
     end
-
-
 
     context 'when invalid' do
       let :teaching_preference do

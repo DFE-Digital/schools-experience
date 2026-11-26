@@ -6,7 +6,6 @@ RSpec.describe Schools::OrganisationAccessRequestsController, type: :request do
 
   include_context "when a DfE user is logged in"
 
-
   before do
     allow(Rails.application.config.x).to \
       receive(:dfe_sign_in_request_organisation_url) \

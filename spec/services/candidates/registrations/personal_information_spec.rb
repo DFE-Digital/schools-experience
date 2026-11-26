@@ -29,7 +29,6 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
         .with_message('Last name must be 50 characters or fewer')
     end
 
-
     it { is_expected.to validate_presence_of :email }
     it { is_expected.to validate_length_of(:email).is_at_most(100).with_message(too_long_msg) }
     it { is_expected.to validate_email_format_of(:email) }
@@ -55,7 +54,6 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
         last_name: pinfo.last_name
       )
     end
-
 
     before do
       allow(GetIntoTeachingApiClient::CandidatesApi).to receive(:new).and_return(api_client)
@@ -113,7 +111,6 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
         last_name: 'test',
         email: 'test@test.com'
     end
-
 
     it { is_expected.to have_attributes first_name: nil }
     it { is_expected.to have_attributes last_name: nil }

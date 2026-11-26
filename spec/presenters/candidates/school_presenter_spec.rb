@@ -8,7 +8,6 @@ RSpec.describe Candidates::SchoolPresenter do
   let(:profile) { build(:bookings_profile) }
   let(:school) { profile.school }
 
-
   describe ".school" do
     it { expect(subject.school).to eql(school) }
   end
@@ -107,7 +106,6 @@ RSpec.describe Candidates::SchoolPresenter do
         build :bookings_profile, dbs_policy_conditions: nil, dbs_policy_details: nil
       end
 
-
       context 'when yes' do
         before { legacy_profile.dbs_required = 'always' }
 
@@ -160,7 +158,6 @@ RSpec.describe Candidates::SchoolPresenter do
           dbs_policy_details: nil,
           dbs_policy: 'Our DBS policy'
       end
-
 
       it { is_expected.to eql 'Our DBS policy' }
     end

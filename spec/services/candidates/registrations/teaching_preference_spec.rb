@@ -6,7 +6,6 @@ describe Candidates::Registrations::TeachingPreference, type: :model do
   include_context 'with a stubbed candidate school'
   it_behaves_like 'a registration step'
 
-
   context 'when attriubtes' do
     it { is_expected.to respond_to :school }
     it { is_expected.to respond_to :teaching_stage }

@@ -364,7 +364,6 @@ RSpec.describe Candidates::SchoolSearch do
       )
     end
 
-
     it do
       expect(subject).to eq({
         "Subjects" => {

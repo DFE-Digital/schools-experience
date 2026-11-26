@@ -294,7 +294,6 @@ describe Candidates::Registrations::DbsRequirmentsChecker do
         let(:dbs_policy) { "inschool" }
 
         shared_examples 'a school offering virtual experiences' do
-
           context 'when candidate has dbs' do
             let(:has_dbs_check) { true }
 

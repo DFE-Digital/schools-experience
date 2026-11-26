@@ -11,10 +11,8 @@ describe Schools::PlacementRequestsController, type: :request do
 
   before do
     create(:bookings_profile, school: school)
-school.subjects << FactoryBot.create_list(:bookings_subject, 1)
-
+    school.subjects << FactoryBot.create_list(:bookings_subject, 1)
   end
-
 
   describe '#index' do
     let!(:placement_requests) do

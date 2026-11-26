@@ -11,7 +11,6 @@ describe Schools::ConfirmAttendanceController, type: :request do
 
   before { create(:bookings_profile, school: school) }
 
-
   describe '#show' do
     subject { get(schools_confirm_attendance_path) }
 
@@ -32,14 +31,14 @@ describe Schools::ConfirmAttendanceController, type: :request do
         unattended.candidate.gitis_uuid,
         attended.candidate.gitis_uuid,
       ]
-        api_client = instance_double(GetIntoTeachingApiClient::SchoolsExperienceApi)
-        allow(GetIntoTeachingApiClient::SchoolsExperienceApi).to receive(:new).and_return(api_client)
-        allow(api_client).to receive(:get_schools_experience_sign_ups).with(ids) do
-          [
-            build(:api_schools_experience_sign_up),
-            build(:api_schools_experience_sign_up)
-          ]
-        end
+      api_client = instance_double(GetIntoTeachingApiClient::SchoolsExperienceApi)
+      allow(GetIntoTeachingApiClient::SchoolsExperienceApi).to receive(:new).and_return(api_client)
+      allow(api_client).to receive(:get_schools_experience_sign_ups).with(ids) do
+        [
+          build(:api_schools_experience_sign_up),
+          build(:api_schools_experience_sign_up)
+        ]
+      end
     end
 
     let!(:attended) do

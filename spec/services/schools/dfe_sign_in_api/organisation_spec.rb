@@ -17,7 +17,6 @@ describe Schools::DFESignInAPI::Organisation do
   end
   let(:response) { organisations_data }
 
-
   before do
     allow(described_class).to receive(:enabled?).and_return(true)
     stub_request(:get, "https://some-signin-host.signin.education.gov.uk/users/#{user_uuid}/organisations")

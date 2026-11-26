@@ -8,7 +8,6 @@ describe Schools::AttendanceRecords, type: :model do
     let(:school_urns) { [booking.bookings_school.urn] }
     let(:candidate_id) { booking.bookings_placement_request.candidate_id }
 
-
     context 'with matching urn' do
       context 'when but different candidate' do
         let(:records) { described_class.new 10_000_000, school_urns }
@@ -56,28 +55,23 @@ describe Schools::AttendanceRecords, type: :model do
         bookings_school: school,
         bookings_placement_request:
           create(:bookings_placement_request, school: school, candidate: candidate)
-create :bookings_booking, :accepted, :unattended,
-        bookings_school: school,
-        bookings_placement_request:
-          create(:bookings_placement_request, school: school, candidate: candidate)
+      create :bookings_booking, :accepted, :unattended,
+              bookings_school: school,
+              bookings_placement_request:
+                create(:bookings_placement_request, school: school, candidate: candidate)
 
-create :bookings_booking, :accepted, :attended,
-        bookings_school: second_school,
-        bookings_placement_request:
-          create(:bookings_placement_request,
-            school: second_school,
-            candidate: candidate)
+      create :bookings_booking, :accepted, :attended,
+              bookings_school: second_school,
+              bookings_placement_request:
+                create(:bookings_placement_request,
+                  school: second_school,
+                  candidate: candidate)
 
-create :bookings_booking, :accepted, :attended,
-        bookings_school: school,
-        bookings_placement_request:
-          create(:bookings_placement_request, school: school)
-
+      create :bookings_booking, :accepted, :attended,
+              bookings_school: school,
+              bookings_placement_request:
+                create(:bookings_placement_request, school: school)
     end
-
-
-
-
 
     describe '#attended_count' do
       subject { records.attended_count }

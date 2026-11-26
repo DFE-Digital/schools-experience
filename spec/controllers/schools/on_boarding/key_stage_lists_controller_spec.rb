@@ -23,10 +23,8 @@ describe Schools::OnBoarding::KeyStageListsController, type: :request do
         :with_dbs_fee,
         :with_other_fee,
         :with_phases
-get '/schools/on_boarding/key_stage_list/new'
-
+      get '/schools/on_boarding/key_stage_list/new'
     end
-
 
     it 'assings the model' do
       expect(assigns(:key_stage_list).attributes).to \

@@ -133,7 +133,6 @@ describe Bookings::SchoolSearch do
         let!(:enabled_school) { create(:bookings_school, :onboarded, coordinates: point_in_manchester) }
         let!(:disabled_school) { create(:bookings_school, :disabled, coordinates: point_in_manchester) }
 
-
         specify 'should return enabled schools' do
           expect(subject).to include(enabled_school)
         end
@@ -255,7 +254,6 @@ describe Bookings::SchoolSearch do
               allow(Geocoder).to receive(:search).and_return([])
             end
 
-
             specify 'results should include all schools' do
               expect(subject.size).to be_zero
             end
@@ -269,7 +267,6 @@ describe Bookings::SchoolSearch do
             before do
               allow(Geocoder).to receive(:search).and_return("ABC123")
             end
-
 
             specify 'should fail with a InvalidGeocoderResultError' do
               expect { subject.results }.to raise_error(Bookings::SchoolSearch::InvalidGeocoderResultError)
@@ -298,7 +295,6 @@ describe Bookings::SchoolSearch do
             non_matching_school.subjects << physics
           end
 
-
           specify 'should return matching results' do
             expect(subject).to include(matching_school)
           end
@@ -315,7 +311,6 @@ describe Bookings::SchoolSearch do
             matching_school.phases << college
             non_matching_school.phases << secondary
           end
-
 
           specify 'should return matching results' do
             expect(subject).to include(matching_school)
@@ -356,7 +351,6 @@ describe Bookings::SchoolSearch do
             non_matching_school.profile = dbs_required
           end
 
-
           specify 'should return both schools requiring DBS for in school or not requiring DBS at all' do
             expect(subject).to include(matching_school, another_matching_school)
           end
@@ -372,7 +366,6 @@ describe Bookings::SchoolSearch do
           before do
             create(:bookings_profile, :without_supports_access_needs, school: non_matching_school)
           end
-
 
           specify 'should return matching results' do
             expect(subject).to include(matching_school)
@@ -414,12 +407,9 @@ describe Bookings::SchoolSearch do
 
         before do
           allow(Geocoder).to receive(:search).and_return(geocoder_manchester_search_result)
-matching_school.phases << secondary
+          matching_school.phases << secondary
           matching_school.subjects << physics
-
         end
-
-
 
         specify 'should allow all search options and filters to work in conjunction' do
           expect(subject).to include(matching_school)
@@ -446,7 +436,6 @@ matching_school.phases << secondary
         before do
           allow(Geocoder).to receive(:search).and_return(geocoder_manchester_search_result)
         end
-
 
         specify 'schools should be ordered by distance, near to far' do
           expect(subject.map(&:name)).to eql([mcr_school, leeds_school, york_school, glasgow_school].map(&:name))
@@ -626,7 +615,6 @@ matching_school.phases << secondary
       let(:query) { nil }
       let(:instance) { described_class.new(location: location, query: query, radius: 50) }
 
-
       specify 'should save the record' do
         expect(subject).to be_persisted
       end
@@ -665,7 +653,6 @@ matching_school.phases << secondary
         let(:subjects) { [2, 3, 4] }
         let(:max_fee) { 30 }
         let(:location) { "Birmingham" }
-
 
         specify 'should record all search parameters' do
           expect(subject.phases).to eql(phases)
@@ -741,7 +728,6 @@ matching_school.phases << secondary
     let(:whitelist) { '1' }
     let(:school_search) { described_class.new(location: "Bury", radius: 10) }
 
-
     before do
       allow(ENV).to receive(:[]).and_call_original
       allow(ENV).to receive(:[]).with('CANDIDATE_URN_WHITELIST').and_return(whitelist)
@@ -757,7 +743,6 @@ matching_school.phases << secondary
       let(:schools) { create_list :bookings_school, 3, :onboarded }
       let(:school_urns) { schools.map(&:urn) }
       let(:whitelist) { school_urns.slice(0, 2).join(' ') }
-
 
       it { is_expected.to include school_urns[0] }
       it { is_expected.to include school_urns[1] }

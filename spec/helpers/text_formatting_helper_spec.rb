@@ -21,7 +21,6 @@ describe TextFormattingHelper, type: :helper do
 
       let(:content) { "hello world" }
 
-
       it { is_expected.to eq("<span>hello world</span>") }
     end
   end

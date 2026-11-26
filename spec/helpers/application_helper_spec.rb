@@ -34,7 +34,6 @@ describe ApplicationHelper, type: :helper do
 
     before { helper.breadcrumbs = args }
 
-
     specify 'the generated list should contain GOV.UK breadcrumb-compliant markup' do
       selector = [
         'nav.govuk-breadcrumbs',
@@ -88,7 +87,6 @@ describe ApplicationHelper, type: :helper do
     let(:current_candidate) do
       create(:candidate, :with_api_contact)
     end
-
 
     specify "should contain the person's name" do
       expect(subject).to include(current_candidate.full_name)

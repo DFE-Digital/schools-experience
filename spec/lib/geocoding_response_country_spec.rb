@@ -10,7 +10,6 @@ RSpec.describe GeocodingResponseCountry do
 
       let(:response) { Geocoder::Result::Test.new(address_components: [{ long_name: country }]) }
 
-
       it "returns '#{country}'" do
         expect(subject).to eq country
       end
@@ -39,7 +38,6 @@ RSpec.describe GeocodingResponseCountry do
 
       let(:canada_response) { Geocoder::Result::Test.new(address_components: [{ long_name: "Canada" }]) }
 
-
       it "returns nil" do
         expect(subject).to be_nil
       end
@@ -53,7 +51,6 @@ RSpec.describe GeocodingResponseCountry do
       end
 
       let(:response) { Geocoder::Result::Test.new(address_components: [{ long_name: country }]) }
-
 
       it "returns true" do
         expect(subject).to be true
@@ -82,7 +79,6 @@ RSpec.describe GeocodingResponseCountry do
       end
 
       let(:response) { Geocoder::Result::Test.new(address_components: [{ long_name: "England" }]) }
-
 
       it "returns false" do
         expect(subject).to be false

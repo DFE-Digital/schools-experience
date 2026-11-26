@@ -183,7 +183,6 @@ describe Schools::SessionsController, type: :request do
         session_hash[:current_user] = OpenIDConnect::ResponseObject::UserInfo.new(sub: "abc1243", name: 'Milhouse')
       end
 
-
       specify 'should redirect to the dashboard' do
         expect(subject).to redirect_to(schools_dashboard_path)
       end
@@ -198,7 +197,6 @@ describe Schools::SessionsController, type: :request do
       before do
         allow(Rails.logger).to receive(:warn).and_return(true)
       end
-
 
       specify 'should log that the session has expired' do
         subject
@@ -225,7 +223,6 @@ describe Schools::SessionsController, type: :request do
         allow(Rails.logger).to receive(:warn).and_call_original
         allow(Rails.logger).to receive(:error).and_call_original
       end
-
 
       shared_examples 'a recovery that discards the callback' do
         specify 'redirects to the dashboard so sign-in restarts' do
@@ -326,7 +323,6 @@ describe Schools::SessionsController, type: :request do
         allow(Rails.logger).to receive(:error).and_call_original
       end
 
-
       {
         'missing' => nil,
         'blank' => '',
@@ -371,14 +367,12 @@ describe Schools::SessionsController, type: :request do
       let(:oidc_host) { 'some-oidc-host' }
       let(:id_token) { 'abcdefg123456' }
 
-      before { get(root_path)
-allow(OpenIDConnect::Client).to receive(:new)
-          .and_return(OpenStruct.new(host: oidc_host))
-
-session[:id_token] = id_token  }
-
-
-
+      before do
+        get(root_path)
+        allow(OpenIDConnect::Client).to receive(:new)
+                  .and_return(OpenStruct.new(host: oidc_host))
+        session[:id_token] = id_token
+      end
 
       specify 'should redirect to the OpenID Connect end session endpoint with the correct query params' do
         expect(subject).to redirect_to(

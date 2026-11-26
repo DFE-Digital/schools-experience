@@ -5,7 +5,6 @@ describe CookiePreferencesController, type: :request do
 
   let(:cookie_name) { 'cookie_preference-v1' }
 
-
   describe "#show" do
     before { get cookie_preference_path }
 

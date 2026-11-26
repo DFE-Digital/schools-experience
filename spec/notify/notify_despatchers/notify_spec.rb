@@ -104,7 +104,6 @@ describe NotifyDespatchers::Base do # rubocop:disable RSpec/MultipleDescribes --
     allow(NotifyService.instance).to receive(:send_sms)
   end
 
-
   describe 'Attributes' do
     it { is_expected.to respond_to(:to) }
   end
@@ -166,7 +165,6 @@ describe NotifyDespatchers::Email do
   end
   let(:notification) { subject.new to: recipients, name: 'Test User' }
 
-
   include_examples "notify_client"
 end
 
@@ -191,7 +189,6 @@ describe NotifyDespatchers::Sms do
   let(:notification) { subject.new to: recipients, name: 'Test User' }
 
   before { allow(Feature).to receive(:enabled?).with(:sms).and_return(true) }
-
 
   include_examples "notify_client"
 

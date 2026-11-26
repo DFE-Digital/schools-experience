@@ -11,7 +11,6 @@ describe Candidates::Registrations::RegistrationStore do
     FactoryBot.build :registration_session, uuid: 'sekret'
   end
 
-
   describe '#store!' do
     before do
       subject.store! session

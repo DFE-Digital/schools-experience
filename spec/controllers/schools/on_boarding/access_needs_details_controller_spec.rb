@@ -28,7 +28,6 @@ describe Schools::OnBoarding::AccessNeedsDetailsController, type: :request do
       .and_return(task_progress_on_boarding)
   end
 
-
   describe '#new' do
     before do
       get '/schools/on_boarding/access_needs_detail/new'

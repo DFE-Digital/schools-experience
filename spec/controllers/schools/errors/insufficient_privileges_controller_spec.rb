@@ -6,7 +6,6 @@ describe Schools::Errors::InsufficientPrivilegesController, type: :request do
 
   include_context "when a DfE user is logged in"
 
-
   describe "#show" do
     it { is_expected.to have_http_status :success }
     it { expect(subject.body).to match "Request organisation access" }

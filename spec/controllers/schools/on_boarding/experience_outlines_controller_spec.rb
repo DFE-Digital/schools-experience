@@ -29,10 +29,8 @@ describe Schools::OnBoarding::ExperienceOutlinesController, type: :request do
         :with_access_needs_detail,
         :with_disability_confident,
         :with_access_needs_policy
-get '/schools/on_boarding/experience_outline/new'
-
+      get '/schools/on_boarding/experience_outline/new'
     end
-
 
     it 'assigns the model' do
       expect(assigns(:experience_outline)).to \

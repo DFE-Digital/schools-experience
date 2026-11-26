@@ -12,7 +12,6 @@ describe Schools::DFESignInAPI::Organisations do
     end
   end
 
-
   before do
     allow(described_class).to receive(:enabled?).and_return(true)
     allow(ENV).to receive(:fetch).and_return('123')

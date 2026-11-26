@@ -39,7 +39,6 @@ describe Candidates::BookingFeedbacksController, type: :request do
 
     include_context "invalid requests"
 
-
     it { is_expected.to render_template(:new) }
   end
 
@@ -54,7 +53,6 @@ describe Candidates::BookingFeedbacksController, type: :request do
     let(:attributes) { attributes_for(:candidates_booking_feedback) }
     let(:params) { { candidates_booking_feedback: attributes } }
     let(:created_feedback) { Candidates::BookingFeedback.last }
-
 
     it { is_expected.to redirect_to(created_feedback) }
     it { expect { perform_request }.to change(Candidates::BookingFeedback, :count).by(1) }

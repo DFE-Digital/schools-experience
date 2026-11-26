@@ -44,7 +44,6 @@ describe Schools::PrepopulateSchoolProfile, type: :model do
       allow(Rails.configuration.x).to receive_messages(dfe_sign_in_api_enabled: true, dfe_sign_in_api_school_change_enabled: true)
     end
 
-
     it { is_expected.to be_enabled }
 
     context "when dfe_sign_in_api_enabled is false" do

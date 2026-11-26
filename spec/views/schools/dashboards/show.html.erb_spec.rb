@@ -14,7 +14,6 @@ describe 'schools/dashboards/show', type: :view do
       end
     end
 
-
     specify 'the page should have a change school link that initiates a DfE Sign-in switch' do
       expect(subject).to have_link('Change school', href: '/schools/switch/new')
     end
@@ -28,7 +27,6 @@ describe 'schools/dashboards/show', type: :view do
         allow(view).to receive(:has_other_schools?).and_return false
       end
     end
-
 
     specify 'the page should have no change school link' do
       expect(subject).not_to have_link('Change school')

@@ -31,10 +31,8 @@ describe Schools::OnBoarding::TeacherTrainingsController, type: :request do
         :with_disability_confident,
         :with_access_needs_policy,
         :with_experience_outline
-get '/schools/on_boarding/teacher_training/new'
-
+      get '/schools/on_boarding/teacher_training/new'
     end
-
 
     it 'assigns the model' do
       expect(assigns(:teacher_training)).to \

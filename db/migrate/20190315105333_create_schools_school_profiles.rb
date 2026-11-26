@@ -1,7 +1,6 @@
 class CreateSchoolsSchoolProfiles < ActiveRecord::Migration[5.2]
   def change
     create_table :schools_school_profiles do |t|
-
       t.timestamps
       t.integer :urn, null: false
       t.string :candidate_requirement_dbs_requirement

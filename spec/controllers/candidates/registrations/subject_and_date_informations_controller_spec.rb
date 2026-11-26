@@ -70,7 +70,6 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
         }
       end
 
-
       specify 'correctly stores the primary placement date in the registration session' do
         persisted_session = \
           Candidates::Registrations::RegistrationStore.instance.retrieve! session['registrations']['11048']
@@ -87,7 +86,6 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
         {}
       end
 
-
       specify { expect { subject }.to raise_error(ActionController::ParameterMissing, /candidates_registrations_subject_and_date_information/) }
     end
 
@@ -102,7 +100,6 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
           }
         }
       end
-
 
       specify 'correctly stores the secondary placement date in the registration session' do
         persisted_session = \

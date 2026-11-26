@@ -29,7 +29,6 @@ shared_examples_for "notify template" do |template_id, personalisation|
     )
   end
 
-
   before do
     allow(NotifyService.instance).to receive(:notification_class).and_return(NotifyFakeClient)
   end
@@ -66,9 +65,8 @@ shared_examples_for "notify template" do |template_id, personalisation|
     describe '#despatch_later!' do
       before do
         allow(Notify::BaseJob).to receive(:perform_later).and_return(true)
-subject.despatch_later!
+        subject.despatch_later!
       end
-
 
       specify 'it enqueues the email delivery job' do
         subject.to.each do |address|
@@ -130,17 +128,14 @@ shared_examples_for "email template from application preview" do |args|
         'Notify::API_KEY',
         ["somekey", SecureRandom.uuid, SecureRandom.uuid].join("-")
       )
-create(:bookings_school, :with_fixed_availability_preference, urn: 11_048)
+      create(:bookings_school, :with_fixed_availability_preference, urn: 11_048)
     end
 
     let(:ap) { Candidates::Registrations::ApplicationPreview.new(rs) }
     let(:to) { "morris.szyslak@moes.net" }
     let(:rs) { build(:registration_session, urn: 11_048) }
 
-
     specify { expect(described_class).to respond_to(:from_application_preview) }
-
-
 
     it { is_expected.to be_a(described_class) }
 

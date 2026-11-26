@@ -5,8 +5,10 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
 
   include_context 'with a stubbed current registration'
 
-  before { create(:bookings_school, urn: 10_020)
-create(:bookings_school, urn: 11_048)  }
+  before do
+    create(:bookings_school, urn: 10_020)
+    create(:bookings_school, urn: 11_048)
+  end
 
   let :registration_session do
     Candidates::Registrations::RegistrationSession.new('urn' => '11048')

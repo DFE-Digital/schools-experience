@@ -27,7 +27,6 @@ describe Cron::IdentifyClosedSchoolsJob, type: :job do
       CSV
     end
 
-
     before do
       temp_csv = Tempfile.new
       temp_csv.write(csv)

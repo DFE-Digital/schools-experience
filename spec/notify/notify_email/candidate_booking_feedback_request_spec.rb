@@ -18,7 +18,6 @@ describe NotifyEmail::CandidateBookingFeedbackRequest do
       candidate.gitis_uuid = candidate.gitis_contact.candidate_id
     end
 
-
     context "when assigning attributes" do
       it "candidate_name is correctly-assigned" do
         expect(subject.candidate_name).to eql(booking.candidate_name)

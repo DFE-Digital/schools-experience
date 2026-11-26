@@ -14,7 +14,6 @@ describe DFEAuthentication do
 
     it { expect(described_class.ancestors).to include(DFEAuthentication) }
 
-
     describe 'login redirect' do
       subject do
         get :show
@@ -63,8 +62,10 @@ describe DFEAuthentication do
       end
 
       context 'when the current user is not set' do
-        before { get :show
-controller.session[:current_user] = teacher_session  }
+        before do
+          get :show
+          controller.session[:current_user] = teacher_session
+        end
 
         specify 'should retrieve the current user from the session' do
           expect(subject.send(:current_user)).to eql(teacher_user)
@@ -135,8 +136,10 @@ controller.session[:current_user] = teacher_session  }
     end
 
     describe '#other_school_urns' do
-      before { allow(controller).to receive(:school_urns).and_return([1, 2, 3])
-allow(controller).to receive(:current_school) { build(:bookings_school, urn: 2) }  }
+      before do
+        allow(controller).to receive(:school_urns).and_return([1, 2, 3])
+        allow(controller).to receive(:current_school) { build(:bookings_school, urn: 2) }
+      end
 
       it { expect(subject.send(:other_school_urns)).to eql [1, 3] }
     end
@@ -149,8 +152,10 @@ allow(controller).to receive(:current_school) { build(:bookings_school, urn: 2) 
       end
 
       context 'when only one school' do
-        before { allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
-allow(controller).to receive(:other_school_urns).and_return([])  }
+        before do
+          allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
+          allow(controller).to receive(:other_school_urns).and_return([])
+        end
 
         it { expect(subject.send(:has_other_schools?)).to be false }
       end

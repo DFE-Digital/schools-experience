@@ -28,10 +28,8 @@ describe NotifyEmail::CandidateBookingReminder do
         'Notify::API_KEY',
         ["somekey", SecureRandom.uuid, SecureRandom.uuid].join("-")
       )
-allow(booking).to receive(:candidate_name).and_return(candidate_name)
-allow(booking).to receive(:candidate_name).and_return(candidate_name)
-
-
+      allow(booking).to receive(:candidate_name).and_return(candidate_name)
+      allow(booking).to receive(:candidate_name).and_return(candidate_name)
     end
 
     let!(:cancellation_url) { "#{Rails.configuration.x.base_url}/candidates/cancel/#{booking.token}" }
@@ -49,13 +47,7 @@ allow(booking).to receive(:candidate_name).and_return(candidate_name)
     let!(:school) { create(:bookings_school) }
     let(:time_until_booking) { "2 weeks" }
 
-
     specify { expect(described_class).to respond_to(:from_booking) }
-
-
-
-
-
 
     it { is_expected.to be_a(described_class) }
 

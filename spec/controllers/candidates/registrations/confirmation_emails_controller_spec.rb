@@ -34,14 +34,15 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
     before { allow(Feature).to receive(:enabled?).with(:skip_candidate_confirmation_emails) { skip_confirmation_emails } }
 
     context 'when skipped step' do
-      before { registration_store.send :delete, 'some-uuid'
-post candidates_school_registrations_confirmation_email_path(school)
-       } # ensure key not left lying around
+      # ensure key not left lying around
+      before do
+        registration_store.send :delete, 'some-uuid'
+        post candidates_school_registrations_confirmation_email_path(school)
+      end
 
       let :registration_session do
         FactoryBot.build :registration_session, with: []
       end
-
 
       it "doesn't store the session" do
         expect {

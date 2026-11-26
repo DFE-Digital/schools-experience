@@ -70,7 +70,6 @@ RSpec.describe Bookings::Candidate, type: :model do
 
       let!(:candidate) { create(:candidate, gitis_uuid: gitis_contact.candidate_id) }
 
-
       it "return existing candidate" do
         expect(subject).to eql candidate
       end
@@ -94,7 +93,6 @@ RSpec.describe Bookings::Candidate, type: :model do
       subject { described_class.find_by_gitis_contact! gitis_contact }
 
       let!(:candidate) { create(:candidate, gitis_uuid: gitis_contact.candidate_id) }
-
 
       it "return existing candidate" do
         expect(subject).to eql candidate
@@ -120,7 +118,6 @@ RSpec.describe Bookings::Candidate, type: :model do
     end
 
     let(:gitis_contact) { build(:api_schools_experience_sign_up_with_name) }
-
 
     context 'with existing' do
       let!(:candidate) { create(:candidate, gitis_uuid: gitis_contact.candidate_id) }
@@ -155,14 +152,13 @@ RSpec.describe Bookings::Candidate, type: :model do
 
     let(:registration) { build(:registration_session, :with_school) }
 
-
     before do
       api_client = instance_double(GetIntoTeachingApiClient::SchoolsExperienceApi)
       allow(GetIntoTeachingApiClient::SchoolsExperienceApi).to receive(:new).and_return(api_client)
       allow(api_client).to receive(:sign_up_schools_experience_candidate) do |sign_up|
-          sign_up.candidate_id = SecureRandom.uuid
-          sign_up
-        end
+        sign_up.candidate_id = SecureRandom.uuid
+        sign_up
+      end
     end
 
     it { is_expected.to be_a described_class }
@@ -189,7 +185,6 @@ RSpec.describe Bookings::Candidate, type: :model do
       let(:candidate) { create(:candidate, :with_api_contact) }
       let(:contact) { candidate.gitis_contact }
 
-
       it "returns the existing candidate" do
         expect(subject).to eql candidate
       end
@@ -212,7 +207,6 @@ RSpec.describe Bookings::Candidate, type: :model do
       end
 
       let(:contact) { build(:api_schools_experience_sign_up_with_name) }
-
 
       it "creates a Candidate" do
         expect(subject).to be_a described_class
@@ -237,7 +231,6 @@ RSpec.describe Bookings::Candidate, type: :model do
       end
 
       let(:contact_id) { SecureRandom.uuid }
-
 
       it "creates a Candidate" do
         expect(subject).to be_a described_class
@@ -267,7 +260,6 @@ RSpec.describe Bookings::Candidate, type: :model do
     let(:registration) { build(:registration_session, :with_school) }
     let(:candidate) { build(:candidate, :with_api_contact) }
 
-
     it { is_expected.to be_a described_class }
     it { is_expected.to have_attributes(gitis_uuid: subject.gitis_contact.candidate_id) }
     it { is_expected.to have_attributes(gitis_contact: instance_of(GetIntoTeachingApiClient::SchoolsExperienceSignUp)) }
@@ -287,7 +279,6 @@ RSpec.describe Bookings::Candidate, type: :model do
     let(:candidate_uuid) { candidate.gitis_uuid }
 
     before { candidate.assign_gitis_contact contact }
-
 
     it 'updates the gitis contact' do
       expect(candidate).to have_attributes gitis_contact: contact
