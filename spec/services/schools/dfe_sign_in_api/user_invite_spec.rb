@@ -26,8 +26,9 @@ describe Schools::DFESignInAPI::UserInvite, type: :model do
   describe '#create' do
     context 'when API is enabled' do
       it 'makes a POST request to the API endpoint' do
-        expect(user_invite).to receive(:response)
+        allow(user_invite).to receive(:response)
         user_invite.create
+        expect(user_invite).to have_received(:response)
       end
     end
 

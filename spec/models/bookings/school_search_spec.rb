@@ -61,7 +61,7 @@ describe Bookings::SchoolSearch do
       end
     end
 
-    context 'Limiting to United Kingdom' do
+    context 'when limiting to united kingdom' do
       specify 'region should be United Kingdom' do
         expect(described_class::REGION).to eql('United Kingdom')
       end
@@ -78,24 +78,24 @@ describe Bookings::SchoolSearch do
               )
             ]
           )
+          allow(Rails.logger).to receive(:info)
+          described_class.new(location: 'Mumbai')
         end
 
-        after { described_class.new(location: 'Mumbai') }
-
         specify "should append the region to the Geocoder query" do
-          expect(Geocoder).to receive(:search)
+          expect(Geocoder).to have_received(:search)
             .with('Mumbai, United Kingdom', params: described_class::GEOCODER_PARAMS)
         end
 
         specify 'should return an empty result' do
-          expect(Rails.logger).to receive(:info).with("No Geocoder results found for Mumbai, United Kingdom (user entered: Mumbai)")
+          expect(Rails.logger).to have_received(:info).with("No Geocoder results found for Mumbai, United Kingdom (user entered: Mumbai)")
         end
       end
     end
   end
 
   describe '#results' do
-    context 'Search Criteria' do
+    context 'with search criteria' do
       before do
         allow(Geocoder).to receive(:search).and_return(geocoder_manchester_search_result)
       end
@@ -119,7 +119,7 @@ describe Bookings::SchoolSearch do
         )
       end
 
-      context 'When no conditions are supplied' do
+      context 'when no conditions are supplied' do
         subject { described_class.new(query: '', location: '').results }
 
         specify 'results should include no schools' do
@@ -127,7 +127,7 @@ describe Bookings::SchoolSearch do
         end
       end
 
-      context 'Only enabled schools should be returned' do
+      context 'when only enabled schools should be returned' do
         subject { described_class.new(location: 'Manchester').results }
 
         let!(:enabled_school) { create(:bookings_school, :onboarded, coordinates: point_in_manchester) }
@@ -143,10 +143,10 @@ describe Bookings::SchoolSearch do
         end
       end
 
-      context 'When coodinates are supplied' do
+      context 'when coodinates are supplied' do
         let!(:coords) { geocoder_manchester_search_result[0] }
 
-        context 'When text and latitude and longitude are supplied' do
+        context 'when text and latitude and longitude are supplied' do
           subject do
             described_class.new(query: 'Springfield', location: {
               latitude: coords.latitude, longitude: coords.longitude
@@ -162,7 +162,7 @@ describe Bookings::SchoolSearch do
           end
         end
 
-        context 'When only lat and lon are supplied' do
+        context 'when only lat and lon are supplied' do
           subject do
             described_class.new(
               query: '',
@@ -183,7 +183,7 @@ describe Bookings::SchoolSearch do
           end
         end
 
-        context 'When only latitude is supplied' do
+        context 'when only latitude is supplied' do
           subject do
             described_class.new(query: '', location: {
               latitude: coords.latitude
@@ -197,7 +197,7 @@ describe Bookings::SchoolSearch do
           end
         end
 
-        context 'When only longitude is supplied' do
+        context 'when only longitude is supplied' do
           subject do
             described_class.new(query: '', location: {
               longitude: coords.longitude
@@ -212,13 +212,13 @@ describe Bookings::SchoolSearch do
         end
       end
 
-      context 'Geocoder' do
-        context 'When Geocoder finds a location' do
+      context 'when geocoder' do
+        context 'when Geocoder finds a location' do
           before do
             allow(Geocoder).to receive(:search).and_return(geocoder_manchester_search_result)
           end
 
-          context 'When text and location are supplied' do
+          context 'when text and location are supplied' do
             subject { described_class.new(query: 'Springfield', location: 'Manchester').results }
 
             specify 'results should include matching records' do
@@ -230,7 +230,7 @@ describe Bookings::SchoolSearch do
             end
           end
 
-          context 'When only a location is supplied' do
+          context 'when only a location is supplied' do
             subject { described_class.new(query: '', location: 'Manchester').results }
 
             let!(:matching_school) do
@@ -247,8 +247,8 @@ describe Bookings::SchoolSearch do
           end
         end
 
-        context 'When Geocoder finds no location' do
-          context 'When the query does not match a school' do
+        context 'when Geocoder finds no location' do
+          context 'when the query does not match a school' do
             subject { described_class.new(location: 'Chippewa, Michigan').results }
 
             before do
@@ -262,8 +262,8 @@ describe Bookings::SchoolSearch do
           end
         end
 
-        context 'When Geocoder returns an invalid location' do
-          context 'When the query matches a school' do
+        context 'when Geocoder returns an invalid location' do
+          context 'when the query matches a school' do
             subject { described_class.new(location: 'Madrid') }
 
             before do
@@ -278,7 +278,7 @@ describe Bookings::SchoolSearch do
         end
       end
 
-      context 'Filtering' do
+      context 'when filtering' do
         # subjects
         let(:maths) { Bookings::Subject.find_by! name: "Maths" }
         let(:physics) { Bookings::Subject.find_by! name: "Physics" }
@@ -290,7 +290,7 @@ describe Bookings::SchoolSearch do
         let!(:dbs_inschool) { create(:bookings_profile, dbs_policy_conditions: 'inschool') }
         let!(:dbs_notrequired) { create(:bookings_profile, dbs_policy_conditions: 'notrequired') }
 
-        context 'Filtering on subjects' do
+        context 'when filtering on subjects' do
           subject { described_class.new(query: '', location: coords_in_manchester, subjects: maths.id).results }
 
           before do
@@ -308,7 +308,7 @@ describe Bookings::SchoolSearch do
           end
         end
 
-        context 'Filtering on phases' do
+        context 'when filtering on phases' do
           subject { described_class.new(query: '', location: coords_in_manchester, phases: college.id).results }
 
           before do
@@ -326,7 +326,7 @@ describe Bookings::SchoolSearch do
           end
         end
 
-        context 'Filtering on fees' do
+        context 'when filtering on fees' do
           subject { described_class.new(query: '', location: coords_in_manchester, max_fee: 20).results }
 
           specify 'should return matching results' do
@@ -338,7 +338,7 @@ describe Bookings::SchoolSearch do
           end
         end
 
-        context 'Filtering on dbs' do
+        context 'when filtering on dbs' do
           subject { described_class.new(query: '', location: coords_in_manchester, dbs_policies: [2]).results }
 
           let!(:another_matching_school) do
@@ -366,7 +366,7 @@ describe Bookings::SchoolSearch do
           end
         end
 
-        context 'Filtering on disability confident' do
+        context 'when filtering on disability confident' do
           subject { described_class.new(query: '', location: coords_in_manchester, disability_confident: '1').results }
 
           before do
@@ -383,7 +383,7 @@ describe Bookings::SchoolSearch do
           end
         end
 
-        context 'Filtering on parking' do
+        context 'when filtering on parking' do
           subject { described_class.new(query: '', location: coords_in_manchester, parking: '1').results }
 
           specify 'should return matching results' do
@@ -398,7 +398,7 @@ describe Bookings::SchoolSearch do
         end
       end
 
-      context 'Chaining' do
+      context 'when chaining' do
         subject do
           described_class.new(
             query: 'Springf',
@@ -427,8 +427,8 @@ matching_school.phases << secondary
       end
     end
 
-    context 'Ordering' do
-      context 'Geographic ordering' do
+    context 'when ordering' do
+      context 'when geographic ordering' do
         subject do
           described_class.new(query: '', location: 'Cheetham Hill', radius: 500).results
         end
@@ -454,12 +454,16 @@ matching_school.phases << secondary
       end
     end
 
-    context 'Other scopes/criteria' do
+    context 'with other scopes/criteria' do
       let(:phases) { create_list(:bookings_phase, 2).map(&:id) }
       let(:subjects) { create_list(:bookings_subject, 2).map(&:id) }
       let(:max_fee) { 20 }
 
-      after do
+      before do
+        allow(Bookings::School).to receive(:enabled).and_call_original
+        allow(Bookings::School).to receive(:at_phases).and_call_original
+        allow(Bookings::School).to receive(:that_provide).and_call_original
+        allow(Bookings::School).to receive(:costing_upto).and_call_original
         described_class.new(
           location: 'Bury',
           phases: phases,
@@ -469,27 +473,27 @@ matching_school.phases << secondary
       end
 
       specify 'should apply the :enabled scope' do
-        expect(Bookings::School).to receive(:enabled).and_call_original
+        expect(Bookings::School).to have_received(:enabled)
       end
 
       specify 'should apply the :onboarded scope' do
-        expect(Bookings::School).to receive(:enabled).and_call_original
+        expect(Bookings::School).to have_received(:enabled)
       end
 
       specify 'should apply the :with_availability scope' do
-        expect(Bookings::School).to receive(:enabled).and_call_original
+        expect(Bookings::School).to have_received(:enabled)
       end
 
       specify 'should apply the :at_phases scope with supplied phases' do
-        expect(Bookings::School).to receive(:at_phases).with(phases).and_call_original
+        expect(Bookings::School).to have_received(:at_phases).with(phases)
       end
 
       specify 'should apply the :that_provide scope with supplied subjects' do
-        expect(Bookings::School).to receive(:that_provide).with(subjects).and_call_original
+        expect(Bookings::School).to have_received(:that_provide).with(subjects)
       end
 
       specify 'should apply the :costing_upto scope with max fee' do
-        expect(Bookings::School).to receive(:costing_upto).with(max_fee).and_call_original
+        expect(Bookings::School).to have_received(:costing_upto).with(max_fee)
       end
     end
   end
@@ -613,7 +617,7 @@ matching_school.phases << secondary
       expect(described_class.new(location: "Bury", radius: 50).total_count).to eql(matching_schools.length)
     end
 
-    context 'Saving results' do
+    context 'when saving results' do
       subject { instance.tap(&:total_count) }
 
       let(:location) { "Bury" }
@@ -645,7 +649,7 @@ matching_school.phases << secondary
         end
       end
 
-      context 'filtering' do
+      context 'when filtering' do
         subject do
           described_class.new(
             location: location,
@@ -731,7 +735,7 @@ matching_school.phases << secondary
     end
   end
 
-  context 'whitelisted_urns' do
+  context 'when whitelisted_urns' do
     subject { school_search }
 
     let(:whitelist) { '1' }
@@ -747,7 +751,7 @@ matching_school.phases << secondary
     it { is_expected.to have_attributes whitelisted_urns: [1] }
     it { is_expected.to have_attributes radius: 1000 }
 
-    context 'searching' do
+    context 'when searching' do
       subject { school_search.results.map(&:urn) }
 
       let(:schools) { create_list :bookings_school, 3, :onboarded }

@@ -2,7 +2,7 @@ require 'rails_helper'
 require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 
 describe Schools::OnBoarding::ExperienceOutlinesController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let(:task_progress_on_boarding) { false }
 
@@ -11,7 +11,7 @@ describe Schools::OnBoarding::ExperienceOutlinesController, type: :request do
       .and_return(task_progress_on_boarding)
   end
 
-  context '#new' do
+  describe '#new' do
     let! :school_profile do
       FactoryBot.create \
         :school_profile,
@@ -45,7 +45,7 @@ describe Schools::OnBoarding::ExperienceOutlinesController, type: :request do
     end
   end
 
-  context '#create' do
+  describe '#create' do
     let! :school_profile do
       FactoryBot.create \
         :school_profile,
@@ -77,7 +77,7 @@ describe Schools::OnBoarding::ExperienceOutlinesController, type: :request do
       post '/schools/on_boarding/experience_outline', params: params
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :experience_outline do
         FactoryBot.build :experience_outline
       end
@@ -103,7 +103,7 @@ describe Schools::OnBoarding::ExperienceOutlinesController, type: :request do
     end
   end
 
-  context '#edit' do
+  describe '#edit' do
     let! :school_profile do
       FactoryBot.create :school_profile, :completed
     end
@@ -121,7 +121,7 @@ describe Schools::OnBoarding::ExperienceOutlinesController, type: :request do
     end
   end
 
-  context '#update' do
+  describe '#update' do
     let! :school_profile do
       FactoryBot.create :school_profile, :completed
     end
@@ -136,7 +136,7 @@ describe Schools::OnBoarding::ExperienceOutlinesController, type: :request do
       patch '/schools/on_boarding/experience_outline', params: params
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :experience_outline do
         FactoryBot.build :experience_outline
       end

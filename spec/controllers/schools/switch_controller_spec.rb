@@ -2,8 +2,8 @@ require 'rails_helper'
 require_relative 'session_context'
 
 describe Schools::SessionsController, type: :request do
-  include_context "logged in DfE user"
-  context '#new' do
+  include_context "when a DfE user is logged in"
+  describe '#new' do
     context 'when in-app school changing is enabled' do
       subject { get new_schools_switch_path }
 

@@ -35,7 +35,7 @@ describe NotifyEmail::CandidateRequestConfirmationNoPii do
 
     it { is_expected.to be_a(described_class) }
 
-    context 'correctly assigning attributes' do
+    context 'when assigning attributes' do
       specify 'cancellation_url is correctly-assigned' do
         expect(subject.cancellation_url).to eql(cancellation_url)
       end
@@ -68,7 +68,7 @@ describe NotifyEmail::CandidateRequestConfirmationNoPii do
         expect(subject.school_name).to eql(ap.school.name)
       end
 
-      context 'placement availability/dates' do
+      context 'with placement availability/dates' do
         context 'when school availability is flexible' do
           specify 'placement_availability is correctly-assigned' do
             expect(subject.placement_availability).to eql(ap.placement_availability)

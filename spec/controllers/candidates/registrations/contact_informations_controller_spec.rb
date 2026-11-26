@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::ContactInformationsController, type: :request do
-  include_context 'Stubbed current_registration'
+  include_context 'with a stubbed current registration'
   let!(:school) { create(:bookings_school, urn: 11_048) }
 
   let(:gitis_contact) { build(:api_schools_experience_sign_up_with_name) }
@@ -11,7 +11,7 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
       FactoryBot.build :registration_session, with: %i[personal_information]
     end
 
-    context '#new' do
+    describe '#new' do
       before do
         get '/candidates/schools/11048/registrations/contact_information/new'
       end
@@ -21,7 +21,7 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
       end
     end
 
-    context '#create' do
+    describe '#create' do
       let :contact_information_params do
         {
           candidates_registrations_contact_information: \
@@ -35,7 +35,7 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
           params: contact_information_params
       end
 
-      context 'invalid' do
+      context 'when invalid' do
         let :contact_information do
           Candidates::Registrations::ContactInformation.new
         end
@@ -50,7 +50,7 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
         end
       end
 
-      context 'valid' do
+      context 'when valid' do
         let :contact_information do
           FactoryBot.build :contact_information
         end
@@ -75,7 +75,7 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
         with: %i[personal_information]
     end
 
-    context '#new' do
+    describe '#new' do
       before do
         get '/candidates/schools/11048/registrations/contact_information/new'
       end
@@ -107,7 +107,7 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
       registration_session.save existing_contact_information
     end
 
-    context '#new' do
+    describe '#new' do
       before do
         get '/candidates/schools/11048/registrations/contact_information/new'
       end
@@ -122,7 +122,7 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
       end
     end
 
-    context '#edit' do
+    describe '#edit' do
       before do
         get '/candidates/schools/11048/registrations/contact_information/edit'
       end
@@ -136,7 +136,7 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
       end
     end
 
-    context '#update' do
+    describe '#update' do
       let :contact_information_params do
         {
           candidates_registrations_contact_information: \
@@ -150,7 +150,7 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
           params: contact_information_params
       end
 
-      context 'invalid' do
+      context 'when invalid' do
         let :contact_information do
           Candidates::Registrations::ContactInformation.new
         end
@@ -165,7 +165,7 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
         end
       end
 
-      context 'valid' do
+      context 'when valid' do
         let :contact_information do
           FactoryBot.build :contact_information, town_or_city: 'Manchester'
         end

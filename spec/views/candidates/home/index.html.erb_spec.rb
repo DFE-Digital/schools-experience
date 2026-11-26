@@ -34,7 +34,7 @@ RSpec.describe "candidates/home/index", type: :view do
 
     before do
       without_partial_double_verification do
-        allow(view).to receive(:show_candidate_alert_notification?) { true }
+        allow(view).to receive(:show_candidate_alert_notification?).and_return(true)
       end
 
       allow(Rails.application.config.x.candidates).to \

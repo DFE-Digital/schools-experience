@@ -2,7 +2,7 @@ require 'rails_helper'
 require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 
 describe Schools::OnBoarding::AccessNeedsDetailsController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let(:task_progress_on_boarding) { false }
   let! :school_profile do
@@ -29,7 +29,7 @@ describe Schools::OnBoarding::AccessNeedsDetailsController, type: :request do
   end
 
 
-  context '#new' do
+  describe '#new' do
     before do
       get '/schools/on_boarding/access_needs_detail/new'
     end
@@ -44,7 +44,7 @@ describe Schools::OnBoarding::AccessNeedsDetailsController, type: :request do
     end
   end
 
-  context '#create' do
+  describe '#create' do
     let :params do
       {
         schools_on_boarding_access_needs_detail: access_needs_detail.attributes
@@ -55,7 +55,7 @@ describe Schools::OnBoarding::AccessNeedsDetailsController, type: :request do
       post '/schools/on_boarding/access_needs_detail/', params: params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :access_needs_detail do
         Schools::OnBoarding::AccessNeedsDetail.new
       end
@@ -70,7 +70,7 @@ describe Schools::OnBoarding::AccessNeedsDetailsController, type: :request do
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :access_needs_detail do
         FactoryBot.build :access_needs_detail
       end
@@ -96,7 +96,7 @@ describe Schools::OnBoarding::AccessNeedsDetailsController, type: :request do
     end
   end
 
-  context '#edit' do
+  describe '#edit' do
     let! :school_profile do
       FactoryBot.create :school_profile, :completed
     end
@@ -115,7 +115,7 @@ describe Schools::OnBoarding::AccessNeedsDetailsController, type: :request do
     end
   end
 
-  context '#update' do
+  describe '#update' do
     let! :school_profile do
       FactoryBot.create :school_profile, :completed
     end
@@ -131,7 +131,7 @@ describe Schools::OnBoarding::AccessNeedsDetailsController, type: :request do
       patch '/schools/on_boarding/access_needs_detail', params: params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :access_needs_detail do
         Schools::OnBoarding::AccessNeedsDetail.new
       end
@@ -146,7 +146,7 @@ describe Schools::OnBoarding::AccessNeedsDetailsController, type: :request do
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :access_needs_detail do
         FactoryBot.build :access_needs_detail, description: 'updated'
       end

@@ -2,13 +2,13 @@ require 'rails_helper'
 
 RSpec.describe Candidates::MapsHelper, type: :helper do
   before do
-    allow(Rails.application.config.x).to receive(:google_maps_key) { '12345' }
+    allow(Rails.application.config.x).to receive(:google_maps_key).and_return('12345')
     @latitude = "53.4782"
     @longitude = "-2.2299"
     @zoom = 8
   end
 
-  context '.static_map_url' do
+  describe '.static_map_url' do
     subject do
       static_map_url(@latitude, @longitude, mapsize: [300, 200], zoom: @zoom)
     end
@@ -20,7 +20,7 @@ RSpec.describe Candidates::MapsHelper, type: :helper do
     end
   end
 
-  context '.ajax_map' do
+  describe '.ajax_map' do
     include ActionController::Base::HelperMethods
 
     subject { ajax_map(@latitude, @longitude, mapsize: [300, 200], zoom: @zoom) }
@@ -39,7 +39,7 @@ RSpec.describe Candidates::MapsHelper, type: :helper do
     end
   end
 
-  context '.external_map_url' do
+  describe '.external_map_url' do
     subject { external_map_url(latitude: @latitude, longitude: @longitude, name: 'test', zoom: @zoom) }
 
     it "adds in latitude and longitude" do

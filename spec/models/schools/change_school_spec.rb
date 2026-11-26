@@ -47,18 +47,18 @@ describe Schools::ChangeSchool, type: :model do
     subject { change_school.available_schools }
 
     it 'only returns schools which we have in our system' do
-      is_expected.to contain_exactly(first_school, second_school)
+      expect(subject).to contain_exactly(first_school, second_school)
     end
 
     it 'returns schools in alphabetical order' do
-      is_expected.to eq([second_school, first_school])
+      expect(subject).to eq([second_school, first_school])
     end
 
     context 'when a school has outstanding tasks' do
       before { create :placement_request, school: first_school }
 
       it 'returns schools with the most outstanding tasks first' do
-        is_expected.to eq([first_school, second_school])
+        expect(subject).to eq([first_school, second_school])
       end
     end
   end
@@ -86,7 +86,7 @@ describe Schools::ChangeSchool, type: :model do
 
     context 'with valid urn' do
       it 'returns school' do
-        is_expected.to eql second_school
+        expect(subject).to eql second_school
       end
     end
 
@@ -118,7 +118,7 @@ describe Schools::ChangeSchool, type: :model do
 
 
       it "includes count only for requested school" do
-        is_expected.to be 2
+        expect(subject).to be 2
       end
     end
   end

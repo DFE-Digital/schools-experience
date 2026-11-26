@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 describe Schools::OnBoarding::TeacherTraining, type: :model do
-  context 'attributes' do
+  context 'with attributes' do
     it { is_expected.to respond_to :provides_teacher_training }
     it { is_expected.to respond_to :teacher_training_details }
     it { is_expected.to respond_to :teacher_training_url }
   end
 
-  context 'validates' do
+  context 'when validates' do
     it { is_expected.not_to allow_value(nil).for :provides_teacher_training }
 
     context 'when provides_teacher_training' do
@@ -37,7 +37,7 @@ describe Schools::OnBoarding::TeacherTraining, type: :model do
     end
   end
 
-  context '.new_from_bookings_school' do
+  describe '.new_from_bookings_school' do
     subject { described_class.new_from_bookings_school school }
 
     let :school do

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Schools::OnBoarding::Fees, type: :model do
-  context '#attributes' do
+  describe '#attributes' do
     it { is_expected.to respond_to :selected_fees }
     it { is_expected.to respond_to :dbs_fees_specified }
   end
@@ -10,7 +10,7 @@ describe Schools::OnBoarding::Fees, type: :model do
     it { expect(subject.dbs_fees_specified).to be(true) }
   end
 
-  context 'validations' do
+  context 'when validating' do
     describe "#selected_fees" do
       context "when no options are selected" do
         subject do

@@ -101,7 +101,7 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
     end
   end
 
-  context '#sent!' do
+  describe '#sent!' do
     subject { FactoryBot.create :cancellation }
 
     before do
@@ -201,7 +201,7 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
       let(:cancellation) { build(:cancellation, fully_booked: true, duplicate: true, reason: nil) }
 
       it "returns the translated strings" do
-        is_expected.to contain_exactly(
+        expect(subject).to contain_exactly(
           "The date you requested is fully booked.",
           "This is a duplicate request."
         )
@@ -214,7 +214,7 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
         end
 
         it "returns the translated strings" do
-          is_expected.to contain_exactly(
+          expect(subject).to contain_exactly(
             "The date you requested is fully booked.",
             "This is a duplicate request.",
             "Other reason."

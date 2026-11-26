@@ -16,8 +16,8 @@ describe Candidates::Registrations::RegistrationState do
   end
 
 
-  context '#steps' do
-    context 'for a school with flexible dates' do
+  describe '#steps' do
+    context 'with a school that has flexible dates' do
       let :registration_session do
         build :registration_session, urn: school_with_flexible_dates.urn, with: []
       end
@@ -35,7 +35,7 @@ describe Candidates::Registrations::RegistrationState do
       end
     end
 
-    context 'for a school with fixed dates' do
+    context 'with a school that has fixed dates' do
       let :registration_session do
         build :registration_session, urn: school_with_fixed_dates.urn, with: []
       end
@@ -54,7 +54,7 @@ describe Candidates::Registrations::RegistrationState do
     end
   end
 
-  context 'for a school with fixed dates' do
+  context 'with a school that has fixed dates' do
     context 'without subject_and_date_information' do
       let :registration_session do
         build :registration_session, urn: school_with_fixed_dates.urn, with: []

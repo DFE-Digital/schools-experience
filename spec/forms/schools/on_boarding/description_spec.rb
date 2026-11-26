@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 describe Schools::OnBoarding::Description, type: :model do
-  context 'attributes' do
+  context 'with attributes' do
     it { is_expected.to respond_to :details }
   end
 
-  context 'validations' do
-    context 'details' do
+  context 'when validating' do
+    context 'when details' do
       context 'when blank' do
         subject { described_class.new details: '' }
 

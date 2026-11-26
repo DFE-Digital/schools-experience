@@ -14,7 +14,7 @@ RSpec.describe Candidates::SchoolSearch do
     it { is_expected.to eq(%w[location]) }
   end
 
-  context '.new' do
+  describe '.new' do
     subject do
       described_class.new(
         query: 'this',
@@ -96,7 +96,7 @@ RSpec.describe Candidates::SchoolSearch do
     end
   end
 
-  context 'delegation' do
+  context 'when delegating' do
     it { expect(subject).to delegate_method(:valid?).to(:school_search) }
     it { expect(subject).to delegate_method(:errors).to(:school_search) }
     it { expect(subject).to delegate_method(:location_name).to(:school_search) }
@@ -108,7 +108,7 @@ RSpec.describe Candidates::SchoolSearch do
     it { expect(subject).to delegate_method(:parking_count).to(:school_search) }
   end
 
-  context '.subjects=' do
+  describe '.subjects=' do
     context 'with blank strings' do
       before { subject.subjects = [1, '', 3] }
 
@@ -142,7 +142,7 @@ RSpec.describe Candidates::SchoolSearch do
     end
   end
 
-  context '.phases=' do
+  describe '.phases=' do
     context 'with blank strings' do
       before { subject.phases = [1, '', 3] }
 
@@ -176,7 +176,7 @@ RSpec.describe Candidates::SchoolSearch do
     end
   end
 
-  context '.dbs_policies=' do
+  describe '.dbs_policies=' do
     context 'with blank strings' do
       before { subject.dbs_policies = [1, '', 3] }
 
@@ -210,7 +210,7 @@ RSpec.describe Candidates::SchoolSearch do
     end
   end
 
-  context 'max_fee=' do
+  context 'when max_fee=' do
     context 'with known value' do
       before { subject.max_fee = '30' }
 
@@ -252,7 +252,7 @@ RSpec.describe Candidates::SchoolSearch do
     end
   end
 
-  context '.results' do
+  describe '.results' do
     subject { described_class.new(query: 'Test School') }
 
     it 'returns array of Schools' do
@@ -260,7 +260,7 @@ RSpec.describe Candidates::SchoolSearch do
     end
   end
 
-  context '.total_count' do
+  describe '.total_count' do
     subject { described_class.new(query: 'Test School') }
 
     it 'returns array of Schools' do
@@ -268,7 +268,7 @@ RSpec.describe Candidates::SchoolSearch do
     end
   end
 
-  context '.valid_search?' do
+  describe '.valid_search?' do
     context 'with query' do
       subject { described_class.new(query: 'Test School') }
 
@@ -328,8 +328,8 @@ RSpec.describe Candidates::SchoolSearch do
     end
   end
 
-  context '.filtering_results' do
-    context 'for blank search' do
+  describe '.filtering_results' do
+    context 'when the search is blank' do
       subject { described_class.new }
 
       it "is false" do
@@ -337,7 +337,7 @@ RSpec.describe Candidates::SchoolSearch do
       end
     end
 
-    context 'for valid search' do
+    context 'when the search is valid' do
       subject { described_class.new(query: "test") }
 
       it "is true" do
@@ -366,7 +366,7 @@ RSpec.describe Candidates::SchoolSearch do
 
 
     it do
-      is_expected.to eq({
+      expect(subject).to eq({
         "Subjects" => {
           subjects: [{ value: subject_1.id, text: "Subject 1" }, { value: subject_2.id, text: "Subject 2" }]
         },

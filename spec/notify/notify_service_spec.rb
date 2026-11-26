@@ -11,11 +11,11 @@ describe NotifyService do
 
   before do
     stub_const 'NotifyService::API_KEY', api_key
-    allow(described_class.instance).to receive(:notification_class) { Notifications::Client }
+    allow(described_class.instance).to receive(:notification_class).and_return(Notifications::Client)
     stub_request(:post, endpoint).with(body: body).to_return(response)
   end
 
-  context '#send_email' do
+  describe '#send_email' do
     let(:email_address) { 'test@example.com' }
     let(:endpoint) { "https://api.notifications.service.gov.uk/v2/notifications/email" }
 
@@ -39,7 +39,7 @@ describe NotifyService do
     end
   end
 
-  context '#send_sms' do
+  describe '#send_sms' do
     let(:endpoint) { "https://api.notifications.service.gov.uk/v2/notifications/sms" }
     let(:phone_number) { '07777777777' }
 

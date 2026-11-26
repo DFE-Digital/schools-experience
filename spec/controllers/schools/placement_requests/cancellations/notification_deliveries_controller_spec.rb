@@ -2,7 +2,7 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::PlacementRequests::Cancellations::NotificationDeliveriesController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let :school do
     Bookings::School.find_by!(urn: urn).tap do |s|
@@ -32,7 +32,7 @@ describe Schools::PlacementRequests::Cancellations::NotificationDeliveriesContro
       receive(:write_to_gitis_contact)
   end
 
-  context '#create' do
+  describe '#create' do
     before do
       post schools_placement_request_cancellation_notification_delivery_path \
         placement_request
@@ -102,7 +102,7 @@ describe Schools::PlacementRequests::Cancellations::NotificationDeliveriesContro
     end
   end
 
-  context '#show' do
+  describe '#show' do
     let :placement_request do
       FactoryBot.create \
         :placement_request, :cancelled_by_school, school: school

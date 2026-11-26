@@ -78,7 +78,7 @@ describe Schools::Attendance do
       end
 
       specify 'save should return false' do
-        is_expected.to be false
+        expect(subject).to be false
       end
 
       specify 'attendance should have 1 error' do
@@ -103,7 +103,7 @@ describe Schools::Attendance do
       end
 
       specify 'save should return true' do
-        is_expected.to be true
+        expect(subject).to be true
       end
 
       specify 'attendance.updated_bookings' do

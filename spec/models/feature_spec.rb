@@ -15,7 +15,7 @@ describe Feature do
     end
 
     context "when feature in config" do
-      before { allow(Rails).to receive(:env) { "production" } }
+      before { allow(Rails).to receive(:env).and_return("production") }
 
       context "when enabled in environment" do
         it "returns true" do

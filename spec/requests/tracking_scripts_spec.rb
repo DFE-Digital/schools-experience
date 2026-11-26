@@ -28,9 +28,9 @@ describe "Tracking Scripts", type: :request do
       it { is_expected.not_to match(/<iframe[^>]*style=/) }
     end
 
-    context "When GTM_ID is not present in the environment" do
+    context "when GTM_ID is not present in the environment" do
       before do
-        allow(ENV).to receive(:[]).with("GTM_ID") { "" }
+        allow(ENV).to receive(:[]).with("GTM_ID").and_return("")
       end
 
       it { is_expected.not_to match(gtm_script) }

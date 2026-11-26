@@ -9,7 +9,7 @@ describe Candidates::Registrations::RegistrationSession do
     allow(DateTime).to receive(:now) { date }
   end
 
-  context '#initialize' do
+  describe '#initialize' do
     before do
       described_class.new session
     end
@@ -35,7 +35,7 @@ describe Candidates::Registrations::RegistrationSession do
     end
   end
 
-  context '#save' do
+  describe '#save' do
     let :session do
       { 'some' => 'information' }
     end
@@ -63,9 +63,9 @@ describe Candidates::Registrations::RegistrationSession do
     end
   end
 
-  context '#uuid' do
+  describe '#uuid' do
     before do
-      allow(SecureRandom).to receive(:urlsafe_base64) { 'sekret' }
+      allow(SecureRandom).to receive(:urlsafe_base64).and_return('sekret')
     end
 
     context 'when uuid not already set' do
@@ -81,7 +81,7 @@ describe Candidates::Registrations::RegistrationSession do
     end
   end
 
-  context '#education_attributes' do
+  describe '#education_attributes' do
     context 'when education is not in session' do
       subject { described_class.new({}) }
 
@@ -100,7 +100,7 @@ describe Candidates::Registrations::RegistrationSession do
     end
   end
 
-  context '#education' do
+  describe '#education' do
     context 'when not education in session' do
       subject { described_class.new({}) }
 
@@ -126,7 +126,7 @@ describe Candidates::Registrations::RegistrationSession do
     end
   end
 
-  context '#teaching_preference_attributes' do
+  describe '#teaching_preference_attributes' do
     context 'when teaching_preference is not in session' do
       subject { described_class.new({}) }
 
@@ -145,7 +145,7 @@ describe Candidates::Registrations::RegistrationSession do
     end
   end
 
-  context '#teaching_preference' do
+  describe '#teaching_preference' do
     context 'when teaching_preference is not in the session' do
       subject { described_class.new({}) }
 
@@ -176,7 +176,7 @@ describe Candidates::Registrations::RegistrationSession do
     end
   end
 
-  context '#pending_email_confirmation?' do
+  describe '#pending_email_confirmation?' do
     context 'when not pending email confirmation' do
       it 'returns false' do
         expect(described_class.new({})).not_to be_pending_email_confirmation
@@ -192,7 +192,7 @@ describe Candidates::Registrations::RegistrationSession do
     end
   end
 
-  context '#flag_as_pending_email_confirmation!' do
+  describe '#flag_as_pending_email_confirmation!' do
     context 'when registration is not complete' do
       subject do
         described_class.new("urn" => urn)
@@ -225,7 +225,7 @@ describe Candidates::Registrations::RegistrationSession do
     end
   end
 
-  context '#fetch' do
+  describe '#fetch' do
     let :session do
       {
         'urn' => '11048',
@@ -249,8 +249,8 @@ describe Candidates::Registrations::RegistrationSession do
     end
   end
 
-  context '#completed?' do
-    context 'not completed' do
+  describe '#completed?' do
+    context 'when not completed' do
       let :session do
         {}
       end
@@ -260,7 +260,7 @@ describe Candidates::Registrations::RegistrationSession do
       end
     end
 
-    context 'completed' do
+    context 'when completed' do
       let :session do
         { 'status' => 'completed' }
       end
@@ -271,8 +271,8 @@ describe Candidates::Registrations::RegistrationSession do
     end
   end
 
-  context '#flag_as_completed!' do
-    include_context 'Stubbed candidates school'
+  describe '#flag_as_completed!' do
+    include_context 'with a stubbed candidate school'
 
     let :registration_session do
       FactoryBot.build :registration_session
@@ -289,7 +289,7 @@ describe Candidates::Registrations::RegistrationSession do
 
   # TODO: SE-1877 remove this
   context 'with legacy session data' do
-    context 'the school has fixed dates' do
+    context 'when the school has fixed dates' do
       let :school do
         create :bookings_school, :with_subjects, availability_preference_fixed: true
       end
@@ -309,13 +309,13 @@ describe Candidates::Registrations::RegistrationSession do
           bookings_placement_date_id: placement_date.id
       end
 
-      context '#placement_preference' do
+      describe '#placement_preference' do
         it 'returns a valid instance' do
           expect(registration_session.placement_preference).to be_valid
         end
       end
 
-      context '#subject_and_date_information' do
+      describe '#subject_and_date_information' do
         let :subject_and_date_information do
           registration_session.subject_and_date_information
         end

@@ -1,4 +1,4 @@
-shared_context 'Stubbed candidates school' do |fixed|
+shared_context 'with a stubbed candidate school' do |fixed|
   let :school_urn do
     11_048
   end

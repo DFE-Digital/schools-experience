@@ -2,7 +2,7 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::PreviousBookingsController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let! :school do
     Bookings::School.find_by!(urn: urn).tap do |s|

@@ -2,9 +2,9 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::OnBoarding::FeesController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
-  context '#new' do
+  describe '#new' do
     let! :school_profile do
       FactoryBot.create :school_profile,
         :with_dbs_requirement,
@@ -29,7 +29,7 @@ get '/schools/on_boarding/fees/new'
     end
   end
 
-  context '#create' do
+  describe '#create' do
     let! :school_profile do
       FactoryBot.create :school_profile,
         :with_dbs_requirement,
@@ -44,7 +44,7 @@ get '/schools/on_boarding/fees/new'
       post '/schools/on_boarding/fees', params: params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :fees do
         Schools::OnBoarding::Fees.new(selected_fees: %w[administration_fees none])
       end
@@ -58,7 +58,7 @@ get '/schools/on_boarding/fees/new'
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :fees do
         FactoryBot.build :fees
       end
@@ -83,7 +83,7 @@ get '/schools/on_boarding/fees/new'
     end
   end
 
-  context '#edit' do
+  describe '#edit' do
     let! :school_profile do
       FactoryBot.create :school_profile, :completed
     end
@@ -101,7 +101,7 @@ get '/schools/on_boarding/fees/new'
     end
   end
 
-  context '#update' do
+  describe '#update' do
     let! :school_profile do
       FactoryBot.create :school_profile, :completed
     end
@@ -114,7 +114,7 @@ get '/schools/on_boarding/fees/new'
       patch '/schools/on_boarding/fees', params: params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :fees do
         Schools::OnBoarding::Fees.new(selected_fees: %w[administration_fees none])
       end
@@ -128,7 +128,7 @@ get '/schools/on_boarding/fees/new'
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :fees do
         FactoryBot.build :fees
       end

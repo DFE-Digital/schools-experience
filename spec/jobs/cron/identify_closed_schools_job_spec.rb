@@ -83,7 +83,9 @@ describe Cron::IdentifyClosedSchoolsJob, type: :job do
       before { allow(Rails).to receive(:env) { "preprod".inquiry } }
 
       it "does not send any emails" do
-        expect(NotifyEmail::ClosedOnboardedSchoolsSummary).not_to receive(:new)
+        allow(NotifyEmail::ClosedOnboardedSchoolsSummary).to receive(:new)
+        perform
+        expect(NotifyEmail::ClosedOnboardedSchoolsSummary).not_to have_received(:new)
       end
     end
   end

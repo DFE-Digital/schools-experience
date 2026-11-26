@@ -2,7 +2,7 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::ConfirmedBookings::DateController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let(:booking) do
     create(:bookings_booking, :accepted, bookings_school: @current_user_school)
@@ -24,7 +24,7 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
       end
 
       specify do
-        is_expected.to render_template(:uneditable)
+        expect(subject).to render_template(:uneditable)
       end
     end
   end
@@ -44,7 +44,7 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
       expect(subject).to redirect_to(schools_booking_date_path(booking))
     end
 
-    context 'updating the booking' do
+    context 'when updating the booking' do
       before { subject }
 
       specify 'should update the booking' do
@@ -61,11 +61,11 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
       end
 
       specify do
-        is_expected.to render_template(:uneditable)
+        expect(subject).to render_template(:uneditable)
       end
     end
 
-    context 'events' do
+    context 'when events' do
       before do
         allow(Event).to receive(:create).and_return(true)
 subject
@@ -81,7 +81,7 @@ subject
       end
     end
 
-    context 'sending an email' do
+    context 'when sending an email' do
       let :email do
         double(NotifyEmail::CandidateBookingDateChanged, despatch_later!: true)
       end
@@ -127,7 +127,7 @@ subject
       end
     end
 
-    context 'updating with same date' do
+    context 'when updating with same date' do
       subject! { patch schools_booking_date_path(booking.id, params: params) }
 
       let(:date) { booking.date }
@@ -150,7 +150,7 @@ subject
       expect(subject).to render_template(:show)
     end
 
-    context 'dynamic contents' do
+    context 'with dynamic contents' do
       before { subject }
 
       specify 'should contain the new date' do

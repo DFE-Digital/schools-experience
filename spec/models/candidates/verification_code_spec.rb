@@ -37,12 +37,12 @@ describe Candidates::VerificationCode do
       end
 
       context "when the code is valid" do
-        include_context "api correct verification code for personal info"
+        include_context "when the API returns a correct verification code for personal information"
 
         it { is_expected.to eq(sign_up) }
 
         context "when the code is incorrect" do
-          include_context "api incorrect verification code"
+          include_context "when the API returns an incorrect verification code"
 
           it { is_expected.to be_nil }
 
@@ -54,7 +54,7 @@ describe Candidates::VerificationCode do
       end
 
       context "when gitis contact is missing the first or last name" do
-        include_context "api correct verification code for personal info without name"
+        include_context "when the API returns a correct verification code for personal information without a name"
 
         it "updates the first name" do
           expect(exchange.first_name).not_to be_empty

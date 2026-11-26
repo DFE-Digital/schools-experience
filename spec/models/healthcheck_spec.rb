@@ -29,19 +29,19 @@ RSpec.describe Healthcheck do
     subject { described_class.new.test_gitis }
 
     context "with a working connection" do
-      include_context "api healthy"
+      include_context "when the API is healthy"
 
       it { is_expected.to be true }
     end
 
     context "with a broken connection" do
-      include_context "api no connection"
+      include_context "when the API cannot be reached"
 
       it { is_expected.to be false }
     end
 
     context "with a degraded connection (CRM online)" do
-      include_context "api degraded (CRM online)"
+      include_context "when the API is degraded but CRM is online"
 
       it { is_expected.to be true }
     end
@@ -152,7 +152,7 @@ RSpec.describe Healthcheck do
   describe "#to_h" do
     subject { described_class.new.to_h }
 
-    include_context "api healthy"
+    include_context "when the API is healthy"
 
 
     it { is_expected.to include :deployment_id }
@@ -168,7 +168,7 @@ RSpec.describe Healthcheck do
   describe "#to_json" do
     subject { JSON.parse described_class.new.to_json }
 
-    include_context "api healthy"
+    include_context "when the API is healthy"
 
 
     it { is_expected.to include "deployment_id" }

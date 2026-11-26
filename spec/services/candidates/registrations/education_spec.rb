@@ -1,20 +1,20 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::Education, type: :model do
-  include_context 'Stubbed candidates school'
+  include_context 'with a stubbed candidate school'
   it_behaves_like 'a registration step'
 
-  context 'attributes' do
+  context 'with attributes' do
     it { is_expected.to respond_to :degree_stage }
     it { is_expected.to respond_to :degree_stage_explaination }
     it { is_expected.to respond_to :degree_subject }
   end
 
-  context 'validations' do
+  context 'when validating' do
     it { is_expected.to validate_presence_of :degree_stage }
 
     it do
-      is_expected.to validate_inclusion_of(:degree_stage).in_array \
+      expect(subject).to validate_inclusion_of(:degree_stage).in_array \
         described_class::OPTIONS_CONFIG.fetch 'DEGREE_STAGES'
     end
 
@@ -37,7 +37,7 @@ describe Candidates::Registrations::Education, type: :model do
       end
 
       it do
-        is_expected.to validate_absence_of(:degree_subject)
+        expect(subject).to validate_absence_of(:degree_subject)
       end
     end
 
@@ -47,12 +47,12 @@ describe Candidates::Registrations::Education, type: :model do
       end
 
       it do
-        is_expected.to validate_presence_of(:degree_subject)
+        expect(subject).to validate_presence_of(:degree_subject)
       end
     end
   end
 
-  context '#requires_subject_for_degree_stage?' do
+  describe '#requires_subject_for_degree_stage?' do
     let :result do
       described_class.new.requires_subject_for_degree_stage? stage
     end

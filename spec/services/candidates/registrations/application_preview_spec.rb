@@ -74,82 +74,82 @@ describe Candidates::Registrations::ApplicationPreview do
   end
 
 
-  context '#full_name' do
+  describe '#full_name' do
     it 'returns the correct value' do
       expect(subject.full_name).to eq "Testy McTest"
     end
   end
 
-  context '#full_address' do
+  describe '#full_address' do
     it 'returns the correct value' do
       expect(subject.full_address).to eq \
         "Test building, Test street, Test town, Testshire, TE57 1NG"
     end
   end
 
-  context '#telephone_number' do
+  describe '#telephone_number' do
     it 'returns the correct value' do
       expect(subject.telephone_number).to eq "01234567890"
     end
   end
 
-  context '#email_address' do
+  describe '#email_address' do
     it 'returns the correct value' do
       expect(subject.email_address).to eq "test@example.com"
     end
   end
 
-  context '#school' do
+  describe '#school' do
     it 'returns the correct value' do
       expect(subject.school).to eq school
     end
   end
 
-  context '#school_name' do
+  describe '#school_name' do
     it 'returns the correct value' do
       expect(subject.school_name).to eq "Test school"
     end
   end
 
-  context '#placement_outcome' do
+  describe '#placement_outcome' do
     it 'returns the correct value' do
       expect(subject.placement_outcome).to eq "test the software"
     end
   end
 
-  context '#degree_stage' do
+  describe '#degree_stage' do
     it 'returns the correct value' do
       expect(subject.degree_stage).to eq \
         "I don't have a degree and am not studying for one"
     end
   end
 
-  context '#degree_subject' do
+  describe '#degree_subject' do
     it 'returns the correct value' do
       expect(subject.degree_subject).to eq "Not applicable"
     end
   end
 
-  context '#teaching_stage' do
+  describe '#teaching_stage' do
     it 'returns the correct value' do
       expect(subject.teaching_stage).to eq \
         "I'm thinking about teaching and want to find out more"
     end
   end
 
-  context '#teaching_subject_first_choice' do
+  describe '#teaching_subject_first_choice' do
     it 'returns the correct value' do
       expect(subject.teaching_subject_first_choice).to eq "Architecture"
     end
   end
 
-  context '#teaching_subject_second_choice' do
+  describe '#teaching_subject_second_choice' do
     it 'returns the correct value' do
       expect(subject.teaching_subject_second_choice).to eq "Maths"
     end
   end
 
-  context '#dbs_check_document' do
+  describe '#dbs_check_document' do
     context 'with dbs check document' do
       let :has_dbs_check do
         true
@@ -171,7 +171,7 @@ describe Candidates::Registrations::ApplicationPreview do
     end
   end
 
-  context 'placement dates' do
+  context 'when placement dates' do
     let :fixed_date_school do
       create :bookings_school,
         name: 'Fixed date school',
@@ -184,7 +184,7 @@ describe Candidates::Registrations::ApplicationPreview do
         availability_preference_fixed: false
     end
 
-    context '#has_subject_and_date_information?' do
+    describe '#has_subject_and_date_information?' do
       context 'when school has flexible dates' do
         let :school do
           flexible_date_school
@@ -206,7 +206,7 @@ describe Candidates::Registrations::ApplicationPreview do
       end
     end
 
-    context '#placement_date_subject' do
+    describe '#placement_date_subject' do
       context 'when school has flexible dates' do
         let :school do
           flexible_date_school
@@ -230,7 +230,7 @@ describe Candidates::Registrations::ApplicationPreview do
       end
     end
 
-    context '#placement_availability' do
+    describe '#placement_availability' do
       context 'when school has flexible dates' do
         let :school do
           flexible_date_school
@@ -254,7 +254,7 @@ describe Candidates::Registrations::ApplicationPreview do
       end
     end
 
-    context '#placement_date' do
+    describe '#placement_date' do
       context 'when school has flexible dates' do
         let :school do
           flexible_date_school
@@ -278,7 +278,7 @@ describe Candidates::Registrations::ApplicationPreview do
       end
     end
 
-    context '#placement_availability_description' do
+    describe '#placement_availability_description' do
       context 'when school has flexible dates' do
         let :school do
           flexible_date_school
@@ -305,7 +305,7 @@ describe Candidates::Registrations::ApplicationPreview do
 
   # TODO: SE-1877 remove this
   context 'with legacy session data' do
-    context 'the school has fixed dates' do
+    context 'when the school has fixed dates' do
       let :school do
         create :bookings_school, :with_subjects, availability_preference_fixed: true
       end
@@ -325,7 +325,7 @@ describe Candidates::Registrations::ApplicationPreview do
           bookings_placement_date_id: placement_date.id
       end
 
-      context '#placement_availability_description' do
+      describe '#placement_availability_description' do
         it 'returns the placement date' do
           expect(subject.placement_availability_description).to \
             eq placement_date.to_s

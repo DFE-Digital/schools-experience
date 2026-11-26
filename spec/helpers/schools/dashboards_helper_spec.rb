@@ -9,7 +9,7 @@ describe Schools::DashboardsHelper, type: 'helper' do
     let(:circle) { numbered_circle(text, aria_label: aria_label) }
 
 
-    context 'id' do
+    context 'when id' do
       context 'when not set' do
         specify 'should be absent' do
           expect(subject['id']).to be_nil
@@ -41,7 +41,7 @@ describe Schools::DashboardsHelper, type: 'helper' do
 
       it { is_expected.to be_nil }
 
-      context 'and show_if_zero set' do
+      context 'when show_if_zero set' do
         subject { Nokogiri.parse circle }
 
         let(:circle) { numbered_circle 0, aria_label: 'x', show_if_zero: true }
@@ -78,7 +78,7 @@ describe Schools::DashboardsHelper, type: 'helper' do
     end
   end
 
-  context '#show_no_placement_dates_warning?' do
+  describe '#show_no_placement_dates_warning?' do
     context 'when availability preference is fixed and dates are available' do
       subject { show_no_placement_dates_warning?(school) }
 
@@ -113,7 +113,7 @@ describe Schools::DashboardsHelper, type: 'helper' do
     end
   end
 
-  context '#not_onboarded_warning' do
+  describe '#not_onboarded_warning' do
     let(:school) { create(:bookings_school) }
 
     context 'when the school has placement requests' do

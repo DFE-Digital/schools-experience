@@ -12,7 +12,7 @@ shared_examples_for "sms template" do |template_id, personalisation|
   let(:to) { "07777777777" }
   let(:template_folder) { "notify_sms" }
 
-  before { allow(Feature).to receive(:enabled?).with(:sms) { true } }
+  before { allow(Feature).to receive(:enabled?).with(:sms).and_return(true) }
 
   include_examples "notify template", template_id, personalisation
 end
@@ -31,7 +31,7 @@ shared_examples_for "notify template" do |template_id, personalisation|
 
 
   before do
-    allow(NotifyService.instance).to receive(:notification_class) { NotifyFakeClient }
+    allow(NotifyService.instance).to receive(:notification_class).and_return(NotifyFakeClient)
   end
 
   specify 'should inherit from the NotifyDespatchers::Base class' do
@@ -143,7 +143,7 @@ shared_examples_for "email template from application preview" do |args|
 
     it { is_expected.to be_a(described_class) }
 
-    context 'correctly assigning attributes' do
+    context 'when assigning attributes' do
       specify 'candidate_address is correctly-assigned' do
         expect(subject.candidate_address).to eql(ap.full_address)
       end
@@ -188,7 +188,7 @@ shared_examples_for "email template from application preview" do |args|
         expect(subject.school_name).to eql(ap.school.name)
       end
 
-      context 'placement availability/dates' do
+      context 'with placement availability/dates' do
         context 'when school availability is flexible' do
           let!(:school) { create(:bookings_school, urn: 11_048) }
 

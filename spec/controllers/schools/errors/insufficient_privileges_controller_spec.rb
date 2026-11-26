@@ -4,7 +4,7 @@ require_relative '../session_context'
 describe Schools::Errors::InsufficientPrivilegesController, type: :request do
   subject { get(schools_errors_inaccessible_school_path) && response }
 
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
 
   describe "#show" do

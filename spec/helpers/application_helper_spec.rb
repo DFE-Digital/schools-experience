@@ -16,7 +16,7 @@ describe ApplicationHelper, type: :helper do
   end
   let(:user) { User.exchange(dfe_sign_in_user) }
 
-  context 'Breadcrumbs' do
+  context 'when breadcrumbs' do
     subject { Nokogiri.parse(helper.breadcrumbs) }
 
     let(:args) do
@@ -68,7 +68,7 @@ describe ApplicationHelper, type: :helper do
     end
   end
 
-  context '#current_user_info_and_logout_link' do
+  describe '#current_user_info_and_logout_link' do
     subject { helper.current_user_info_and_logout_link user }
 
     context 'when a user is logged in' do
@@ -82,7 +82,7 @@ describe ApplicationHelper, type: :helper do
     end
   end
 
-  context '#current_candidate_info_and_logout_link' do
+  describe '#current_candidate_info_and_logout_link' do
     subject { helper.current_candidate_info_and_logout_link current_candidate }
 
     let(:current_candidate) do

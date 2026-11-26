@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::EducationsController, type: :request do
-  include_context 'Stubbed current_registration'
+  include_context 'with a stubbed current registration'
 
   let :registration_session do
     FactoryBot.build :registration_session, with: %i[
@@ -11,7 +11,7 @@ describe Candidates::Registrations::EducationsController, type: :request do
   end
   let!(:school) { create(:bookings_school, urn: 11_048) }
 
-  context '#new' do
+  describe '#new' do
     context 'without existing education in session' do
       before do
         get '/candidates/schools/11048/registrations/education/new'
@@ -50,7 +50,7 @@ get '/candidates/schools/11048/registrations/education/new'
     end
   end
 
-  context '#create' do
+  describe '#create' do
     let :education_params do
       { candidates_registrations_education: education.attributes }
     end
@@ -60,7 +60,7 @@ get '/candidates/schools/11048/registrations/education/new'
         params: education_params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :education do
         Candidates::Registrations::Education.new
       end
@@ -75,7 +75,7 @@ get '/candidates/schools/11048/registrations/education/new'
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :education do
         FactoryBot.build :education
       end
@@ -91,7 +91,7 @@ get '/candidates/schools/11048/registrations/education/new'
     end
   end
 
-  context '#edit' do
+  describe '#edit' do
     let :education do
       FactoryBot.build :education
     end
@@ -112,7 +112,7 @@ get '/candidates/schools/11048/registrations/education/edit'
     end
   end
 
-  context '#update' do
+  describe '#update' do
     let :existing_education do
       FactoryBot.build :education
     end
@@ -125,7 +125,7 @@ get '/candidates/schools/11048/registrations/education/edit'
     end
 
 
-    context 'invalid' do
+    context 'when invalid' do
       before do
         patch '/candidates/schools/11048/registrations/education',
           params: education_params
@@ -146,7 +146,7 @@ get '/candidates/schools/11048/registrations/education/edit'
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       before do
         patch '/candidates/schools/11048/registrations/education',
           params: education_params
@@ -171,7 +171,7 @@ get '/candidates/schools/11048/registrations/education/edit'
       end
     end
 
-    context 'unsetting explanation when changed from other' do
+    context 'when unsetting explanation when changed from other' do
       subject do
         patch '/candidates/schools/11048/registrations/education', params: params
       end

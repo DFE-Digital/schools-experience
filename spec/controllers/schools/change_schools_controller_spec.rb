@@ -2,8 +2,8 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::ChangeSchoolsController, type: :request do
-  include_context "logged in DfE user"
-  include_context "stub role check api"
+  include_context "when a DfE user is logged in"
+  include_context "when stubbing the role-check API"
 
   let(:enable_school_change) { true }
   let(:old_school) { @current_user_school }
@@ -97,7 +97,7 @@ describe Schools::ChangeSchoolsController, type: :request do
       let(:new_school_uuid) { SecureRandom.uuid }
 
       before do
-        allow_any_instance_of(described_class).to receive(:current_urn) { nil }
+        allow_any_instance_of(described_class).to receive(:current_urn).and_return(nil)
 
         allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
           receive(:uuids).and_return new_school_uuid => new_school.urn

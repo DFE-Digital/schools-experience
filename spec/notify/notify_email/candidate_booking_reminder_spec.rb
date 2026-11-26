@@ -59,7 +59,7 @@ allow(booking).to receive(:candidate_name).and_return(candidate_name)
 
     it { is_expected.to be_a(described_class) }
 
-    context 'correctly assigning attributes' do
+    context 'when assigning attributes' do
       specify 'time_until_booking is correctly assigned' do
         expect(subject.time_until_booking).to eql(time_until_booking)
       end

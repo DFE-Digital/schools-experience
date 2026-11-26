@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::ContactInformation, type: :model do
-  include_context 'Stubbed candidates school'
+  include_context 'with a stubbed candidate school'
   it_behaves_like 'a registration step'
 
-  context 'attributes' do
+  context 'with attributes' do
     it { is_expected.to respond_to :building }
     it { is_expected.to respond_to :street }
     it { is_expected.to respond_to :town_or_city }
@@ -13,8 +13,8 @@ describe Candidates::Registrations::ContactInformation, type: :model do
     it { is_expected.to respond_to :phone }
   end
 
-  context 'validations' do
-    context 'building' do
+  context 'when validating' do
+    context 'when building' do
       let(:too_long_msg) { 'Address line 1 must be 250 characters or fewer' }
 
       it { is_expected.to validate_presence_of :building }
@@ -23,25 +23,25 @@ describe Candidates::Registrations::ContactInformation, type: :model do
       it { is_expected.to validate_length_of(:building).is_at_most(250).with_message(too_long_msg) }
     end
 
-    context 'street' do
+    context 'when street' do
       let(:too_long_msg) { 'Address line 2 must be 250 characters or fewer' }
 
       it { is_expected.to validate_length_of(:street).is_at_most(250).with_message(too_long_msg) }
     end
 
-    context 'town_or_city' do
+    context 'when town_or_city' do
       let(:too_long_msg) { 'Town or city must be 80 characters or fewer' }
 
       it { is_expected.to validate_length_of(:town_or_city).is_at_most(80).with_message(too_long_msg) }
     end
 
-    context 'county' do
+    context 'when county' do
       let(:too_long_msg) { 'County must be 50 characters or fewer' }
 
       it { is_expected.to validate_length_of(:county).is_at_most(50).with_message(too_long_msg) }
     end
 
-    context 'postcode' do
+    context 'when postcode' do
       let(:too_long_msg) { 'Postcode must be 20 characters or fewer' }
 
       it { is_expected.to validate_presence_of :postcode }
@@ -50,7 +50,7 @@ describe Candidates::Registrations::ContactInformation, type: :model do
       it { is_expected.to validate_length_of(:postcode).is_at_most(20).with_message(too_long_msg) }
     end
 
-    context 'phone' do
+    context 'when phone' do
       let(:too_long_msg) { 'Phone number must be 50 digits or fewer' }
 
       it { is_expected.to validate_presence_of :phone }
@@ -58,12 +58,12 @@ describe Candidates::Registrations::ContactInformation, type: :model do
 
       it { is_expected.to validate_length_of(:phone).is_at_most(50).with_message(too_long_msg) }
 
-      context 'phone is present' do
+      context 'when phone is present' do
         valid_numbers = ['01434 634996', '+441434634996', '01234567890'].freeze
         invalid_numbers = ['7', 'q', '+4414346349'].freeze
         blank_numbers = ['', ' ', '   '].freeze
 
-        context 'valid numbers' do
+        context 'when valid numbers' do
           valid_numbers.each do |number|
             subject { described_class.new phone: number }
 
@@ -75,7 +75,7 @@ describe Candidates::Registrations::ContactInformation, type: :model do
           end
         end
 
-        context 'invalid numbers' do
+        context 'when invalid numbers' do
           invalid_numbers.each do |number|
             subject { described_class.new phone: number }
 
@@ -87,7 +87,7 @@ describe Candidates::Registrations::ContactInformation, type: :model do
           end
         end
 
-        context 'blank number' do
+        context 'when blank number' do
           blank_numbers.each do |number|
             subject { described_class.new phone: number }
 
@@ -101,7 +101,7 @@ describe Candidates::Registrations::ContactInformation, type: :model do
       end
     end
 
-    context 'postcode is present' do
+    context 'when postcode is present' do
       let(:too_long_msg) { 'Postcode must be 20 characters or fewer' }
 
       it { is_expected.to validate_length_of(:postcode).is_at_most(20).with_message(too_long_msg) }
@@ -125,7 +125,7 @@ describe Candidates::Registrations::ContactInformation, type: :model do
 
       blank_postcodes = ['', ' ', '  '].freeze
 
-      context 'valid postcodes' do
+      context 'when valid postcodes' do
         valid_postcodes.each do |postcode|
           subject { described_class.new postcode: postcode }
 
@@ -137,7 +137,7 @@ describe Candidates::Registrations::ContactInformation, type: :model do
         end
       end
 
-      context 'invalid postcodes' do
+      context 'when invalid postcodes' do
         invalid_postcodes.each do |postcode|
           subject { described_class.new postcode: postcode }
 
@@ -149,7 +149,7 @@ describe Candidates::Registrations::ContactInformation, type: :model do
         end
       end
 
-      context 'blank postcodes' do
+      context 'when blank postcodes' do
         blank_postcodes.each do |postcode|
           subject { described_class.new postcode: postcode }
 

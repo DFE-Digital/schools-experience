@@ -26,32 +26,32 @@ describe DFEAuthentication do
           receive(:allow_school_change_in_app?).and_return allow_change_school
       end
 
-      context 'and ChangeSchool not enabled' do
+      context 'without ChangeSchool enabled' do
         let(:allow_change_school) { false }
 
         it 'redirects to DfE Sign in' do
-          is_expected.to redirect_to %r{#{Regexp.quote(auth_host)}}
+          expect(subject).to redirect_to %r{#{Regexp.quote(auth_host)}}
         end
 
         it 'requests organisation from DfE Sign-in' do
-          is_expected.to redirect_to %r{&scope=profile%20organisation%20openid}
+          expect(subject).to redirect_to %r{&scope=profile%20organisation%20openid}
         end
       end
 
-      context 'and ChangeSchool enabled' do
+      context 'when ChangeSchool enabled' do
         let(:allow_change_school) { true }
 
         it 'redirects to DfE Sign in' do
-          is_expected.to redirect_to %r{#{Regexp.quote(auth_host)}}
+          expect(subject).to redirect_to %r{#{Regexp.quote(auth_host)}}
         end
 
         it 'does not request organisation from DfE Sign-in' do
-          is_expected.to redirect_to %r{&scope=profile%20openid}
+          expect(subject).to redirect_to %r{&scope=profile%20openid}
         end
       end
     end
 
-    context '#current_user' do
+    describe '#current_user' do
       context 'when the current_user is set' do
         before do
           subject.instance_variable_set(:@current_user, teacher_user)
@@ -72,7 +72,7 @@ controller.session[:current_user] = teacher_session  }
       end
     end
 
-    context '#user_signed_in?' do
+    describe '#user_signed_in?' do
       context 'when a user is signed in' do
         before do
           subject.instance_variable_set(:@current_user, teacher_user)
@@ -92,7 +92,7 @@ controller.session[:current_user] = teacher_session  }
 
     describe '#school_urns' do
       before do
-        allow(Schools::DFESignInAPI::Client).to receive(:enabled?) { true }
+        allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
 
         allow(controller).to receive(:retrieve_school_uuids).and_return \
           SecureRandom.uuid => 4,
@@ -125,8 +125,8 @@ controller.session[:current_user] = teacher_session  }
 
       context 'when DfE Sign-in API is disabled' do
         before do
-          allow(Schools::DFESignInAPI::Client).to receive(:enabled?) { false }
-          allow(controller).to receive(:current_urn) { 1 }
+          allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(false)
+          allow(controller).to receive(:current_urn).and_return(1)
         end
 
         it { expect(subject.send(:school_urns)).to eql [1] }
@@ -135,7 +135,7 @@ controller.session[:current_user] = teacher_session  }
     end
 
     describe '#other_school_urns' do
-      before { allow(controller).to receive(:school_urns) { [1, 2, 3] }
+      before { allow(controller).to receive(:school_urns).and_return([1, 2, 3])
 allow(controller).to receive(:current_school) { build(:bookings_school, urn: 2) }  }
 
       it { expect(subject.send(:other_school_urns)).to eql [1, 3] }
@@ -143,14 +143,14 @@ allow(controller).to receive(:current_school) { build(:bookings_school, urn: 2) 
 
     describe '#has_other_schools' do
       context 'when other schools' do
-        before { allow(controller).to receive(:other_school_urns) { [1, 2] } }
+        before { allow(controller).to receive(:other_school_urns).and_return([1, 2]) }
 
         it { expect(subject.send(:has_other_schools?)).to be true }
       end
 
       context 'when only one school' do
-        before { allow(Schools::DFESignInAPI::Client).to receive(:enabled?) { true }
-allow(controller).to receive(:other_school_urns) { [] }  }
+        before { allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
+allow(controller).to receive(:other_school_urns).and_return([])  }
 
         it { expect(subject.send(:has_other_schools?)).to be false }
       end

@@ -2,13 +2,13 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::PlacementDates::RecurrencesSelectionsController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let(:school) { Bookings::School.find_by!(urn: urn).tap { |s| create :bookings_profile, school: s } }
 
   let(:placement_date) { create :bookings_placement_date, bookings_school: school, supports_subjects: false, recurring: true, published_at: nil }
 
-  context '#new' do
+  describe '#new' do
     before do
       get new_schools_placement_date_recurrences_selection_path(placement_date.id)
     end
@@ -22,7 +22,7 @@ describe Schools::PlacementDates::RecurrencesSelectionsController, type: :reques
     end
   end
 
-  context '#create' do
+  describe '#create' do
     subject(:perform_request) do
       post "/schools/placement_dates/#{placement_date.id}/recurrences_selection", params: params
       response

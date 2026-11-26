@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe ApplicationController, type: :request do
   describe 'X-Robots-Tag' do
-    include_context "api healthy"
+    include_context "when the API is healthy"
 
     let(:header) { 'X-Robots-Tag' }
     let(:school) { create(:bookings_school) }

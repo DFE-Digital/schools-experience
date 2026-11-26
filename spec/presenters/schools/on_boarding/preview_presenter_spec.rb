@@ -7,7 +7,7 @@ describe Schools::OnBoarding::PreviewPresenter do
     create :bookings_school, :full_address, urn: 123_456
   end
 
-  context '#warning' do
+  describe '#warning' do
     let :profile do
       create :school_profile, bookings_school: school
     end

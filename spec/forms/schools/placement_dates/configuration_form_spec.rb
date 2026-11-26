@@ -5,7 +5,7 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
     create :bookings_school, :with_subjects, subject_count: 3
   end
 
-  context '.new_from_date' do
+  describe '.new_from_date' do
     subject { described_class.new_from_date placement_date }
 
     context 'when the placement_date has already been published' do
@@ -56,10 +56,10 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
     end
   end
 
-  context '#save' do
+  describe '#save' do
     before { described_class.new(attributes).save(placement_date) }
 
-    context 'for a unpublished placement_date' do
+    context 'with a unpublished placement_date' do
       let :placement_date do
         create \
           :bookings_placement_date, bookings_school: school, published_at: nil
@@ -146,7 +146,7 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
       end
     end
 
-    context 'for a published placement_date' do
+    context 'with a published placement_date' do
       let :placement_date do
         create \
           :bookings_placement_date,
@@ -214,7 +214,7 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
     end
   end
 
-  context '#subject_specific?' do
+  describe '#subject_specific?' do
     context 'when the date doesnt support subjects' do
       subject { described_class.new supports_subjects: false }
 

@@ -21,7 +21,7 @@ RSpec.describe Candidates::SessionToken, type: :model do
       subject { described_class.unconfirmed.to_a }
 
       it "onlies return confirmed token" do
-        is_expected.to eq([unconfirmed])
+        expect(subject).to eq([unconfirmed])
       end
     end
 
@@ -29,7 +29,7 @@ RSpec.describe Candidates::SessionToken, type: :model do
       subject { described_class.confirmed.to_a }
 
       it "onlies return confirmed token" do
-        is_expected.to eq([confirmed])
+        expect(subject).to eq([confirmed])
       end
     end
   end
@@ -42,7 +42,7 @@ RSpec.describe Candidates::SessionToken, type: :model do
 
 
     it "onlies return the valid token" do
-      is_expected.to eq([valid])
+      expect(subject).to eq([valid])
     end
   end
 
@@ -55,7 +55,7 @@ RSpec.describe Candidates::SessionToken, type: :model do
 
 
     it "onlies return the valid token" do
-      is_expected.to eq([valid])
+      expect(subject).to eq([valid])
     end
   end
 

@@ -1,36 +1,36 @@
 require 'rails_helper'
 
 describe Bookings::Gitis::ContactFetcher do
-  include_context "api sign ups for requests"
-  include_context "api sign up for first request"
+  include_context "when the API signs up for requests"
+  include_context "when the API signs up for the first request"
 
   let(:fetcher) { described_class.new }
   let(:school) { create :bookings_school }
   let(:requests) { create_list :bookings_placement_request, 2, school: school }
   let(:reloaded_requests) { Bookings::PlacementRequest.find requests.map(&:id) }
 
-  context 'been_merged?' do
+  context 'when been_merged?' do
     subject { fetcher.been_merged?(contact) }
 
-    context 'correct merged' do
+    context 'when correct merged' do
       let(:contact) { build(:api_schools_experience_sign_up_with_name, :merged) }
 
       it { is_expected.to be true }
     end
 
-    context 'correct unmerged' do
+    context 'when correct unmerged' do
       let(:contact) { build(:api_schools_experience_sign_up_with_name) }
 
       it { is_expected.to be false }
     end
 
-    context 'merged without master' do
+    context 'when merged without master' do
       let(:contact) { build(:api_schools_experience_sign_up_with_name, :merged, master_id: nil) }
 
       it { expect { subject }.to raise_exception described_class::InconsistentContactState }
     end
 
-    context 'master but not merged' do
+    context 'when master but not merged' do
       let(:contact) { build(:api_schools_experience_sign_up_with_name, :merged, merged: false) }
 
       it { expect { subject }.to raise_exception described_class::InconsistentContactState }
@@ -79,7 +79,7 @@ describe Bookings::Gitis::ContactFetcher do
       build :api_schools_experience_sign_up_with_name, :merged, master_id: merged.candidate_id, first_name: 'chained'
     end
 
-    context 'for single record' do
+    context 'with single record' do
       subject { fetcher.assign_to_model candidate }
 
       let(:candidate) { create :candidate, gitis_uuid: merged.candidate_id }
@@ -97,11 +97,11 @@ describe Bookings::Gitis::ContactFetcher do
       end
 
       it 'locates the master contact record' do
-        is_expected.to have_attributes gitis_contact: first
+        expect(subject).to have_attributes gitis_contact: first
       end
 
       it 'does not update the gitis UUID to match the master contact record' do
-        is_expected.to have_attributes gitis_uuid: merged.candidate_id
+        expect(subject).to have_attributes gitis_uuid: merged.candidate_id
       end
 
       it { is_expected.to have_attributes changes: {} }
@@ -110,11 +110,11 @@ describe Bookings::Gitis::ContactFetcher do
         let(:candidate) { create :candidate, gitis_uuid: chained.candidate_id }
 
         it 'locates the master contact record' do
-          is_expected.to have_attributes gitis_contact: first
+          expect(subject).to have_attributes gitis_contact: first
         end
 
         it 'does not update the gitis UUID to match the master contact record' do
-          is_expected.to have_attributes gitis_uuid: chained.candidate_id
+          expect(subject).to have_attributes gitis_uuid: chained.candidate_id
         end
 
         it { is_expected.to have_attributes changes: {} }
@@ -137,11 +137,11 @@ describe Bookings::Gitis::ContactFetcher do
 
 
         it 'locates the master contact record' do
-          is_expected.to have_attributes gitis_contact: merged
+          expect(subject).to have_attributes gitis_contact: merged
         end
 
         it 'does not update the gitis UUID to match the master contact record' do
-          is_expected.to have_attributes gitis_uuid: sixth.candidate_id
+          expect(subject).to have_attributes gitis_uuid: sixth.candidate_id
         end
 
         it { is_expected.to have_attributes changes: {} }
@@ -162,14 +162,14 @@ describe Bookings::Gitis::ContactFetcher do
           receive(:get_schools_experience_sign_ups).with([first.candidate_id]) { [first] }
       end
 
-      context 'retrieving multiple records' do
+      context 'when retrieving multiple records' do
         subject { fetcher.fetch_for_models [candidate, second_candidate] }
 
         it { is_expected.to include chained.candidate_id => first }
         it { is_expected.to include second.candidate_id => second }
       end
 
-      context 'assigning multiple records' do
+      context 'when assigning multiple records' do
         subject { fetcher.assign_to_models [candidate, second_candidate] }
 
         it "updates contact ids" do

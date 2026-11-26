@@ -11,11 +11,9 @@ describe Notify::NotifySync do
       'NotifySync::API_KEY',
       ["somekey", SecureRandom.uuid, SecureRandom.uuid].join("-")
     )
-allow(subject).to receive(:client).and_return(NotifyFakeClient.new)
-
+    allow(subject).to receive(:client).and_return(NotifyFakeClient.new)
+    allow($stdout).to receive(:puts)
   end
-
-
 
   specify "template path should be app/notify/notify_email" do
     expect(described_class::TEMPLATE_PATH).to eql(
@@ -23,36 +21,43 @@ allow(subject).to receive(:client).and_return(NotifyFakeClient.new)
     )
   end
 
-  context 'Comparing templates' do
-    context 'Present in both repositories' do
+  context 'when comparing templates' do
+    let(:local_templates) { {} }
+    let(:remote_templates) { {} }
+
+    before do
+      allow(subject).to receive_messages(
+        local_templates: local_templates,
+        remote_templates: remote_templates
+      )
+      subject.compare
+    end
+
+    context 'when present in both repositories' do
       let(:matching_template_id) { 'aaaaaaaa-bbbb-cccc-dddd-111111111111' }
       let(:matching_template_name) { 'A story about a fox' }
 
-      before do
-        allow(subject).to receive(:local_templates).and_return(
-          matching_template_id => <<~TEMPLATE_ONE
-            The quick brown fox jumped
-            over the lazy dog
-          TEMPLATE_ONE
-          .chomp,
-        )
-
-        allow(subject).to receive(:remote_templates).and_return(
+      let(:matching_template_body) do
+        <<~BODY.chomp
+          The quick brown fox jumped
+          over the lazy dog
+        BODY
+      end
+      let(:local_templates) do
+        { matching_template_id => matching_template_body }
+      end
+      let(:remote_templates) do
+        {
           matching_template_id => OpenStruct.new(
             id: matching_template_id,
             name: matching_template_name,
-            body: <<~TEMPLATE_ONE
-              The quick brown fox jumped
-              over the lazy dog
-            TEMPLATE_ONE
+            body: matching_template_body
           )
-        )
+        }
       end
 
-      after { subject.compare }
-
       specify "should state that exact templates match" do
-        expect($stdout).to receive(:puts).with(
+        expect($stdout).to have_received(:puts).with(
           [
             matching_template_id.ljust(18),
             matching_template_name.ljust(40),
@@ -62,24 +67,14 @@ allow(subject).to receive(:client).and_return(NotifyFakeClient.new)
       end
     end
 
-    context 'Missing remote templates' do
+    context 'when missing remote templates' do
       let(:local_only_template_id) { 'aaaaaaaa-bbbb-cccc-dddd-222222222222' }
-
-      before do
-        allow(subject).to receive(:local_templates).and_return(
-          local_only_template_id => <<~TEMPLATE_TWO
-            The quick brown fox jumped
-            over the lazy dog
-          TEMPLATE_TWO
-          .chomp,
-        )
-        allow(subject).to receive(:remote_templates).and_return({})
+      let(:local_templates) do
+        { local_only_template_id => "The quick brown fox jumped\nover the lazy dog" }
       end
 
-      after { subject.compare }
-
       specify "should state that local-only templates are missing from remote repository" do
-        expect($stdout).to receive(:puts).with(
+        expect($stdout).to have_received(:puts).with(
           [
             local_only_template_id.ljust(18),
             "Unknown".ljust(40),
@@ -89,29 +84,21 @@ allow(subject).to receive(:client).and_return(NotifyFakeClient.new)
       end
     end
 
-    context 'Missing local templates' do
+    context 'when missing local templates' do
       let(:remote_only_template_id) { 'aaaaaaaa-bbbb-cccc-dddd-333333333333' }
       let(:remote_only_template_name) { 'A story about a fox' }
-
-      before do
-        allow(subject).to receive(:local_templates).and_return({})
-
-        allow(subject).to receive(:remote_templates).and_return(
+      let(:remote_templates) do
+        {
           remote_only_template_id => OpenStruct.new(
             id: remote_only_template_id,
             name: remote_only_template_name,
-            body: <<~TEMPLATE_THREE
-              The quick brown fox jumped
-              over the lazy dog
-            TEMPLATE_THREE
+            body: "The quick brown fox jumped\nover the lazy dog"
           )
-        )
+        }
       end
 
-      after { subject.compare }
-
       specify "should state that local-only templates are missing from local repository" do
-        expect($stdout).to receive(:puts).with(
+        expect($stdout).to have_received(:puts).with(
           [
             remote_only_template_id.ljust(18),
             remote_only_template_name.ljust(40),
@@ -122,7 +109,7 @@ allow(subject).to receive(:client).and_return(NotifyFakeClient.new)
     end
   end
 
-  context 'Pulling templates' do
+  context 'when pulling templates' do
     let(:template_id) { 'aaaaaaaa-bbbb-cccc-dddd-444444444444' }
     let(:remote_body) do
       <<~TEMPLATE_FOUR
@@ -131,28 +118,30 @@ allow(subject).to receive(:client).and_return(NotifyFakeClient.new)
       TEMPLATE_FOUR
     end
 
-    before do
-      allow(subject).to receive(:local_templates).and_return(
-        template_id => <<~TEMPLATE_FOUR
-          The quick brown fox jumped
-          over the lazy dog
-        TEMPLATE_FOUR
-        .chomp,
-      )
-
-      allow(subject).to receive(:remote_templates).and_return(
+    let(:local_templates) do
+      { template_id => "The quick brown fox jumped\nover the lazy dog" }
+    end
+    let(:remote_templates) do
+      {
         template_id => OpenStruct.new(
           id: template_id,
           name: "My - Magic - Template",
           body: remote_body
         )
-      )
+      }
     end
 
-    after { subject.pull }
+    before do
+      allow(File).to receive(:write)
+      allow(subject).to receive_messages(
+        local_templates: local_templates,
+        remote_templates: remote_templates
+      )
+      subject.pull
+    end
 
     specify "should write the remote file" do
-      expect(File).to receive(:write).with(
+      expect(File).to have_received(:write).with(
         File.join(
           described_class::TEMPLATE_PATH,
           "my_magic_template.#{template_id}.md"

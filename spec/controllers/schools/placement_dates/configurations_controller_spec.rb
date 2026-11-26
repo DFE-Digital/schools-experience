@@ -3,7 +3,7 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::PlacementDates::ConfigurationsController, type: :request do
   include ActiveSupport::Testing::TimeHelpers
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let! :school do
     Bookings::School.find_by!(urn: urn).tap do |s|
@@ -15,7 +15,7 @@ describe Schools::PlacementDates::ConfigurationsController, type: :request do
     create :bookings_placement_date, bookings_school: school, published_at: nil
   end
 
-  context '#new' do
+  describe '#new' do
     before do
       get "/schools/placement_dates/#{placement_date.id}/configuration/new"
     end
@@ -29,7 +29,7 @@ describe Schools::PlacementDates::ConfigurationsController, type: :request do
     end
   end
 
-  context '#create' do
+  describe '#create' do
     let :params do
       {
         schools_placement_dates_configuration_form: {
@@ -47,7 +47,7 @@ describe Schools::PlacementDates::ConfigurationsController, type: :request do
         params: params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :max_bookings_count do
         0
       end
@@ -69,7 +69,7 @@ describe Schools::PlacementDates::ConfigurationsController, type: :request do
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       context 'when not available_for_all_subjects' do
         let :max_bookings_count do
           1

@@ -10,7 +10,7 @@ describe Schools::AttendanceRecords, type: :model do
 
 
     context 'with matching urn' do
-      context 'but different candidate' do
+      context 'when but different candidate' do
         let(:records) { described_class.new 10_000_000, school_urns }
 
         it { is_expected.not_to include booking }
@@ -19,17 +19,17 @@ describe Schools::AttendanceRecords, type: :model do
       context 'with matching candidate' do
         let(:records) { described_class.new candidate_id, school_urns }
 
-        context 'and attended' do
+        context 'when the candidate attended' do
           it { is_expected.to include booking }
         end
 
-        context 'and did not attend' do
+        context 'when the candidate did not attend' do
           let(:booking) { create :bookings_booking, :accepted, :unattended }
 
           it { is_expected.to include booking }
         end
 
-        context 'and no attendance info' do
+        context 'without attendance info' do
           let(:booking) { create :bookings_booking, :accepted }
 
           it { is_expected.not_to include booking }
@@ -37,7 +37,7 @@ describe Schools::AttendanceRecords, type: :model do
       end
     end
 
-    context 'for URN not in list' do
+    context 'with URN not in list' do
       let(:records) { described_class.new candidate_id, [999_999_999, 999_999_990] }
 
       it { is_expected.not_to include booking }
@@ -87,7 +87,7 @@ describe Schools::AttendanceRecords, type: :model do
 
       it { is_expected.to eq 1 }
 
-      context 'for both schools' do
+      context 'when applied to both schools' do
         let(:urns) { [school.urn, second_school.urn] }
 
         it { is_expected.to eq 2 }

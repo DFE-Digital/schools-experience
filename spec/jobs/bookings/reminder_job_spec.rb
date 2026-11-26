@@ -13,7 +13,7 @@ describe Bookings::ReminderJob, type: :job do
   end
 
 
-  context '#perform' do
+  describe '#perform' do
     before { subject }
 
     specify 'should build a new reminder with the correct params' do

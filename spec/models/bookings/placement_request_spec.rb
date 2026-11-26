@@ -5,7 +5,7 @@ describe Bookings::PlacementRequest, type: :model do
 
   subject { described_class.new bookings_school_id: school.id }
 
-  include_context 'Stubbed candidates school'
+  include_context 'with a stubbed candidate school'
 
   let! :today do
     Time.zone.today
@@ -48,16 +48,16 @@ subject.reload  }
     end
   end
 
-  context 'relationships' do
+  context 'with relationships' do
     it do
-      is_expected.to \
+      expect(subject).to \
         have_one(:candidate_cancellation)
           .dependent(:destroy)
           .class_name('Bookings::PlacementRequest::Cancellation')
     end
 
     it do
-      is_expected.to \
+      expect(subject).to \
         have_one(:school_cancellation)
           .dependent(:destroy)
           .class_name('Bookings::PlacementRequest::Cancellation')
@@ -68,7 +68,7 @@ subject.reload  }
     it { is_expected.to belong_to(:placement_date).class_name('Bookings::PlacementDate').with_foreign_key(:bookings_placement_date_id).optional }
 
     it do
-      is_expected.to belong_to(:candidate).class_name('Bookings::Candidate')\
+      expect(subject).to belong_to(:candidate).class_name('Bookings::Candidate')\
         .with_foreign_key(:candidate_id).without_validating_presence
     end
   end
@@ -77,7 +77,7 @@ subject.reload  }
 
   it_behaves_like 'a background check'
 
-  context 'scopes' do
+  context 'when scopes' do
     let :school do
       FactoryBot.create :bookings_school, :with_subjects
     end
@@ -112,39 +112,39 @@ subject.reload  }
         .bookings_placement_request
     end
 
-    context '.unprocessed' do
+    describe '.unprocessed' do
       subject { described_class.unprocessed }
 
       it do
-        is_expected.to contain_exactly(placement_request_open, placement_request_cancelled_by_school_but_not_sent, booked_but_not_accepted_placement_request)
+        expect(subject).to contain_exactly(placement_request_open, placement_request_cancelled_by_school_but_not_sent, booked_but_not_accepted_placement_request)
       end
     end
 
-    context '.unbooked' do
+    describe '.unbooked' do
       subject { described_class.unbooked }
 
       it do
-        is_expected.to contain_exactly(placement_request_open, placement_request_cancelled_by_school_but_not_sent, placement_request_closed_by_candidate, placement_request_closed_by_school, booked_but_not_accepted_placement_request)
+        expect(subject).to contain_exactly(placement_request_open, placement_request_cancelled_by_school_but_not_sent, placement_request_closed_by_candidate, placement_request_closed_by_school, booked_but_not_accepted_placement_request)
       end
     end
 
-    context '.cancelled' do
+    describe '.cancelled' do
       subject { described_class.cancelled }
 
       it do
-        is_expected.to contain_exactly(placement_request_closed_by_candidate, placement_request_closed_by_school, booked_then_cancelled_by_candidate)
+        expect(subject).to contain_exactly(placement_request_closed_by_candidate, placement_request_closed_by_school, booked_then_cancelled_by_candidate)
       end
     end
 
-    context '.not_cancelled' do
+    describe '.not_cancelled' do
       subject { described_class.not_cancelled }
 
       it do
-        is_expected.to contain_exactly(placement_request_open, placement_request_cancelled_by_school_but_not_sent, booked_placement_request, booked_but_not_accepted_placement_request)
+        expect(subject).to contain_exactly(placement_request_open, placement_request_cancelled_by_school_but_not_sent, booked_placement_request, booked_but_not_accepted_placement_request)
       end
     end
 
-    context '.withdrawn' do
+    describe '.withdrawn' do
       subject { described_class.withdrawn }
 
       let!(:unviewed) do
@@ -157,7 +157,7 @@ subject.reload  }
       it { is_expected.to eq [unviewed, placement_request_closed_by_candidate] }
     end
 
-    context '.withdrawn_but_unviewed' do
+    describe '.withdrawn_but_unviewed' do
       subject { described_class.withdrawn_but_unviewed }
 
       let!(:withdrawn_and_viewed) do
@@ -170,7 +170,7 @@ subject.reload  }
       it { is_expected.to contain_exactly(placement_request_closed_by_candidate) }
     end
 
-    context '.rejected' do
+    describe '.rejected' do
       subject { described_class.rejected }
 
       let!(:unviewed) do
@@ -184,7 +184,7 @@ subject.reload  }
     end
   end
 
-  context 'complex scopes' do
+  context 'when complex scopes' do
     let :school do
       create :bookings_school, :with_subjects
     end
@@ -214,7 +214,7 @@ subject.reload  }
       create :placement_request, school: create(:bookings_school, :with_subjects)
     end
 
-    context '.requiring_attention' do
+    describe '.requiring_attention' do
       subject { school.placement_requests.requiring_attention }
 
       it { is_expected.to     include request_pending_decision }
@@ -226,10 +226,10 @@ subject.reload  }
     end
   end
 
-  context '.create_from_registration_session' do
+  describe '.create_from_registration_session' do
     let(:candidate) { create(:candidate) }
 
-    context 'invalid session' do
+    context 'when invalid session' do
       let :invalid_session do
         Candidates::Registrations::RegistrationSession.new \
           "candidates_registrations_background_check" => {},
@@ -249,13 +249,13 @@ subject.reload  }
       end
     end
 
-    context 'valid session' do
+    context 'when valid session' do
       subject do
         candidate.placement_requests.create_from_registration_session! \
           registration_session
       end
 
-      include_context 'Stubbed candidates school'
+      include_context 'with a stubbed candidate school'
 
       let :registration_session do
         FactoryBot.build :registration_session
@@ -263,7 +263,7 @@ subject.reload  }
 
 
       it 'creates the placement request' do
-        expect { subject }.to change { described_class.count }.by 1
+        expect { subject }.to change(described_class, :count).by 1
       end
 
       it 'saves the experience type' do
@@ -276,7 +276,7 @@ subject.reload  }
         create :candidate
       end
 
-      context 'from fixed to flex' do
+      context 'when from fixed to flex' do
         let! :school do
           create :bookings_school,
             :with_placement_dates,
@@ -300,7 +300,7 @@ subject.reload  }
         end
       end
 
-      context 'from flex to fixed' do
+      context 'when from flex to fixed' do
         let! :school do
           create :bookings_school, availability_preference_fixed: false
         end
@@ -323,7 +323,7 @@ subject.reload  }
       end
     end
 
-    context 'subject_specific_date' do
+    context 'when subject_specific_date' do
       let! :candidate do
         create :candidate
       end
@@ -367,7 +367,7 @@ subject.reload  }
         end
       end
 
-      context 'the school makes the applied for subject unavailable' do
+      context 'when the school makes the applied for subject unavailable' do
         let! :placement_date do
           create :bookings_placement_date,
             bookings_school: school,
@@ -394,7 +394,7 @@ subject.reload  }
         end
       end
 
-      context 'the school makes the applied for date subject_specific' do
+      context 'when the school makes the applied for date subject_specific' do
         let! :placement_date do
           create :bookings_placement_date,
             bookings_school: school,
@@ -422,7 +422,7 @@ subject.reload  }
     end
   end
 
-  context 'attributes' do
+  context 'with attributes' do
     it { is_expected.to respond_to :gitis_contact }
     it { is_expected.to respond_to :urn }
     it { is_expected.to respond_to :degree_stage }
@@ -436,19 +436,19 @@ subject.reload  }
     it { is_expected.to respond_to :bookings_placement_date_id }
   end
 
-  context 'validations' do
+  context 'when validating' do
     it { is_expected.to validate_presence_of :urn }
 
     it { is_expected.to validate_presence_of :degree_stage }
 
     it do
-      is_expected.to validate_inclusion_of(:degree_stage).in_array \
+      expect(subject).to validate_inclusion_of(:degree_stage).in_array \
         described_class::OPTIONS_CONFIG.fetch 'DEGREE_STAGES'
     end
 
     context 'when degree stage is "Other"' do
       before do
-        allow(subject).to receive(:degree_stage) { "Other" }
+        allow(subject).to receive(:degree_stage).and_return("Other")
       end
 
       it { is_expected.to validate_presence_of :degree_stage_explaination }
@@ -462,47 +462,47 @@ subject.reload  }
 
     context 'when degree stage is "I don\'t have a degree and am not studying for one"' do
       before do
-        allow(subject).to receive(:degree_stage) { "I don't have a degree and am not studying for one" }
+        allow(subject).to receive(:degree_stage).and_return("I don't have a degree and am not studying for one")
       end
 
       it do
-        is_expected.to validate_absence_of(:degree_subject)
+        expect(subject).to validate_absence_of(:degree_subject)
       end
     end
 
     context 'when degree stage is not "I don\'t have a degree and am not studying for one"' do
       before do
-        allow(subject).to receive(:degree_stage) { 'Final year' }
+        allow(subject).to receive(:degree_stage).and_return('Final year')
       end
 
       it do
-        is_expected.to validate_presence_of(:degree_subject)
+        expect(subject).to validate_presence_of(:degree_subject)
       end
     end
 
     it { is_expected.to validate_presence_of :teaching_stage }
 
     it do
-      is_expected.to validate_inclusion_of(:teaching_stage).in_array \
+      expect(subject).to validate_inclusion_of(:teaching_stage).in_array \
         described_class::OPTIONS_CONFIG.fetch('TEACHING_STAGES')
     end
 
     it { is_expected.to validate_presence_of :subject_first_choice }
 
     it do
-      is_expected.to validate_inclusion_of(:subject_first_choice).in_array \
+      expect(subject).to validate_inclusion_of(:subject_first_choice).in_array \
         allowed_subject_choices
     end
 
     it { is_expected.to validate_presence_of :subject_second_choice }
 
     it do
-      is_expected.to validate_inclusion_of(:subject_second_choice).in_array \
+      expect(subject).to validate_inclusion_of(:subject_second_choice).in_array \
         second_subject_choices
     end
   end
 
-  context '#available_subject_choices' do
+  describe '#available_subject_choices' do
     context 'when the school has subjects' do
       before do
         school.subjects << FactoryBot.build_list(:bookings_subject, 8)
@@ -522,7 +522,7 @@ subject.reload  }
     end
   end
 
-  context '#second_subject_choices' do
+  describe '#second_subject_choices' do
     it "returns the list of subjects from it's school" do
       choices = subject.second_subject_choices
       no_choice = choices.shift
@@ -534,7 +534,7 @@ subject.reload  }
     end
   end
 
-  context '#requires_subject_for_degree_stage?' do
+  describe '#requires_subject_for_degree_stage?' do
     let :result do
       described_class.new.requires_subject_for_degree_stage? stage
     end
@@ -561,7 +561,7 @@ subject.reload  }
   end
 
 
-  context 'validations for placement preferences' do
+  context 'when validations for placement preferences' do
     before do
       placement_request.validate
     end
@@ -605,7 +605,7 @@ placement_request.validate
     end
   end
 
-  context 'validations for availability preference' do
+  context 'when validations for availability preference' do
     before do
       placement_request.validate
     end
@@ -639,7 +639,7 @@ placement_request.validate
     end
   end
 
-  context '#closed?' do
+  describe '#closed?' do
     context 'when cancelled' do
       context 'when cancelled by candidate' do
         subject { FactoryBot.create :placement_request, :cancelled }
@@ -667,7 +667,7 @@ placement_request.validate
     end
   end
 
-  context 'build_candidate_cancellation' do
+  context 'when build_candidate_cancellation' do
     let :cancellation do
       described_class.new.build_candidate_cancellation
     end
@@ -677,7 +677,7 @@ placement_request.validate
     end
   end
 
-  context 'build_school_cancellation' do
+  context 'when build_school_cancellation' do
     let :cancellation do
       described_class.new.build_school_cancellation
     end
@@ -687,7 +687,7 @@ placement_request.validate
     end
   end
 
-  context '#cancellation' do
+  describe '#cancellation' do
     context 'when cancelled by candidate' do
       subject { create(:placement_request, :cancelled) }
 
@@ -715,8 +715,8 @@ placement_request.validate
     end
   end
 
-  context '#status' do
-    context 'default' do
+  describe '#status' do
+    context 'with default' do
       subject { create(:placement_request).status }
 
       it { is_expected.to eq 'New' }
@@ -813,7 +813,7 @@ placement_request.validate
     end
   end
 
-  context '#dbs' do
+  describe '#dbs' do
     context 'when has_dbs_check' do
       subject { FactoryBot.create :placement_request, has_dbs_check: true }
 
@@ -839,7 +839,7 @@ placement_request.validate
     end
   end
 
-  context '#under_consideration?' do
+  describe '#under_consideration?' do
     context 'when under_consideration_at has a date' do
       subject { under_consideration_placement_request.under_consideration_at? }
 
@@ -910,11 +910,11 @@ placement_request.validate
     end
 
 
-    context 'when for a non subject specific date' do
+    context 'when the date is not subject-specific' do
       it { is_expected.to eq subject_1 }
     end
 
-    context 'when for a subject specific date' do
+    context 'when the date is subject-specific' do
       before { placement_request.subject = subject_2 }
 
       it { is_expected.to eq subject_2 }
@@ -944,19 +944,19 @@ placement_request.validate
     let(:date) { pr.placement_date }
 
 
-    context 'for today' do
+    context 'when the date is today' do
       before { date.date = Time.zone.today }
 
       it { is_expected.to be false }
     end
 
-    context 'for yesterday' do
+    context 'when the date is yesterday' do
       before { date.date = Time.zone.yesterday }
 
       it { is_expected.to be false }
     end
 
-    context 'for tomorrow' do
+    context 'when the date is tomorrow' do
       before { date.date = Time.zone.tomorrow }
 
       it { is_expected.to be true }

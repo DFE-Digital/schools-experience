@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 describe Schools::CsvExportForm, type: :model do
-  context "attributes" do
+  context "with attributes" do
     it { is_expected.to respond_to :from_date }
     it { is_expected.to respond_to :to_date }
   end
 
-  context "validation" do
+  context "when validating" do
     it { is_expected.to validate_presence_of(:from_date) }
     it { is_expected.to validate_presence_of(:to_date) }
 

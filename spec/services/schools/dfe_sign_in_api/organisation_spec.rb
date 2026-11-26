@@ -4,7 +4,7 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 describe Schools::DFESignInAPI::Organisation do
   subject { described_class.new(user_uuid, current_school_urn) }
 
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let(:user_uuid) { '123456' }
   let(:current_school_urn) { 987_654 }

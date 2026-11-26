@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::PersonalInformation, type: :model do
-  include_context 'Stubbed candidates school'
+  include_context 'with a stubbed candidate school'
   it_behaves_like 'a registration step'
 
-  context 'attributes' do
+  context 'with attributes' do
     it { is_expected.to respond_to :full_name }
     it { is_expected.to respond_to :first_name }
     it { is_expected.to respond_to :last_name }
@@ -13,19 +13,19 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
     it { is_expected.to have_attributes read_only: false }
   end
 
-  context 'validations' do
+  context 'when validating' do
     let(:too_long_msg) { 'Email must be 100 characters or fewer' }
 
     it { is_expected.to validate_presence_of :first_name }
     it { is_expected.to validate_presence_of :last_name }
 
     it do
-      is_expected.to validate_length_of(:first_name).is_at_most(50)
+      expect(subject).to validate_length_of(:first_name).is_at_most(50)
         .with_message('First name must be 50 characters or fewer')
     end
 
     it do
-      is_expected.to validate_length_of(:last_name).is_at_most(50)
+      expect(subject).to validate_length_of(:last_name).is_at_most(50)
         .with_message('Last name must be 50 characters or fewer')
     end
 
@@ -74,7 +74,7 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
     end
   end
 
-  context '#full_name' do
+  describe '#full_name' do
     context 'when first_name last_name attributes are set' do
       subject { described_class.new first_name: 'Testy', last_name: 'McTest' }
 

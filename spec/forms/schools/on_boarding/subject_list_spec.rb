@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 describe Schools::OnBoarding::SubjectList, type: :model do
-  context '#attibutes' do
+  describe '#attibutes' do
     it { is_expected.to respond_to :subject_ids }
   end
 
-  context '#subject_ids' do
+  describe '#subject_ids' do
     it 'removes blank values' do
       expect(described_class.new(subject_ids: [""]).subject_ids).to eq []
     end
@@ -15,7 +15,7 @@ describe Schools::OnBoarding::SubjectList, type: :model do
     end
   end
 
-  context 'validations' do
+  context 'when validating' do
     context 'when no subjects selected' do
       subject { described_class.new subject_ids: [] }
 
@@ -40,7 +40,7 @@ describe Schools::OnBoarding::SubjectList, type: :model do
     end
   end
 
-  context '.new_from_bookings_school' do
+  describe '.new_from_bookings_school' do
     subject { described_class.new_from_bookings_school bookings_school }
 
     let :bookings_school do

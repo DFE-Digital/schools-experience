@@ -7,7 +7,7 @@ describe Bookings::Data::SchoolMassImporter do
     allow_any_instance_of(Kernel).to receive(:print).and_return(nil)
   end
 
-  context 'Initialization' do
+  context 'when initializing' do
     let(:edubase_data) do
       CSV.parse(
         Rails.root.join('spec', 'sample_data', 'edubase.csv').read.scrub,
@@ -15,7 +15,7 @@ describe Bookings::Data::SchoolMassImporter do
       )
     end
 
-    context 'EduBase Data' do
+    context 'with edubase data' do
       subject { described_class.new([], edubase_data).edubase_data }
 
       specify 'should convert to a hash' do
@@ -31,7 +31,7 @@ describe Bookings::Data::SchoolMassImporter do
       end
     end
 
-    context 'Importing' do
+    context 'when importing' do
       subject { described_class.new(edubase_data) }
 
       let!(:count_before) { Bookings::School.count }
@@ -90,7 +90,7 @@ describe Bookings::Data::SchoolMassImporter do
         end
       end
 
-      context 'Cleaning up websites' do
+      context 'when cleaning up websites' do
         specify 'invalid websites should raise errors' do
           expect { subject.send(:cleanup_website, { 'URN' => 101_010, 'SchoolWebsite' => "invalidcom" }) }.to raise_error(
             RuntimeError, "invalid hostname for 101010, invalidcom"
@@ -117,7 +117,7 @@ describe Bookings::Data::SchoolMassImporter do
         end
       end
 
-      context 'Overriding email addresses' do
+      context 'when overriding email addresses' do
         subject { described_class.new(edubase_data, email_override) }
 
         let(:email_override) { "someone@someschool.org" }

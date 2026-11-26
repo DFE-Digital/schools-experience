@@ -8,7 +8,7 @@ RSpec.describe "candidates/schools/index", type: :view do
     end
   end
 
-  context 'filtering existing search' do
+  context 'when filtering existing search' do
     let(:phases) { %w[3] }
     let(:max_fee) { '60' }
     let(:subjects) { %w[1 3] }
@@ -17,13 +17,8 @@ RSpec.describe "candidates/schools/index", type: :view do
     let(:parking) { '1' }
 
     before do
-      allow(Candidates::School).to receive(:subjects).and_return(
-        [[1, 'Computer science'], [2, 'Maths'], [3, 'English']]
-      )
 
-      allow(Candidates::School).to receive(:phases).and_return(
-        [[1, 'Primary'], [2, 'Seconday'], [3, '16 to 18']]
-      )
+      allow(Candidates::School).to receive_messages(subjects: [[1, 'Computer science'], [2, 'Maths'], [3, 'English']], phases: [[1, 'Primary'], [2, 'Seconday'], [3, '16 to 18']])
 
       @school = build(:bookings_school)
       @search = Candidates::SchoolSearch.new(
@@ -108,7 +103,7 @@ RSpec.describe "candidates/schools/index", type: :view do
     end
   end
 
-  context "sorted by distance tag" do
+  context "when sorted by distance tag" do
     before do
       @search = Candidates::SchoolSearch.new
       @facet_tags = FacetTagsPresenter.new(@search.applied_filters)

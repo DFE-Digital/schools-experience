@@ -2,7 +2,7 @@ require 'rails_helper'
 require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 
 describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let :school_experience do
     instance_double(Bookings::Gitis::SchoolExperience)
@@ -32,7 +32,7 @@ describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailControl
     api.get_schools_experience_sign_up(pr.contact_uuid)
   end
 
-  context '#edit' do
+  describe '#edit' do
     before do
       get edit_schools_placement_request_acceptance_preview_confirmation_email_path(pr.id)
     end
@@ -44,7 +44,7 @@ describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailControl
     end
   end
 
-  context '#update' do
+  describe '#update' do
     before do
       allow(Bookings::Gitis::SchoolExperience).to \
         receive(:from_booking) { school_experience }

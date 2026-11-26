@@ -2,7 +2,7 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::OnBoarding::DbsFeesController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let! :school_profile do
     FactoryBot.create \
@@ -19,7 +19,7 @@ describe Schools::OnBoarding::DbsFeesController, type: :request do
       .and_return(task_progress_on_boarding)
   end
 
-  context '#new' do
+  describe '#new' do
     before do
       get '/schools/on_boarding/dbs_fee/new'
     end
@@ -33,7 +33,7 @@ describe Schools::OnBoarding::DbsFeesController, type: :request do
     end
   end
 
-  context '#edit' do
+  describe '#edit' do
     let! :school_profile do
       FactoryBot.create :school_profile, :completed
     end
@@ -52,7 +52,7 @@ describe Schools::OnBoarding::DbsFeesController, type: :request do
     end
   end
 
-  context '#create' do
+  describe '#create' do
     let :params do
       { schools_on_boarding_dbs_fee: dbs_fee.attributes }
     end
@@ -61,7 +61,7 @@ describe Schools::OnBoarding::DbsFeesController, type: :request do
       post '/schools/on_boarding/dbs_fee', params: params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :dbs_fee do
         Schools::OnBoarding::DBSFee.new
       end
@@ -79,7 +79,7 @@ describe Schools::OnBoarding::DbsFeesController, type: :request do
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :dbs_fee do
         FactoryBot.build :dbs_fee
       end

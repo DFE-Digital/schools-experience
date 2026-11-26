@@ -1,14 +1,14 @@
 require 'rails_helper'
 
 describe Schools::OnBoarding::CandidateRequirementsSelection, type: :model do
-  context 'attributes' do
+  context 'with attributes' do
     it { is_expected.to respond_to :selected_requirements }
     it { is_expected.to respond_to :maximum_distance_from_school }
     it { is_expected.to respond_to :photo_identification_details }
     it { is_expected.to respond_to :other_details }
   end
 
-  context 'before_validation' do
+  context 'when before_validation' do
     context 'when the live_locally option is selected' do
       before do
         subject.selected_requirements = %w[live_locally]
@@ -79,7 +79,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelection, type: :model do
     end
   end
 
-  context 'validations' do
+  context 'when validating' do
     describe "#selected_requirements" do
       context "when no options are selected" do
         subject { described_class.new(selected_requirements: []) }
@@ -94,7 +94,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelection, type: :model do
       end
     end
 
-    context 'maximum_distance_from_school' do
+    context 'when maximum_distance_from_school' do
       context 'when the live_locally is selected' do
         before { subject.selected_requirements = %w[live_locally] }
 
@@ -106,7 +106,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelection, type: :model do
       end
     end
 
-    context 'photo_identification_details' do
+    context 'when photo_identification_details' do
       context 'when provide_photo_identification is selected' do
         before { subject.selected_requirements = %w[provide_photo_identification] }
 
@@ -118,7 +118,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelection, type: :model do
       end
     end
 
-    context 'other details' do
+    context 'when other details' do
       context 'when other is selected' do
         before { subject.selected_requirements = %w[other] }
 

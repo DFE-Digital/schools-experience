@@ -3,7 +3,7 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::OnBoarding::CandidateParkingInformationsController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let(:task_progress_on_boarding) { false }
 
@@ -12,7 +12,7 @@ describe Schools::OnBoarding::CandidateParkingInformationsController, type: :req
       .and_return(task_progress_on_boarding)
   end
 
-  context '#new' do
+  describe '#new' do
     let! :school_profile do
       FactoryBot.create \
         :school_profile,
@@ -42,7 +42,7 @@ describe Schools::OnBoarding::CandidateParkingInformationsController, type: :req
     end
   end
 
-  context '#create' do
+  describe '#create' do
     let! :school_profile do
       FactoryBot.create \
         :school_profile,
@@ -69,7 +69,7 @@ describe Schools::OnBoarding::CandidateParkingInformationsController, type: :req
       post schools_on_boarding_candidate_parking_information_path, params: params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :candidate_parking_information do
         Schools::OnBoarding::CandidateParkingInformation.new
       end
@@ -84,7 +84,7 @@ describe Schools::OnBoarding::CandidateParkingInformationsController, type: :req
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :candidate_parking_information do
         FactoryBot.build :candidate_parking_information
       end
@@ -110,7 +110,7 @@ describe Schools::OnBoarding::CandidateParkingInformationsController, type: :req
     end
   end
 
-  context '#edit' do
+  describe '#edit' do
     let! :school_profile do
       FactoryBot.create :school_profile, :completed
     end
@@ -129,7 +129,7 @@ describe Schools::OnBoarding::CandidateParkingInformationsController, type: :req
     end
   end
 
-  context '#update' do
+  describe '#update' do
     let! :school_profile do
       FactoryBot.create :school_profile, :completed
     end
@@ -145,7 +145,7 @@ describe Schools::OnBoarding::CandidateParkingInformationsController, type: :req
       patch schools_on_boarding_candidate_parking_information_path, params: params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :candidate_parking_information do
         Schools::OnBoarding::CandidateParkingInformation.new
       end
@@ -160,7 +160,7 @@ describe Schools::OnBoarding::CandidateParkingInformationsController, type: :req
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :candidate_parking_information do
         FactoryBot.build \
           :candidate_parking_information

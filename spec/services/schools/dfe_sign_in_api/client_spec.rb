@@ -50,7 +50,7 @@ describe Schools::DFESignInAPI::Client do
   end
 
   describe '.role_check_enabled?' do
-    before { allow(Feature).to receive(:enabled?).with(:rolecheck) { true } }
+    before { allow(Feature).to receive(:enabled?).with(:rolecheck).and_return(true) }
 
     context 'when the client is disabled' do
       before { allow(subject).to receive(:enabled?).and_return(false)
@@ -68,7 +68,7 @@ allow(ENV).to receive(:fetch).and_return(true)  }
 allow(Rails.application.config.x).to receive(:dfe_sign_in_api_role_check_enabled).and_return(true)  }
 
       context 'when role check is disabled' do
-        before { allow(Feature).to receive(:enabled?).with(:rolecheck) { false } }
+        before { allow(Feature).to receive(:enabled?).with(:rolecheck).and_return(false) }
 
         context 'when the DfE Sign-in role and service environment variables are absent' do
           before { allow(ENV).to receive(:fetch).and_return(nil) }
@@ -137,8 +137,8 @@ allow(Rails.application.config.x).to receive(:dfe_sign_in_api_role_check_enabled
       end
     end
 
-    context 'timeouts' do
-      context 'first timeout' do
+    context 'when timeouts' do
+      context 'when first timeout' do
         before do
           stub_request(:get, "#{apihost}/testapi")
             .to_timeout.then
@@ -152,7 +152,7 @@ allow(Rails.application.config.x).to receive(:dfe_sign_in_api_role_check_enabled
         it { is_expected.to eql('hello' => 'world') }
       end
 
-      context 'second timeout' do
+      context 'when second timeout' do
         before do
           stub_request(:get, "#{apihost}/testapi")
             .to_timeout.then

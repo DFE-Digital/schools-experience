@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
-  include_context 'Stubbed candidates school', fixed: true
+  include_context 'with a stubbed candidate school', fixed: true
   it_behaves_like 'a registration step'
 
   describe 'attributes' do
@@ -11,7 +11,7 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
     it { is_expected.to respond_to :bookings_subject_id }
   end
 
-  context 'methods' do
+  context 'when calling methods' do
     specify { expect(subject).to respond_to(:placement_date) }
     specify { expect(subject).to respond_to(:placement_date_subject) }
   end
@@ -55,7 +55,7 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
         before { school.subjects << [maths] }
 
 
-        context 'and no date subject specified' do
+        context 'without date subject specified' do
           subject do
             described_class.new \
               urn: school.urn,
@@ -63,13 +63,13 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
           end
 
           specify 'should validate the presence of bookings_subject_id' do
-            is_expected.to \
+            expect(subject).to \
               validate_presence_of(:bookings_subject_id)
                 .with_message('Choose a subject')
           end
         end
 
-        context 'and invalid date subject specified' do
+        context 'when invalid date subject specified' do
           # race scenario if school removes subject from date whilst
           # candidate is viewing it
 
@@ -81,7 +81,7 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
           end
 
           specify 'should validate the presence of bookings_placement_date_subject' do
-            is_expected.not_to be_valid
+            expect(subject).not_to be_valid
             expect(subject.errors.full_messages).to include('Choose a subject')
           end
         end
@@ -208,15 +208,23 @@ subject.bookings_placement_date_id = 1
       subject { described_class.new }
 
       context 'when secondary dates are present' do
-        before { allow(subject).to receive(:primary_placement_dates).and_return(%w[yes])
-allow(subject).to receive(:secondary_placement_dates_grouped_by_date).and_return(%w[yes])  }
+        before do
+          allow(subject).to receive_messages(
+            primary_placement_dates: %w[yes],
+            secondary_placement_dates_grouped_by_date: %w[yes]
+          )
+        end
 
         it { is_expected.to have_primary_and_secondary_dates }
       end
 
       context 'when no secondary dates are present' do
-        before { allow(subject).to receive(:secondary_placement_dates_grouped_by_date).and_return({})
-allow(subject).to receive(:primary_placement_dates).and_return([])  }
+        before do
+          allow(subject).to receive_messages(
+            secondary_placement_dates_grouped_by_date: {},
+            primary_placement_dates: []
+          )
+        end
 
         it { is_expected.not_to have_primary_and_secondary_dates }
       end

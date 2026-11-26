@@ -11,7 +11,7 @@ describe Bookings::Reminder, type: :request do
   let(:booking) { create(:bookings_booking, :accepted, bookings_school: school, date: 3.weeks.from_now) }
 
 
-  before { allow(Feature).to receive(:enabled?).with(:sms) { true } }
+  before { allow(Feature).to receive(:enabled?).with(:sms).and_return(true) }
 
   describe '#deliver' do
     it "queues an email and sms per provided booking" do
@@ -20,7 +20,7 @@ describe Bookings::Reminder, type: :request do
       expect_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
         receive(:get_schools_experience_sign_up).with(booking.contact_uuid) { sign_up }
 
-      expect { subject.deliver }.to change { enqueued_jobs.size }.by(2)
+      expect { subject.deliver }.to change(enqueued_jobs, :size).by(2)
     end
 
     context "when it's an in school experience" do

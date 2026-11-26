@@ -19,7 +19,7 @@ describe Event, type: :model do
       expect(subject).to validate_inclusion_of(:event_type).in_array(Event::EVENT_TYPES)
     end
 
-    context 'presence of school or candidate' do
+    context 'when presence of school or candidate' do
       context 'when both are missing' do
         subject { build(:event, :without_bookings_candidate, :without_bookings_school) }
 

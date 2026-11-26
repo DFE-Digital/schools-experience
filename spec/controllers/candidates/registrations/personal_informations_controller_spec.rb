@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Candidates::Registrations::PersonalInformationsController, type: :request do
   include ActiveJob::TestHelper
 
-  include_context 'Stubbed current_registration'
+  include_context 'with a stubbed current registration'
 
   let!(:other_school) { create(:bookings_school, urn: 10_020) }
   let!(:school) { create(:bookings_school, urn: 11_048) }
@@ -13,7 +13,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
   end
 
   context 'without existing personal information in the session' do
-    context '#new' do
+    describe '#new' do
       before do
         get '/candidates/schools/10020/registrations/personal_information/new'
       end
@@ -23,7 +23,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
       end
     end
 
-    context '#create' do
+    describe '#create' do
       let :personal_information_params do
         {
           candidates_registrations_personal_information: \
@@ -34,7 +34,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
       around { |example| perform_enqueued_jobs { example.run } }
       before { NotifyFakeClient.reset_deliveries! }
 
-      context 'invalid' do
+      context 'when invalid' do
         before do
           post \
             '/candidates/schools/10020/registrations/personal_information',
@@ -55,8 +55,8 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
         end
       end
 
-      context 'valid and known to gitis' do
-        include_context "api candidate matched back"
+      context 'when valid and known to gitis' do
+        include_context "when the API candidate matches back"
 
         let :personal_information do
           FactoryBot.build :personal_information
@@ -76,8 +76,8 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
         end
       end
 
-      context 'valid but not known to gitis' do
-        include_context "api candidate not matched back"
+      context 'when valid but not known to gitis' do
+        include_context "when the API candidate does not match back"
 
         let :personal_information do
           FactoryBot.build :personal_information, email: 'unknown@mctest.com'
@@ -95,8 +95,8 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
         end
       end
 
-      context 'already signed in' do
-        include_context 'candidate signin'
+      context 'when already signed in' do
+        include_context 'when the candidate signs in'
 
         let :registration_session do
           Candidates::Registrations::GitisRegistrationSession.new({ 'urn' => '10020' }, gitis_contact)
@@ -138,13 +138,13 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
   end
 
   context 'with existing personal information in gitis' do
-    include_context 'candidate signin'
+    include_context 'when the candidate signs in'
 
     let :registration_session do
       Candidates::Registrations::GitisRegistrationSession.new({ 'urn' => '10020' }, gitis_contact)
     end
 
-    context '#new' do
+    describe '#new' do
       before do
         get '/candidates/schools/10020/registrations/personal_information/new'
       end
@@ -174,7 +174,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
       registration_session.save existing_personal_information
     end
 
-    context '#new' do
+    describe '#new' do
       before do
         get '/candidates/schools/10020/registrations/personal_information/new'
       end
@@ -189,7 +189,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
       end
     end
 
-    context '#edit' do
+    describe '#edit' do
       before do
         get '/candidates/schools/10020/registrations/personal_information/edit'
       end
@@ -203,7 +203,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
       end
     end
 
-    context '#update' do
+    describe '#update' do
       let :personal_information_params do
         {
           candidates_registrations_personal_information: \
@@ -217,7 +217,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
           params: personal_information_params
       end
 
-      context 'invalid' do
+      context 'when invalid' do
         let :personal_information do
           Candidates::Registrations::PersonalInformation.new
         end
@@ -232,7 +232,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
         end
       end
 
-      context 'valid' do
+      context 'when valid' do
         let :personal_information do
           FactoryBot.build :personal_information, email: 'new-email@test.com', urn: 10_020
         end

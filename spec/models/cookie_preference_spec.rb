@@ -9,7 +9,7 @@ describe CookiePreference, type: :model do
     it { is_expected.to respond_to :required }
     it { is_expected.to have_attributes required: true }
 
-    context 'required should be editable' do
+    context 'when required should be editable' do
       before { subject.required = false }
 
       it { is_expected.to have_attributes required: true }
@@ -17,12 +17,12 @@ describe CookiePreference, type: :model do
   end
 
   describe 'validations' do
-    context 'for analytics' do
+    context 'with analytics' do
       it { is_expected.to allow_value(true).for(:analytics) }
       it { is_expected.to allow_value(false).for(:analytics) }
 
       it do
-        is_expected.not_to allow_value(nil).for(:analytics)
+        expect(subject).not_to allow_value(nil).for(:analytics)
           .with_message('Choose On or Off for cookies which measure website use')
       end
     end
@@ -95,7 +95,7 @@ describe CookiePreference, type: :model do
     subject { described_class.all_cookies }
 
     it do
-      is_expected.to eql \
+      expect(subject).to eql \
         %w[_ga _gid ai_session ai_user]
     end
   end
@@ -106,7 +106,7 @@ describe CookiePreference, type: :model do
     before { allow(ENV).to receive(:[]).and_call_original }
 
 
-    context "analytics cookies" do
+    context "with analytics cookies" do
       it { is_expected.to include({ analytics: %w[_ga _gid ai_session ai_user] }) }
     end
   end
@@ -118,7 +118,7 @@ describe CookiePreference, type: :model do
       let(:preference) { described_class.new(analytics: true) }
 
       it do
-        is_expected.to eql \
+        expect(subject).to eql \
           %w[_ga _gid ai_session ai_user]
       end
     end
@@ -143,7 +143,7 @@ describe CookiePreference, type: :model do
       let(:preference) { described_class.new(analytics: false) }
 
       it do
-        is_expected.to eql \
+        expect(subject).to eql \
           %w[_ga _gid ai_session ai_user]
       end
     end
@@ -159,19 +159,19 @@ describe CookiePreference, type: :model do
     context 'with cookie name' do
       subject { described_class.new(params).allowed?('_ga') }
 
-      context 'for neither accepted nor rejected' do
+      context 'when neither accepted nor rejected' do
         let(:params) { {} }
 
         it { is_expected.to be false }
       end
 
-      context 'for accepted' do
+      context 'when accepted' do
         let(:params) { { analytics: true } }
 
         it { is_expected.to be true }
       end
 
-      context 'for rejected' do
+      context 'when rejected' do
         let(:params) { { analytics: false } }
 
         it { is_expected.to be false }

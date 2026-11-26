@@ -19,7 +19,7 @@ describe NotifyEmail::CandidateBookingFeedbackRequest do
     end
 
 
-    context "correctly assigning attributes" do
+    context "when assigning attributes" do
       it "candidate_name is correctly-assigned" do
         expect(subject.candidate_name).to eql(booking.candidate_name)
       end

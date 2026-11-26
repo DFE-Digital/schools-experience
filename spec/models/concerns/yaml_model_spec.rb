@@ -62,7 +62,7 @@ describe YamlModel, type: :model do
     end
   end
 
-  context 'attributes' do
+  context 'with attributes' do
     subject do
       described_class.new dob: '1978-01-01', firstname: 'James', lastname: 'Smith'
     end

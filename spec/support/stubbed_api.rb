@@ -1,11 +1,11 @@
-shared_context "api candidate matched back" do
+shared_context "when the API candidate matches back" do
   before do
     allow_any_instance_of(GetIntoTeachingApiClient::CandidatesApi).to \
       receive(:create_candidate_access_token)
   end
 end
 
-shared_context "api candidate not matched back" do
+shared_context "when the API candidate does not match back" do
   before do
     allow_any_instance_of(GetIntoTeachingApiClient::CandidatesApi).to \
       receive(:create_candidate_access_token)
@@ -13,7 +13,7 @@ shared_context "api candidate not matched back" do
   end
 end
 
-shared_context "api incorrect verification code" do
+shared_context "when the API returns an incorrect verification code" do
   before do
     allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
       receive(:exchange_access_token_for_schools_experience_sign_up)
@@ -21,7 +21,7 @@ shared_context "api incorrect verification code" do
   end
 end
 
-shared_context "api healthy" do
+shared_context "when the API is healthy" do
   before do
     response = GetIntoTeachingApiClient::HealthCheckResponse.new(status: "healthy", crm: "ok")
     allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \
@@ -29,14 +29,14 @@ shared_context "api healthy" do
   end
 end
 
-shared_context "api no connection" do
+shared_context "when the API cannot be reached" do
   before do
     allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \
       receive(:health_check).and_raise(GetIntoTeachingApiClient::ApiError)
   end
 end
 
-shared_context "api degraded (CRM online)" do
+shared_context "when the API is degraded but CRM is online" do
   before do
     response = GetIntoTeachingApiClient::HealthCheckResponse.new(status: "degraded", crm: "ok")
     allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \
@@ -44,7 +44,7 @@ shared_context "api degraded (CRM online)" do
   end
 end
 
-shared_context "api correct verification code" do
+shared_context "when the API returns a correct verification code" do
   let(:code) { "123456" }
   let(:sign_up) { build(:api_schools_experience_sign_up_with_name) }
 
@@ -55,7 +55,7 @@ shared_context "api correct verification code" do
   end
 end
 
-shared_context "api correct verification code for personal info" do
+shared_context "when the API returns a correct verification code for personal information" do
   let(:code) { "123456" }
   let(:request) do
     GetIntoTeachingApiClient::ExistingCandidateRequest.new(
@@ -73,7 +73,7 @@ shared_context "api correct verification code for personal info" do
   end
 end
 
-shared_context "api correct verification code for personal info without name" do
+shared_context "when the API returns a correct verification code for personal information without a name" do
   let(:code) { "123456" }
   let(:request) do
     GetIntoTeachingApiClient::ExistingCandidateRequest.new(
@@ -91,7 +91,7 @@ shared_context "api correct verification code for personal info without name" do
   end
 end
 
-shared_context "api latest privacy policy" do
+shared_context "when the API returns the latest privacy policy" do
   let(:current_policy) { build(:api_privacy_policy) }
 
   before do
@@ -100,7 +100,7 @@ shared_context "api latest privacy policy" do
   end
 end
 
-shared_context "api teaching subjects" do
+shared_context "when the API returns teaching subjects" do
   let(:teaching_subjects) { [] }
 
   before do
@@ -109,7 +109,7 @@ shared_context "api teaching subjects" do
   end
 end
 
-shared_context "api sign up" do
+shared_context "when the API signs up" do
   before do
     allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
       receive(:sign_up_schools_experience_candidate)
@@ -119,7 +119,7 @@ shared_context "api sign up" do
   end
 end
 
-shared_context "api add school experience" do
+shared_context "when the API adds school experience" do
   before do
     allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
       receive(:add_school_experience)
@@ -127,7 +127,7 @@ shared_context "api add school experience" do
   end
 end
 
-shared_context "api sign ups for requests" do
+shared_context "when the API signs up for requests" do
   let(:ids) { requests.map(&:contact_uuid) }
   let(:sign_ups) do
     ids.map { |id| build(:api_schools_experience_sign_up_with_name, candidate_id: id) }
@@ -140,7 +140,7 @@ shared_context "api sign ups for requests" do
   end
 end
 
-shared_context "api sign up for first request" do
+shared_context "when the API signs up for the first request" do
   before do
     id = requests.first.contact_uuid
 

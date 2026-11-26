@@ -6,16 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 63
-# This cop supports safe autocorrection (--autocorrect).
-Capybara/CurrentPathExpectation:
-  Enabled: false
-
-# Offense count: 1
-Capybara/VisibilityMatcher:
-  Exclude:
-    - "features/step_definitions/candidates/schools/filtering_steps.rb"
-
 # Offense count: 3
 # Configuration parameters: EnforcedStyle, AllowedGems, Include.
 # SupportedStyles: Gemfile, gems.rb, gemspec
@@ -34,17 +24,6 @@ Lint/Debugger:
 RSpec/AnyInstance:
   Enabled: false
 
-# Offense count: 379
-# This cop supports safe autocorrection (--autocorrect).
-RSpec/ContextMethod:
-  Enabled: false
-
-# Offense count: 995
-# Configuration parameters: Prefixes, AllowedPatterns.
-# Prefixes: when, with, without
-RSpec/ContextWording:
-  Enabled: false
-
 # Offense count: 2
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: AutoCorrect.
@@ -58,31 +37,12 @@ RSpec/EmptyExampleGroup:
 RSpec/ExampleLength:
   Max: 31
 
-# Offense count: 5
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: method_call, block
-RSpec/ExpectChange:
-  Exclude:
-    - "spec/controllers/candidates/booking_feedbacks_controller_spec.rb"
-    - "spec/controllers/candidates/registrations/sign_ins_controller_spec.rb"
-    - "spec/models/bookings/placement_date_spec.rb"
-    - "spec/models/bookings/placement_request_spec.rb"
-    - "spec/services/bookings/reminder_spec.rb"
-
 # Offense count: 4
 RSpec/ExpectInHook:
   Exclude:
     - "spec/controllers/candidates/registrations/sign_ins_controller_spec.rb"
     - "spec/jobs/notify_job_spec.rb"
     - "spec/services/bookings/gitis/school_experience_spec.rb"
-
-# Offense count: 231
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: single_line_only, single_statement_only, disallow, require_implicit
-RSpec/ImplicitSubject:
-  Enabled: false
 
 # Offense count: 36
 # Configuration parameters: Max, AllowedIdentifiers, AllowedPatterns.
@@ -119,19 +79,6 @@ RSpec/MessageChain:
     - "spec/models/bookings/placement_date_spec.rb"
     - "spec/services/candidates/registrations/dbs_requirments_checker_spec.rb"
 
-# Offense count: 21
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: have_received, receive
-RSpec/MessageSpies:
-  Exclude:
-    - "spec/controllers/schools/sessions_controller_spec.rb"
-    - "spec/jobs/cron/identify_closed_schools_job_spec.rb"
-    - "spec/lib/notify/notify_sync_spec.rb"
-    - "spec/models/bookings/booking_spec.rb"
-    - "spec/models/bookings/school_search_spec.rb"
-    - "spec/services/schools/dfe_sign_in_api/user_invite_spec.rb"
-    - "spec/validators/website_validator_spec.rb"
-
 # Offense count: 2
 RSpec/MultipleDescribes:
   Exclude:
@@ -152,12 +99,6 @@ RSpec/MultipleMemoizedHelpers:
 RSpec/MultipleSubjects:
   Exclude:
     - "spec/models/schools/change_school_spec.rb"
-
-# Offense count: 1071
-# Configuration parameters: EnforcedStyle, IgnoreSharedExamples.
-# SupportedStyles: always, named_only
-RSpec/NamedSubject:
-  Enabled: false
 
 # Offense count: 708
 # Configuration parameters: AllowedGroups.
@@ -182,16 +123,6 @@ RSpec/OverwritingSetup:
 RSpec/PendingWithoutReason:
   Exclude:
     - "spec/controllers/healthchecks_controller_spec.rb"
-
-# Offense count: 16
-# This cop supports unsafe autocorrection (--autocorrect-all).
-RSpec/ReceiveMessages:
-  Exclude:
-    - "spec/controllers/schools/sessions_controller_spec.rb"
-    - "spec/lib/notify/notify_sync_spec.rb"
-    - "spec/models/bookings/school_sync_spec.rb"
-    - "spec/views/candidates/schools/index.html.erb_spec.rb"
-    - "spec/views/schools/change_schools/show.html.erb_spec.rb"
 
 # Offense count: 10
 RSpec/RepeatedDescription:
@@ -220,13 +151,6 @@ RSpec/RepeatedExampleGroupDescription:
     - "spec/models/cookie_preference_spec.rb"
     - "spec/presenters/candidates/school_presenter_spec.rb"
     - "spec/services/candidates/registrations/subject_and_date_information_spec.rb"
-
-# Offense count: 43
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: and_return, block
-RSpec/ReturnFromStub:
-  Enabled: false
 
 # Offense count: 7
 # Configuration parameters: Include, CustomTransform, IgnoreMethods, IgnoreMetadata.

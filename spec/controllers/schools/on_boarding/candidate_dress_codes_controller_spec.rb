@@ -3,7 +3,7 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::OnBoarding::CandidateDressCodesController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let(:task_progress_on_boarding) { false }
 
@@ -12,7 +12,7 @@ describe Schools::OnBoarding::CandidateDressCodesController, type: :request do
       .and_return(task_progress_on_boarding)
   end
 
-  context '#new' do
+  describe '#new' do
     let! :school_profile do
       FactoryBot.create \
         :school_profile,
@@ -41,7 +41,7 @@ describe Schools::OnBoarding::CandidateDressCodesController, type: :request do
     end
   end
 
-  context '#create' do
+  describe '#create' do
     let! :school_profile do
       FactoryBot.create \
         :school_profile,
@@ -67,7 +67,7 @@ describe Schools::OnBoarding::CandidateDressCodesController, type: :request do
       post schools_on_boarding_candidate_dress_code_path, params: params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let(:candidate_dress_code) { FactoryBot.build(:candidate_dress_code, selected_requirements: %w[business_dress none]) }
 
       it "doesn't update the school_profile" do
@@ -79,7 +79,7 @@ describe Schools::OnBoarding::CandidateDressCodesController, type: :request do
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let(:candidate_dress_code) { FactoryBot.build :candidate_dress_code }
 
       it 'updates the school_profile' do
@@ -103,7 +103,7 @@ describe Schools::OnBoarding::CandidateDressCodesController, type: :request do
     end
   end
 
-  context '#edit' do
+  describe '#edit' do
     let! :school_profile do
       FactoryBot.create :school_profile, :completed
     end
@@ -122,7 +122,7 @@ describe Schools::OnBoarding::CandidateDressCodesController, type: :request do
     end
   end
 
-  context '#update' do
+  describe '#update' do
     let! :school_profile do
       FactoryBot.create :school_profile, :completed
     end
@@ -138,7 +138,7 @@ describe Schools::OnBoarding::CandidateDressCodesController, type: :request do
       patch schools_on_boarding_candidate_dress_code_path, params: params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let(:candidate_dress_code) { FactoryBot.build(:candidate_dress_code, selected_requirements: %w[business_dress none]) }
 
       it "doesn't update the school_profile" do
@@ -151,7 +151,7 @@ describe Schools::OnBoarding::CandidateDressCodesController, type: :request do
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let(:candidate_dress_code) { FactoryBot.build :candidate_dress_code }
 
       it 'updates the school_profile' do

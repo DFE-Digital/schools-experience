@@ -13,7 +13,7 @@ describe LinkAndButtonHelper do
       expect(subject).to have_css("#{tag}.govuk-button[data-module='govuk-button']")
     end
 
-    context 'overriding text' do
+    context 'when overriding text' do
       subject { helper.send(method, custom_text, path) }
 
       let(:custom_text) { 'Proceed' }
@@ -26,7 +26,7 @@ describe LinkAndButtonHelper do
       end
     end
 
-    context 'extra attributes' do
+    context 'when extra attributes' do
       subject { helper.send(method, link_text, path, role: 'button', disabled: true, data: { type: 'XYZ' }) }
 
       specify 'button should have the extra attributes' do
@@ -36,7 +36,7 @@ describe LinkAndButtonHelper do
       end
     end
 
-    context 'extra classes' do
+    context 'when extra classes' do
       subject { helper.send(method, link_text, path, class: extra_classes) }
 
       let(:extra_classes) { %w[pink stripy] }
@@ -47,7 +47,7 @@ describe LinkAndButtonHelper do
       end
     end
 
-    context 'secondary' do
+    context 'when secondary' do
       subject { helper.send(method, link_text, path, secondary: true) }
 
       specify 'should create a button link with secondary class' do
@@ -55,7 +55,7 @@ describe LinkAndButtonHelper do
       end
     end
 
-    context 'warning' do
+    context 'when warning' do
       subject { helper.send(method, link_text, path, warning: true) }
 
       specify 'should create a button link with warning class' do
@@ -63,7 +63,7 @@ describe LinkAndButtonHelper do
       end
     end
 
-    context 'blocks' do
+    context 'when blocks' do
       subject { helper.send(method, path) { custom_text } }
 
       let(:custom_text) { 'Advance' }

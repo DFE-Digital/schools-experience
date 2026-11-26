@@ -1,22 +1,22 @@
 require 'rails_helper'
 
 describe Schools::OnBoarding::PhasesList, type: :model do
-  context '#attributes' do
+  describe '#attributes' do
     it { is_expected.to respond_to :primary }
     it { is_expected.to respond_to :secondary }
     it { is_expected.to respond_to :college }
     it { is_expected.to respond_to :secondary_and_college }
   end
 
-  context '#validations' do
+  describe '#validations' do
     it 'validates at_least_one_phase_offered' do
       expect(described_class.new.tap(&:validate).errors[:base]).to \
         eq ['Select at least one school phase']
     end
   end
 
-  context '#primary?' do
-    context 'primary selected' do
+  describe '#primary?' do
+    context 'when primary selected' do
       subject { described_class.new primary: true }
 
       it 'returns true' do
@@ -24,7 +24,7 @@ describe Schools::OnBoarding::PhasesList, type: :model do
       end
     end
 
-    context 'primary not selected' do
+    context 'when primary not selected' do
       subject { described_class.new primary: false }
 
       it 'returns false' do
@@ -33,8 +33,8 @@ describe Schools::OnBoarding::PhasesList, type: :model do
     end
   end
 
-  context '#secondary?' do
-    context 'secondary selected' do
+  describe '#secondary?' do
+    context 'when secondary selected' do
       subject { described_class.new secondary: true }
 
       it 'returns true' do
@@ -42,8 +42,8 @@ describe Schools::OnBoarding::PhasesList, type: :model do
       end
     end
 
-    context 'secondary not selected' do
-      context 'secondary_and_college selected' do
+    context 'when secondary not selected' do
+      context 'when secondary_and_college selected' do
         subject do
           described_class.new secondary: false, secondary_and_college: true
         end
@@ -53,7 +53,7 @@ describe Schools::OnBoarding::PhasesList, type: :model do
         end
       end
 
-      context 'secondary_and_college not selected' do
+      context 'when secondary_and_college not selected' do
         subject do
           described_class.new secondary: false, secondary_and_college: false
         end
@@ -65,8 +65,8 @@ describe Schools::OnBoarding::PhasesList, type: :model do
     end
   end
 
-  context '#college?' do
-    context 'college selected' do
+  describe '#college?' do
+    context 'when college selected' do
       subject { described_class.new college: true }
 
       it 'returns true' do
@@ -74,8 +74,8 @@ describe Schools::OnBoarding::PhasesList, type: :model do
       end
     end
 
-    context 'college not selected' do
-      context 'secondary_and_college selected' do
+    context 'when college not selected' do
+      context 'when secondary_and_college selected' do
         subject do
           described_class.new college: false, secondary_and_college: true
         end
@@ -85,7 +85,7 @@ describe Schools::OnBoarding::PhasesList, type: :model do
         end
       end
 
-      context 'secondary_and_college not selected' do
+      context 'when secondary_and_college not selected' do
         subject do
           described_class.new college: false, secondary_and_college: false
         end
@@ -97,7 +97,7 @@ describe Schools::OnBoarding::PhasesList, type: :model do
     end
   end
 
-  context '.new_from_bookings_school' do
+  describe '.new_from_bookings_school' do
     subject { described_class.new_from_bookings_school school }
 
     let :school do

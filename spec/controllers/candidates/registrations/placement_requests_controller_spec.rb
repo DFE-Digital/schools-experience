@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::PlacementRequestsController, type: :request do
-  include_context 'Stubbed candidates school'
-  include_context "api latest privacy policy"
-  include_context "api teaching subjects"
+  include_context 'with a stubbed candidate school'
+  include_context "when the API returns the latest privacy policy"
+  include_context "when the API returns teaching subjects"
 
   let :registration_session do
     FactoryBot.build :registration_session, urn: school.urn
@@ -22,7 +22,7 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
       registration_session
 
     allow(Candidates::Registrations::PlacementRequestJob).to \
-      receive(:perform_later) { true }
+      receive(:perform_later).and_return(true)
 
     allow(Bookings::Gitis::SchoolExperience).to \
       receive(:from_placement_request) { school_experience }
@@ -31,12 +31,12 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
       receive(:write_to_gitis_contact)
   end
 
-  context '#create' do
+  describe '#create' do
     before do
       @placement_request_count = Bookings::PlacementRequest.count
     end
 
-    context 'uuid not found' do
+    context 'when uuid not found' do
       before do
         get "/candidates/confirm/bad-uuid"
       end
@@ -56,8 +56,8 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
       end
     end
 
-    context 'uuid found' do
-      context 'registration job already enqueued' do
+    context 'when uuid found' do
+      context 'when registration job already enqueued' do
         before do
           get "/candidates/confirm/#{uuid}"
           @placement_request_count = Bookings::PlacementRequest.count
@@ -83,7 +83,7 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
         end
       end
 
-      context 'registration job not already enqueued' do
+      context 'when registration job not already enqueued' do
         shared_examples 'a successful create' do
           before do
             get "/candidates/confirm/#{uuid}"
@@ -140,7 +140,7 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
           end
         end
 
-        context 'school has changed availability type' do
+        context 'when school has changed availability type' do
           let :registration_session do
             FactoryBot.build :registration_session, :with_placement_date, urn: school.urn
           end
@@ -152,7 +152,7 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
           it_behaves_like 'a successful create'
         end
 
-        context 'school has not changed availability type' do
+        context 'when school has not changed availability type' do
           it_behaves_like 'a successful create'
         end
 
@@ -178,7 +178,7 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
     end
   end
 
-  context '#show' do
+  describe '#show' do
     before do
       get \
         "/candidates/schools/#{school.urn}/registrations/placement_request?uuid=#{uuid}"

@@ -15,7 +15,7 @@ allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
   context 'when the user has access to multiple schools' do
     before do
       allow(Schools::ChangeSchool).to \
-        receive(:allow_school_change_in_app?) { true }
+        receive(:allow_school_change_in_app?).and_return(true)
 assign :current_school, school
       assign :schools, all_schools
       assign :change_school, Schools::ChangeSchool.new(nil, {}, change_to_urn: school&.urn)
@@ -42,7 +42,7 @@ render
       expect(rendered).to have_css("a[href='/schools/dashboard']", text: "Go back to #{school.name} dashboard")
     end
 
-    context 'no existing school chosen' do
+    context 'without existing school chosen' do
       let(:school) { nil }
 
       specify 'there should be one radio button per school' do
@@ -82,11 +82,9 @@ render  }
       assign :schools, all_schools
       assign :change_school, change_school
 
-      allow(Schools::ChangeSchool).to \
-        receive(:allow_school_change_in_app?).and_return true
 
       allow(Schools::ChangeSchool).to \
-        receive(:request_approval_url).and_return 'https://dfesignin.url'
+        receive_messages(allow_school_change_in_app?: true, request_approval_url: 'https://dfesignin.url')
 
       without_partial_double_verification do
         allow(view).to receive(:current_urn).and_return nil

@@ -12,7 +12,7 @@ describe PagesController, type: :request do
 
   describe 'maintenance mode' do
     before do
-      allow(Rails.application.config.x).to receive(:maintenance_mode) { true }
+      allow(Rails.application.config.x).to receive(:maintenance_mode).and_return(true)
       Rails.application.reload_routes!
     end
 

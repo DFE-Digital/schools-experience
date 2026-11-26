@@ -19,7 +19,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
   end
 
   describe 'GET #show' do
-    include_context 'Stubbed current_registration'
+    include_context 'with a stubbed current registration'
 
     before { get candidates_school_registrations_sign_in_path(school_id) }
 
@@ -29,8 +29,8 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
   end
 
   describe 'GET #update' do
-    include_context "Stubbed current_registration"
-    include_context "api correct verification code for personal info"
+    include_context "with a stubbed current registration"
+    include_context "when the API returns a correct verification code for personal information"
 
     let(:personal_info) { registration_session.personal_information }
     let(:params) do
@@ -60,7 +60,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
     end
 
     context "with an invalid code" do
-      include_context "api incorrect verification code"
+      include_context "when the API returns an incorrect verification code"
 
       before { perform_request }
 
@@ -71,7 +71,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
     end
 
     context "when already signed in" do
-      include_context "candidate signin"
+      include_context "when the candidate signs in"
 
       before do
         expect_any_instance_of(described_class).to \
@@ -87,12 +87,12 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
     end
 
     context "when the Candidate already exists" do
-      include_context "candidate signin"
+      include_context "when the candidate signs in"
 
       let(:sign_up) { build(:api_schools_experience_sign_up_with_name, candidate_id: gitis_contact_attrs[:candidate_id]) }
 
       it "does not create another Candidate and redirect_to ConfirmationInformation step" do
-        expect { perform_request }.not_to(change { Bookings::Candidate.count })
+        expect { perform_request }.not_to(change(Bookings::Candidate, :count))
 
         expect(response).to \
           redirect_to new_candidates_school_registrations_contact_information_path(school_id)
@@ -117,8 +117,8 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
   end
 
   describe 'POST #create' do
-    include_context 'Stubbed current_registration'
-    include_context "api candidate matched back"
+    include_context 'with a stubbed current registration'
+    include_context "when the API candidate matches back"
 
     let!(:candidate) { create(:candidate, gitis_uuid: SecureRandom.uuid) }
 

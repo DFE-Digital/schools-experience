@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Candidates::School do
-  context '.find' do
+  describe '.find' do
     before { @school = create(:bookings_school) }
 
     context('with valid identifier') do
@@ -19,7 +19,7 @@ describe Candidates::School do
     end
   end
 
-  context '.phases' do
+  describe '.phases' do
     before do
       @third = create(:bookings_phase, name: 'third', position: 3)
       @first = create(:bookings_phase, name: 'first', position: 1)
@@ -37,7 +37,7 @@ describe Candidates::School do
     end
   end
 
-  context '.subjects' do
+  describe '.subjects' do
     before do
       Bookings::Subject.destroy_all
       @later = create(:bookings_subject, name: 'Later')

@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe Schools::PlacementDates::PlacementDetail, type: :model do
-  context 'validations' do
-    context '#start_availability_offset' do
+  context 'when validating' do
+    describe '#start_availability_offset' do
       it do
         expect(subject).to(
           validate_numericality_of(:start_availability_offset)
@@ -15,12 +15,12 @@ describe Schools::PlacementDates::PlacementDetail, type: :model do
 
       it "is greater than #end_availability_offset" do
         subject.end_availability_offset = 1
-        is_expected.to allow_value(2).for :start_availability_offset
-        is_expected.not_to allow_values(0, 1).for :start_availability_offset
+        expect(subject).to allow_value(2).for :start_availability_offset
+        expect(subject).not_to allow_values(0, 1).for :start_availability_offset
       end
     end
 
-    context '#end_availability_offset' do
+    describe '#end_availability_offset' do
       it do
         expect(subject).to(
           validate_numericality_of(:end_availability_offset)
@@ -32,7 +32,7 @@ describe Schools::PlacementDates::PlacementDetail, type: :model do
       it { expect(subject).to validate_presence_of(:end_availability_offset) }
     end
 
-    context '#duration' do
+    describe '#duration' do
       it do
         expect(subject).to(
           validate_numericality_of(:duration)
@@ -44,12 +44,12 @@ describe Schools::PlacementDates::PlacementDetail, type: :model do
       it { expect(subject).to validate_presence_of(:duration) }
     end
 
-    context '#virtual' do
+    describe '#virtual' do
       it { is_expected.to allow_values(true, false).for :virtual }
       it { is_expected.not_to allow_value(nil).for :virtual }
     end
 
-    context '#supports_subjects' do
+    describe '#supports_subjects' do
       context "when placement dates school has primary and secondary phases" do
         subject { described_class.new_from_date placement_date }
 
@@ -65,7 +65,7 @@ describe Schools::PlacementDates::PlacementDetail, type: :model do
     end
   end
 
-  context '.new_from_date' do
+  describe '.new_from_date' do
     subject { described_class.new_from_date placement_date }
 
     let(:placement_date) { create :bookings_placement_date, published_at: DateTime.now }
@@ -75,13 +75,13 @@ describe Schools::PlacementDates::PlacementDetail, type: :model do
     end
   end
 
-  context '#save' do
+  describe '#save' do
     subject { described_class.new }
 
     let(:placement_date) { create :bookings_placement_date }
 
 
-    context 'invalid' do
+    context 'when invalid' do
       before { allow(subject).to receive(:valid?).and_return(false) }
 
       it 'returns false' do
@@ -89,7 +89,7 @@ describe Schools::PlacementDates::PlacementDetail, type: :model do
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       subject { described_class.new(attributes) }
 
       let(:placement_date) { create :bookings_placement_date }

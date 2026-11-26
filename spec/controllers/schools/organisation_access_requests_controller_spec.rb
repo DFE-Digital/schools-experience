@@ -4,7 +4,7 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 RSpec.describe Schools::OrganisationAccessRequestsController, type: :request do
   subject { page_request && response }
 
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
 
   before do

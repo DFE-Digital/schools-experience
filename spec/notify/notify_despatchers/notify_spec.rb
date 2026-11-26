@@ -130,7 +130,7 @@ describe NotifyDespatchers::Base do
       end
     end
 
-    context 'Private methods' do
+    context 'when private methods' do
       describe '#personalisation' do
         it "fails with 'Not implemented'" do
           expect { subject.send(:personalisation) }.to raise_error('Not implemented')
@@ -190,13 +190,13 @@ describe NotifyDespatchers::Sms do
   end
   let(:notification) { subject.new to: recipients, name: 'Test User' }
 
-  before { allow(Feature).to receive(:enabled?).with(:sms) { true } }
+  before { allow(Feature).to receive(:enabled?).with(:sms).and_return(true) }
 
 
   include_examples "notify_client"
 
   context "when in non-production environments" do
-    before { allow(Feature).to receive(:enabled?).with(:sms) { false } }
+    before { allow(Feature).to receive(:enabled?).with(:sms).and_return(false) }
 
     it "does not despatch SMS" do
       perform_enqueued_jobs do

@@ -3,7 +3,7 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::OnBoarding::ProfilesController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   context 'with an incomplete profile' do
     let! :school_profile do
@@ -25,7 +25,7 @@ describe Schools::OnBoarding::ProfilesController, type: :request do
       FactoryBot.create :school_profile, :completed
     end
 
-    context '#show' do
+    describe '#show' do
       before do
         get '/schools/on_boarding/profile'
       end
@@ -43,7 +43,7 @@ describe Schools::OnBoarding::ProfilesController, type: :request do
         let(:school) { create(:bookings_school, :onboarded) }
         let(:school_profile) { FactoryBot.create :school_profile, :completed, bookings_school: school }
 
-        include_context "logged in DfE user for school with profile"
+        include_context "when a DfE user is logged in for a school with a profile"
 
         it 'renders the editing template' do
           expect(response).to render_template :editing

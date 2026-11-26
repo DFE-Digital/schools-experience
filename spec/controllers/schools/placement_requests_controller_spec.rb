@@ -3,7 +3,7 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::PlacementRequestsController, type: :request do
   include ActiveSupport::Testing::TimeHelpers
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let :school do
     Bookings::School.find_by! urn: urn
@@ -17,7 +17,7 @@ describe Schools::PlacementRequestsController, type: :request do
     school.subjects << FactoryBot.create_list(:bookings_subject, 1)
   end
 
-  context '#index' do
+  describe '#index' do
     let!(:placement_requests) do
       FactoryBot.create_list :placement_request, 2, school: school
     end
@@ -54,7 +54,7 @@ describe Schools::PlacementRequestsController, type: :request do
       end
     end
 
-    context 'for unaccepted placement requests' do
+    context 'with unaccepted placement requests' do
       before { get '/schools/placement_requests' }
 
       it 'assigns the placement_requests belonging to the school' do
@@ -68,7 +68,7 @@ describe Schools::PlacementRequestsController, type: :request do
       end
     end
 
-    context 'after placement requests have been accepted' do
+    context 'when after placement requests have been accepted' do
       let(:booked) { placement_requests.last }
 
       before do
@@ -85,7 +85,7 @@ describe Schools::PlacementRequestsController, type: :request do
       end
     end
 
-    context 'after placement requests have been rejected' do
+    context 'when after placement requests have been rejected' do
       let(:rejected) { placement_requests.last }
 
       before do
@@ -121,7 +121,7 @@ describe Schools::PlacementRequestsController, type: :request do
         ids = placement_requests.map(&:contact_uuid)
         allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
           receive(:get_schools_experience_sign_ups)
-            .with(a_collection_containing_exactly(*ids)) { [] }
+            .with(a_collection_containing_exactly(*ids)).and_return([])
         get "/schools/placement_requests"
       end
 
@@ -133,7 +133,7 @@ describe Schools::PlacementRequestsController, type: :request do
     end
   end
 
-  context '#show' do
+  describe '#show' do
     context 'with a new placement request' do
       before do
         get "/schools/placement_requests/#{placement_request.id}"
@@ -166,7 +166,7 @@ describe Schools::PlacementRequestsController, type: :request do
       end
     end
 
-    context 'cannot find the placement request' do
+    context 'when cannot find the placement request' do
       subject { get(schools_placement_request_path(placement_request.id)) }
 
       let(:another_school) { create(:bookings_school) }

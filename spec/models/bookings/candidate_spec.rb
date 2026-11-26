@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Bookings::Candidate, type: :model do
-  include_context "api teaching subjects"
+  include_context "when the API returns teaching subjects"
 
   describe 'database structure' do
     it { is_expected.to have_db_column(:gitis_uuid).of_type(:uuid) }
@@ -21,7 +21,7 @@ RSpec.describe Bookings::Candidate, type: :model do
     it { is_expected.not_to allow_value('foobar').for :gitis_uuid }
 
     it do
-      is_expected.not_to \
+      expect(subject).not_to \
         allow_value(SecureRandom.uuid + SecureRandom.uuid).for :gitis_uuid
     end
 
@@ -40,7 +40,7 @@ RSpec.describe Bookings::Candidate, type: :model do
   end
 
   describe 'scopes' do
-    context 'for confirmations' do
+    context 'with confirmations' do
       let!(:confirmed) { create(:candidate, :confirmed) }
       let!(:unconfirmed) { create(:candidate) }
 
@@ -48,7 +48,7 @@ RSpec.describe Bookings::Candidate, type: :model do
         subject { described_class.confirmed.to_a }
 
         it "onlies include confirmed" do
-          is_expected.to eql([confirmed])
+          expect(subject).to eql([confirmed])
         end
       end
 
@@ -56,7 +56,7 @@ RSpec.describe Bookings::Candidate, type: :model do
         subject { described_class.unconfirmed.to_a }
 
         it "onlies include unconfirmed" do
-          is_expected.to eql([unconfirmed])
+          expect(subject).to eql([unconfirmed])
         end
       end
     end
@@ -72,11 +72,11 @@ RSpec.describe Bookings::Candidate, type: :model do
 
 
       it "return existing candidate" do
-        is_expected.to eql candidate
+        expect(subject).to eql candidate
       end
 
       it "assigns gitis_contact" do
-        is_expected.to have_attributes(gitis_contact: gitis_contact)
+        expect(subject).to have_attributes(gitis_contact: gitis_contact)
       end
     end
 
@@ -97,11 +97,11 @@ RSpec.describe Bookings::Candidate, type: :model do
 
 
       it "return existing candidate" do
-        is_expected.to eql candidate
+        expect(subject).to eql candidate
       end
 
       it "assigns gitis_contact" do
-        is_expected.to have_attributes(gitis_contact: gitis_contact)
+        expect(subject).to have_attributes(gitis_contact: gitis_contact)
       end
     end
 
@@ -126,22 +126,22 @@ RSpec.describe Bookings::Candidate, type: :model do
       let!(:candidate) { create(:candidate, gitis_uuid: gitis_contact.candidate_id) }
 
       it "return existing candidate" do
-        is_expected.to eql candidate
+        expect(subject).to eql candidate
       end
 
       it "assigns gitis_contact" do
-        is_expected.to have_attributes(gitis_contact: gitis_contact)
+        expect(subject).to have_attributes(gitis_contact: gitis_contact)
       end
     end
 
     context 'without existing' do
       it "creates candidate" do
-        is_expected.to be_a described_class
-        is_expected.to be_persisted
+        expect(subject).to be_a described_class
+        expect(subject).to be_persisted
       end
 
       it "assigns gitis_contact" do
-        is_expected.to have_attributes(gitis_contact: gitis_contact)
+        expect(subject).to have_attributes(gitis_contact: gitis_contact)
       end
     end
   end
@@ -151,7 +151,7 @@ RSpec.describe Bookings::Candidate, type: :model do
       described_class.create_from_registration_session! registration
     end
 
-    include_context "api latest privacy policy"
+    include_context "when the API returns the latest privacy policy"
 
     let(:registration) { build(:registration_session, :with_school) }
 
@@ -190,7 +190,7 @@ RSpec.describe Bookings::Candidate, type: :model do
 
 
       it "returns the existing candidate" do
-        is_expected.to eql candidate
+        expect(subject).to eql candidate
       end
 
       it "updates the contacts details" do
@@ -200,7 +200,7 @@ RSpec.describe Bookings::Candidate, type: :model do
       end
 
       it "marks as already existing in gitis" do
-        is_expected.to have_attributes(created_in_gitis: false)
+        expect(subject).to have_attributes(created_in_gitis: false)
       end
     end
 
@@ -214,8 +214,8 @@ RSpec.describe Bookings::Candidate, type: :model do
 
 
       it "creates a Candidate" do
-        is_expected.to be_a described_class
-        is_expected.to be_persisted
+        expect(subject).to be_a described_class
+        expect(subject).to be_persisted
       end
 
       it "updates the contacts details" do
@@ -225,7 +225,7 @@ RSpec.describe Bookings::Candidate, type: :model do
       end
 
       it "marks as already existing in gitis" do
-        is_expected.to have_attributes(created_in_gitis: false)
+        expect(subject).to have_attributes(created_in_gitis: false)
       end
     end
 
@@ -239,8 +239,8 @@ RSpec.describe Bookings::Candidate, type: :model do
 
 
       it "creates a Candidate" do
-        is_expected.to be_a described_class
-        is_expected.to be_persisted
+        expect(subject).to be_a described_class
+        expect(subject).to be_persisted
       end
 
       it "creates the Contacts with registration details" do
@@ -250,7 +250,7 @@ RSpec.describe Bookings::Candidate, type: :model do
       end
 
       it "marks as newly created in gitis" do
-        is_expected.to have_attributes(created_in_gitis: true)
+        expect(subject).to have_attributes(created_in_gitis: true)
       end
     end
   end
@@ -260,8 +260,8 @@ RSpec.describe Bookings::Candidate, type: :model do
       candidate.update_from_registration_session! registration
     end
 
-    include_context "api latest privacy policy"
-    include_context "api sign up"
+    include_context "when the API returns the latest privacy policy"
+    include_context "when the API signs up"
 
     let(:registration) { build(:registration_session, :with_school) }
     let(:candidate) { build(:candidate, :with_api_contact) }
@@ -334,13 +334,13 @@ RSpec.describe Bookings::Candidate, type: :model do
       create(:candidate_session_token, candidate: first.candidate).tap(&:confirm!)
     end
 
-    context 'for confirmed candidate' do
+    context 'with confirmed candidate' do
       it "returns last confirmed token timestamp" do
         expect(first.candidate.last_signed_in_at.to_i).to eql(second.confirmed_at.to_i)
       end
     end
 
-    context 'for subsequently deconfirmed candidate' do
+    context 'with subsequently deconfirmed candidate' do
       before { first.candidate.update!(confirmed_at: nil) }
 
       it "returns last confirmed token timestamp" do
@@ -355,7 +355,7 @@ RSpec.describe Bookings::Candidate, type: :model do
     it "is delegated to gitis contact" do
       full_name = "#{subject.gitis_contact.first_name} #{subject.gitis_contact.last_name}"
 
-      is_expected.to have_attributes \
+      expect(subject).to have_attributes \
         full_name: full_name,
         email: subject.gitis_contact.email
     end

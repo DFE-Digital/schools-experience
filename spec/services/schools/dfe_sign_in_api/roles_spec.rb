@@ -4,7 +4,7 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 describe Schools::DFESignInAPI::Roles do
   subject { described_class.new(user_guid, dfe_signin_school_id) }
 
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   before do
     allow_any_instance_of(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
@@ -15,7 +15,7 @@ describe Schools::DFESignInAPI::Roles do
     expect(subject).to respond_to(:has_school_experience_role?)
   end
 
-  context '#has_school_experience_role?' do
+  describe '#has_school_experience_role?' do
     context 'when the role is present' do
       specify 'should return true when the role is present' do
         expect(subject.has_school_experience_role?).to be true

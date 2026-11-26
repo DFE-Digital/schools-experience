@@ -14,7 +14,7 @@ describe GeocoderAutoexpireCache do
     expect(subject[key]).to eql(value)
   end
 
-  context 'expiry defaults to 1 month' do
+  context 'when expiry defaults to 1 month' do
     before do
       allow(subject.store).to receive(:write).and_return(true)
 subject[key] = value
@@ -26,7 +26,7 @@ subject[key] = value
     end
   end
 
-  context 'overriding the expiry' do
+  context 'when overriding the expiry' do
     subject { described_class.new(store, 2.months) }
 
     it 'sets the ttl of new records to be the newly-specified value' do

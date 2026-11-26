@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Schools::OnBoarding::DBSFee, type: :model do
   it_behaves_like 'a school fee'
 
-  context '#interval' do
+  describe '#interval' do
     it 'defaults to "One-off"' do
       expect(described_class.new.interval).to eq 'One-off'
     end

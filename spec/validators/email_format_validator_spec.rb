@@ -13,26 +13,26 @@ describe EmailFormatValidator do
   before { instance.valid? }
 
 
-  context 'invalid addresses' do
+  context 'when invalid addresses' do
     [
       'test.com', 'test@@test.com', 'FFFF', 'test@test', 'test@test.'
     ].each do |email_address|
       let(:instance) { TestModel.new(email_address: email_address) }
 
       it "#{email_address} should not be valid" do
-        is_expected.to include email_address: ['is invalid']
+        expect(subject).to include email_address: ['is invalid']
       end
     end
   end
 
-  context 'valid addresses' do
+  context 'when valid addresses' do
     [
       'test@example.com', 'testymctest@gmail.com', 'test%.mctest@domain.co.uk'
     ].each do |email_address|
       let(:instance) { TestModel.new(email_address: email_address) }
 
       it "#{email_address} should be valid" do
-        is_expected.not_to include [:email_address]
+        expect(subject).not_to include [:email_address]
       end
     end
   end

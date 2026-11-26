@@ -13,7 +13,7 @@ describe Schools::DFESignInAPI::Healthcheck do
   end
 
   context 'when DfE Sign In is enabled' do
-    context 'and the endpoint reports status up' do
+    context 'when the endpoint reports status up' do
       before do
         stub_request(:get, url).to_return(
           status: 200,
@@ -36,7 +36,7 @@ describe Schools::DFESignInAPI::Healthcheck do
       end
     end
 
-    context 'and the endpoint reports a non-up status' do
+    context 'when the endpoint reports a non-up status' do
       before do
         stub_request(:get, url).to_return(status: 200, body: { status: 'down' }.to_json)
       end
@@ -44,7 +44,7 @@ describe Schools::DFESignInAPI::Healthcheck do
       it { is_expected.to be false }
     end
 
-    context 'and the response body has no status' do
+    context 'when the response body has no status' do
       before do
         stub_request(:get, url).to_return(status: 200, body: {}.to_json)
       end
@@ -52,7 +52,7 @@ describe Schools::DFESignInAPI::Healthcheck do
       it { is_expected.to be false }
     end
 
-    context 'and the response body is not valid JSON' do
+    context 'when the response body is not valid JSON' do
       before do
         stub_request(:get, url).to_return(status: 200, body: '<html>maintenance</html>')
       end
@@ -60,19 +60,19 @@ describe Schools::DFESignInAPI::Healthcheck do
       it { is_expected.to be false }
     end
 
-    context 'and the endpoint returns 404' do
+    context 'when the endpoint returns 404' do
       before { stub_request(:get, url).to_return(status: 404) }
 
       it { is_expected.to be false }
     end
 
-    context 'and the endpoint returns 503' do
+    context 'when the endpoint returns 503' do
       before { stub_request(:get, url).to_return(status: 503) }
 
       it { is_expected.to be false }
     end
 
-    context 'and the connection times out' do
+    context 'when the connection times out' do
       before { stub_request(:get, url).to_timeout }
 
       it { is_expected.to be false }
@@ -86,7 +86,7 @@ describe Schools::DFESignInAPI::Healthcheck do
     end
 
     it 'reports healthy - there is nothing to probe' do
-      is_expected.to be true
+      expect(subject).to be true
     end
 
     it 'makes no outbound request' do

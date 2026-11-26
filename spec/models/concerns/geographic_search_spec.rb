@@ -32,7 +32,7 @@ describe 'Concerns' do
         expect(subject.close_to(leeds_centre)).not_to include(mcr_victoria, mcr_piccadilly)
       end
 
-      context 'should use default value when supplied a nil radius' do
+      context 'when a nil radius is supplied' do
         before do
           allow(Conversions::Distance::Miles::ToMetres).to receive(:convert).and_return(50)
 subject.close_to(mcr_piccadilly, radius: nil)
@@ -44,7 +44,7 @@ subject.close_to(mcr_piccadilly, radius: nil)
         end
       end
 
-      context 'custom radius' do
+      context 'with custom radius' do
         specify 'should return records that fall inside a custom radius of a point' do
           expect(subject.close_to(mcr_centre, radius: 50)).to include(leeds_station)
           expect(subject.close_to(leeds_centre, radius: 50)).to include(mcr_piccadilly, mcr_victoria)
@@ -60,7 +60,7 @@ subject.close_to(mcr_piccadilly, radius: nil)
         end
       end
 
-      context 'include_distance: true' do
+      context 'when include_distance: true' do
         specify 'should return records with a included distance attribute' do
           expect(subject.close_to(mcr_centre, radius: 50)).to all(respond_to(:distance))
         end
@@ -70,7 +70,7 @@ subject.close_to(mcr_piccadilly, radius: nil)
         end
       end
 
-      context 'include_distance: false' do
+      context 'when include_distance: false' do
         specify 'should return records without an included distance attribute' do
           subject.close_to(mcr_centre, radius: 50, include_distance: false).each do |result|
             expect(result).not_to respond_to(:distance)

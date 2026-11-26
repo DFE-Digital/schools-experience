@@ -23,8 +23,8 @@ RSpec.describe Candidates::SessionsController, type: :request do
       }
     end
 
-    context "for known user" do
-      include_context "api candidate matched back"
+    context "when the user is known" do
+      include_context "when the API candidate matches back"
 
       let(:candidate) { create(:candidate) }
 
@@ -37,8 +37,8 @@ RSpec.describe Candidates::SessionsController, type: :request do
       end
     end
 
-    context "for unknown user" do
-      include_context "api candidate not matched back"
+    context "when the user is unknown" do
+      include_context "when the API candidate does not match back"
 
       context "when less than 3 failed attempts" do
         before do
@@ -77,7 +77,7 @@ RSpec.describe Candidates::SessionsController, type: :request do
   end
 
   describe "PUT #update" do
-    include_context "api correct verification code for personal info"
+    include_context "when the API returns a correct verification code for personal information"
 
     let(:personal_info) { build(:personal_information) }
     let(:params) do
@@ -106,7 +106,7 @@ RSpec.describe Candidates::SessionsController, type: :request do
     end
 
     context "with an invalid code" do
-      include_context "api incorrect verification code"
+      include_context "when the API returns an incorrect verification code"
 
       before { perform_request }
 
@@ -118,7 +118,7 @@ RSpec.describe Candidates::SessionsController, type: :request do
   end
 
   describe "sign_out" do
-    include_context "api candidate matched back"
+    include_context "when the API candidate matches back"
 
     before { get candidates_signout_path }
 

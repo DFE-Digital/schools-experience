@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 describe Schools::OnBoarding::AccessNeedsPolicy, type: :model do
-  context 'attributes' do
+  context 'with attributes' do
     it { is_expected.to respond_to :has_access_needs_policy }
     it { is_expected.to respond_to :url }
   end
 
-  context 'validation' do
+  context 'when validating' do
     it { is_expected.not_to allow_value(nil).for :has_access_needs_policy }
 
     context 'when has policy' do

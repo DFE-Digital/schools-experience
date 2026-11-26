@@ -7,7 +7,7 @@ describe HealthchecksController, type: :request do
     ActionController::HttpAuthentication::Basic.encode_credentials(username, password)
   end
 
-  include_context "api healthy"
+  include_context "when the API is healthy"
 
   before do
     allow(ENV).to receive(:[]).and_call_original
@@ -17,7 +17,7 @@ describe HealthchecksController, type: :request do
 
     allow(ENV).to receive(:[]).with("REDIS_URL").and_return \
       "redis://localhost:6379/1"
-    allow(REDIS).to receive(:ping) { "PONG" }
+    allow(REDIS).to receive(:ping).and_return("PONG")
 
     allow(ApplicationRecord).to \
       receive(:connected?).and_return(true)
@@ -69,7 +69,7 @@ describe HealthchecksController, type: :request do
     end
 
     context 'with unhealthy API' do
-      include_context "api no connection"
+      include_context "when the API cannot be reached"
 
       before do
         get healthcheck_path
@@ -161,7 +161,7 @@ describe HealthchecksController, type: :request do
     end
 
     context 'with unhealthy API' do
-      include_context "api no connection"
+      include_context "when the API cannot be reached"
 
       before do
         get api_health_path

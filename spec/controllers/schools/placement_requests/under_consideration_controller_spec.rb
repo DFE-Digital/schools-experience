@@ -2,7 +2,7 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::PlacementRequests::UnderConsiderationController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   describe '#place_under_consideration' do
     subject do
@@ -10,7 +10,7 @@ describe Schools::PlacementRequests::UnderConsiderationController, type: :reques
       response
     end
 
-    include_context "logged in DfE user"
+    include_context "when a DfE user is logged in"
 
 
     context 'when there is a placement request' do

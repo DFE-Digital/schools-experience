@@ -30,7 +30,7 @@ describe Schools::DFESignInAPI::RoleCheckedOrganisations, type: :model do
 
   describe '#organisation_uuid_pairs' do
     it "onlies include uuids the user has a role over" do
-      is_expected.to have_attributes \
+      expect(subject).to have_attributes \
         organisation_uuid_pairs: { org1 => 1, org3 => 3 }
     end
   end
@@ -48,7 +48,7 @@ describe Schools::DFESignInAPI::RoleCheckedOrganisations, type: :model do
 
     describe '#organisation_uuid_pairs' do
       it "includes all uuids" do
-        is_expected.to have_attributes \
+        expect(subject).to have_attributes \
           organisation_uuid_pairs: { org1 => 1, org2 => 2, org3 => 3, org4 => 4 }
       end
     end

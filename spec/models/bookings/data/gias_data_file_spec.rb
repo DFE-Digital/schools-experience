@@ -4,12 +4,16 @@ describe Bookings::Data::GiasDataFile do
   let(:today) { Time.zone.today.strftime('%Y%m%d') }
 
   describe '#path' do
-    before { allow(subject).to receive(:valid_file?).and_return true
-allow(subject).to receive(:already_downloaded?).and_return false
-allow(subject).to receive(:remove_old_files!).and_return true
-allow(subject).to receive(:remove_todays_file!).and_return true
-allow(subject).to receive(:download_and_save) { subject.todays_file }
-allow(subject).to receive(:create_temp_dir).and_return true  }
+    before do
+      allow(subject).to receive(:download_and_save) { subject.todays_file }
+      allow(subject).to receive_messages(
+        valid_file?: true,
+        already_downloaded?: false,
+        remove_old_files!: true,
+        remove_todays_file!: true,
+        create_temp_dir: true
+      )
+    end
 
     context 'with existing file' do
       before { allow(subject).to receive(:already_downloaded?).and_return true }
@@ -22,15 +26,15 @@ allow(subject).to receive(:create_temp_dir).and_return true  }
       end
 
       it "returns existing file" do
-        is_expected.not_to have_received(:download_and_save)
+        expect(subject).not_to have_received(:download_and_save)
       end
 
       it "cleans up old csv files" do
-        is_expected.to have_received(:remove_old_files!)
+        expect(subject).to have_received(:remove_old_files!)
       end
 
       it "creates temp dir" do
-        is_expected.not_to have_received(:create_temp_dir)
+        expect(subject).not_to have_received(:create_temp_dir)
       end
     end
 
@@ -43,15 +47,15 @@ allow(subject).to receive(:create_temp_dir).and_return true  }
       end
 
       it "downloads a new file" do
-        is_expected.to have_received(:download_and_save)
+        expect(subject).to have_received(:download_and_save)
       end
 
       it "cleans up old csv files" do
-        is_expected.to have_received(:remove_old_files!)
+        expect(subject).to have_received(:remove_old_files!)
       end
 
       it "creates temp dir" do
-        is_expected.to have_received(:create_temp_dir)
+        expect(subject).to have_received(:create_temp_dir)
       end
     end
 
@@ -60,12 +64,12 @@ allow(subject).to receive(:create_temp_dir).and_return true  }
 
       it "raises an exception and remove file" do
         expect { subject.path }.to raise_exception described_class::InvalidSourceUri
-        is_expected.to have_received(:remove_todays_file!)
+        expect(subject).to have_received(:remove_todays_file!)
       end
     end
   end
 
-  context '#remove_old_files' do
+  describe '#remove_old_files' do
     let(:yesterday) { Time.zone.yesterday.strftime('%Y%m%d') }
     let(:today) { Time.zone.today.strftime('%Y%m%d') }
     let(:tomorrow) { Time.zone.tomorrow.strftime('%Y%m%d') }
@@ -97,7 +101,7 @@ allow(subject).to receive(:create_temp_dir).and_return true  }
     end
   end
 
-  context '#remove_todays_file!' do
+  describe '#remove_todays_file!' do
     let(:yesterday) { Time.zone.yesterday.strftime('%Y%m%d') }
     let(:today) { Time.zone.today.strftime('%Y%m%d') }
 
@@ -117,7 +121,7 @@ allow(subject).to receive(:create_temp_dir).and_return true  }
     end
   end
 
-  context 'valid_file?' do
+  context 'when valid_file?' do
     let(:tempfile) { Tempfile.new }
 
     before { allow(subject).to receive(:todays_file).and_return tempfile.path }

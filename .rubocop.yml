@@ -43,6 +43,14 @@ Style/StringConcatenation:
 Style/HashTransformValues:
   Enabled: true
 
+# Prefer the single-line implicit-subject style; naming subjects would affect
+# substantially more specs (1,071 offenses versus 231 for ImplicitSubject).
+RSpec/ImplicitSubject:
+  EnforcedStyle: single_line_only
+
+RSpec/NamedSubject:
+  Enabled: false
+
 Style/StringLiterals:
   Enabled: false
 

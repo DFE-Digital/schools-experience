@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Candidates::Registrations::PlacementRequestJob, type: :job do
   include ActiveJob::TestHelper
   include ActiveSupport::Testing::TimeHelpers
-  include_context 'Stubbed candidates school'
+  include_context 'with a stubbed candidate school'
 
   let :registration_store do
     Candidates::Registrations::RegistrationStore.instance
@@ -48,8 +48,8 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
     registration_store.store! registration_session
   end
 
-  context '#perform' do
-    context 'no errors' do
+  describe '#perform' do
+    context 'without errors' do
       before do
         perform_enqueued_jobs do
           described_class.perform_later registration_session.uuid, cancellation_url, placement_request_url

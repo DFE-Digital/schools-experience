@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Candidates::FeedbacksController, type: :request do
-  context '#new' do
+  describe '#new' do
     before do
       get '/candidates/feedbacks/new'
     end
@@ -15,7 +15,7 @@ describe Candidates::FeedbacksController, type: :request do
     end
   end
 
-  context '#create' do
+  describe '#create' do
     let :feedback_params do
       { candidates_feedback: feedback.attributes }
     end
@@ -24,7 +24,7 @@ describe Candidates::FeedbacksController, type: :request do
       post '/candidates/feedbacks', params: feedback_params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :feedback do
         Candidates::Feedback.new
       end
@@ -38,7 +38,7 @@ describe Candidates::FeedbacksController, type: :request do
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :feedback do
         FactoryBot.build :candidates_feedback
       end
@@ -50,7 +50,7 @@ describe Candidates::FeedbacksController, type: :request do
     end
   end
 
-  context '#show' do
+  describe '#show' do
     let :feedback do
       FactoryBot.create :candidates_feedback
     end

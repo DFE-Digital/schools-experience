@@ -3,7 +3,7 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::OnBoarding::OtherFeesController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let! :school_profile do
     FactoryBot.create \
@@ -21,7 +21,7 @@ describe Schools::OnBoarding::OtherFeesController, type: :request do
       .and_return(task_progress_on_boarding)
   end
 
-  context '#new' do
+  describe '#new' do
     before do
       get '/schools/on_boarding/other_fee/new'
     end
@@ -35,7 +35,7 @@ describe Schools::OnBoarding::OtherFeesController, type: :request do
     end
   end
 
-  context '#edit' do
+  describe '#edit' do
     let! :school_profile do
       FactoryBot.create :school_profile, :completed
     end
@@ -54,7 +54,7 @@ describe Schools::OnBoarding::OtherFeesController, type: :request do
     end
   end
 
-  context '#create' do
+  describe '#create' do
     let :params do
       { schools_on_boarding_other_fee: other_fee.attributes }
     end
@@ -63,7 +63,7 @@ describe Schools::OnBoarding::OtherFeesController, type: :request do
       post '/schools/on_boarding/other_fee', params: params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :other_fee do
         Schools::OnBoarding::OtherFee.new
       end
@@ -81,7 +81,7 @@ describe Schools::OnBoarding::OtherFeesController, type: :request do
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :other_fee do
         FactoryBot.build :other_fee
       end

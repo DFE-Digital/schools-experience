@@ -44,7 +44,7 @@ describe NotifyEmail::CandidateVirtualExperienceBookingConfirmation do
 
     it { is_expected.to be_a(described_class) }
 
-    context 'correctly assigning attributes' do
+    context 'when assigning attributes' do
       specify 'candidate_name is correctly-assigned' do
         expect(subject.candidate_name).to eql(candidate_name)
       end

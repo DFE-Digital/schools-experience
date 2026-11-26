@@ -41,21 +41,20 @@ describe Schools::PrepopulateSchoolProfile, type: :model do
     subject { described_class }
 
     before do
-      allow(Rails.configuration.x).to receive(:dfe_sign_in_api_enabled) { true }
-      allow(Rails.configuration.x).to receive(:dfe_sign_in_api_school_change_enabled) { true }
+      allow(Rails.configuration.x).to receive_messages(dfe_sign_in_api_enabled: true, dfe_sign_in_api_school_change_enabled: true)
     end
 
 
     it { is_expected.to be_enabled }
 
     context "when dfe_sign_in_api_enabled is false" do
-      before { allow(Rails.configuration.x).to receive(:dfe_sign_in_api_enabled) { false } }
+      before { allow(Rails.configuration.x).to receive(:dfe_sign_in_api_enabled).and_return(false) }
 
       it { is_expected.not_to be_enabled }
     end
 
     context "when dfe_sign_in_api_school_change_enabled is false" do
-      before { allow(Rails.configuration.x).to receive(:dfe_sign_in_api_school_change_enabled) { false } }
+      before { allow(Rails.configuration.x).to receive(:dfe_sign_in_api_school_change_enabled).and_return(false) }
 
       it { is_expected.not_to be_enabled }
     end
@@ -65,11 +64,11 @@ describe Schools::PrepopulateSchoolProfile, type: :model do
     subject { instance.available_schools }
 
     it "only returns schools which we have in our system and are onboarded, excluding the current school" do
-      is_expected.to contain_exactly(first_school, second_school)
+      expect(subject).to contain_exactly(first_school, second_school)
     end
 
     it "returns schools in alphabetical order" do
-      is_expected.to eq([second_school, first_school])
+      expect(subject).to eq([second_school, first_school])
     end
   end
 

@@ -36,7 +36,7 @@ RSpec.describe FacetTagsPresenter do
     # Group 2: Three and Four
     # Group 3: Five and (Six or Seven)
     it do
-      is_expected.to eq({
+      expect(subject).to eq({
         "Group 1" => [
           { value: 1, text: "One", key: "key-1" },
           { value: 2, text: "Two", preposition: :or, key: "key-1" },

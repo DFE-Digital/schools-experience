@@ -23,13 +23,13 @@ describe Schools::ContactUsController, type: :request do
 
 
   context "when signed in" do
-    include_context "logged in DfE user"
+    include_context "when a DfE user is logged in"
 
     include_examples "return to dashboard"
   end
 
   context "when signed in with school profile" do
-    include_context "logged in DfE user for school with profile"
+    include_context "when a DfE user is logged in for a school with a profile"
 
     include_examples "return to dashboard"
   end

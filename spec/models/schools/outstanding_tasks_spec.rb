@@ -7,7 +7,7 @@ describe Schools::OutstandingTasks do
   describe "#summarize" do
     let(:summary) { described_class.new([school.urn, other_school.urn]).summarize }
 
-    context "requests_requiring_attention" do
+    context "when requests_requiring_attention" do
       subject { compact_summary(:requests_requiring_attention) }
 
       it { is_expected.to eq({ school.urn => 0, other_school.urn => 0 }) }
@@ -36,7 +36,7 @@ describe Schools::OutstandingTasks do
       end
     end
 
-    context "unviewed_withdrawn_requests" do
+    context "when unviewed_withdrawn_requests" do
       subject { compact_summary(:unviewed_withdrawn_requests) }
 
       it { is_expected.to eq({ school.urn => 0, other_school.urn => 0 }) }
@@ -64,7 +64,7 @@ describe Schools::OutstandingTasks do
       end
     end
 
-    context "upcoming_bookings" do
+    context "when upcoming_bookings" do
       subject { compact_summary(:upcoming_bookings) }
 
       it { is_expected.to eq({ school.urn => 0, other_school.urn => 0 }) }
@@ -92,7 +92,7 @@ describe Schools::OutstandingTasks do
       end
     end
 
-    context "bookings_pending_attendance_confirmation" do
+    context "when bookings_pending_attendance_confirmation" do
       subject { compact_summary(:bookings_pending_attendance_confirmation) }
 
       it { is_expected.to eq({ school.urn => 0, other_school.urn => 0 }) }

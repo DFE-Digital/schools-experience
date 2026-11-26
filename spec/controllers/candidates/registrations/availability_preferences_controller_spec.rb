@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::AvailabilityPreferencesController, type: :request do
-  include_context 'Stubbed candidates school'
-  include_context 'Stubbed current_registration'
+  include_context 'with a stubbed candidate school'
+  include_context 'with a stubbed current registration'
 
   let :registration_session do
     FactoryBot.build :registration_session, with: %i[
@@ -16,7 +16,7 @@ describe Candidates::Registrations::AvailabilityPreferencesController, type: :re
   end
 
   context 'without existing availability_preference in session' do
-    context '#new' do
+    describe '#new' do
       before do
         get '/candidates/schools/11048/registrations/availability_preference/new'
       end
@@ -30,7 +30,7 @@ describe Candidates::Registrations::AvailabilityPreferencesController, type: :re
       end
     end
 
-    context '#create' do
+    describe '#create' do
       let :availability_preference_params do
         {
           candidates_registrations_availability_preference: \
@@ -43,7 +43,7 @@ describe Candidates::Registrations::AvailabilityPreferencesController, type: :re
           params: availability_preference_params
       end
 
-      context 'invalid' do
+      context 'when invalid' do
         let :availability_preference do
           Candidates::Registrations::AvailabilityPreference.new
         end
@@ -58,7 +58,7 @@ describe Candidates::Registrations::AvailabilityPreferencesController, type: :re
         end
       end
 
-      context 'valid' do
+      context 'when valid' do
         let :availability_preference do
           FactoryBot.build :availability_preference, urn: school.urn
         end
@@ -85,7 +85,7 @@ describe Candidates::Registrations::AvailabilityPreferencesController, type: :re
       registration_session.save existing_availability_preference
     end
 
-    context '#new' do
+    describe '#new' do
       before do
         get '/candidates/schools/11048/registrations/availability_preference/new'
       end
@@ -100,7 +100,7 @@ describe Candidates::Registrations::AvailabilityPreferencesController, type: :re
       end
     end
 
-    context '#edit' do
+    describe '#edit' do
       before do
         get '/candidates/schools/11048/registrations/availability_preference/edit'
       end
@@ -115,7 +115,7 @@ describe Candidates::Registrations::AvailabilityPreferencesController, type: :re
       end
     end
 
-    context '#update' do
+    describe '#update' do
       let :availability_preference_params do
         {
           candidates_registrations_availability_preference: \
@@ -128,7 +128,7 @@ describe Candidates::Registrations::AvailabilityPreferencesController, type: :re
           params: availability_preference_params
       end
 
-      context 'invalid' do
+      context 'when invalid' do
         let :availability_preference do
           Candidates::Registrations::AvailabilityPreference.new
         end
@@ -143,7 +143,7 @@ describe Candidates::Registrations::AvailabilityPreferencesController, type: :re
         end
       end
 
-      context 'valid' do
+      context 'when valid' do
         let :availability_preference do
           FactoryBot.build :availability_preference,
             urn: school.urn,

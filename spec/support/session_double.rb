@@ -1,4 +1,4 @@
-shared_context "session double" do
+shared_context "with a session double" do
   let(:session_hash) { {} }
 
   before do

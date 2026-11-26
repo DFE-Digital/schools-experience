@@ -2,8 +2,8 @@ require "rails_helper"
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::PrepopulateSchoolProfilesController, type: :request do
-  include_context "logged in DfE user"
-  include_context "stub role check api"
+  include_context "when a DfE user is logged in"
+  include_context "when stubbing the role-check API"
 
   describe "#create" do
     subject { post(schools_prepopulate_school_profiles_path, params: params) }
@@ -20,7 +20,7 @@ describe Schools::PrepopulateSchoolProfilesController, type: :request do
 
 
     it "prepopulates the school profile" do
-      is_expected.to redirect_to(schools_on_boarding_progress_path)
+      expect(subject).to redirect_to(schools_on_boarding_progress_path)
 
       follow_redirect!
 

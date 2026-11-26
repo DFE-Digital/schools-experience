@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 describe Schools::OnBoarding::CandidateParkingInformation, type: :model do
-  context 'attributes' do
+  context 'with attributes' do
     it { is_expected.to respond_to :parking_provided }
     it { is_expected.to respond_to :parking_details }
     it { is_expected.to respond_to :nearby_parking_details }
   end
 
-  context 'validations' do
+  context 'when validating' do
     it { is_expected.not_to allow_value(nil).for :parking_provided }
 
     context 'when parking_provided' do

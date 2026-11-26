@@ -2,7 +2,7 @@ require 'rails_helper'
 require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 
 describe Schools::OnBoarding::DisabilityConfidentsController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let(:task_progress_on_boarding) { false }
   let! :school_profile do
@@ -30,7 +30,7 @@ describe Schools::OnBoarding::DisabilityConfidentsController, type: :request do
   end
 
 
-  context '#new' do
+  describe '#new' do
     before do
       get '/schools/on_boarding/disability_confident/new'
     end
@@ -45,7 +45,7 @@ describe Schools::OnBoarding::DisabilityConfidentsController, type: :request do
     end
   end
 
-  context '#create' do
+  describe '#create' do
     let :params do
       {
         schools_on_boarding_disability_confident: \
@@ -57,7 +57,7 @@ describe Schools::OnBoarding::DisabilityConfidentsController, type: :request do
       post '/schools/on_boarding/disability_confident', params: params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :disability_confident do
         Schools::OnBoarding::DisabilityConfident.new
       end
@@ -72,7 +72,7 @@ describe Schools::OnBoarding::DisabilityConfidentsController, type: :request do
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :disability_confident do
         FactoryBot.build :disability_confident
       end
@@ -98,7 +98,7 @@ describe Schools::OnBoarding::DisabilityConfidentsController, type: :request do
     end
   end
 
-  context '#edit' do
+  describe '#edit' do
     let! :school_profile do
       FactoryBot.create :school_profile, :completed
     end
@@ -117,7 +117,7 @@ describe Schools::OnBoarding::DisabilityConfidentsController, type: :request do
     end
   end
 
-  context '#update' do
+  describe '#update' do
     let! :school_profile do
       FactoryBot.create :school_profile, :completed
     end
@@ -133,7 +133,7 @@ describe Schools::OnBoarding::DisabilityConfidentsController, type: :request do
       patch '/schools/on_boarding/disability_confident', params: params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :disability_confident do
         Schools::OnBoarding::AccessNeedsSupport.new
       end
@@ -148,7 +148,7 @@ describe Schools::OnBoarding::DisabilityConfidentsController, type: :request do
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :disability_confident do
         FactoryBot.build :disability_confident, is_disability_confident: false
       end

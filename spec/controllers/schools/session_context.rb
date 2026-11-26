@@ -1,5 +1,5 @@
-shared_context "logged in DfE user" do
-  include_context "session double"
+shared_context "when a DfE user is logged in" do
+  include_context "with a session double"
 
   let(:urn) { 123_456 }
   let(:user_guid) { '33333333-4444-5555-6666-777777777777' }
@@ -68,8 +68,8 @@ shared_context "logged in DfE user" do
   end
 end
 
-shared_context "logged in DfE user for school with profile" do
-  include_context "logged in DfE user"
+shared_context "when a DfE user is logged in for a school with a profile" do
+  include_context "when a DfE user is logged in"
 
   let! :school do
     @current_user_school.tap do |s|

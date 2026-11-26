@@ -2,13 +2,13 @@ require "rails_helper"
 
 describe Candidates::BookingFeedback, type: :model do
   it do
-    is_expected.to belong_to(:booking)
+    expect(subject).to belong_to(:booking)
       .class_name("Bookings::Booking")
       .with_foreign_key("bookings_booking_id")
   end
 
   it do
-    is_expected.to define_enum_for(:effect_on_decision)
+    expect(subject).to define_enum_for(:effect_on_decision)
       .with_values(%i[negatively positively unaffected])
   end
 
@@ -27,7 +27,7 @@ describe Candidates::BookingFeedback, type: :model do
 
     it do
       subject.booking = create(:bookings_booking)
-      is_expected.to validate_uniqueness_of(:bookings_booking_id)
+      expect(subject).to validate_uniqueness_of(:bookings_booking_id)
     end
   end
 end

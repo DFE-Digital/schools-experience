@@ -18,7 +18,7 @@ describe SchoolsController, type: :request do
       let(:toggle) { 'false' }
 
       specify 'should render the correct template' do
-        is_expected.to have_rendered :show
+        expect(subject).to have_rendered :show
       end
 
       specify 'should show login button' do
@@ -34,7 +34,7 @@ describe SchoolsController, type: :request do
       let(:toggle) { '1' }
 
       specify 'should render the correct template' do
-        is_expected.to have_rendered :show
+        expect(subject).to have_rendered :show
       end
 
       specify 'should not show login button' do
@@ -54,7 +54,7 @@ describe SchoolsController, type: :request do
       let(:toggle) { 'custom message' }
 
       specify 'should render the correct template' do
-        is_expected.to have_rendered :show
+        expect(subject).to have_rendered :show
       end
 
       specify 'should not show login button' do

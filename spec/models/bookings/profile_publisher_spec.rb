@@ -33,7 +33,7 @@ RSpec.describe Bookings::ProfilePublisher, type: :model do
       create(:school_profile, :completed, :with_subjects)
     end
 
-    context "for School without Profile" do
+    context "with School without Profile" do
       subject { described_class.new(school, school_profile).update! }
 
       it { is_expected.to be_a Bookings::Profile }
@@ -44,7 +44,7 @@ RSpec.describe Bookings::ProfilePublisher, type: :model do
       it { expect(subject.school.phase_ids.length).to be(4) }
     end
 
-    context "for School with Profile" do
+    context "with a school that has Profile" do
       subject { described_class.new(school, school_profile).update! }
 
       before do

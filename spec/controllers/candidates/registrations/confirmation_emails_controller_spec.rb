@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::ConfirmationEmailsController, type: :request do
-  include_context 'Stubbed candidates school'
-  include_context 'Stubbed current_registration'
+  include_context 'with a stubbed candidate school'
+  include_context 'with a stubbed current registration'
 
   let :registration_session do
     FactoryBot.build :registration_session, urn: school.urn,
@@ -27,12 +27,12 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
       receive(:perform_later)
   end
 
-  context '#create' do
+  describe '#create' do
     let(:skip_confirmation_emails) { false }
 
     before { allow(Feature).to receive(:enabled?).with(:skip_candidate_confirmation_emails) { skip_confirmation_emails } }
 
-    context 'skipped step' do
+    context 'when skipped step' do
       before { registration_store.send :delete, 'some-uuid'
 post candidates_school_registrations_confirmation_email_path(school)
        } # ensure key not left lying around
@@ -61,7 +61,7 @@ post candidates_school_registrations_confirmation_email_path(school)
       end
     end
 
-    context 'no skipped steps' do
+    context 'without skipped steps' do
       before do
         post candidates_school_registrations_confirmation_email_path(school)
       end
@@ -111,7 +111,7 @@ post candidates_school_registrations_confirmation_email_path(school)
       end
     end
 
-    context 'no skipped steps and already signed in' do
+    context 'when the candidate is already signed in and has not skipped any steps' do
       let(:candidate) { create(:candidate, :confirmed) }
       let(:contact) do
         api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
@@ -150,7 +150,7 @@ post candidates_school_registrations_confirmation_email_path(school)
     end
   end
 
-  context '#show' do
+  describe '#show' do
     before do
       get candidates_school_registrations_confirmation_email_path school
     end

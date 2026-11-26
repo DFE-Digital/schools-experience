@@ -42,9 +42,9 @@ shared_examples "notify_job" do
     executions.times { job.perform_now }
   end
 
-  context '#perform' do
-    context 'on error' do
-      context 'retryable error' do
+  describe '#perform' do
+    context 'when on error' do
+      context 'when retryable error' do
         let(:notify_class) { NotifyRetryableErroringClient }
         let(:executions) { 4 }
         let(:retry_in) { 2.hours.from_now.to_i }
@@ -61,7 +61,7 @@ shared_examples "notify_job" do
         end
       end
 
-      context 'non retryable error' do
+      context 'when non retryable error' do
         let(:notify_class) { NotifyNonRetryableErroringClient }
         let(:executions) { 2 }
         let(:application_job_timeout) { (executions**4) + 2 }
@@ -75,7 +75,7 @@ shared_examples "notify_job" do
       end
     end
 
-    context 'on success' do
+    context 'when on success' do
       let(:notify_class) { double Class, new: stub_client }
       let(:executions) { 1 }
 
@@ -136,10 +136,10 @@ shared_examples "notify recipient restriction handling" do
     allow(Rails.env).to receive(:production?).and_return(production)
   end
 
-  context 'outside production' do
+  context 'when outside production' do
     let(:production) { false }
 
-    context 'team-only API key error' do
+    context 'with team-only api key error' do
       let(:notify_class) { erroring_client(team_only_message) }
 
       it 'swallows the error without raising, retrying or alerting' do
@@ -155,7 +155,7 @@ shared_examples "notify recipient restriction handling" do
       end
     end
 
-    context 'trial mode error' do
+    context 'with trial mode error' do
       let(:notify_class) { erroring_client(trial_mode_message) }
 
       it 'swallows the error without retrying or alerting' do
@@ -165,7 +165,7 @@ shared_examples "notify recipient restriction handling" do
       end
     end
 
-    context 'restriction message in a different case' do
+    context 'when restriction message in a different case' do
       let(:notify_class) { erroring_client(team_only_message.upcase) }
 
       it 'still swallows the error (case-insensitive match)' do
@@ -174,7 +174,7 @@ shared_examples "notify recipient restriction handling" do
       end
     end
 
-    context 'any other bad request error' do
+    context 'when any other bad request error' do
       let(:notify_class) { erroring_client(other_bad_request_message) }
 
       it 'lets the error propagate to be retried' do
@@ -184,10 +184,10 @@ shared_examples "notify recipient restriction handling" do
     end
   end
 
-  context 'in production' do
+  context 'when in production' do
     let(:production) { true }
 
-    context 'team-only API key error' do
+    context 'with team-only api key error' do
       let(:notify_class) { erroring_client(team_only_message) }
 
       it 'lets the error propagate to be retried' do
@@ -196,7 +196,7 @@ shared_examples "notify recipient restriction handling" do
       end
     end
 
-    context 'trial mode error' do
+    context 'with trial mode error' do
       let(:notify_class) { erroring_client(trial_mode_message) }
 
       it 'lets the error propagate to be retried' do
@@ -208,7 +208,7 @@ shared_examples "notify recipient restriction handling" do
 end
 
 describe Notify::BaseJob, type: :job do
-  context "#perform" do
+  describe "#perform" do
     it "fails with NotImplementedError'" do
       expect { subject.perform }.to raise_error(NotImplementedError, 'You must implement the perform method')
     end

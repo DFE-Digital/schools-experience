@@ -2,13 +2,13 @@ require 'rails_helper'
 require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 
 describe Schools::OnBoarding::ConfirmationsController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let! :school_profile do
     FactoryBot.create :school_profile, :completed
   end
 
-  context '#create' do
+  describe '#create' do
     let :params do
       {
         schools_on_boarding_confirmation: confirmation.attributes
@@ -19,7 +19,7 @@ describe Schools::OnBoarding::ConfirmationsController, type: :request do
       post '/schools/on_boarding/confirmation', params: params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :confirmation do
         Schools::OnBoarding::Confirmation.new acceptance: false
       end
@@ -37,7 +37,7 @@ describe Schools::OnBoarding::ConfirmationsController, type: :request do
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :confirmation do
         FactoryBot.build :confirmation
       end
@@ -56,7 +56,7 @@ describe Schools::OnBoarding::ConfirmationsController, type: :request do
     end
   end
 
-  context '#show' do
+  describe '#show' do
     context 'when the profile is incomplete' do
       before do
         get '/schools/on_boarding/confirmation'

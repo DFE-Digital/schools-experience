@@ -7,18 +7,18 @@ RSpec.describe Bookings::SchoolsSubject, type: :model do
   end
 
   describe 'Validation' do
-    context '#bookings_school' do
+    describe '#bookings_school' do
       it { is_expected.to validate_presence_of(:bookings_school) }
     end
 
-    context '#bookings_subject' do
+    describe '#bookings_subject' do
       it { is_expected.to validate_presence_of(:bookings_subject) }
 
-      context 'Uniqueness' do
+      context 'when checking uniqueness' do
         subject { create(:bookings_schools_subject) }
 
         it do
-          is_expected.to(
+          expect(subject).to(
             validate_uniqueness_of(:bookings_subject_id)
               .scoped_to(:bookings_school_id)
           )

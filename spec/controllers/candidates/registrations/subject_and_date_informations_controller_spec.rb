@@ -11,7 +11,7 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
     end
 
     context 'when the school has flexible dates' do
-      include_context 'Stubbed candidates school'
+      include_context 'with a stubbed candidate school'
 
       context 'without existing subject and date in session' do
         before do
@@ -27,7 +27,7 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
     end
 
     context 'when the school has fixed dates' do
-      include_context 'Stubbed candidates school', true
+      include_context 'with a stubbed candidate school', true
 
       context 'without existing subject and date in session' do
         before do
@@ -53,7 +53,7 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
   end
 
   describe '#post' do
-    include_context 'Stubbed candidates school', true
+    include_context 'with a stubbed candidate school', true
     let :subject_and_date_info_path do
       '/candidates/schools/11048/registrations/subject_and_date_information'
     end

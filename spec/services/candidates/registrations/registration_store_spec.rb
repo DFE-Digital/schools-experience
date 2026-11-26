@@ -12,7 +12,7 @@ describe Candidates::Registrations::RegistrationStore do
   end
 
 
-  context '#store!' do
+  describe '#store!' do
     let! :returned_uuid do
       subject.store! session
     end
@@ -27,9 +27,9 @@ describe Candidates::Registrations::RegistrationStore do
     end
   end
 
-  context '#store! with a blank key' do
+  describe '#store! with a blank key' do
     before do
-      allow(session).to receive(:uuid) { nil }
+      allow(session).to receive(:uuid).and_return(nil)
     end
 
     it 'raises an error' do
@@ -39,7 +39,7 @@ describe Candidates::Registrations::RegistrationStore do
     end
   end
 
-  context '#get!' do
+  describe '#get!' do
     before do
       subject.store! session
     end
@@ -63,7 +63,7 @@ describe Candidates::Registrations::RegistrationStore do
     end
   end
 
-  context '#delete!' do
+  describe '#delete!' do
     before do
       subject.store! session
     end
@@ -86,7 +86,7 @@ describe Candidates::Registrations::RegistrationStore do
     end
   end
 
-  context '#has_registration?' do
+  describe '#has_registration?' do
     let! :returned_uuid do
       subject.store! session
     end

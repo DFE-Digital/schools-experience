@@ -56,7 +56,7 @@ describe Candidates::Registrations::GitisRegistrationSession do
     end
   end
 
-  context 'Background Check' do
+  context 'when background Check' do
     let(:model) { Candidates::Registrations::BackgroundCheck }
     let(:data) { { 'has_dbs_check' => false } }
     let(:gitis_data) { { 'has_dbs_check' => nil } }
@@ -70,8 +70,8 @@ describe Candidates::Registrations::GitisRegistrationSession do
     end
   end
 
-  context 'Teaching Preference' do
-    include_context "api teaching subjects"
+  context 'when teaching Preference' do
+    include_context "when the API returns teaching subjects"
 
     let(:model) { Candidates::Registrations::TeachingPreference }
     let(:data) { { 'subject_first_choice' => 'Biology', 'subject_second_choice' => 'Physics' } }

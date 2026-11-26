@@ -157,7 +157,7 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
   context "with a Bookings::Cancellation" do
     subject { described_class.from_cancellation(cancellation, status) }
 
-    context "cancelled by candidate" do
+    context "when cancelled by candidate" do
       let(:status) { :cancelled_by_candidate }
 
       context "when cancelled after being accepted" do
@@ -191,7 +191,7 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
       end
     end
 
-    context "cancelled by school" do
+    context "when cancelled by school" do
       let(:status) { :cancelled_by_school }
       let(:cancellation) { create(:bookings_booking, :cancelled_by_school).school_cancellation }
       let(:expected_school_experience) do

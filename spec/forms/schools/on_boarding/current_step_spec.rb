@@ -9,12 +9,12 @@ describe Schools::OnBoarding::CurrentStep do
     FactoryBot.create :bookings_phase, :college
   end
 
-  context '.for' do
+  describe '.for' do
     let :returned_step do
       described_class.for school_profile
     end
 
-    context 'dbs_requirement required' do
+    context 'when dbs_requirement required' do
       let :school_profile do
         FactoryBot.build :school_profile
       end
@@ -24,7 +24,7 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'dbs_requirement not required' do
+    context 'when dbs_requirement not required' do
       let :school_profile do
         FactoryBot.build :school_profile, :with_dbs_requirement
       end
@@ -34,8 +34,8 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'candidate_requirements_selection required' do
-      context 'step not completed' do
+    context 'when candidate_requirements_selection required' do
+      context 'when step not completed' do
         let :school_profile do
           FactoryBot.build :school_profile,
             :with_dbs_requirement
@@ -46,7 +46,7 @@ describe Schools::OnBoarding::CurrentStep do
         end
       end
 
-      context 'step completed' do
+      context 'when step completed' do
         let :school_profile do
           FactoryBot.build :school_profile,
             :with_dbs_requirement,
@@ -59,7 +59,7 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'fees required' do
+    context 'when fees required' do
       let :school_profile do
         FactoryBot.build :school_profile,
           :with_dbs_requirement,
@@ -86,8 +86,8 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'administration_fee required' do
-      context 'administration_fee invalid' do
+    context 'when administration_fee required' do
+      context 'when administration_fee invalid' do
         let :school_profile do
           FactoryBot.build :school_profile,
             :with_dbs_requirement,
@@ -102,7 +102,7 @@ describe Schools::OnBoarding::CurrentStep do
         end
       end
 
-      context 'administration_fee valid step flagged incomplete' do
+      context 'when administration_fee valid step flagged incomplete' do
         let :school_profile do
           FactoryBot.build :school_profile,
             :with_dbs_requirement,
@@ -120,8 +120,8 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'dbs_fee required' do
-      context 'dbs_fee invalid' do
+    context 'when dbs_fee required' do
+      context 'when dbs_fee invalid' do
         let :school_profile do
           FactoryBot.build :school_profile,
             :with_dbs_requirement,
@@ -136,7 +136,7 @@ describe Schools::OnBoarding::CurrentStep do
         end
       end
 
-      context 'dbs_fee step flagged incomplete' do
+      context 'when dbs_fee step flagged incomplete' do
         let :school_profile do
           FactoryBot.build :school_profile,
             :with_dbs_requirement,
@@ -154,8 +154,8 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'other_fees required' do
-      context 'other_fees invalid' do
+    context 'when other_fees required' do
+      context 'when other_fees invalid' do
         let :school_profile do
           FactoryBot.build :school_profile,
             :with_dbs_requirement,
@@ -170,7 +170,7 @@ describe Schools::OnBoarding::CurrentStep do
         end
       end
 
-      context 'other_fees step flagged incomplete' do
+      context 'when other_fees step flagged incomplete' do
         let :school_profile do
           FactoryBot.build :school_profile,
             :with_dbs_requirement,
@@ -188,7 +188,7 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'phases_list required' do
+    context 'when phases_list required' do
       let :school_profile do
         FactoryBot.build :school_profile,
           :with_dbs_requirement,
@@ -203,7 +203,7 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'key_stage_list required' do
+    context 'when key_stage_list required' do
       let :school_profile do
         FactoryBot.build :school_profile,
           :with_dbs_requirement,
@@ -220,7 +220,7 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'subjects required' do
+    context 'when subjects required' do
       let :school_profile do
         FactoryBot.build :school_profile,
           :with_dbs_requirement,
@@ -238,7 +238,7 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'description required' do
+    context 'when description required' do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
@@ -257,7 +257,7 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'candidate_dress_code required' do
+    context 'when candidate_dress_code required' do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
@@ -276,7 +276,7 @@ describe Schools::OnBoarding::CurrentStep do
         expect(returned_step).to eq :candidate_dress_code
       end
 
-      context 'step not flagged as completed' do
+      context 'when step not flagged as completed' do
         let :school_profile do
           FactoryBot.create :school_profile,
             :with_dbs_requirement,
@@ -298,7 +298,7 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'candidate_parking_information required' do
+    context 'when candidate_parking_information required' do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
@@ -319,7 +319,7 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'candidate_experience_schedule required' do
+    context 'when candidate_experience_schedule required' do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
@@ -341,7 +341,7 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'access_needs_support required' do
+    context 'when access_needs_support required' do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
@@ -364,7 +364,7 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'access_needs_detail not required' do
+    context 'when access_needs_detail not required' do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
@@ -389,7 +389,7 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'access_needs_detail required' do
+    context 'when access_needs_detail required' do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
@@ -413,7 +413,7 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'disability_confident required' do
+    context 'when disability_confident required' do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
@@ -438,7 +438,7 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'access_needs_policy required' do
+    context 'when access_needs_policy required' do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
@@ -464,7 +464,7 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'experience_outline requred' do
+    context 'when experience_outline requred' do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
@@ -491,7 +491,7 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'admin_contact required' do
+    context 'when admin_contact required' do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
@@ -520,7 +520,7 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'admin_contact not required' do
+    context 'when admin_contact not required' do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,

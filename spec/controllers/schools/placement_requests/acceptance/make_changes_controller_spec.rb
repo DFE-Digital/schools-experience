@@ -2,7 +2,7 @@ require 'rails_helper'
 require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 
 describe Schools::PlacementRequests::Acceptance::MakeChangesController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let!(:pr) { create(:bookings_placement_request, school: @current_user_school) }
 
@@ -10,7 +10,7 @@ describe Schools::PlacementRequests::Acceptance::MakeChangesController, type: :r
     create(:bookings_profile, school: @current_user_school)
   end
 
-  context '#new' do
+  describe '#new' do
     before do
       get new_schools_placement_request_acceptance_make_changes_path(pr.id)
     end
@@ -20,7 +20,7 @@ describe Schools::PlacementRequests::Acceptance::MakeChangesController, type: :r
     end
   end
 
-  context '#create' do
+  describe '#create' do
     before { post schools_placement_request_acceptance_make_changes_path(pr.id, params: params) }
 
     let(:future_date) { 3.weeks.from_now.to_date }

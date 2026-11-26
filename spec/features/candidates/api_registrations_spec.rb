@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 feature 'Candidate Registrations (via the API)', type: :feature do
-  include_context "api teaching subjects"
-  include_context "api latest privacy policy"
-  include_context "api add school experience"
-  include_context "api sign up"
-  include_context "Stubbed candidates school"
+  include_context "when the API returns teaching subjects"
+  include_context "when the API returns the latest privacy policy"
+  include_context "when the API adds school experience"
+  include_context "when the API signs up"
+  include_context "with a stubbed candidate school"
 
   let(:today) { Time.zone.today }
   let(:tomorrow) { today + 1.day }
@@ -20,8 +20,8 @@ feature 'Candidate Registrations (via the API)', type: :feature do
   end
 
   feature 'Candidate Registration' do
-    context 'for unknown Contact' do
-      include_context "api candidate not matched back"
+    context 'with unknown Contact' do
+      include_context "when the API candidate does not match back"
 
       let(:email_address) { 'unknown@example.com' }
 
@@ -39,9 +39,9 @@ feature 'Candidate Registrations (via the API)', type: :feature do
       end
     end
 
-    context 'for unknown Candidate but Contact is in Gitis' do
-      include_context "api candidate matched back"
-      include_context "api correct verification code"
+    context 'with unknown Candidate but Contact is in Gitis' do
+      include_context "when the API candidate matches back"
+      include_context "when the API returns a correct verification code"
 
       let(:email_address) { sign_up.email }
 
@@ -59,9 +59,9 @@ feature 'Candidate Registrations (via the API)', type: :feature do
       end
     end
 
-    context 'for known Candidate not signed in' do
-      include_context "api candidate matched back"
-      include_context "api correct verification code"
+    context 'with known Candidate not signed in' do
+      include_context "when the API candidate matches back"
+      include_context "when the API returns a correct verification code"
 
       let(:email_address) { sign_up.email }
       let!(:candidate) { create(:candidate, :confirmed, gitis_uuid: sign_up.candidate_id) }
@@ -108,8 +108,8 @@ feature 'Candidate Registrations (via the API)', type: :feature do
   end
 
   def complete_contact_information_step
-    expect(page.current_path).to eq \
-      "/candidates/schools/#{school_urn}/registrations/contact_information/new"
+    expect(page).to have_current_path \
+      "/candidates/schools/#{school_urn}/registrations/contact_information/new", ignore_query: true
 
     # Submit contact information form with errors
     fill_in 'Address line 1', with: ''
@@ -127,8 +127,8 @@ feature 'Candidate Registrations (via the API)', type: :feature do
   end
 
   def complete_education_step
-    expect(page.current_path).to eq \
-      "/candidates/schools/#{school_urn}/registrations/education/new"
+    expect(page).to have_current_path \
+      "/candidates/schools/#{school_urn}/registrations/education/new", ignore_query: true
 
     # Submit registrations/education form with errors
     choose 'Graduate or postgraduate'
@@ -142,8 +142,8 @@ feature 'Candidate Registrations (via the API)', type: :feature do
   end
 
   def complete_teaching_preference_step
-    expect(page.current_path).to eq \
-      "/candidates/schools/#{school_urn}/registrations/teaching_preference/new"
+    expect(page).to have_current_path \
+      "/candidates/schools/#{school_urn}/registrations/teaching_preference/new", ignore_query: true
 
     # Submit registrations/teaching_preference form with errors
     choose "I’m very sure and think I’ll apply"
@@ -157,8 +157,8 @@ feature 'Candidate Registrations (via the API)', type: :feature do
   end
 
   def complete_placement_preference_step
-    expect(page.current_path).to eq \
-      "/candidates/schools/#{school_urn}/registrations/placement_preference/new"
+    expect(page).to have_current_path \
+      "/candidates/schools/#{school_urn}/registrations/placement_preference/new", ignore_query: true
 
     # Submit registrations/placement_preference form with errors
     fill_in 'Enter what you want to get out of your placement', with: ''
@@ -171,8 +171,8 @@ feature 'Candidate Registrations (via the API)', type: :feature do
   end
 
   def complete_availability_preference_step
-    expect(page.current_path).to eq \
-      "/candidates/schools/#{school_urn}/registrations/availability_preference/new"
+    expect(page).to have_current_path \
+      "/candidates/schools/#{school_urn}/registrations/availability_preference/new", ignore_query: true
 
     # Submit registrations/availability_preference form with errors
     fill_in 'Enter your availability', with: ''
@@ -185,8 +185,8 @@ feature 'Candidate Registrations (via the API)', type: :feature do
   end
 
   def complete_background_step
-    expect(page.current_path).to eq \
-      "/candidates/schools/#{school_urn}/registrations/background_check/new"
+    expect(page).to have_current_path \
+      "/candidates/schools/#{school_urn}/registrations/background_check/new", ignore_query: true
 
     # Submit registrations/background_check form with errors
     click_button 'Continue'
@@ -198,8 +198,8 @@ feature 'Candidate Registrations (via the API)', type: :feature do
   end
 
   def complete_application_preview_step(name: 'testy mctest', email: nil, button_text: 'Accept and send')
-    expect(page.current_path).to eq \
-      "/candidates/schools/#{school_urn}/registrations/application_preview"
+    expect(page).to have_current_path \
+      "/candidates/schools/#{school_urn}/registrations/application_preview", ignore_query: true
 
     # Expect preview to match the data we successfully submited
     expect(page).to have_text "Full name #{name}"
@@ -248,7 +248,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
 
   def get_bounced_to_contact_information_step
     visit "/candidates/schools/#{school_urn}/registrations/application_preview"
-    expect(page.current_path).to eq \
-      "/candidates/schools/#{school_urn}/registrations/contact_information/new"
+    expect(page).to have_current_path \
+      "/candidates/schools/#{school_urn}/registrations/contact_information/new", ignore_query: true
   end
 end

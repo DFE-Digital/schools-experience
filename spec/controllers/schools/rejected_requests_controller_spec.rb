@@ -2,7 +2,7 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::RejectedRequestsController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let :school do
     Bookings::School.find_by!(urn: urn).tap do |school|
@@ -12,7 +12,7 @@ describe Schools::RejectedRequestsController, type: :request do
   end
 
   describe "#index" do
-    include_context "api sign ups for requests"
+    include_context "when the API signs up for requests"
 
     let(:requests) { create_list(:placement_request, 2, :cancelled_by_school, school: school) }
 

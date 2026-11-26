@@ -7,7 +7,7 @@ RSpec.describe Bookings::Profile, type: :model do
 
   describe 'methods' do
     describe '#dress_code' do
-      context 'omitting other details' do
+      context 'when omitting other details' do
         subject { create(:bookings_profile, dress_code_cover_tattoos: true, dress_code_other_details: 'any pants') }
 
         specify 'should not include the contents of dress_code_other_details' do
@@ -15,7 +15,7 @@ RSpec.describe Bookings::Profile, type: :model do
         end
       end
 
-      context 'correctly adding code flags' do
+      context 'when correctly adding code flags' do
         subject { create(:bookings_profile, dress_code_cover_tattoos: true, dress_code_remove_piercings: true) }
 
         specify 'should contain the correct information' do
@@ -29,7 +29,7 @@ RSpec.describe Bookings::Profile, type: :model do
         end
       end
 
-      context 'capitalising output' do
+      context 'when capitalising output' do
         subject { create(:bookings_profile, dress_code_smart_casual: true) }
 
         specify 'should not include incorrect information' do

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Candidates::SchoolsController, type: :request do
-  context "GET #index with search params" do
+  context "when gET #index with search params" do
     let(:query_params) do
       {
         query: 'Something',
@@ -103,7 +103,7 @@ RSpec.describe Candidates::SchoolsController, type: :request do
     end
   end
 
-  context "GET #show" do
+  context "when gET #show" do
     subject! { req }
 
     let(:school) { create(:bookings_school) }
@@ -122,7 +122,7 @@ RSpec.describe Candidates::SchoolsController, type: :request do
       expect(assigns(:school)).not_to be_nil
     end
 
-    context 'counting' do
+    context 'when counting' do
       let!(:count) { school.views }
 
       before { req }

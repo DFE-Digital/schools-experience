@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 describe Schools::OnBoarding::ExperienceOutline, type: :model do
-  context 'attributes' do
+  context 'with attributes' do
     it { is_expected.to respond_to :candidate_experience }
   end
 
-  context '.new_from_bookings_school' do
+  describe '.new_from_bookings_school' do
     subject { described_class.new_from_bookings_school school }
 
     let :school do

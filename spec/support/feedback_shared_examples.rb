@@ -1,13 +1,13 @@
 shared_examples 'a feedback' do
-  context 'attributes' do
+  context 'with attributes' do
     it do
-      is_expected.to have_db_column(:reason_for_using_service)
+      expect(subject).to have_db_column(:reason_for_using_service)
         .of_type(:integer)
         .with_options(null: false)
     end
 
     it do
-      is_expected.to have_db_column(:rating)
+      expect(subject).to have_db_column(:rating)
         .of_type(:integer)
         .with_options(null: false)
     end
@@ -15,9 +15,9 @@ shared_examples 'a feedback' do
     it { is_expected.to have_db_column(:improvements).of_type(:text) }
   end
 
-  context 'validations' do
+  context 'when validating' do
     it do
-      is_expected.to validate_presence_of(:reason_for_using_service)
+      expect(subject).to validate_presence_of(:reason_for_using_service)
     end
 
     it { is_expected.to validate_presence_of(:rating) }
@@ -26,14 +26,14 @@ shared_examples 'a feedback' do
       subject { described_class.new(reason_for_using_service: :something_else) }
 
       it do
-        is_expected.to \
+        expect(subject).to \
           validate_presence_of :reason_for_using_service_explanation
       end
     end
 
     context 'when reason does not require explanation' do
       it do
-        is_expected.not_to \
+        expect(subject).not_to \
           validate_presence_of :reason_for_using_service_explanation
       end
     end

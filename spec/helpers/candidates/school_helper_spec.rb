@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Candidates::SchoolHelper, type: :helper do
-  context '.format_school_address' do
+  describe '.format_school_address' do
     before do
       @school = OpenStruct.new(
         address_1: nil,
@@ -57,7 +57,7 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     end
   end
 
-  context '.format_school_subjects' do
+  describe '.format_school_subjects' do
     let(:school) { create(:bookings_school) }
     let(:output) { format_school_subjects(school) }
 
@@ -90,7 +90,7 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
         expect(output).to eq "First, Second, and Third"
       end
 
-      context 'highlighting filter matches' do
+      context 'when highlighting filter matches' do
         before do
           allow(self).to receive(:filtered_subject_ids).and_return([subject_2.id])
         end
@@ -109,7 +109,7 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     end
   end
 
-  context '.format_school_phases' do
+  describe '.format_school_phases' do
     before do
       @school = OpenStruct.new(
         phases: [
@@ -152,14 +152,14 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     it { is_expected.to eq("First, Second, Third") }
   end
 
-  context '.describe_current_search' do
+  describe '.describe_current_search' do
     subject { describe_current_search(search, **opts) }
 
     let(:opts) { {} }
 
 
     context 'with location search' do
-      context 'and name supplied by search' do
+      context 'when name supplied by search' do
         let(:search) do
           instance_double(Candidates::SchoolSearch,
             latitude: '',
@@ -221,14 +221,14 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     end
   end
 
-  context '.school_location_map' do
+  describe '.school_location_map' do
     include Candidates::MapsHelper
     include ActionController::Base::HelperMethods
 
     subject { school_location_map @school }
 
     before do
-      allow(Rails.application.config.x).to receive(:google_maps_key) { '12345' }
+      allow(Rails.application.config.x).to receive(:google_maps_key).and_return('12345')
       @latitude = "53.4782"
       @longitude = "-2.2299"
       @school = OpenStruct.new(
@@ -315,7 +315,7 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
       expect(split_to_list('')).to be_nil
     end
 
-    context 'splitting up items into a HTML list' do
+    context 'when splitting up items into a HTML list' do
       subject { split_to_list content }
 
       let(:content) do
@@ -328,11 +328,11 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
 
 
       specify 'should create a list with the correct number of entries' do
-        is_expected.to have_css('ul.govuk-list--bullet > li', count: 3)
+        expect(subject).to have_css('ul.govuk-list--bullet > li', count: 3)
       end
     end
 
-    context 'dealing with blank lines' do
+    context 'when dealing with blank lines' do
       subject { split_to_list content }
 
       let(:content) do
@@ -345,7 +345,7 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
 
 
       specify 'should create a list with the correct number of entries' do
-        is_expected.to have_css('ul.govuk-list--bullet > li', count: 2)
+        expect(subject).to have_css('ul.govuk-list--bullet > li', count: 2)
       end
     end
   end
@@ -353,21 +353,21 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
   describe "#format_school_placement_locations" do
     subject { format_school_placement_locations school }
 
-    context "for school with virtual placements" do
+    context "with a school that has virtual placements" do
       let(:school) { create(:bookings_placement_date, virtual: true).bookings_school }
 
       it { is_expected.to have_css "strong", text: "Virtual" }
       it { is_expected.not_to have_css "strong", text: "In school" }
     end
 
-    context "for school with inschool placements" do
+    context "with a school that has inschool placements" do
       let(:school) { create(:bookings_placement_date, virtual: false).bookings_school }
 
       it { is_expected.not_to have_css "strong", text: "Virtual" }
       it { is_expected.to have_css "strong", text: "In school" }
     end
 
-    context "for school with both virtual and inschool placements" do
+    context "with a school that has both virtual and inschool placements" do
       let :school do
         create(:bookings_placement_date, virtual: true).bookings_school.tap do |school|
           create :bookings_placement_date, virtual: false, bookings_school: school

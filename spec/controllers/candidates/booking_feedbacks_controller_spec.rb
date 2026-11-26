@@ -57,7 +57,7 @@ describe Candidates::BookingFeedbacksController, type: :request do
 
 
     it { is_expected.to redirect_to(created_feedback) }
-    it { expect { perform_request }.to change { Candidates::BookingFeedback.count }.by(1) }
+    it { expect { perform_request }.to change(Candidates::BookingFeedback, :count).by(1) }
 
     it "creates feedback associated to the booking" do
       perform_request

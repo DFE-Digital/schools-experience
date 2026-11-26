@@ -9,8 +9,8 @@ describe Bookings::Data::SchoolUpdater do
     )
   end
 
-  context 'Initialization' do
-    context 'EduBase Data' do
+  context 'when initializing' do
+    context 'with edubase data' do
       subject { described_class.new(edubase_data).edubase_data }
 
       specify 'should be iterable' do
@@ -23,7 +23,7 @@ describe Bookings::Data::SchoolUpdater do
     end
   end
 
-  context 'Updating' do
+  context 'when updating' do
     let(:school_100492) do
       OpenStruct.new(
         actual_name: "St Thomas' CofE Primary School",
@@ -64,7 +64,7 @@ describe Bookings::Data::SchoolUpdater do
     # because it's missing
     let!(:missing_school_urn) { 100_171 }
 
-    context 'performing updates correctly' do
+    context 'when performing updates correctly' do
       before { described_class.new(edubase_data).update }
 
       specify 'values should match those in the source data' do

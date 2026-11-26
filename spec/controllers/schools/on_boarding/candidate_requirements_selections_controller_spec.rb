@@ -2,7 +2,7 @@ require 'rails_helper'
 require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 
 describe Schools::OnBoarding::CandidateRequirementsSelectionsController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let! :school_profile do
     FactoryBot.create :school_profile,
@@ -15,7 +15,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelectionsController, type: :
       .and_return(task_progress_on_boarding)
   end
 
-  context '#new' do
+  describe '#new' do
     before do
       get '/schools/on_boarding/candidate_requirements_selection/new'
     end
@@ -30,7 +30,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelectionsController, type: :
     end
   end
 
-  context '#create' do
+  describe '#create' do
     let :params do
       {
         schools_on_boarding_candidate_requirements_selection: \
@@ -43,7 +43,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelectionsController, type: :
         params: params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :candidate_requirements_selection do
         Schools::OnBoarding::CandidateRequirementsSelection.new
       end
@@ -58,7 +58,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelectionsController, type: :
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :candidate_requirements_selection do
         build :candidate_requirements_selection
       end
@@ -82,7 +82,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelectionsController, type: :
     end
   end
 
-  context '#edit' do
+  describe '#edit' do
     let! :school_profile do
       FactoryBot.create :school_profile, \
         :completed, :with_candidate_requirements_selection
@@ -102,7 +102,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelectionsController, type: :
     end
   end
 
-  context '#update' do
+  describe '#update' do
     let! :school_profile do
       FactoryBot.create :school_profile, \
         :completed, :with_candidate_requirements_selection
@@ -120,7 +120,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelectionsController, type: :
         params: params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :candidate_requirements_selection do
         Schools::OnBoarding::CandidateRequirementsSelection.new
       end
@@ -135,7 +135,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelectionsController, type: :
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :candidate_requirements_selection do
         school_profile.candidate_requirements_selection.dup.tap do |m|
           m.selected_requirements << "has_or_working_towards_degree" unless m.has_or_working_towards_degree?
