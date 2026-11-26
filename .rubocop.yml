@@ -1,5 +1,3 @@
-inherit_from: .rubocop_todo.yml
-
 plugins:
   - rubocop-rspec
   - rubocop-capybara
@@ -13,6 +11,49 @@ inherit_gem:
 Gemspec/RequiredRubyVersion:
   Exclude:
     - node_modules/dfe-autocomplete/dfe-autocomplete.gemspec
+
+Gemspec/DevelopmentDependencies:
+  Exclude:
+    - node_modules/dfe-autocomplete/dfe-autocomplete.gemspec
+
+# These migrations have already been applied; rewriting them to combine table
+# changes would alter historical migration behavior for existing deployments.
+Rails/BulkChangeTable:
+  Exclude:
+    - db/migrate/20190131110800_add_importable_fields_to_bookings_schools.rb
+    - db/migrate/20190225092622_remove_access_needs_and_access_needs_details_from_candidates_registrations_placmenet_requests.rb
+    - db/migrate/20190226120359_remove_date_start_and_date_end_from_candidates_registrations_placement_requests.rb
+    - db/migrate/20190314135823_add_questionnaire_fields_to_bookings_school.rb
+    - db/migrate/20190315235339_add_fees_to_schools_school_profile.rb
+    - db/migrate/20190329113747_add_administration_fee_to_school_profile.rb
+    - db/migrate/20190329150543_add_dbs_fee_to_school_profile.rb
+    - db/migrate/20190329164135_add_other_fee_to_school_profile.rb
+    - db/migrate/20190401162830_add_phases_lists_to_school_profile.rb
+    - db/migrate/20190403132018_add_key_stage_list_to_schools_school_profile.rb
+    - db/migrate/20190408080917_add_specialism_to_school_profile.rb
+    - db/migrate/20190408123541_add_candidate_eperience_detail_to_school_profile.rb
+    - db/migrate/20190408154736_add_experience_outline_to_school_profile.rb
+    - db/migrate/20190409094117_add_admin_contact_to_school_profile.rb
+    - db/migrate/20190426154201_link_bookings_placement_dates_to_bookings_schools.rb
+    - db/migrate/20190520155422_remove_availability_from_bookings_profile.rb
+    - db/migrate/20190522114343_remove_availability_description_and_preference_from_schools_profile.rb
+    - db/migrate/20190531141719_add_bookings_booking_acceptance_fields.rb
+    - db/migrate/20190717131205_change_event_gitis_uuid_to_bookings_candidate_id.rb
+    - db/migrate/20190801095642_add_fees_wizard_state_fields_to_school_profiles.rb
+    - db/migrate/20190816113709_add_dbs_requirement_columns_to_schools_on_boarding_profile.rb
+    - db/migrate/20190816213044_add_dbs_step_fields_to_bookings_profile.rb
+    - db/migrate/20190829111645_add_candidate_requirements_selection_attributes_to_schools_school_profiles.rb
+    - db/migrate/20190904120202_rename_candidate_requirement_selection_options.rb
+    - db/migrate/20190906131351_add_access_needs_fields_to_schools_school_profiles.rb
+    - db/migrate/20190909102743_add_access_needs_fields_to_bookings_profiles.rb
+    - db/migrate/20190916105024_add_successful_visit_to_feedbacks.rb
+    - db/migrate/20191108132921_add_photo_id_requirements_to_schools_school_profiles.rb
+    - db/migrate/20210121091849_add_online_to_bookings_placement_dates.rb
+    - db/migrate/20210130095443_add_dbs_policy_conditions_to_bookings_profile.rb
+    - db/migrate/20220119115856_add_availability_offsets_to_bookings_placement_dates.rb
+    - db/migrate/20220810101108_add_default_to_bookings_school_availability.rb
+    - db/migrate/20220810142124_make_availability_info_and_experience_type_not_nullable.rb
+    - db/migrate/20220907093024_add_rejection_categories_to_bookings_placement_request_cancellations.rb
 
 Metrics/BlockLength:
   Exclude:
