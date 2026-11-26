@@ -24,7 +24,7 @@ Given("I am on the {string} page for my school of choice") do |string|
 end
 
 Given("I save the page") do
-  save_page
+  save_page # rubocop:disable Lint/Debugger -- Onboarding steps capture page HTML for troubleshooting.
 end
 
 Then("the page's main header/heading should be {string}") do |string|

@@ -5,10 +5,10 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
   include_context "when a DfE user is logged in"
 
   let(:booking) do
-    create(:bookings_booking, :accepted, bookings_school: @current_user_school)
+    create(:bookings_booking, :accepted, bookings_school: current_user_school)
   end
 
-  let!(:profile) { create(:bookings_profile, school: @current_user_school) }
+  before { create(:bookings_profile, school: current_user_school) }
 
   describe '#edit' do
     subject { get edit_schools_booking_date_path(booking.id) }
@@ -75,7 +75,7 @@ subject
       specify 'should add an event' do
         expect(Event).to have_received(:create).with(
           event_type: :booking_date_changed,
-          bookings_school: @current_user_school,
+          bookings_school: current_user_school,
           recordable: booking
         )
       end
@@ -83,11 +83,11 @@ subject
 
     context 'when sending an email' do
       let :email do
-        double(NotifyEmail::CandidateBookingDateChanged, despatch_later!: true)
+        instance_double(NotifyEmail::CandidateBookingDateChanged, despatch_later!: true)
       end
 
       let :virtual_email do
-        double(NotifyEmail::CandidateVirtualExperienceBookingDateChanged, despatch_later!: true)
+        instance_double(NotifyEmail::CandidateVirtualExperienceBookingDateChanged, despatch_later!: true)
       end
 
       before do
@@ -113,7 +113,7 @@ subject
       end
 
       context "when it's a virtual experience" do
-        let(:booking) { create(:bookings_booking, :virtual_experience, :accepted, bookings_school: @current_user_school) }
+        let(:booking) { create(:bookings_booking, :virtual_experience, :accepted, bookings_school: current_user_school) }
 
         specify 'should send a candidate virtual experience booking date changed email with the correct values' do
           expect(NotifyEmail::CandidateVirtualExperienceBookingDateChanged).to have_received(:from_booking).with(

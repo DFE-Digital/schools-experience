@@ -143,19 +143,26 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
   end
 
   describe '#phase_ids' do
-    subject { described_class.new(attrs).phase_ids }
+    subject do
+      phases
+      described_class.new(attrs).phase_ids
+    end
 
-    before { @early_years = create(:bookings_phase, :early_years)
-@primary = create(:bookings_phase, :primary)
-@secondary = create(:bookings_phase, :secondary)
-@college = create(:bookings_phase, :college)  }
+    let(:phases) do
+      {
+        early_years: create(:bookings_phase, :early_years),
+        primary: create(:bookings_phase, :primary),
+        secondary: create(:bookings_phase, :secondary),
+        college: create(:bookings_phase, :college)
+      }
+    end
 
     let(:attrs) { build(:school_profile, :completed).attributes }
 
 
-    it { is_expected.to include(@early_years.id) }
-    it { is_expected.to include(@primary.id) }
-    it { is_expected.to include(@secondary.id) }
-    it { is_expected.to include(@college.id) }
+    it { expect(subject).to include(phases[:early_years].id) }
+    it { expect(subject).to include(phases[:primary].id) }
+    it { expect(subject).to include(phases[:secondary].id) }
+    it { expect(subject).to include(phases[:college].id) }
   end
 end

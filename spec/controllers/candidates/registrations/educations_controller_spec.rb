@@ -9,7 +9,8 @@ describe Candidates::Registrations::EducationsController, type: :request do
       contact_information
     ]
   end
-  let!(:school) { create(:bookings_school, urn: 11_048) }
+
+  before { create(:bookings_school, urn: 11_048) }
 
   describe '#new' do
     context 'without existing education in session' do

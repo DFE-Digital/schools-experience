@@ -349,15 +349,15 @@ RSpec.describe Candidates::SchoolSearch do
   describe "#applied_filters" do
     subject { instance.applied_filters }
 
-    let!(:subject_1) { create(:bookings_subject, name: "Subject 1") }
-    let!(:subject_2) { create(:bookings_subject, name: "Subject 2") }
-    let!(:phase_3) { create(:bookings_phase, :primary) }
-    let!(:phase_4) { create(:bookings_phase, :secondary) }
+    let!(:first_subject) { create(:bookings_subject, name: "Subject 1") }
+    let!(:second_subject) { create(:bookings_subject, name: "Subject 2") }
+    let!(:primary_phase) { create(:bookings_phase, :primary) }
+    let!(:secondary_phase) { create(:bookings_phase, :secondary) }
 
     let(:instance) do
       described_class.new(
-        subjects: [subject_1.id, subject_2.id],
-        phases: [phase_3.id, phase_4.id],
+        subjects: [first_subject.id, second_subject.id],
+        phases: [primary_phase.id, secondary_phase.id],
         dbs_policies: [2],
         disability_confident: "1",
         parking: "1"
@@ -368,10 +368,10 @@ RSpec.describe Candidates::SchoolSearch do
     it do
       expect(subject).to eq({
         "Subjects" => {
-          subjects: [{ value: subject_1.id, text: "Subject 1" }, { value: subject_2.id, text: "Subject 2" }]
+          subjects: [{ value: first_subject.id, text: "Subject 1" }, { value: second_subject.id, text: "Subject 2" }]
         },
         "Education phases" => {
-          phases: [{ value: phase_3.id, text: "Primary (4 to 11)" }, { value: phase_4.id, text: "Secondary (11 to 16)" }]
+          phases: [{ value: primary_phase.id, text: "Primary (4 to 11)" }, { value: secondary_phase.id, text: "Secondary (11 to 16)" }]
         },
         "Requirements" => {
           dbs_policies: [{ value: 2, text: "DBS check: Not required" }],

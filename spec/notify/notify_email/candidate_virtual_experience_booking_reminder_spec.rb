@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe NotifyEmail::CandidateVirtualExperienceBookingReminder do
-  it_should_behave_like "email template", "be4eb8b2-3abd-4882-8719-e6812975110a",
+  it_behaves_like "email template", "be4eb8b2-3abd-4882-8719-e6812975110a",
     time_until_booking: "2 weeks",
     school_name: "Springfield Elementary",
     candidate_name: "Kearney Zzyzwicz",

@@ -49,11 +49,12 @@ describe Schools::DFESignInAPI::Organisations do
   end
 
   describe 'error_handling' do
-    subject { described_class.new(user_guid) }
+    subject(:organisations) { described_class.new(user_guid) }
 
     describe 'when an invalid response is returned' do
       before do
-        allow(subject).to receive(:response).and_return({})
+        stub_request(:get, "https://some-signin-host.signin.education.gov.uk/users/#{user_guid}/organisations")
+          .to_return(status: 200, body: '{}', headers: {})
       end
 
       specify 'urns should match the API request content' do

@@ -76,23 +76,19 @@ describe Schools::PlacementDates::PlacementDetail, type: :model do
   end
 
   describe '#save' do
-    subject { described_class.new }
-
-    let(:placement_date) { create :bookings_placement_date }
-
+    subject(:placement_detail) { described_class.new }
 
     context 'when invalid' do
-      before { allow(subject).to receive(:valid?).and_return(false) }
+      let(:invalid_placement_date) { create :bookings_placement_date }
 
       it 'returns false' do
-        expect(subject.save(placement_date)).to be false
+        expect(placement_detail.save(invalid_placement_date)).to be false
       end
     end
 
     context 'when valid' do
-      subject { described_class.new(attributes) }
+      subject(:placement_detail) { described_class.new(attributes) }
 
-      let(:placement_date) { create :bookings_placement_date }
       let(:attributes) do
         {
           start_availability_offset: 1,

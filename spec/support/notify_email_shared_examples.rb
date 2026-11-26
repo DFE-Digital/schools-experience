@@ -130,12 +130,13 @@ shared_examples_for "email template from application preview" do |args|
         'Notify::API_KEY',
         ["somekey", SecureRandom.uuid, SecureRandom.uuid].join("-")
       )
+create(:bookings_school, :with_fixed_availability_preference, urn: 11_048)
     end
 
     let(:ap) { Candidates::Registrations::ApplicationPreview.new(rs) }
     let(:to) { "morris.szyslak@moes.net" }
     let(:rs) { build(:registration_session, urn: 11_048) }
-    let!(:school) { create(:bookings_school, :with_fixed_availability_preference, urn: 11_048) }
+
 
     specify { expect(described_class).to respond_to(:from_application_preview) }
 
@@ -190,7 +191,7 @@ shared_examples_for "email template from application preview" do |args|
 
       context 'with placement availability/dates' do
         context 'when school availability is flexible' do
-          let!(:school) { create(:bookings_school, urn: 11_048) }
+          before { create(:bookings_school, urn: 11_048) }
 
           specify 'placement_availability is correctly-assigned' do
             expect(subject.placement_availability).to eql(ap.placement_availability_description)

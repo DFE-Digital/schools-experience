@@ -15,7 +15,7 @@ describe 'Conversions' do
     end
   end
 
-  describe 'Distance::Miles::ToMetres' do
+  describe 'Distance::Metres::ToMiles' do
     describe '.convert' do
       context 'with precision of 0' do
         subject { Conversions::Distance::Metres::ToMiles }

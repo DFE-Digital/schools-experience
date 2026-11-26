@@ -13,6 +13,8 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
     registration_session.uuid
   end
 
+  let(:placement_request_count) { Bookings::PlacementRequest.count }
+
   let :school_experience do
     instance_double(Bookings::Gitis::SchoolExperience)
   end
@@ -38,12 +40,13 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
 
     context 'when uuid not found' do
       before do
+        placement_request_count
         get "/candidates/confirm/bad-uuid"
       end
 
       it "doesn't create a new PlacementRequest" do
         expect(Bookings::PlacementRequest.count).to \
-          eq @placement_request_count
+          eq placement_request_count
       end
 
       it "doesn't queue a PlacementRequestJob" do
@@ -60,13 +63,13 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
       context 'when registration job already enqueued' do
         before do
           get "/candidates/confirm/#{uuid}"
-          @placement_request_count = Bookings::PlacementRequest.count
+          placement_request_count
           get "/candidates/confirm/#{uuid}"
         end
 
         it "doesn't create a new PlacementRequest" do
           expect(Bookings::PlacementRequest.count).to \
-            eq @placement_request_count
+            eq placement_request_count
         end
 
         it "doesn't requeue a PlacementRequestJob" do
@@ -86,6 +89,7 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
       context 'when registration job not already enqueued' do
         shared_examples 'a successful create' do
           before do
+            placement_request_count
             get "/candidates/confirm/#{uuid}"
           end
 
@@ -109,7 +113,7 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
 
           it 'creates a bookings placement request' do
             expect(Bookings::PlacementRequest.count).to \
-              eq @placement_request_count + 1
+              eq placement_request_count + 1
             expect(Bookings::PlacementRequest.last.school).to \
               eq stored_registration_session.school
           end

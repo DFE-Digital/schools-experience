@@ -53,18 +53,16 @@ describe Schools::DFESignInAPI::Client do
     before { allow(Feature).to receive(:enabled?).with(:rolecheck).and_return(true) }
 
     context 'when the client is disabled' do
-      before { allow(subject).to receive(:enabled?).and_return(false)
+      before { allow(described_class).to receive(:enabled?).and_return(false)
 allow(ENV).to receive(:fetch).and_return(true)  }
 
       specify 'should be disabled' do
-        expect(subject).not_to be_role_check_enabled
+        expect(described_class).not_to be_role_check_enabled
       end
     end
 
     context 'when the client is enabled' do
-      subject { described_class }
-
-      before { allow(subject).to receive(:enabled?).and_return(true)
+      before { allow(described_class).to receive(:enabled?).and_return(true)
 allow(Rails.application.config.x).to receive(:dfe_sign_in_api_role_check_enabled).and_return(true)  }
 
       context 'when role check is disabled' do

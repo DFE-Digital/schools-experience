@@ -186,13 +186,13 @@ describe Bookings::PlacementDate, type: :model do
       subject { date.active }
 
       context "when active is false" do
-        let!(:date) { create(:bookings_placement_date, active: false) }
+        let(:date) { create(:bookings_placement_date, active: false) }
 
         it { is_expected.to be false }
       end
 
       context "when active is true" do
-        let!(:date) { create(:bookings_placement_date, active: true) }
+        let(:date) { create(:bookings_placement_date, active: true) }
 
         it { is_expected.to be true }
       end
@@ -239,16 +239,34 @@ describe Bookings::PlacementDate, type: :model do
     end
 
     describe '.available' do
-      after { described_class.available }
+      let!(:available_dates) do
+        [
+          create(
+            :bookings_placement_date,
+            active: true,
+            date: 1.month.from_now,
+            start_availability_offset: 75,
+            end_availability_offset: 0
+          ),
+          create(
+            :bookings_placement_date,
+            active: true,
+            date: 2.months.from_now,
+            start_availability_offset: 75,
+            end_availability_offset: 0
+          )
+        ]
+      end
 
-      specify 'should combine the future, active, published, open_to_candidates, and in_date_order scopes' do
-        expect(described_class).to receive_message_chain(:published, :active, :bookable_date, :inside_availability_window, :in_date_order)
+      it 'returns available placement dates in date order' do
+        expect(described_class.available).to eq(available_dates)
       end
     end
 
     describe '.published' do
       let!(:published) { create :bookings_placement_date }
-      let!(:un_publised) { create :bookings_placement_date, published_at: nil }
+
+      before { create :bookings_placement_date, published_at: nil }
 
       specify 'should return only the published placement_dates' do
         expect(described_class.published).to contain_exactly(published)

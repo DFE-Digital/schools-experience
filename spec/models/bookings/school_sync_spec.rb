@@ -1,28 +1,32 @@
 require 'rails_helper'
 
 describe Bookings::SchoolSync do
-  subject { described_class.new(email_override: email_override) }
+  subject(:school_sync) { described_class.new(email_override: email_override) }
 
   let(:email_override) { 'test@test.org' }
 
-  specify { expect(subject.email_override).to eql(email_override) }
-  specify { expect(subject).to respond_to(:sync) }
+  specify { expect(school_sync.email_override).to eql(email_override) }
+  specify { expect(school_sync).to respond_to(:sync) }
 
   context 'when syncing is disabled' do
     before do
-      allow(subject).to receive_messages(sync_disabled?: true, import_and_update: true)
+      allow(ENV).to receive(:fetch).and_call_original
+      allow(ENV).to receive(:fetch).with('GIAS_SYNC_DISABLED', false).and_return(true)
       allow(Rails.logger).to receive(:warn).and_return(true)
-      subject.sync
+      allow(Bookings::Data::GiasDataFile).to receive(:new).and_call_original
     end
 
     let(:disabled_message) { 'GIAS sync attempted but disabled' }
 
     specify 'calling sync should print a warning to the log' do
+      school_sync.sync
       expect(Rails.logger).to have_received(:warn).with(disabled_message)
     end
 
     specify 'the sync should not go ahead' do
-      expect(subject).not_to have_received(:import_and_update)
+      school_sync.sync
+
+      expect(Bookings::Data::GiasDataFile).not_to have_received(:new)
     end
   end
 

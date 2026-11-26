@@ -139,7 +139,7 @@ describe CookiePreference, type: :model do
       it { is_expected.to be_empty }
     end
 
-    context 'with analytics accepted' do
+    context 'with analytics rejected' do
       let(:preference) { described_class.new(analytics: false) }
 
       it do

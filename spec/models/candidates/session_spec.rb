@@ -34,9 +34,9 @@ RSpec.describe Candidates::Session, type: :model do
     let!(:token) { create(:candidate_session_token, candidate: first.candidate) }
 
     context 'with valid token' do
-      before { @candidate = described_class.signin!(token.token) }
+      let!(:candidate) { described_class.signin!(token.token) }
 
-      it { expect(@candidate).to eql(token.candidate) }
+      it { expect(candidate).to eql(token.candidate) }
 
       it "clears out other tokens" do
         expect(token.candidate.session_tokens.valid.count).to be(0)
@@ -44,9 +44,9 @@ RSpec.describe Candidates::Session, type: :model do
     end
 
     context 'with unknown token' do
-      before { @candidate = described_class.signin!('UNKNOWNTOKEN') }
+      let!(:candidate) { described_class.signin!('UNKNOWNTOKEN') }
 
-      it { expect(@candidate).to be_nil }
+      it { expect(candidate).to be_nil }
 
       it "does not remove tokens" do
         expect(Candidates::SessionToken.valid.count).to be(2)

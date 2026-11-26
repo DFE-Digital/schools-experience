@@ -154,9 +154,11 @@ describe Schools::SessionsController, type: :request do
 
     describe 'role checking' do
       include_context 'when handling an OIDC callback'
+
+      let(:signin_role_check_response) { false }
+
       before do
         allow(Schools::DFESignInAPI::Client).to receive_messages(enabled?: true, role_check_enabled?: true)
-        allow_any_instance_of(Schools::DFESignInAPI::Roles).to receive(:has_school_experience_role?).and_return(false)
       end
 
       subject! { get callback } # rubocop:disable RSpec/LeadingSubject -- Request must run after OIDC and role setup.

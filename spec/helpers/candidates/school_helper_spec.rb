@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Candidates::SchoolHelper, type: :helper do
   describe '.format_school_address' do
-    before do
-      @school = OpenStruct.new(
+    let(:school) do
+      OpenStruct.new(
         address_1: nil,
         address_2: 'Picadilly Gate',
         address_3: '',
@@ -11,16 +11,15 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
         county: 'Manchester',
         postcode: 'MA1 1AM'
       )
-
-      @formatted = format_school_address(@school)
     end
+    let(:formatted) { format_school_address(school) }
 
     it 'is html_safe' do
-      expect(@formatted.html_safe?).to be true
+      expect(formatted.html_safe?).to be true
     end
 
     it 'concatenates non blank fields' do
-      expect(@formatted).to eq "Picadilly Gate, Manchester, Manchester, MA1 1AM"
+      expect(formatted).to eq "Picadilly Gate, Manchester, Manchester, MA1 1AM"
     end
   end
 
@@ -72,11 +71,11 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     end
 
     context 'with subjects' do
-      let(:subject_1) { create(:bookings_subject, name: 'First') }
-      let(:subject_2) { create(:bookings_subject, name: 'Second') }
-      let(:subject_3) { create(:bookings_subject, name: 'Third') }
+      let(:first_subject) { create(:bookings_subject, name: 'First') }
+      let(:second_subject) { create(:bookings_subject, name: 'Second') }
+      let(:third_subject) { create(:bookings_subject, name: 'Third') }
 
-      let!(:subjects) { [subject_1, subject_2, subject_3] }
+      let!(:subjects) { [first_subject, second_subject, third_subject] }
 
       before do
         school.subjects << subjects
@@ -92,15 +91,15 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
 
       context 'when highlighting filter matches' do
         before do
-          allow(self).to receive(:filtered_subject_ids).and_return([subject_2.id])
+          allow(self).to receive(:filtered_subject_ids).and_return([second_subject.id])
         end
 
         it 'boldens matched subjects' do
-          expect(output).to have_css('strong', text: subject_2.name)
+          expect(output).to have_css('strong', text: second_subject.name)
         end
 
         it 'includes but not bolden unmatched subjects' do
-          [subject_1, subject_3].each do |subj|
+          [first_subject, third_subject].each do |subj|
             expect(output).to have_content(subj.name)
             expect(output).not_to have_css('strong', text: subj.name)
           end
@@ -110,8 +109,8 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
   end
 
   describe '.format_school_phases' do
-    before do
-      @school = OpenStruct.new(
+    let(:school) do
+      OpenStruct.new(
         phases: [
           OpenStruct.new(id: 1, name: 'First'),
           OpenStruct.new(id: 2, name: 'Second'),
@@ -120,9 +119,7 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
       )
     end
 
-    let(:formatted) do
-      format_school_phases(@school)
-    end
+    let(:formatted) { format_school_phases(school) }
 
     let(:parsed) { Nokogiri.parse(formatted) }
 
@@ -131,15 +128,15 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     end
 
     it 'turns them into a list' do
-      expect(parsed.css('ul.govuk-list > li').map(&:text)).to eql(@school.phases.map(&:name))
+      expect(parsed.css('ul.govuk-list > li').map(&:text)).to eql(school.phases.map(&:name))
     end
   end
 
   describe ".format_school_phases_compact" do
-    subject { format_school_phases_compact(@school) }
+    subject { format_school_phases_compact(school) }
 
-    before do
-      @school = OpenStruct.new(
+    let(:school) do
+      OpenStruct.new(
         phases: [
           OpenStruct.new(id: 1, name: "First"),
           OpenStruct.new(id: 2, name: "Second"),
@@ -225,22 +222,25 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     include Candidates::MapsHelper
     include ActionController::Base::HelperMethods
 
-    subject { school_location_map @school }
+    subject { school_location_map school }
 
     before do
       allow(Rails.application.config.x).to receive(:google_maps_key).and_return('12345')
-      @latitude = "53.4782"
-      @longitude = "-2.2299"
-      @school = OpenStruct.new(
+    end
+
+    let(:latitude) { "53.4782" }
+    let(:longitude) { "-2.2299" }
+    let(:school) do
+      OpenStruct.new(
         name: 'Stub School',
-        coordinates: OpenStruct.new(latitude: @latitude, longitude: @longitude)
+        coordinates: OpenStruct.new(latitude: latitude, longitude: longitude)
       )
     end
 
 
     it('returns a correct Google Maps for schools location') do
       expect(subject).to match(/<img /)
-      expect(subject).to match("#{@latitude}%2C#{@longitude}")
+      expect(subject).to match("#{latitude}%2C#{longitude}")
     end
   end
 

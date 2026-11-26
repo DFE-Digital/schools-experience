@@ -34,7 +34,7 @@ describe Schools::DashboardsController, type: :request do
     include_context "when a DfE user is logged in"
 
     before do
-      @current_user_school.destroy!
+      current_user_school.destroy!
     end
 
     specify 'should redirect to school not registered error page' do
@@ -49,7 +49,7 @@ describe Schools::DashboardsController, type: :request do
       allow(Schools::ChangeSchool).to \
         receive(:allow_school_change_in_app?) { allow_school_change }
 
-      allow_any_instance_of(described_class).to receive(:current_urn).and_return(nil)
+      session_hash[:urn] = nil
       get '/schools/dashboard'
     end
 

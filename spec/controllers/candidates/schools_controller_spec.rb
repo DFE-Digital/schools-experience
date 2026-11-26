@@ -94,7 +94,11 @@ RSpec.describe Candidates::SchoolsController, type: :request do
 
     context "when search is invalid" do
       before do
-        allow_any_instance_of(Candidates::SchoolSearch).to receive(:valid?).and_return false
+        allow(Candidates::SchoolSearch).to receive(:new_decrypt).and_wrap_original do |original, *args|
+          original.call(*args).tap do |search|
+            allow(search).to receive(:valid?).and_return(false)
+          end
+        end
       end
 
       it "renders the search page" do

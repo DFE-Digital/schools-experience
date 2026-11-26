@@ -90,9 +90,11 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
   end
 
   describe 'methods' do
+    subject(:registration_step) { described_class.new(urn: school.urn) }
+
     describe '#placement_date' do
       before { allow(Bookings::PlacementDate).to receive(:find_by).and_return('a')
-allow(subject).to receive(:bookings_placement_date_id).and_return(1)  }
+registration_step.bookings_placement_date_id = 1 }
 
       it { is_expected.to respond_to(:placement_date) }
 
@@ -173,59 +175,50 @@ subject.bookings_placement_date_id = 1
     end
 
     describe '#has_primary_dates?' do
-      subject { described_class.new }
+      subject(:registration_step) { described_class.new(urn: school.urn) }
 
       context 'when primary dates are present' do
-        before { allow(subject).to receive(:primary_placement_dates).and_return(%w[yes]) }
+        before do
+          create(:bookings_placement_date, :active, :not_supporting_subjects, bookings_school: school)
+        end
 
         it { is_expected.to have_primary_dates }
       end
 
       context 'when no primary dates are present' do
-        before { allow(subject).to receive(:primary_placement_dates).and_return([]) }
-
         it { is_expected.not_to have_primary_dates }
       end
     end
 
     describe '#has_secondary_dates?' do
-      subject { described_class.new }
+      subject(:registration_step) { described_class.new(urn: school.urn) }
 
       context 'when secondary dates are present' do
-        before { allow(subject).to receive(:secondary_placement_dates_grouped_by_date).and_return(%w[yes]) }
+        before do
+          create(:bookings_placement_date, :active, bookings_school: school)
+        end
 
         it { is_expected.to have_secondary_dates }
       end
 
       context 'when no secondary dates are present' do
-        before { allow(subject).to receive(:secondary_placement_dates_grouped_by_date).and_return({}) }
-
         it { is_expected.not_to have_secondary_dates }
       end
     end
 
     describe '#has_primary_and_secondary_dates?' do
-      subject { described_class.new }
+      subject(:registration_step) { described_class.new(urn: school.urn) }
 
       context 'when secondary dates are present' do
         before do
-          allow(subject).to receive_messages(
-            primary_placement_dates: %w[yes],
-            secondary_placement_dates_grouped_by_date: %w[yes]
-          )
+          create(:bookings_placement_date, :active, :not_supporting_subjects, bookings_school: school)
+          create(:bookings_placement_date, :active, bookings_school: school)
         end
 
         it { is_expected.to have_primary_and_secondary_dates }
       end
 
       context 'when no secondary dates are present' do
-        before do
-          allow(subject).to receive_messages(
-            secondary_placement_dates_grouped_by_date: {},
-            primary_placement_dates: []
-          )
-        end
-
         it { is_expected.not_to have_primary_and_secondary_dates }
       end
     end

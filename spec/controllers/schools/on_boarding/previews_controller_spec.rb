@@ -7,32 +7,30 @@ describe Schools::OnBoarding::PreviewsController, type: :request do
   let! :early_years do
     FactoryBot.create :bookings_phase, :early_years
   end
+  let! :school do
+    FactoryBot.create :bookings_school
+  end
 
   let! :primary do
     FactoryBot.create :bookings_phase, :primary
   end
 
-  let! :secondary do
+  before do
     FactoryBot.create :bookings_phase, :secondary
+FactoryBot.create :bookings_phase, :college
+
   end
 
-  let! :college do
-    FactoryBot.create :bookings_phase, :college
-  end
 
-  let! :school do
-    FactoryBot.create :bookings_school
-  end
 
   describe '#show' do
     context 'when profile is not complete' do
-      let! :school_profile do
+      before do
         FactoryBot.create :school_profile, bookings_school: school
+get '/schools/on_boarding/preview'
+
       end
 
-      before do
-        get '/schools/on_boarding/preview'
-      end
 
       it 'redirects to the first outstanding step' do
         expect(response).to redirect_to \

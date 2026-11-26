@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Candidates::Registrations::ContactInformationsController, type: :request do
   include_context 'with a stubbed current registration'
-  let!(:school) { create(:bookings_school, urn: 11_048) }
+  before { create(:bookings_school, urn: 11_048) }
 
   let(:gitis_contact) { build(:api_schools_experience_sign_up_with_name) }
 

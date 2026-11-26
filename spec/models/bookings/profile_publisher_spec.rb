@@ -45,17 +45,16 @@ RSpec.describe Bookings::ProfilePublisher, type: :model do
     end
 
     context "with a school that has Profile" do
-      subject { described_class.new(school, school_profile).update! }
+      subject { initial_profile; described_class.new(school, school_profile).update! }
 
-      before do
-        @initial_profile = create(:bookings_profile, school: school)
-      end
+      let(:initial_profile) { create(:bookings_profile, school: school) }
+
 
 
       it { is_expected.to be_a Bookings::Profile }
       it { is_expected.to be_persisted }
       it { is_expected.to be_valid }
-      it { is_expected.to eql @initial_profile }
+      it { is_expected.to eql initial_profile }
       it { is_expected.to have_attributes(primary_phase: true, secondary_phase: true) }
       it { expect(subject.school.subject_ids.sort).to eql(school_profile.subject_ids.sort) }
       it { expect(subject.school.phase_ids.length).to be(4) }

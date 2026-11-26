@@ -2,19 +2,19 @@ require 'rails_helper'
 
 describe Candidates::PlacementRequests::CancellationsController, type: :request do
   let :notify_school_request_cancellation do
-    double NotifyEmail::SchoolRequestCancellation, despatch_later!: true
+    instance_double NotifyEmail::SchoolRequestCancellation, despatch_later!: true
   end
 
   let :notify_candidate_request_cancellation do
-    double NotifyEmail::CandidateRequestCancellation, despatch_later!: true
+    instance_double NotifyEmail::CandidateRequestCancellation, despatch_later!: true
   end
 
   let :notify_school_booking_cancellation do
-    double NotifyEmail::SchoolBookingCancellation, despatch_later!: true
+    instance_double NotifyEmail::SchoolBookingCancellation, despatch_later!: true
   end
 
   let :notify_candidate_booking_cancellation do
-    double NotifyEmail::CandidateBookingCancellation, despatch_later!: true
+    instance_double NotifyEmail::CandidateBookingCancellation, despatch_later!: true
   end
 
   let :school_experience do

@@ -24,7 +24,7 @@ describe Bookings::Data::SchoolUpdater do
   end
 
   context 'when updating' do
-    let(:school_100492) do
+    let(:st_thomas_school) do
       OpenStruct.new(
         actual_name: "St Thomas' CofE Primary School",
         address_1: "Appleford Road",
@@ -35,7 +35,7 @@ describe Bookings::Data::SchoolUpdater do
         record: create(:bookings_school, urn: 100_492)
       )
     end
-    let(:school_100459) do
+    let(:st_aloysius_school) do
       OpenStruct.new(
         actual_name: "St Aloysius RC College",
         address_1: "Hornsey Lane",
@@ -47,7 +47,7 @@ describe Bookings::Data::SchoolUpdater do
       )
     end
 
-    let(:school_100494) do
+    let(:st_francis_school) do
       OpenStruct.new(
         actual_name: "Saint Francis of Assisi Catholic Primary School",
         address_1: "Treadgold Street",
@@ -58,11 +58,10 @@ describe Bookings::Data::SchoolUpdater do
         record: create(:bookings_school, urn: 100_494)
       )
     end
-    let!(:schools) { [school_100492, school_100459, school_100494] }
+    let!(:schools) { [st_thomas_school, st_aloysius_school, st_francis_school] }
 
     # missing school not actually tested, just ensure update doesn't crash
     # because it's missing
-    let!(:missing_school_urn) { 100_171 }
 
     context 'when performing updates correctly' do
       before { described_class.new(edubase_data).update }

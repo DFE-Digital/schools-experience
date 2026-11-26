@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Cron::SyncSchoolsJob, type: :job do
   describe '#perform' do
-    let(:school_sync_instance) { double Object, sync: true }
+    let(:school_sync_instance) { instance_double(Bookings::SchoolSync, sync: true) }
 
     before do
       allow(Bookings::SchoolSync).to receive(:new).and_return(school_sync_instance)

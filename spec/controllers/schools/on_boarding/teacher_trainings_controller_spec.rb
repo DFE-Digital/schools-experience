@@ -12,7 +12,7 @@ describe Schools::OnBoarding::TeacherTrainingsController, type: :request do
   end
 
   describe '#new' do
-    let! :school_profile do
+    before do
       FactoryBot.create \
         :school_profile,
         :with_dbs_requirement,
@@ -31,11 +31,10 @@ describe Schools::OnBoarding::TeacherTrainingsController, type: :request do
         :with_disability_confident,
         :with_access_needs_policy,
         :with_experience_outline
+get '/schools/on_boarding/teacher_training/new'
+
     end
 
-    before do
-      get '/schools/on_boarding/teacher_training/new'
-    end
 
     it 'assigns the model' do
       expect(assigns(:teacher_training)).to \

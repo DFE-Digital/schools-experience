@@ -13,7 +13,7 @@ describe Schools::OnBoarding::KeyStageListsController, type: :request do
   end
 
   describe '#new' do
-    let! :school_profile do
+    before do
       FactoryBot.create \
         :school_profile,
         :with_dbs_requirement,
@@ -23,11 +23,10 @@ describe Schools::OnBoarding::KeyStageListsController, type: :request do
         :with_dbs_fee,
         :with_other_fee,
         :with_phases
+get '/schools/on_boarding/key_stage_list/new'
+
     end
 
-    before do
-      get '/schools/on_boarding/key_stage_list/new'
-    end
 
     it 'assings the model' do
       expect(assigns(:key_stage_list).attributes).to \

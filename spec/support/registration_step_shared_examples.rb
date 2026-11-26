@@ -1,7 +1,10 @@
+# These shared examples isolate timestamp persistence from each form's validation rules.
+# rubocop:disable RSpec/SubjectStub
 shared_examples 'a registration step' do
-  subject do
+  subject(:registration_step) do
     described_class.new(urn: school.urn)
   end
+  # rubocop:enable RSpec/SubjectStub
 
   let! :datetime do
     DateTime.now
@@ -52,7 +55,7 @@ shared_examples 'a registration step' do
 
       context 'when valid' do
         before do
-          allow(subject).to receive(:valid?).and_return(true)
+          allow(registration_step).to receive(:valid?).and_return(true)
           subject.flag_as_persisted!
         end
 
@@ -91,7 +94,7 @@ shared_examples 'a registration step' do
 
       context 'when valid' do
         before do
-          allow(subject).to receive(:valid?).and_return(true)
+          allow(registration_step).to receive(:valid?).and_return(true)
           subject.flag_as_persisted!
         end
 

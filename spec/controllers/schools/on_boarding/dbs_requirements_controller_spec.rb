@@ -12,11 +12,11 @@ describe Schools::OnBoarding::DbsRequirementsController, type: :request do
   end
 
   describe '#new' do
-    let! :school_profile do
+    before do
       create :school_profile
+get '/schools/on_boarding/dbs_requirement/new'
     end
 
-    before { get '/schools/on_boarding/dbs_requirement/new' }
 
     it 'assigns the model' do
       expect(assigns(:dbs_requirement)).to eq_model \

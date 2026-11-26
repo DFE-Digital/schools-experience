@@ -13,7 +13,7 @@ describe Schools::OnBoarding::CandidateParkingInformationsController, type: :req
   end
 
   describe '#new' do
-    let! :school_profile do
+    before do
       FactoryBot.create \
         :school_profile,
         :with_dbs_requirement,
@@ -26,11 +26,10 @@ describe Schools::OnBoarding::CandidateParkingInformationsController, type: :req
         :with_key_stage_list,
         :with_description,
         :with_candidate_dress_code
+get new_schools_on_boarding_candidate_parking_information_path
+
     end
 
-    before do
-      get new_schools_on_boarding_candidate_parking_information_path
-    end
 
     it 'assigns the model' do
       expect(assigns(:candidate_parking_information)).to \

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe NotifyEmail::CandidateRequestConfirmationNoPii do
-  it_should_behave_like "email template", "8ee470a1-0b94-48ee-9fe7-98b7beb8921c",
+  it_behaves_like "email template", "8ee470a1-0b94-48ee-9fe7-98b7beb8921c",
     school_name: "Springfield Elementary School",
     candidate_dbs_check_document: "Yes",
     candidate_degree_stage: "Postgraduate",

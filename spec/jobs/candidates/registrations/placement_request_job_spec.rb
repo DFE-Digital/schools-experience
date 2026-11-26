@@ -18,11 +18,11 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
   end
 
   let :school_request_confirmation_notification_link_only do
-    double NotifyEmail::SchoolRequestConfirmationLinkOnly, despatch_later!: true
+    instance_double NotifyEmail::SchoolRequestConfirmationLinkOnly, despatch_later!: true
   end
 
   let :candidate_request_confirmation_notification_with_confirmation_link do
-    double NotifyEmail::CandidateRequestConfirmationNoPii,
+    instance_double NotifyEmail::CandidateRequestConfirmationNoPii,
       despatch_later!: true
   end
 

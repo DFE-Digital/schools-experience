@@ -3,14 +3,17 @@ require 'rails_helper'
 describe "Redirecting to Canonical Domain", type: :request do
   shared_examples "perform healthchecks" do
     before do
-      allow_any_instance_of(Healthcheck).to \
-        receive(:test_gitis).and_return(true)
-      allow_any_instance_of(Healthcheck).to \
-        receive(:test_redis).and_return(true)
-      allow_any_instance_of(Healthcheck).to \
-        receive(:test_postgresql).and_return(true)
-      allow_any_instance_of(Healthcheck).to \
-        receive(:test_dfe_signin_api).and_return(true)
+      healthcheck = instance_double(
+        Healthcheck,
+        test_gitis: true,
+        test_redis: true,
+        test_postgresql: true,
+        test_dfe_signin_api: true,
+        deployment: 'not set',
+        to_h: { healthy: true },
+        to_json: '{"healthy":true}'
+      )
+      allow(Healthcheck).to receive(:new).and_return(healthcheck)
     end
 
     specify "will allow direct access to /healthcheck" do
@@ -35,13 +38,12 @@ describe "Redirecting to Canonical Domain", type: :request do
     end
   end
 
-  before do
-    @orig_canonical_domain = ENV['CANONICAL_DOMAIN']
+  around do |example|
+    original_canonical_domain = ENV['CANONICAL_DOMAIN']
     ENV['CANONICAL_DOMAIN'] = "canonical-domain"
-  end
-
-  after do
-    ENV['CANONICAL_DOMAIN'] = @orig_canonical_domain
+    example.run
+  ensure
+    ENV['CANONICAL_DOMAIN'] = original_canonical_domain
   end
 
   context "with request to canonical-domain" do

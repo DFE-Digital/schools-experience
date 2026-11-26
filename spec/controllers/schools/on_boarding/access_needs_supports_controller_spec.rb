@@ -12,7 +12,7 @@ describe Schools::OnBoarding::AccessNeedsSupportsController, type: :request do
   end
 
   describe '#new' do
-    let! :school_profile do
+    before do
       FactoryBot.create \
         :school_profile,
         :with_dbs_requirement,
@@ -25,11 +25,10 @@ describe Schools::OnBoarding::AccessNeedsSupportsController, type: :request do
         :with_key_stage_list,
         :with_description,
         :with_candidate_experience_schedule
+get '/schools/on_boarding/access_needs_support/new'
+
     end
 
-    before do
-      get '/schools/on_boarding/access_needs_support/new'
-    end
 
     it 'assigns the model' do
       expect(assigns(:access_needs_support)).to \

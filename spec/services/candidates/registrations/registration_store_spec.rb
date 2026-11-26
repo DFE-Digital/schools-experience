@@ -13,7 +13,7 @@ describe Candidates::Registrations::RegistrationStore do
 
 
   describe '#store!' do
-    let! :returned_uuid do
+    before do
       subject.store! session
     end
 
@@ -87,7 +87,7 @@ describe Candidates::Registrations::RegistrationStore do
   end
 
   describe '#has_registration?' do
-    let! :returned_uuid do
+    before do
       subject.store! session
     end
 

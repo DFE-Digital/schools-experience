@@ -8,8 +8,12 @@ describe "Expired Session", type: :request do
     end
 
     before do
-      allow_any_instance_of(Candidates::HomeController).to receive(:index) do
-        raise ActionController::InvalidAuthenticityToken
+      allow(Candidates::HomeController).to receive(:new).and_wrap_original do |original, *args|
+        original.call(*args).tap do |controller|
+          allow(controller).to receive(:index) do
+            raise ActionController::InvalidAuthenticityToken
+          end
+        end
       end
     end
 

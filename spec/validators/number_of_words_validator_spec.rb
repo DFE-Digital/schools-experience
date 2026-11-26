@@ -2,11 +2,11 @@ require 'rails_helper'
 
 describe NumberOfWordsValidator do
   let :errors do
-    double 'errors', add: true
+    instance_double(ActiveModel::Errors, add: true)
   end
 
   let :model do
-    double 'model', description: description, errors: errors
+    Struct.new(:description, :errors).new(description, errors)
   end
 
   let :validator do

@@ -15,8 +15,16 @@ feature 'Candidate Registrations (via the API)', type: :feature do
   end
 
   before do
-    allow_any_instance_of(Candidates::Registrations::RegistrationSession).to \
-      receive(:uuid).and_return(uuid)
+    allow(Candidates::Registrations::RegistrationSession).to receive(:new).and_wrap_original do |original, *args|
+      original.call(*args).tap do |session|
+        allow(session).to receive(:uuid).and_return(uuid)
+      end
+    end
+    allow(Candidates::Registrations::GitisRegistrationSession).to receive(:new).and_wrap_original do |original, *args|
+      original.call(*args).tap do |session|
+        allow(session).to receive(:uuid).and_return(uuid)
+      end
+    end
   end
 
   feature 'Candidate Registration' do
@@ -35,7 +43,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
         complete_background_step
         complete_application_preview_step button_text: 'Continue'
         complete_email_confirmation_step
-        view_request_acknowledgement_step
+        expect(page).to have_text "You've requested school experience at"
       end
     end
 
@@ -55,7 +63,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
         complete_availability_preference_step
         complete_background_step
         complete_application_preview_step(name: sign_up.full_name)
-        view_request_acknowledgement_step
+        expect(page).to have_text "You've requested school experience at"
       end
     end
 
@@ -64,7 +72,8 @@ feature 'Candidate Registrations (via the API)', type: :feature do
       include_context "when the API returns a correct verification code"
 
       let(:email_address) { sign_up.email }
-      let!(:candidate) { create(:candidate, :confirmed, gitis_uuid: sign_up.candidate_id) }
+
+      before { create(:candidate, :confirmed, gitis_uuid: sign_up.candidate_id) }
 
       scenario "completing the Journey" do
         complete_personal_information_step
@@ -76,7 +85,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
         complete_availability_preference_step
         complete_background_step
         complete_application_preview_step(name: sign_up.full_name,)
-        view_request_acknowledgement_step
+        expect(page).to have_text "You've requested school experience at"
       end
     end
   end
@@ -231,10 +240,6 @@ feature 'Candidate Registrations (via the API)', type: :feature do
 
     # Click email confirmation link
     visit "/candidates/confirm/#{registration_session.uuid}"
-  end
-
-  def view_request_acknowledgement_step
-    expect(page).to have_text "You've requested school experience at"
   end
 
   def visit_candidate_dashboard_step

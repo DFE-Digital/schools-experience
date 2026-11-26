@@ -6,8 +6,11 @@ shared_context 'when the candidate signs in' do
   end
 
   before do
-    allow_any_instance_of(described_class).to \
-      receive(:current_contact).and_return(gitis_contact)
+    allow(described_class).to receive(:new).and_wrap_original do |original, *args|
+      original.call(*args).tap do |controller|
+        allow(controller).to receive(:current_contact).and_return(gitis_contact)
+      end
+    end
 
     allow(Bookings::Candidate).to receive(:find_by_gitis_contact).and_return(current_candidate)
   end

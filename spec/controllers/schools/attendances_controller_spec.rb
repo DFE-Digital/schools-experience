@@ -10,7 +10,7 @@ describe Schools::AttendancesController, type: :request do
     end
   end
 
-  let! :booking do
+  before do
     create :bookings_booking, :previous, :accepted, :attended,
       bookings_placement_request: create(:bookings_placement_request, school: school),
       bookings_school: school

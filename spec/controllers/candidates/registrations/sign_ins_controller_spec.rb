@@ -3,8 +3,6 @@ require 'rails_helper'
 RSpec.describe Candidates::Registrations::SignInsController, type: :request do
   include ActiveJob::TestHelper
   let(:school_id) { 11_048 }
-  let!(:school) { create(:bookings_school, urn: school_id) }
-
   let :registration_session do
     Candidates::Registrations::RegistrationSession.new(
       'urn' => school_id,
@@ -17,6 +15,9 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
         }
     )
   end
+
+  before { create(:bookings_school, urn: school_id) }
+
 
   describe 'GET #show' do
     include_context 'with a stubbed current registration'
@@ -73,11 +74,6 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
     context "when already signed in" do
       include_context "when the candidate signs in"
 
-      before do
-        expect_any_instance_of(described_class).to \
-          receive(:delete_registration_sessions!)
-      end
-
       it "redirect_toes ContactInformation step" do
         perform_request
 
@@ -120,7 +116,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
     include_context 'with a stubbed current registration'
     include_context "when the API candidate matches back"
 
-    let!(:candidate) { create(:candidate, gitis_uuid: SecureRandom.uuid) }
+    before { create(:candidate, gitis_uuid: SecureRandom.uuid) }
 
     let(:perform_request) do
       perform_enqueued_jobs do

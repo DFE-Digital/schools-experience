@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe NotifyEmail::CandidateVirtualExperienceBookingConfirmation do
-  it_should_behave_like "email template", "1e6d2dff-be25-44f4-ac97-6fe67f131528",
+  it_behaves_like "email template", "1e6d2dff-be25-44f4-ac97-6fe67f131528",
     school_name: "Springfield Elementary",
     candidate_name: "Kearney Zzyzwicz",
     placement_schedule: "2022-03-04 for 3 days",

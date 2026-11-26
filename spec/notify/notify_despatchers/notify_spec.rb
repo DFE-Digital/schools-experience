@@ -93,7 +93,7 @@ private
   end
 end
 
-describe NotifyDespatchers::Base do
+describe NotifyDespatchers::Base do # rubocop:disable RSpec/MultipleDescribes -- The base and concrete dispatchers share this contract suite.
   include ActiveJob::TestHelper
   subject { described_class.new(to: to) }
 

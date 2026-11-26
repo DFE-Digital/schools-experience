@@ -1,14 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe "candidates/schools/index", type: :view do
-  context 'with fresh search' do
-    before do
-      assign(:search, Candidates::SchoolSearch.new)
-      render
-    end
-  end
-
   context 'when filtering existing search' do
+    let(:school) { build(:bookings_school) }
     let(:phases) { %w[3] }
     let(:max_fee) { '60' }
     let(:subjects) { %w[1 3] }
@@ -17,23 +11,20 @@ RSpec.describe "candidates/schools/index", type: :view do
     let(:parking) { '1' }
 
     before do
-
       allow(Candidates::School).to receive_messages(subjects: [[1, 'Computer science'], [2, 'Maths'], [3, 'English']], phases: [[1, 'Primary'], [2, 'Seconday'], [3, '16 to 18']])
 
-      @school = build(:bookings_school)
-      @search = Candidates::SchoolSearch.new(
+      search = Candidates::SchoolSearch.new(
         query: 'Manchester',
         phases: phases,
         max_fee: max_fee,
         subjects: subjects,
         dbs_policies: dbs_policies
       )
-      allow(@search).to receive(:results).and_return(Kaminari.paginate_array([@school]).page(1))
+      allow(search).to receive(:results).and_return(Kaminari.paginate_array([school]).page(1))
 
-      assign :search, @search
+      assign :search, search
 
-      @facet_tags = FacetTagsPresenter.new(@search.applied_filters)
-      assign :facet_tags, @facet_tags
+      assign :facet_tags, FacetTagsPresenter.new(search.applied_filters)
 
       render
     end
@@ -78,7 +69,7 @@ RSpec.describe "candidates/schools/index", type: :view do
 
     it "shows results" do
       expect(rendered).to have_css '.school-result'
-      expect(rendered).to have_css '.school-result h2', text: @school.name
+      expect(rendered).to have_css '.school-result h2', text: school.name
       expect(rendered).to have_css '.school-result .govuk-summary-list__key', count: 4
     end
 
@@ -105,9 +96,10 @@ RSpec.describe "candidates/schools/index", type: :view do
 
   context "when sorted by distance tag" do
     before do
-      @search = Candidates::SchoolSearch.new
-      @facet_tags = FacetTagsPresenter.new(@search.applied_filters)
-      allow(@search).to receive(:results).and_return(Kaminari.paginate_array(schools).page(1))
+      search = Candidates::SchoolSearch.new
+      assign :search, search
+      assign :facet_tags, FacetTagsPresenter.new(search.applied_filters)
+      allow(search).to receive(:results).and_return(Kaminari.paginate_array(schools).page(1))
 
       render
     end
@@ -132,8 +124,9 @@ RSpec.describe "candidates/schools/index", type: :view do
   context "when no results and expanded search" do
     shared_examples "a non-England search" do
       before do
-        @search = Candidates::SchoolSearch.new
-        @facet_tags = FacetTagsPresenter.new(@search.applied_filters)
+        search = Candidates::SchoolSearch.new
+        assign :search, search
+        assign :facet_tags, FacetTagsPresenter.new(search.applied_filters)
 
         geocoding_response = Geocoder::Result::Test.new(address_components: [{ long_name: country }])
         country = GeocodingResponseCountry.new(geocoding_response)
@@ -178,8 +171,9 @@ RSpec.describe "candidates/schools/index", type: :view do
         let(:country) { "Canada" }
 
         it "shows a message" do
-          @search = Candidates::SchoolSearch.new
-          @facet_tags = FacetTagsPresenter.new(@search.applied_filters)
+          search = Candidates::SchoolSearch.new
+          assign :search, search
+          assign :facet_tags, FacetTagsPresenter.new(search.applied_filters)
 
           geocoding_response = Geocoder::Result::Test.new(address_components: [{ long_name: country }])
           country = GeocodingResponseCountry.new(geocoding_response)

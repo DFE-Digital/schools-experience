@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe WebsiteValidator do
-  let(:model) { double('model') }
-  let(:errors) { double('errors') }
+  let(:model) { Struct.new(:errors).new(errors) }
+  let(:errors) { instance_double(ActiveModel::Errors) }
 
   before do
     allow(model).to receive(:errors).and_return(errors)

@@ -57,7 +57,7 @@ describe Bookings::Data::SchoolManager do
     end
 
     context 'when some schools are missing' do
-      let!(:targetted_schools) do
+      before do
         urns.drop(1).map { |urn| create(:bookings_school, urn: urn, enabled: false) }
       end
 
@@ -94,7 +94,7 @@ describe Bookings::Data::SchoolManager do
     end
 
     context 'when some schools are missing' do
-      let!(:targetted_schools) do
+      before do
         urns.drop(1).map { |urn| create(:bookings_school, urn: urn, enabled: true) }
       end
 

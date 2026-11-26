@@ -13,7 +13,7 @@ describe Schools::OnBoarding::DescriptionsController, type: :request do
   end
 
   describe '#new' do
-    let! :school_profile do
+    before do
       FactoryBot.create \
         :school_profile,
         :with_dbs_requirement,
@@ -24,11 +24,10 @@ describe Schools::OnBoarding::DescriptionsController, type: :request do
         :with_other_fee,
         :with_only_early_years_phase,
         :with_key_stage_list
+get '/schools/on_boarding/description/new'
+
     end
 
-    before do
-      get '/schools/on_boarding/description/new'
-    end
 
     it 'assigns the model' do
       expect(assigns(:description)).to eq Schools::OnBoarding::Description.new

@@ -5,7 +5,8 @@ describe Schools::PlacementRequests::PastAttendanceController, type: :request do
   include_context "when a DfE user is logged in"
 
   let(:school) { Bookings::School.find_by! urn: urn }
-  let!(:profile) { create :bookings_profile, school: school }
+
+  before { create :bookings_profile, school: school }
 
   describe '#index' do
     subject do

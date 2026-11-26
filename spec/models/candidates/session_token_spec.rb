@@ -38,7 +38,8 @@ RSpec.describe Candidates::SessionToken, type: :model do
     subject { described_class.unexpired.to_a }
 
     let!(:valid) { create(:candidate_session_token) }
-    let!(:expired) { create(:candidate_session_token, :expired) }
+
+    before { create(:candidate_session_token, :expired) }
 
 
     it "onlies return the valid token" do
@@ -50,8 +51,9 @@ RSpec.describe Candidates::SessionToken, type: :model do
     subject { described_class.valid.to_a }
 
     let!(:valid) { create(:candidate_session_token) }
-    let!(:expired) { create(:candidate_session_token, :expired) }
-    let!(:first) { create(:candidate_session_token, created_at: 10.days.ago) }
+
+    before { create(:candidate_session_token, :expired)
+create(:candidate_session_token, created_at: 10.days.ago)  }
 
 
     it "onlies return the valid token" do

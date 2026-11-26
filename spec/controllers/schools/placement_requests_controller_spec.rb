@@ -9,13 +9,12 @@ describe Schools::PlacementRequestsController, type: :request do
     Bookings::School.find_by! urn: urn
   end
 
-  let! :profile do
+  before do
     create(:bookings_profile, school: school)
+school.subjects << FactoryBot.create_list(:bookings_subject, 1)
+
   end
 
-  before do
-    school.subjects << FactoryBot.create_list(:bookings_subject, 1)
-  end
 
   describe '#index' do
     let!(:placement_requests) do
@@ -23,30 +22,40 @@ describe Schools::PlacementRequestsController, type: :request do
     end
 
     context 'with expired placement requests' do
-      before do
-        @flex_recent_expired = create :placement_request, created_at: 2.days.ago, school: school
-        @flex_old_expired = create :placement_request, created_at: 2.months.ago, school: school
+      let(:expired_requests) do
+        flex_recent = create :placement_request, created_at: 2.days.ago, school: school
+        flex_old = create :placement_request, created_at: 2.months.ago, school: school
         school.update(availability_preference_fixed: true)
-        @fixed_recent_expired = create(:placement_request, :with_a_fixed_date_in_the_recent_past, school: school)
-        @fixed_old_expired = create(:placement_request, :with_a_fixed_date_in_the_past, school: school)
+        fixed_recent = create(:placement_request, :with_a_fixed_date_in_the_recent_past, school: school)
+        fixed_old = create(:placement_request, :with_a_fixed_date_in_the_past, school: school)
 
+        {
+          flex_recent: flex_recent,
+          flex_old: flex_old,
+          fixed_recent: fixed_recent,
+          fixed_old: fixed_old
+        }
+      end
+
+      before do
+        expired_requests
         get '/schools/placement_requests'
       end
 
       it 'displays fixed placement requests that expired within a month' do
-        expect(assigns(:placement_requests)).to include @fixed_recent_expired
+        expect(assigns(:placement_requests)).to include expired_requests[:fixed_recent]
       end
 
       it 'displays flex placement requests that expired within two months' do
-        expect(assigns(:placement_requests)).to include @flex_recent_expired
+        expect(assigns(:placement_requests)).to include expired_requests[:flex_recent]
       end
 
       it 'does not display expired request that are older than a month' do
-        expect(assigns(:placement_requests)).not_to include @fixed_old_expired
+        expect(assigns(:placement_requests)).not_to include expired_requests[:fixed_old]
       end
 
-      it 'does not display expired request that are older than a month' do
-        expect(assigns(:placement_requests)).not_to include @flex_old_expired
+      it 'does not display flex requests older than two months' do
+        expect(assigns(:placement_requests)).not_to include expired_requests[:flex_old]
       end
 
       it 'displays both recently expired fixed and flex placement requests' do
@@ -101,10 +110,12 @@ describe Schools::PlacementRequestsController, type: :request do
     end
 
     context "with a timeout response from the API" do
+      let(:api_client) { instance_double(GetIntoTeachingApiClient::SchoolsExperienceApi) }
+
       before do
         ids = placement_requests.map(&:contact_uuid)
-        allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-          receive(:get_schools_experience_sign_ups)
+        allow(GetIntoTeachingApiClient::SchoolsExperienceApi).to receive(:new).and_return(api_client)
+        allow(api_client).to receive(:get_schools_experience_sign_ups)
             .with(a_collection_containing_exactly(*ids))
             .and_raise(Faraday::ConnectionFailed.new("failed"))
         get "/schools/placement_requests"
@@ -117,10 +128,12 @@ describe Schools::PlacementRequestsController, type: :request do
     end
 
     context "with a missing contact from API" do
+      let(:api_client) { instance_double(GetIntoTeachingApiClient::SchoolsExperienceApi) }
+
       before do
         ids = placement_requests.map(&:contact_uuid)
-        allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-          receive(:get_schools_experience_sign_ups)
+        allow(GetIntoTeachingApiClient::SchoolsExperienceApi).to receive(:new).and_return(api_client)
+        allow(api_client).to receive(:get_schools_experience_sign_ups)
             .with(a_collection_containing_exactly(*ids)).and_return([])
         get "/schools/placement_requests"
       end
@@ -176,9 +189,11 @@ describe Schools::PlacementRequestsController, type: :request do
         before do
           allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
 
-          allow_any_instance_of(Schools::DFESignInAPI::RoleCheckedOrganisations).to \
-            receive(:organisation_uuid_pairs).and_return \
-              SecureRandom.uuid => another_school.urn
+          organisations = instance_double(
+            Schools::DFESignInAPI::RoleCheckedOrganisations,
+            organisation_uuid_pairs: { SecureRandom.uuid => another_school.urn }
+          )
+          allow(Schools::DFESignInAPI::RoleCheckedOrganisations).to receive(:new).and_return(organisations)
         end
 
         specify 'redirects to the switch school page with urn param present' do
@@ -200,8 +215,11 @@ describe Schools::PlacementRequestsController, type: :request do
         before do
           allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
 
-          allow_any_instance_of(Schools::DFESignInAPI::RoleCheckedOrganisations).to \
-            receive(:organisation_uuid_pairs).and_return({})
+          organisations = instance_double(
+            Schools::DFESignInAPI::RoleCheckedOrganisations,
+            organisation_uuid_pairs: {}
+          )
+          allow(Schools::DFESignInAPI::RoleCheckedOrganisations).to receive(:new).and_return(organisations)
         end
 
         specify 'should raise a record not found error' do
@@ -214,10 +232,11 @@ describe Schools::PlacementRequestsController, type: :request do
       let :placement_request do
         FactoryBot.create :placement_request, school: school
       end
+      let(:api_client) { instance_double(GetIntoTeachingApiClient::SchoolsExperienceApi) }
 
       before do
-        allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-          receive(:get_schools_experience_sign_up)
+        allow(GetIntoTeachingApiClient::SchoolsExperienceApi).to receive(:new).and_return(api_client)
+        allow(api_client).to receive(:get_schools_experience_sign_up)
             .with(placement_request.candidate.gitis_uuid)
             .and_raise(Faraday::ConnectionFailed.new("timeout"))
 
@@ -234,10 +253,11 @@ describe Schools::PlacementRequestsController, type: :request do
       let :placement_request do
         FactoryBot.create :placement_request, school: school
       end
+      let(:api_client) { instance_double(GetIntoTeachingApiClient::SchoolsExperienceApi) }
 
       before do
-        allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-          receive(:get_schools_experience_sign_up)
+        allow(GetIntoTeachingApiClient::SchoolsExperienceApi).to receive(:new).and_return(api_client)
+        allow(api_client).to receive(:get_schools_experience_sign_up)
             .with(placement_request.candidate.gitis_uuid)
             .and_raise(GetIntoTeachingApiClient::ApiError.new(code: 404))
 

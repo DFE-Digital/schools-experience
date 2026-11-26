@@ -7,12 +7,11 @@ describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailControl
   let :school_experience do
     instance_double(Bookings::Gitis::SchoolExperience)
   end
-  let!(:booking_profile) { create(:bookings_profile, school: @current_user_school) }
-  let!(:pr) { create(:bookings_placement_request, school: @current_user_school) }
+  let!(:pr) { create(:bookings_placement_request, school: current_user_school) }
   let!(:booking) do
     create(
       :bookings_booking,
-      bookings_school: @current_user_school,
+      bookings_school: current_user_school,
       bookings_placement_request: pr,
       date: 3.weeks.from_now,
       placement_details: "an amazing experience",
@@ -24,13 +23,16 @@ describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailControl
     )
   end
   let :candidate_booking_confirmation_sms do
-    double NotifySms::CandidateBookingConfirmation,
+    instance_double NotifySms::CandidateBookingConfirmation,
            despatch_later!: true
   end
   let(:gitis_contact) do
     api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
     api.get_schools_experience_sign_up(pr.contact_uuid)
   end
+
+  before { create(:bookings_profile, school: current_user_school) }
+
 
   describe '#edit' do
     before do
@@ -54,7 +56,7 @@ describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailControl
 
       allow(NotifyEmail::CandidateBookingConfirmation).to(
         receive(:from_booking)
-          .and_return(double(NotifyEmail::CandidateBookingConfirmation, despatch_later!: true))
+        .and_return(instance_double(NotifyEmail::CandidateBookingConfirmation, despatch_later!: true))
       )
 
       allow(NotifySms::CandidateBookingConfirmation).to receive(:new) do
@@ -72,11 +74,11 @@ patch schools_placement_request_acceptance_preview_confirmation_email_path(pr.id
 
     context 'when virtual experience' do
       let!(:virtual_experience) { create(:bookings_placement_date, virtual: true) }
-      let!(:pr) { create(:placement_request, :virtual, school: @current_user_school, placement_date: virtual_experience) }
+      let!(:pr) { create(:placement_request, :virtual, school: current_user_school, placement_date: virtual_experience) }
       let!(:booking) do
         create(
           :bookings_booking,
-          bookings_school: @current_user_school,
+          bookings_school: current_user_school,
           experience_type: 'virtual',
           bookings_placement_request: pr,
           date: 3.weeks.from_now,
@@ -92,7 +94,7 @@ patch schools_placement_request_acceptance_preview_confirmation_email_path(pr.id
       specify 'should send a candidate booking confirmation notification virtual experience email' do
         allow(NotifyEmail::CandidateVirtualExperienceBookingConfirmation).to(
           receive(:from_booking)
-            .and_return(double(NotifyEmail::CandidateVirtualExperienceBookingConfirmation, despatch_later!: true))
+            .and_return(instance_double(NotifyEmail::CandidateVirtualExperienceBookingConfirmation, despatch_later!: true))
         )
 
         patch schools_placement_request_acceptance_preview_confirmation_email_path(pr.id, params)

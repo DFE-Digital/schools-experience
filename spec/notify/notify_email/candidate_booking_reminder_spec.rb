@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe NotifyEmail::CandidateBookingReminder do
-  it_should_behave_like "email template", "b3e75ee5-61cf-49c5-a145-c0710c54347d",
+  it_behaves_like "email template", "b3e75ee5-61cf-49c5-a145-c0710c54347d",
     time_until_booking: "2 weeks",
     school_name: "Springfield Elementary",
     candidate_name: "Kearney Zzyzwicz",

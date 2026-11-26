@@ -5,6 +5,9 @@ shared_context "when a DfE user is logged in" do
   let(:user_guid) { '33333333-4444-5555-6666-777777777777' }
   let(:dfe_signin_school_urn) { 123_489 }
   let(:dfe_signin_school_id) { '33333333-aaaa-5555-bbbb-777777777777' }
+  let(:current_user_school) do
+    Bookings::School.find_by(urn: urn) || FactoryBot.create(:bookings_school, urn: urn)
+  end
   let(:dfe_signin_school_data) do
     [
       { urn: dfe_signin_school_urn, name: 'School A', id: dfe_signin_school_id },
@@ -21,6 +24,7 @@ shared_context "when a DfE user is logged in" do
 
   before do
     allow(ENV).to receive(:fetch).and_call_original
+    current_user_school
 
     allow(ENV).to receive(:fetch)
       .with('DFE_SIGNIN_API_CLIENT')
@@ -40,10 +44,6 @@ shared_context "when a DfE user is logged in" do
   end
 
   before do
-    if Bookings::School.find_by(urn: urn).nil?
-      @current_user_school = FactoryBot.create(:bookings_school, urn: urn)
-    end
-
     session_hash[:urn] = urn
     session_hash[:current_user] = OpenStruct.new(
       given_name: 'Martin',
@@ -71,8 +71,8 @@ end
 shared_context "when a DfE user is logged in for a school with a profile" do
   include_context "when a DfE user is logged in"
 
-  let! :school do
-    @current_user_school.tap do |s|
+  before do
+    current_user_school.tap do |s|
       s.subjects << FactoryBot.create_list(:bookings_subject, 2)
       create :bookings_profile, school: s
     end

@@ -6,7 +6,7 @@ describe Schools::ChangeSchoolsController, type: :request do
   include_context "when stubbing the role-check API"
 
   let(:enable_school_change) { true }
-  let(:old_school) { @current_user_school }
+  let(:old_school) { current_user_school }
   let(:new_school) { create(:bookings_school) }
 
   before do
@@ -21,8 +21,7 @@ describe Schools::ChangeSchoolsController, type: :request do
     end
 
     before do
-      allow_any_instance_of(described_class).to \
-        receive(:current_urn) { current_urn }
+      session_hash[:urn] = current_urn
     end
 
 
@@ -51,10 +50,14 @@ describe Schools::ChangeSchoolsController, type: :request do
       let(:change_school_page) { get '/schools/change' }
 
       before do
-        allow_any_instance_of(Schools::DFESignInAPI::RoleCheckedOrganisations).to \
-          receive(:organisation_uuid_pairs).and_return \
+        organisations = instance_double(
+          Schools::DFESignInAPI::RoleCheckedOrganisations,
+          organisation_uuid_pairs: {
             SecureRandom.uuid => old_school.urn,
             SecureRandom.uuid => new_school.urn
+          }
+        )
+        allow(Schools::DFESignInAPI::RoleCheckedOrganisations).to receive(:new).and_return(organisations)
       end
 
 
@@ -97,15 +100,14 @@ describe Schools::ChangeSchoolsController, type: :request do
       let(:new_school_uuid) { SecureRandom.uuid }
 
       before do
-        allow_any_instance_of(described_class).to receive(:current_urn).and_return(nil)
+        session_hash[:urn] = nil
 
-        allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
-          receive(:uuids).and_return new_school_uuid => new_school.urn
+        organisations = instance_double(
+          Schools::DFESignInAPI::Organisations,
+          uuids: { new_school_uuid => new_school.urn }
+        )
+        allow(Schools::DFESignInAPI::Organisations).to receive(:new).and_return(organisations)
 
-        allow(Schools::DFESignInAPI::Roles).to receive(:new).and_call_original
-
-        allow_any_instance_of(Schools::DFESignInAPI::Roles).to \
-          receive(:has_school_experience_role?).and_return(true)
       end
 
       subject! { post('/schools/change', params: params) } # rubocop:disable RSpec/LeadingSubject -- Request must run after role setup.

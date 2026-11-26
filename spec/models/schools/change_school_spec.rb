@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe Schools::ChangeSchool, type: :model do
-  subject { change_school }
 
   subject { change_school }
 
@@ -19,18 +18,16 @@ describe Schools::ChangeSchool, type: :model do
       SecureRandom.uuid => 1_000_000
     }
   end
-  let(:change_school) { described_class.new(user, uuid_map, urn: current_urn) }
-
   let(:change_school) do
     described_class.new user, uuid_map, change_to_urn: change_to_urn
   end
 
   before do
-    allow(Schools::DFESignInAPI::Roles).to \
-      receive(:new).and_call_original
-
-    allow_any_instance_of(Schools::DFESignInAPI::Roles).to \
-      receive(:has_school_experience_role?) { user_has_role }
+    roles = instance_double(
+      Schools::DFESignInAPI::Roles,
+      has_school_experience_role?: user_has_role
+    )
+    allow(Schools::DFESignInAPI::Roles).to receive(:new).and_return(roles)
   end
 
 

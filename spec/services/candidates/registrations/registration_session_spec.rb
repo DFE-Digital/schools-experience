@@ -199,7 +199,8 @@ describe Candidates::Registrations::RegistrationSession do
       end
 
       let(:urn) { 11_048 }
-      let!(:school) { create(:bookings_school, urn: 11_048) }
+
+      before { create(:bookings_school, urn: 11_048) }
 
 
       it 'raises an error' do

@@ -5,10 +5,12 @@ describe Schools::ConfirmAttendanceController, type: :request do
   include_context "when a DfE user is logged in"
 
   let(:school) { Bookings::School.find_by(urn: urn) }
-  let!(:profile) { create(:bookings_profile, school: school) }
   let :school_experience do
     instance_double(Bookings::Gitis::SchoolExperience)
   end
+
+  before { create(:bookings_profile, school: school) }
+
 
   describe '#show' do
     subject { get(schools_confirm_attendance_path) }
@@ -30,8 +32,9 @@ describe Schools::ConfirmAttendanceController, type: :request do
         unattended.candidate.gitis_uuid,
         attended.candidate.gitis_uuid,
       ]
-      allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-        receive(:get_schools_experience_sign_ups).with(ids) do
+        api_client = instance_double(GetIntoTeachingApiClient::SchoolsExperienceApi)
+        allow(GetIntoTeachingApiClient::SchoolsExperienceApi).to receive(:new).and_return(api_client)
+        allow(api_client).to receive(:get_schools_experience_sign_ups).with(ids) do
           [
             build(:api_schools_experience_sign_up),
             build(:api_schools_experience_sign_up)

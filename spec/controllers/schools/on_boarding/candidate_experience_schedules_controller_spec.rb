@@ -13,7 +13,7 @@ describe Schools::OnBoarding::CandidateExperienceSchedulesController, type: :req
   end
 
   describe '#new' do
-    let! :school_profile do
+    before do
       FactoryBot.create \
         :school_profile,
         :with_dbs_requirement,
@@ -27,11 +27,10 @@ describe Schools::OnBoarding::CandidateExperienceSchedulesController, type: :req
         :with_description,
         :with_candidate_dress_code,
         :with_candidate_parking_information
+get '/schools/on_boarding/candidate_experience_schedule/new'
+
     end
 
-    before do
-      get '/schools/on_boarding/candidate_experience_schedule/new'
-    end
 
     it 'assigns the model' do
       expect(assigns(:candidate_experience_schedule)).to \

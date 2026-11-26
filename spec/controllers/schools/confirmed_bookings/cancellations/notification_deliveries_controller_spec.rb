@@ -12,7 +12,7 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
   end
 
   let :candidate_request_rejection_notification_email do
-    double NotifyEmail::CandidateBookingSchoolCancelsBooking,
+    instance_double NotifyEmail::CandidateBookingSchoolCancelsBooking,
       despatch_later!: true
   end
 
@@ -21,7 +21,7 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
   end
 
   let :candidate_request_rejection_notification_sms do
-    double NotifySms::CandidateBookingSchoolCancelsBooking,
+    instance_double NotifySms::CandidateBookingSchoolCancelsBooking,
       despatch_later!: true
   end
 

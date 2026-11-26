@@ -25,25 +25,25 @@ RSpec.describe "candidates/registrations/personal_informations/_form", type: :vi
         personal_information: Candidates::Registrations::PersonalInformation.new
     end
 
-    it "allows the address to be changed" do
+    it "allows the email address to be changed" do
       expect(rendered).to have_css(email_selector, count: 1)
       expect(rendered).to have_css("#{email_selector}[readonly]", count: 0)
       expect(rendered).to have_css("#{email_selector}[disabled]", count: 0)
     end
 
-    it "allows the address to be changed" do
+    it "allows the first name to be changed" do
       expect(rendered).to have_css(email_selector, count: 1)
       expect(rendered).to have_css("#{fname_selector}[readonly]", count: 0)
       expect(rendered).to have_css("#{fname_selector}[disabled]", count: 0)
     end
 
-    it "allows the address to be changed" do
+    it "allows the last name to be changed" do
       expect(rendered).to have_css(email_selector, count: 1)
       expect(rendered).to have_css("#{lname_selector}[readonly]", count: 0)
       expect(rendered).to have_css("#{lname_selector}[disabled]", count: 0)
     end
 
-    it "allows the address to be changed" do
+    it "renders the email address field" do
       expect(rendered).to have_css(email_selector, count: 1)
     end
   end
@@ -63,25 +63,25 @@ RSpec.describe "candidates/registrations/personal_informations/_form", type: :vi
         personal_information: personal_information
     end
 
-    it "does not allow the address to be changed" do
+    it "does not allow the email address to be changed" do
       expect(rendered).to have_css(email_selector, count: 1)
       expect(rendered).to have_css("#{email_selector}[readonly]", count: 1)
       expect(rendered).to have_css("#{email_selector}[disabled]", count: 1)
     end
 
-    it "does not allow the address to be changed" do
+    it "does not allow the first name to be changed" do
       expect(rendered).to have_css(email_selector, count: 1)
       expect(rendered).to have_css("#{fname_selector}[readonly]", count: 1)
       expect(rendered).to have_css("#{fname_selector}[disabled]", count: 1)
     end
 
-    it "does not allow the address to be changed" do
+    it "does not allow the last name to be changed" do
       expect(rendered).to have_css(email_selector, count: 1)
       expect(rendered).to have_css("#{lname_selector}[readonly]", count: 1)
       expect(rendered).to have_css("#{lname_selector}[disabled]", count: 1)
     end
 
-    it "does not allow the address to be changed" do
+    it "renders the read-only email address field" do
       expect(rendered).to have_css(email_selector, count: 1)
     end
   end

@@ -47,6 +47,7 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
     subject { pinfo.issue_verification_code }
 
     let(:pinfo) { build(:personal_information) }
+    let(:api_client) { instance_double(GetIntoTeachingApiClient::CandidatesApi) }
     let(:request) do
       GetIntoTeachingApiClient::ExistingCandidateRequest.new(
         email: pinfo.email,
@@ -57,17 +58,16 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
 
 
     before do
-      allow_any_instance_of(GetIntoTeachingApiClient::CandidatesApi).to \
-        receive(:create_candidate_access_token).with(request)
+      allow(GetIntoTeachingApiClient::CandidatesApi).to receive(:new).and_return(api_client)
+      allow(api_client).to receive(:create_candidate_access_token).with(request)
     end
 
     it { is_expected.to be_truthy }
 
     context "when the user cannot be matched back" do
       before do
-        allow_any_instance_of(GetIntoTeachingApiClient::CandidatesApi).to \
-          receive(:create_candidate_access_token)
-            .with(request).and_raise(GetIntoTeachingApiClient::ApiError)
+        allow(api_client).to receive(:create_candidate_access_token)
+          .with(request).and_raise(GetIntoTeachingApiClient::ApiError)
       end
 
       it { is_expected.to be_falsy }

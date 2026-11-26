@@ -12,8 +12,6 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
     let(:status) { :requested }
 
 
-    before { allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to receive(:add_school_experience) }
-
     context "with valid arguments" do
       it "does not throw error" do
         expect { subject }.not_to raise_error
@@ -62,17 +60,27 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
 
 
   shared_examples "a successful API post" do
-    before do
-      expect_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi)
-        .to receive(:add_school_experience).with(gitis_id, expected_school_experience)
+    let(:schools_experience_api) { instance_double(GetIntoTeachingApiClient::SchoolsExperienceApi) }
+    let(:lookup_items_api) { instance_double(GetIntoTeachingApiClient::LookupItemsApi) }
 
-      allow_any_instance_of(GetIntoTeachingApiClient::LookupItemsApi)
-        .to receive(:get_teaching_subjects).and_return([build(:api_teaching_subject, id: subject_id, value: subject_name)])
+    before do
+      allow(GetIntoTeachingApiClient::SchoolsExperienceApi).to receive(:new)
+        .and_return(schools_experience_api)
+      allow(GetIntoTeachingApiClient::LookupItemsApi).to receive(:new)
+        .and_return(lookup_items_api)
+      allow(lookup_items_api)
+        .to receive(:get_teaching_subjects)
+        .and_return([build(:api_teaching_subject, id: subject_id, value: subject_name)])
+      allow(schools_experience_api).to receive(:add_school_experience)
+
     end
 
     describe "#write_to_gitis_contact" do
       it "posts to gitis" do
         subject.write_to_gitis_contact(gitis_id)
+
+        expect(schools_experience_api).to have_received(:add_school_experience)
+          .with(gitis_id, expected_school_experience)
       end
     end
   end

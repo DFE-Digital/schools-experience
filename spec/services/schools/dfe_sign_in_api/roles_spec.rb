@@ -7,8 +7,7 @@ describe Schools::DFESignInAPI::Roles do
   include_context "when a DfE user is logged in"
 
   before do
-    allow_any_instance_of(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
-    allow_any_instance_of(Schools::DFESignInAPI::Client).to receive(:role_check_enabled?).and_return(true)
+    allow(Schools::DFESignInAPI::Client).to receive_messages(enabled?: true, role_check_enabled?: true)
   end
 
   specify 'should respond to #has_school_experience_role?' do
@@ -51,9 +50,12 @@ describe Schools::DFESignInAPI::Roles do
     end
 
     context 'when no result is returned' do
-      subject { described_class.new(user_guid, dfe_signin_school_urn) }
+      subject(:roles) { described_class.new(user_guid, dfe_signin_school_urn) }
 
-      before { allow(subject).to receive(:response).and_return(nil) }
+      before do
+        stub_request(:get, "https://some-signin-host.signin.education.gov.uk/services/#{dfe_signin_admin_service_id}/organisations/#{dfe_signin_school_urn}/users/#{user_guid}")
+          .to_return(status: 200, body: '{}', headers: {})
+      end
 
 
       specify "should raise an 'invalid response' error" do

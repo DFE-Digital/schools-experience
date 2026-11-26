@@ -157,8 +157,9 @@ RSpec.describe Bookings::Candidate, type: :model do
 
 
     before do
-      allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-        receive(:sign_up_schools_experience_candidate) do |_, sign_up|
+      api_client = instance_double(GetIntoTeachingApiClient::SchoolsExperienceApi)
+      allow(GetIntoTeachingApiClient::SchoolsExperienceApi).to receive(:new).and_return(api_client)
+      allow(api_client).to receive(:sign_up_schools_experience_candidate) do |sign_up|
           sign_up.candidate_id = SecureRandom.uuid
           sign_up
         end

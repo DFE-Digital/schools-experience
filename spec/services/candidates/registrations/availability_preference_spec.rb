@@ -1,9 +1,6 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::AvailabilityPreference, type: :model do
-  let! :today do
-    Time.zone.today
-  end
 
   it_behaves_like 'a registration step'
 

@@ -28,11 +28,16 @@ describe Candidates::VerificationCode do
       context "when the code is invalid" do
         let(:code) { "123" }
 
+        before do
+          allow(GetIntoTeachingApiClient::SchoolsExperienceApi).to receive(:new).and_call_original
+        end
+
         it { is_expected.to be_falsy }
 
         it "does not call the API" do
-          expect_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).not_to \
-            receive(:exchange_access_token_for_schools_experience_sign_up)
+          exchange
+
+          expect(GetIntoTeachingApiClient::SchoolsExperienceApi).not_to have_received(:new)
         end
       end
 
@@ -79,18 +84,18 @@ describe Candidates::VerificationCode do
         )
       end
 
+      let(:candidates_api_client) { instance_double(GetIntoTeachingApiClient::CandidatesApi) }
 
       before do
-        allow_any_instance_of(GetIntoTeachingApiClient::CandidatesApi).to \
-          receive(:create_candidate_access_token).with(request)
+        allow(GetIntoTeachingApiClient::CandidatesApi).to receive(:new).and_return(candidates_api_client)
+        allow(candidates_api_client).to receive(:create_candidate_access_token).with(request)
       end
 
       it { is_expected.to be_truthy }
 
       context "when the user cannot be matched back" do
         before do
-          allow_any_instance_of(GetIntoTeachingApiClient::CandidatesApi).to \
-            receive(:create_candidate_access_token)
+          allow(candidates_api_client).to receive(:create_candidate_access_token)
               .with(request).and_raise(GetIntoTeachingApiClient::ApiError)
         end
 

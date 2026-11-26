@@ -9,10 +9,14 @@ describe Schools::PrepopulateSchoolProfilesController, type: :request do
     subject { post(schools_prepopulate_school_profiles_path, params: params) }
 
     before do
-      allow_any_instance_of(Schools::DFESignInAPI::RoleCheckedOrganisations).to \
-        receive(:organisation_uuid_pairs).and_return \
+      organisations = instance_double(
+        Schools::DFESignInAPI::RoleCheckedOrganisations,
+        organisation_uuid_pairs: {
           SecureRandom.uuid => prepopulate_from_school.urn,
-          SecureRandom.uuid => @current_user_school.urn
+          SecureRandom.uuid => current_user_school.urn
+        }
+      )
+      allow(Schools::DFESignInAPI::RoleCheckedOrganisations).to receive(:new).and_return(organisations)
     end
 
     let(:prepopulate_from_school) { create(:bookings_school, :with_school_profile, :onboarded) }
@@ -26,7 +30,7 @@ describe Schools::PrepopulateSchoolProfilesController, type: :request do
 
       excluding_attributes = %w[id bookings_school_id created_at updated_at]
       expected_attributes = prepopulate_from_school.school_profile.attributes.without(excluding_attributes)
-      expect(@current_user_school.school_profile).to have_attributes(expected_attributes)
+      expect(current_user_school.school_profile).to have_attributes(expected_attributes)
 
       expect(response.body).to include("Your profile has been prepopulated")
     end

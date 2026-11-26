@@ -46,41 +46,38 @@ describe Schools::AttendanceRecords, type: :model do
 
   describe 'counts' do
     let(:candidate) { create(:candidate) }
+    let(:urns) { [school.urn] }
+    let(:records) { described_class.new candidate.id, urns }
     let(:school) { create(:bookings_school) }
     let(:second_school) { create(:bookings_school) }
 
-    let!(:attended) do
+    before do
       create :bookings_booking, :accepted, :attended,
         bookings_school: school,
         bookings_placement_request:
           create(:bookings_placement_request, school: school, candidate: candidate)
-    end
-
-    let!(:did_not_attend) do
-      create :bookings_booking, :accepted, :unattended,
+create :bookings_booking, :accepted, :unattended,
         bookings_school: school,
         bookings_placement_request:
           create(:bookings_placement_request, school: school, candidate: candidate)
-    end
 
-    let!(:another_school) do
-      create :bookings_booking, :accepted, :attended,
+create :bookings_booking, :accepted, :attended,
         bookings_school: second_school,
         bookings_placement_request:
           create(:bookings_placement_request,
             school: second_school,
             candidate: candidate)
-    end
 
-    let!(:another_candidate) do
-      create :bookings_booking, :accepted, :attended,
+create :bookings_booking, :accepted, :attended,
         bookings_school: school,
         bookings_placement_request:
           create(:bookings_placement_request, school: school)
+
     end
 
-    let(:urns) { [school.urn] }
-    let(:records) { described_class.new candidate.id, urns }
+
+
+
 
     describe '#attended_count' do
       subject { records.attended_count }

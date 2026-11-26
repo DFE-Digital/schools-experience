@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::ConfirmationEmailsController, type: :request do
+  include_context 'with a session double'
   include_context 'with a stubbed candidate school'
   include_context 'with a stubbed current registration'
 
@@ -120,11 +121,7 @@ post candidates_school_registrations_confirmation_email_path(school)
       let(:contact_attributes) { contact.to_hash }
 
       before do
-        allow_any_instance_of(ActionDispatch::Request::Session).to \
-          receive(:[]).and_call_original
-        allow_any_instance_of(ActionDispatch::Request::Session).to \
-          receive(:[]).with(:gitis_contact).and_return(contact_attributes)
-
+        session_hash[:gitis_contact] = contact_attributes
         post candidates_school_registrations_confirmation_email_path(school)
       end
 

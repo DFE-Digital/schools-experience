@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe NotifyEmail::CandidateBookingDateChanged do
-  it_should_behave_like "email template", "3c1fd380-db1c-4efb-8e98-f3a0ef3e2661",
+  it_behaves_like "email template", "3c1fd380-db1c-4efb-8e98-f3a0ef3e2661",
     school_name: "Springfield Elementary",
     candidate_name: "Kearney Zzyzwicz",
     placement_schedule: "2022-03-04 for 3 days",

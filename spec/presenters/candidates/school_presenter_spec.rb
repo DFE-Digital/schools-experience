@@ -120,7 +120,7 @@ RSpec.describe Candidates::SchoolPresenter do
         it { is_expected.to eql "No - Candidates will be accompanied at all times" }
       end
 
-      context 'when yes' do
+      context 'when yes, sometimes required' do
         before { legacy_profile.dbs_required = 'sometimes' }
 
         it { is_expected.to eql "Yes - Sometimes" }

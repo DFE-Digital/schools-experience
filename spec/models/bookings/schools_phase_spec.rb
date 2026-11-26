@@ -11,7 +11,7 @@ RSpec.describe Bookings::SchoolsPhase, type: :model do
       it { is_expected.to validate_presence_of(:bookings_school) }
     end
 
-    describe '#bookings_school' do
+    describe '#bookings_phase' do
       it { is_expected.to validate_presence_of(:bookings_phase) }
     end
 

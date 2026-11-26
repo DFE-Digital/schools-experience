@@ -12,7 +12,7 @@ describe Schools::PlacementRequests::Cancellations::NotificationDeliveriesContro
   end
 
   let :candidate_request_rejection_notification do
-    double NotifyEmail::CandidateRequestRejection,
+    instance_double NotifyEmail::CandidateRequestRejection,
       despatch_later!: true
   end
 

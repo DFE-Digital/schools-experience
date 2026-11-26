@@ -4,10 +4,10 @@ require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 describe Schools::PlacementRequests::Acceptance::MakeChangesController, type: :request do
   include_context "when a DfE user is logged in"
 
-  let!(:pr) { create(:bookings_placement_request, school: @current_user_school) }
+  let!(:pr) { create(:bookings_placement_request, school: current_user_school) }
 
-  let!(:profile) do
-    create(:bookings_profile, school: @current_user_school)
+  before do
+    create(:bookings_profile, school: current_user_school)
   end
 
   describe '#new' do

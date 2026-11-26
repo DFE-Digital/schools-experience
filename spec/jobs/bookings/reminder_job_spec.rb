@@ -5,7 +5,7 @@ describe Bookings::ReminderJob, type: :job do
 
   let(:time_until_booking) { 'one week' }
   let(:time_until_booking_descriptive) { 'in one week' }
-  let(:reminder) { double(Bookings::Reminder, deliver: true) }
+  let(:reminder) { instance_double(Bookings::Reminder, deliver: true) }
   let(:booking) { create(:bookings_booking) }
 
   before do

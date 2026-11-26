@@ -3,8 +3,7 @@ require 'csv'
 
 describe Bookings::Data::SchoolMassImporter do
   before do
-    allow($stdout).to receive(:puts).and_return(true)
-    allow_any_instance_of(Kernel).to receive(:print).and_return(nil)
+    allow($stdout).to receive_messages(puts: true, write: 0)
   end
 
   context 'when initializing' do

@@ -27,7 +27,7 @@ shared_context "with a session double" do
       session_hash.key?(key)
     end
 
-    allow_any_instance_of(ActionDispatch::Request)
+    allow_any_instance_of(ActionDispatch::Request) # rubocop:disable RSpec/AnyInstance -- Rack creates request instances internally for each request.
       .to receive(:session).and_return(session_double)
   end
 end

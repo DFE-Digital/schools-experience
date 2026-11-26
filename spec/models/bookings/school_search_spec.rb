@@ -461,6 +461,8 @@ matching_school.phases << secondary
 
       before do
         allow(Bookings::School).to receive(:enabled).and_call_original
+        allow(Bookings::School).to receive(:onboarded).and_call_original
+        allow(Bookings::School).to receive(:with_availability).and_call_original
         allow(Bookings::School).to receive(:at_phases).and_call_original
         allow(Bookings::School).to receive(:that_provide).and_call_original
         allow(Bookings::School).to receive(:costing_upto).and_call_original
@@ -477,11 +479,11 @@ matching_school.phases << secondary
       end
 
       specify 'should apply the :onboarded scope' do
-        expect(Bookings::School).to have_received(:enabled)
+        expect(Bookings::School).to have_received(:onboarded)
       end
 
       specify 'should apply the :with_availability scope' do
-        expect(Bookings::School).to have_received(:enabled)
+        expect(Bookings::School).to have_received(:with_availability)
       end
 
       specify 'should apply the :at_phases scope with supplied phases' do
@@ -609,7 +611,7 @@ matching_school.phases << secondary
       create_list(:bookings_school, 8, :onboarded)
     end
 
-    let!(:non_matching_school) do
+    before do
       create(:bookings_school, :onboarded, coordinates: Bookings::School::GEOFACTORY.point(-1.148, 52.794))
     end
 
@@ -720,16 +722,14 @@ matching_school.phases << secondary
   end
 
   describe '#has_coordinates?' do
-    subject { described_class.new(location: "Bury") }
-
     context 'when coordinates are present' do
-      before { allow(subject).to receive(:coordinates).and_return(point_in_leeds) }
+      subject { described_class.new(location: { latitude: point_in_leeds.latitude, longitude: point_in_leeds.longitude }) }
 
       it { is_expected.to have_coordinates }
     end
 
     context 'when coordinates are absent' do
-      before { allow(subject).to receive(:coordinates).and_return([]) }
+      subject { described_class.new(location: nil) }
 
       it { is_expected.not_to have_coordinates }
     end

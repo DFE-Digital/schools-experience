@@ -3,13 +3,10 @@ require 'rails_helper'
 describe Bookings::PlacementRequest, type: :model do
   include ActiveSupport::Testing::TimeHelpers
 
-  subject { described_class.new bookings_school_id: school.id }
+  subject(:placement_request) { described_class.new bookings_school_id: school.id }
 
   include_context 'with a stubbed candidate school'
 
-  let! :today do
-    Time.zone.today
-  end
 
   it { is_expected.to have_db_column(:objectives).of_type(:text).with_options null: false }
   it { is_expected.to have_db_column(:urn).of_type(:integer).with_options null: false }
@@ -160,7 +157,7 @@ subject.reload  }
     describe '.withdrawn_but_unviewed' do
       subject { described_class.withdrawn_but_unviewed }
 
-      let!(:withdrawn_and_viewed) do
+      before do
         create(:placement_request, :cancelled, school: school).tap do |pr|
           pr.candidate_cancellation.viewed!
         end
@@ -328,18 +325,18 @@ subject.reload  }
         create :candidate
       end
 
-      let! :bookings_subject_1 do
+      let! :first_bookings_subject do
         create :bookings_subject
       end
 
-      let! :bookings_subject_2 do
+      let! :second_bookings_subject do
         create :bookings_subject
       end
 
       let! :school do
         create :bookings_school,
           availability_preference_fixed: true,
-          subjects: [bookings_subject_1, bookings_subject_2]
+          subjects: [first_bookings_subject, second_bookings_subject]
       end
 
       let! :placement_preference do
@@ -354,6 +351,12 @@ subject.reload  }
         build :teaching_preference, school: school,
                                     subject_first_choice: school.subjects.first.name,
                                     subject_second_choice: school.subjects.second.name
+      end
+
+      let :subject_and_date_information do
+        build :subject_and_date_information,
+          bookings_placement_date_id: placement_date.id,
+          bookings_subject_id: first_bookings_subject.id
       end
 
       let! :registration_session do
@@ -372,17 +375,12 @@ subject.reload  }
           create :bookings_placement_date,
             bookings_school: school,
             subject_specific: true,
-            subjects: [bookings_subject_1]
+            subjects: [first_bookings_subject]
         end
 
-        let! :subject_and_date_information do
-          build :subject_and_date_information,
-            bookings_placement_date_id: placement_date.id,
-            bookings_subject_id: placement_date.placement_date_subjects.first.bookings_subject.id
-        end
 
         before do
-          placement_date.update! subjects: [bookings_subject_2]
+          placement_date.update! subjects: [second_bookings_subject]
         end
 
         it 'creates the placement_request' do
@@ -401,14 +399,10 @@ subject.reload  }
             subject_specific: false
         end
 
-        let! :subject_and_date_information do
-          build :subject_and_date_information,
-            bookings_placement_date_id: placement_date.id
-        end
 
         before do
           placement_date.update! \
-            subject_specific: true, subjects: [bookings_subject_1]
+            subject_specific: true, subjects: [first_bookings_subject]
         end
 
         it 'creates the placement_request' do
@@ -447,9 +441,7 @@ subject.reload  }
     end
 
     context 'when degree stage is "Other"' do
-      before do
-        allow(subject).to receive(:degree_stage).and_return("Other")
-      end
+      subject { described_class.new(bookings_school_id: school.id, degree_stage: "Other") }
 
       it { is_expected.to validate_presence_of :degree_stage_explaination }
     end
@@ -461,9 +453,7 @@ subject.reload  }
     it { is_expected.to validate_presence_of :degree_subject }
 
     context 'when degree stage is "I don\'t have a degree and am not studying for one"' do
-      before do
-        allow(subject).to receive(:degree_stage).and_return("I don't have a degree and am not studying for one")
-      end
+      subject { described_class.new(bookings_school_id: school.id, degree_stage: "I don't have a degree and am not studying for one") }
 
       it do
         expect(subject).to validate_absence_of(:degree_subject)
@@ -471,9 +461,7 @@ subject.reload  }
     end
 
     context 'when degree stage is not "I don\'t have a degree and am not studying for one"' do
-      before do
-        allow(subject).to receive(:degree_stage).and_return('Final year')
-      end
+      subject { described_class.new(bookings_school_id: school.id, degree_stage: 'Final year') }
 
       it do
         expect(subject).to validate_presence_of(:degree_subject)
@@ -893,16 +881,16 @@ placement_request.validate
   describe '#requested_subject' do
     subject { placement_request.requested_subject }
 
-    let :subject_1 do
+    let :first_subject do
       create :bookings_subject
     end
 
-    let :subject_2 do
+    let :second_subject do
       create :bookings_subject
     end
 
     let :school do
-      create :bookings_school, subjects: [subject_1, subject_2]
+      create :bookings_school, subjects: [first_subject, second_subject]
     end
 
     let :placement_request do
@@ -911,13 +899,13 @@ placement_request.validate
 
 
     context 'when the date is not subject-specific' do
-      it { is_expected.to eq subject_1 }
+      it { is_expected.to eq first_subject }
     end
 
     context 'when the date is subject-specific' do
-      before { placement_request.subject = subject_2 }
+      before { placement_request.subject = second_subject }
 
-      it { is_expected.to eq subject_2 }
+      it { is_expected.to eq second_subject }
     end
   end
 

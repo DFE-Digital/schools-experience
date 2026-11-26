@@ -203,7 +203,7 @@ describe Bookings::Booking do
     describe '.cancelled' do
       subject { described_class.cancelled }
 
-      let! :not_cancelled do
+      before do
         FactoryBot.create :bookings_booking
       end
 
@@ -226,13 +226,12 @@ describe Bookings::Booking do
         FactoryBot.create :bookings_booking
       end
 
-      let! :booking_cancelled_by_school do
+      before do
         FactoryBot.create :bookings_booking, :cancelled_by_school
+FactoryBot.create :bookings_booking, :cancelled_by_candidate
+
       end
 
-      let! :booking_cancelled_by_candidate do
-        FactoryBot.create :bookings_booking, :cancelled_by_candidate
-      end
 
 
       it { is_expected.to contain_exactly(not_cancelled) }
@@ -325,10 +324,12 @@ describe Bookings::Booking do
     describe '.with_unviewed_candidate_cancellation' do
       subject { described_class.with_unviewed_candidate_cancellation }
 
-      let!(:new_booking) { create :bookings_booking }
-      let!(:with_viewed_candidate_cancellation) { create :bookings_booking, :with_viewed_candidate_cancellation }
+      before { create :bookings_booking
+create :bookings_booking, :with_viewed_candidate_cancellation
+create :bookings_booking, :cancelled_by_school  }
+
       let!(:with_unviewed_candidate_cancellation) { create :bookings_booking, :cancelled_by_candidate }
-      let!(:with_unviewed_school_cancellation) { create :bookings_booking, :cancelled_by_school }
+
 
 
       it { is_expected.to contain_exactly(with_unviewed_candidate_cancellation) }
@@ -517,7 +518,7 @@ describe Bookings::Booking do
     end
   end
 
-  describe '#cancellable?' do
+  describe '#editable_date?' do
     context 'with uncancelled future booking' do
       subject { create(:bookings_booking, :accepted) }
 

@@ -11,6 +11,8 @@ shared_examples "notify_job" do
   let :personalisation do
     { school_name: "A School", confirmation_link: "ABC123" }
   end
+  let(:log_messages) { [] }
+  let(:executions) { 1 }
 
   let :template_id do
     '11111111-aaaa-1111-aaaa-111111111111'
@@ -33,8 +35,7 @@ shared_examples "notify_job" do
     allow(Sentry).to receive :capture_exception
 
     allow(ActiveJob::Base.logger).to receive :info do |&block|
-      personalisation.each_value { |v| expect(block.call).not_to include v }
-      expect(block.call).not_to include email_address
+      log_messages << block.call
     end
 
     freeze_time
@@ -43,6 +44,13 @@ shared_examples "notify_job" do
   end
 
   describe '#perform' do
+    it 'does not log personalisation or recipient details' do
+      personalisation.each_value do |value|
+        expect(log_messages.join).not_to include(value)
+      end
+      expect(log_messages.join).not_to include(recipient)
+    end
+
     context 'when on error' do
       context 'when retryable error' do
         let(:notify_class) { NotifyRetryableErroringClient }
@@ -76,7 +84,7 @@ shared_examples "notify_job" do
     end
 
     context 'when on success' do
-      let(:notify_class) { double Class, new: stub_client }
+      let(:notify_class) { class_double(Notifications::Client, new: stub_client) }
       let(:executions) { 1 }
 
       it 'sends the email' do
@@ -207,7 +215,7 @@ shared_examples "notify recipient restriction handling" do
   end
 end
 
-describe Notify::BaseJob, type: :job do
+describe Notify::BaseJob, type: :job do # rubocop:disable RSpec/MultipleDescribes -- Shared notify job specs cover the related job family.
   describe "#perform" do
     it "fails with NotImplementedError'" do
       expect { subject.perform }.to raise_error(NotImplementedError, 'You must implement the perform method')
@@ -217,7 +225,7 @@ end
 
 describe Notify::EmailJob, type: :job do
   let(:recipient) { 'test@example.com' }
-  let(:stub_client) { double Notifications::Client, send_email: true }
+  let(:stub_client) { instance_double Notifications::Client, send_email: true }
   let(:notify_method) { :send_email }
   let(:notify_method_params) do
     {
@@ -233,7 +241,7 @@ end
 
 describe Notify::SmsJob, type: :job do
   let(:recipient) { "07777777777" }
-  let(:stub_client) { double Notifications::Client, send_sms: true }
+  let(:stub_client) { instance_double Notifications::Client, send_sms: true }
   let(:notify_method) { :send_sms }
   let(:notify_method_params) do
     {

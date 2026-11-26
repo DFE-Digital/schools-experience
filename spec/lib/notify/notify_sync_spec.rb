@@ -1,8 +1,9 @@
 require 'rails_helper'
 require Rails.root.join("lib", "notify", "notify_sync")
+require 'tmpdir'
 
 describe Notify::NotifySync do
-  subject do
+  subject(:notify_sync) do
     described_class.new
   end
 
@@ -11,7 +12,6 @@ describe Notify::NotifySync do
       'NotifySync::API_KEY',
       ["somekey", SecureRandom.uuid, SecureRandom.uuid].join("-")
     )
-    allow(subject).to receive(:client).and_return(NotifyFakeClient.new)
     allow($stdout).to receive(:puts)
   end
 
@@ -22,16 +22,23 @@ describe Notify::NotifySync do
   end
 
   context 'when comparing templates' do
+    let(:template_path) { Pathname.new(Dir.mktmpdir) }
     let(:local_templates) { {} }
     let(:remote_templates) { {} }
 
     before do
-      allow(subject).to receive_messages(
-        local_templates: local_templates,
-        remote_templates: remote_templates
+      stub_const('Notify::NotifySync::TEMPLATE_PATH', template_path)
+      local_templates.each do |template_id, body|
+        File.write(template_path.join("template.#{template_id}.md"), body)
+      end
+      notify_sync.client = instance_double(
+        Notifications::Client,
+        get_all_templates: OpenStruct.new(collection: remote_templates.values)
       )
-      subject.compare
+      notify_sync.compare
     end
+
+    after { FileUtils.remove_entry(template_path) }
 
     context 'when present in both repositories' do
       let(:matching_template_id) { 'aaaaaaaa-bbbb-cccc-dddd-111111111111' }
@@ -110,6 +117,7 @@ describe Notify::NotifySync do
   end
 
   context 'when pulling templates' do
+    let(:template_path) { Pathname.new(Dir.mktmpdir) }
     let(:template_id) { 'aaaaaaaa-bbbb-cccc-dddd-444444444444' }
     let(:remote_body) do
       <<~TEMPLATE_FOUR
@@ -132,22 +140,22 @@ describe Notify::NotifySync do
     end
 
     before do
-      allow(File).to receive(:write)
-      allow(subject).to receive_messages(
-        local_templates: local_templates,
-        remote_templates: remote_templates
+      stub_const('Notify::NotifySync::TEMPLATE_PATH', template_path)
+      local_templates.each do |local_template_id, body|
+        File.write(template_path.join("template.#{local_template_id}.md"), body)
+      end
+      notify_sync.client = instance_double(
+        Notifications::Client,
+        get_all_templates: OpenStruct.new(collection: remote_templates.values)
       )
-      subject.pull
+      notify_sync.pull
     end
 
+    after { FileUtils.remove_entry(template_path) }
+
     specify "should write the remote file" do
-      expect(File).to have_received(:write).with(
-        File.join(
-          described_class::TEMPLATE_PATH,
-          "my_magic_template.#{template_id}.md"
-        ),
-        remote_body.chomp
-      )
+      expect(File.read(template_path.join("my_magic_template.#{template_id}.md")))
+        .to eq(remote_body.chomp)
     end
   end
 end

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Candidates::PlacementPresenter do
-  subject { described_class.new(placement_request) }
+  subject(:placement_presenter) { described_class.new(placement_request) }
 
   let(:placement_request) { create(:placement_request) }
 
@@ -144,10 +144,10 @@ RSpec.describe Candidates::PlacementPresenter do
   end
 
   describe '#status_tag_colour' do
-    it 'returns a govuk tag colour css class' do
-      allow(subject).to receive(:status).and_return('Withdrawn')
+    let(:placement_request) { create(:placement_request, :cancelled) }
 
-      expect(subject.status_tag_colour).to eq('govuk-tag--orange')
+    it 'returns a govuk tag colour css class' do
+      expect(placement_presenter.status_tag_colour).to eq('govuk-tag--orange')
     end
   end
 

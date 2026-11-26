@@ -5,19 +5,19 @@ describe Schools::OnBoarding::FeesController, type: :request do
   include_context "when a DfE user is logged in"
 
   describe '#new' do
-    let! :school_profile do
+    before do
       FactoryBot.create :school_profile,
         :with_dbs_requirement,
         :with_candidate_requirements_selection
-    end
-    let(:task_progress_on_boarding) { false }
-
-    before do
-      allow(Feature).to receive(:enabled?).with(:task_progress_on_boarding)
+allow(Feature).to receive(:enabled?).with(:task_progress_on_boarding)
         .and_return(task_progress_on_boarding)
 get '/schools/on_boarding/fees/new'
 
+
     end
+
+    let(:task_progress_on_boarding) { false }
+
 
 
     it 'assigns the model' do

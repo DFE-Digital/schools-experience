@@ -114,17 +114,21 @@ RSpec.describe Healthcheck do
   describe "#test_dfe_signin_api" do
     subject { described_class.new.test_dfe_signin_api }
 
-    context "when the DfE Sign In healthcheck reports up" do
-      before do
-        allow_any_instance_of(Schools::DFESignInAPI::Healthcheck).to receive(:up?).and_return(true)
-      end
+    let(:dfe_healthcheck) do
+      instance_double(Schools::DFESignInAPI::Healthcheck, up?: true)
+    end
 
+    before do
+      allow(Schools::DFESignInAPI::Healthcheck).to receive(:new).and_return(dfe_healthcheck)
+    end
+
+    context "when the DfE Sign In healthcheck reports up" do
       it { is_expected.to be true }
     end
 
     context "when the DfE Sign In healthcheck reports down" do
-      before do
-        allow_any_instance_of(Schools::DFESignInAPI::Healthcheck).to receive(:up?).and_return(false)
+      let(:dfe_healthcheck) do
+        instance_double(Schools::DFESignInAPI::Healthcheck, up?: false)
       end
 
       it { is_expected.to be false }
@@ -132,8 +136,7 @@ RSpec.describe Healthcheck do
 
     context "when the DfE Sign In healthcheck raises an unexpected StandardError" do
       before do
-        allow_any_instance_of(Schools::DFESignInAPI::Healthcheck)
-          .to receive(:up?).and_raise(TypeError, "no implicit conversion of nil into String")
+        allow(dfe_healthcheck).to receive(:up?).and_raise(TypeError, "no implicit conversion of nil into String")
       end
 
       it { is_expected.to be false }
@@ -141,8 +144,7 @@ RSpec.describe Healthcheck do
 
     context "when the request times out (Rack::Timeout::RequestTimeoutException)" do
       before do
-        allow_any_instance_of(Schools::DFESignInAPI::Healthcheck)
-          .to receive(:up?).and_raise(Rack::Timeout::RequestTimeoutException.new({}))
+        allow(dfe_healthcheck).to receive(:up?).and_raise(Rack::Timeout::RequestTimeoutException.new({}))
       end
 
       it { is_expected.to be false }

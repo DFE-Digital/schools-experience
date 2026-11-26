@@ -5,11 +5,11 @@ describe Schools::ArchivedPlacementRequestsController, type: :request do
   include_context "when a DfE user is logged in"
 
   let(:school) { Bookings::School.find_by! urn: urn }
-  let!(:profile) { create :bookings_profile, school: school }
 
-  before do
-    school.subjects << create_list(:bookings_subject, 1)
-  end
+  before { create :bookings_profile, school: school
+school.subjects << create_list(:bookings_subject, 1)
+   }
+
 
   describe '#index' do
     subject { response }

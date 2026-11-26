@@ -86,13 +86,14 @@ describe Bookings::Gitis::ContactFetcher do
 
 
       before do
-        allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+        api_client = stubbed_api_client(GetIntoTeachingApiClient::SchoolsExperienceApi)
+        allow(api_client).to \
           receive(:get_schools_experience_sign_up).with(first.candidate_id) { first }
-        allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+        allow(api_client).to \
           receive(:get_schools_experience_sign_up).with(second.candidate_id) { second }
-        allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+        allow(api_client).to \
           receive(:get_schools_experience_sign_up).with(merged.candidate_id) { merged }
-        allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+        allow(api_client).to \
           receive(:get_schools_experience_sign_up).with(chained.candidate_id) { chained }
       end
 
@@ -127,11 +128,12 @@ describe Bookings::Gitis::ContactFetcher do
         let(:sixth) { build :api_schools_experience_sign_up_with_name, :merged, master_id: fifth.candidate_id }
 
         before do
-          allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+          api_client = stubbed_api_client(GetIntoTeachingApiClient::SchoolsExperienceApi)
+          allow(api_client).to \
             receive(:get_schools_experience_sign_up).with(fourth.candidate_id) { fourth }
-          allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+          allow(api_client).to \
             receive(:get_schools_experience_sign_up).with(fifth.candidate_id) { fifth }
-          allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+          allow(api_client).to \
             receive(:get_schools_experience_sign_up).with(sixth.candidate_id) { sixth }
         end
 
@@ -153,12 +155,13 @@ describe Bookings::Gitis::ContactFetcher do
       let(:second_candidate) { create :candidate, gitis_uuid: second.candidate_id }
 
       before do
-        allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+        api_client = stubbed_api_client(GetIntoTeachingApiClient::SchoolsExperienceApi)
+        allow(api_client).to \
           receive(:get_schools_experience_sign_ups)
             .with([chained.candidate_id, second.candidate_id]) { [chained, second] }
-        allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+        allow(api_client).to \
           receive(:get_schools_experience_sign_ups).with([merged.candidate_id]) { [merged] }
-        allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+        allow(api_client).to \
           receive(:get_schools_experience_sign_ups).with([first.candidate_id]) { [first] }
       end
 
