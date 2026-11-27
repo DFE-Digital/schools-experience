@@ -47,7 +47,7 @@ RSpec.describe Bookings::Candidate, type: :model do
       describe '.confirmed' do
         subject { described_class.confirmed.to_a }
 
-        it "onlies include confirmed" do
+        it "includes only confirmed candidates" do
           expect(subject).to eql([confirmed])
         end
       end
@@ -55,7 +55,7 @@ RSpec.describe Bookings::Candidate, type: :model do
       describe '.unconfirmed' do
         subject { described_class.unconfirmed.to_a }
 
-        it "onlies include unconfirmed" do
+        it "includes only unconfirmed candidates" do
           expect(subject).to eql([unconfirmed])
         end
       end

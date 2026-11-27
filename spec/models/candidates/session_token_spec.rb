@@ -20,7 +20,7 @@ RSpec.describe Candidates::SessionToken, type: :model do
     describe '.unconfirmed' do
       subject { described_class.unconfirmed.to_a }
 
-      it "onlies return confirmed token" do
+      it "returns only unconfirmed tokens" do
         expect(subject).to eq([unconfirmed])
       end
     end
@@ -28,7 +28,7 @@ RSpec.describe Candidates::SessionToken, type: :model do
     describe '.confirmed' do
       subject { described_class.confirmed.to_a }
 
-      it "onlies return confirmed token" do
+      it "returns only confirmed tokens" do
         expect(subject).to eq([confirmed])
       end
     end
@@ -41,7 +41,7 @@ RSpec.describe Candidates::SessionToken, type: :model do
 
     before { create(:candidate_session_token, :expired) }
 
-    it "onlies return the valid token" do
+    it "returns only valid tokens" do
       expect(subject).to eq([valid])
     end
   end
@@ -56,7 +56,7 @@ RSpec.describe Candidates::SessionToken, type: :model do
       create(:candidate_session_token, created_at: 10.days.ago)
     end
 
-    it "onlies return the valid token" do
+    it "returns only valid tokens" do
       expect(subject).to eq([valid])
     end
   end
