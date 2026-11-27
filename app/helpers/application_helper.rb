@@ -79,7 +79,7 @@ module ApplicationHelper
 
     greeting = if valid_user?(user)
                  "Welcome #{current_user_full_name user}"
-               end
+    end
 
     safe_join([greeting, logout_link].compact, " ")
   end

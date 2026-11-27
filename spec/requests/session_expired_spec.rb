@@ -2,15 +2,19 @@ require 'rails_helper'
 
 describe "Expired Session", type: :request do
   context 'when InvalidAuthenticityToken is raised' do
-    before do
-      allow_any_instance_of(Candidates::HomeController).to receive(:index) do
-        raise ActionController::InvalidAuthenticityToken
-      end
-    end
-
     subject(:perform_request) do
       get candidates_root_path
       response
+    end
+
+    before do
+      allow(Candidates::HomeController).to receive(:new).and_wrap_original do |original, *args|
+        original.call(*args).tap do |controller|
+          allow(controller).to receive(:index) do
+            raise ActionController::InvalidAuthenticityToken
+          end
+        end
+      end
     end
 
     it { is_expected.to have_http_status(:success) }

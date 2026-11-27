@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::BackgroundCheck, type: :model do
-  include_context 'Stubbed candidates school'
+  include_context 'with a stubbed candidate school'
   it_behaves_like 'a registration step'
   it_behaves_like 'a background check'
 end

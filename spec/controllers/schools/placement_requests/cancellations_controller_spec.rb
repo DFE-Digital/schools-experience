@@ -2,7 +2,7 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::PlacementRequests::CancellationsController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let :school do
     Bookings::School.find_by!(urn: urn).tap do |s|
@@ -11,7 +11,7 @@ describe Schools::PlacementRequests::CancellationsController, type: :request do
     end
   end
 
-  context '#new' do
+  describe '#new' do
     before do
       get "/schools/placement_requests/#{placement_request.id}/cancellation/new"
     end
@@ -43,7 +43,7 @@ describe Schools::PlacementRequests::CancellationsController, type: :request do
     end
   end
 
-  context '#create' do
+  describe '#create' do
     let :cancellation_params do
       { bookings_placement_request_cancellation: cancellation.attributes.merge(other: true) }
     end
@@ -73,7 +73,7 @@ describe Schools::PlacementRequests::CancellationsController, type: :request do
         FactoryBot.create :placement_request, school: school
       end
 
-      context 'failure' do
+      context 'when it fails' do
         let :cancellation do
           placement_request.build_school_cancellation
         end
@@ -87,7 +87,7 @@ describe Schools::PlacementRequests::CancellationsController, type: :request do
         end
       end
 
-      context 'success' do
+      context 'when it succeeds' do
         let :cancellation do
           FactoryBot.build :cancellation,
             fully_booked: true,
@@ -108,7 +108,7 @@ describe Schools::PlacementRequests::CancellationsController, type: :request do
     end
   end
 
-  context '#edit' do
+  describe '#edit' do
     before do
       get "/schools/placement_requests/#{placement_request.id}/cancellation/edit"
     end
@@ -141,7 +141,7 @@ describe Schools::PlacementRequests::CancellationsController, type: :request do
     end
   end
 
-  context '#update' do
+  describe '#update' do
     before do
       patch "/schools/placement_requests/#{placement_request.id}/cancellation",
         params: cancellation_params
@@ -181,7 +181,7 @@ describe Schools::PlacementRequests::CancellationsController, type: :request do
           :placement_request, :with_school_cancellation, school: school
       end
 
-      context 'failure' do
+      context 'when it fails' do
         let :cancellation do
           FactoryBot.build :cancellation,
             reason: "",
@@ -199,7 +199,7 @@ describe Schools::PlacementRequests::CancellationsController, type: :request do
         end
       end
 
-      context 'success' do
+      context 'when it succeeds' do
         let :cancellation do
           FactoryBot.build :cancellation,
             reason: "school's out for ever",

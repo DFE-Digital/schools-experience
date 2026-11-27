@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Candidates::Registrations::SendEmailConfirmationJob, type: :job do
   include ActiveJob::TestHelper
-  include_context 'Stubbed candidates school'
+  include_context 'with a stubbed candidate school'
 
   let(:registration_session) { FactoryBot.build :registration_session }
   let(:uuid) { registration_session.uuid }
@@ -21,7 +21,7 @@ describe Candidates::Registrations::SendEmailConfirmationJob, type: :job do
     Candidates::Registrations::RegistrationStore.instance.delete! uuid
   end
 
-  context '#perform' do
+  describe '#perform' do
     before do
       perform_enqueued_jobs do
         described_class.perform_later uuid, host

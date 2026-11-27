@@ -6,9 +6,9 @@ describe FeatureFlagsController, type: :request do
   before { allow(Feature).to receive(:config).and_return(mock_config) }
 
   describe '#index' do
-    before { get feature_flags_path }
-
     subject { response.body }
+
+    before { get feature_flags_path }
 
     it "shows a table with the correct markers" do
       assert_response :success

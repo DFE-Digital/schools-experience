@@ -2,7 +2,7 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::WithdrawnRequestsController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let :school do
     Bookings::School.find_by!(urn: urn).tap do |school|
@@ -23,6 +23,7 @@ describe Schools::WithdrawnRequestsController, type: :request do
 
   describe '#show' do
     let(:withdrawn) { create :placement_request, :cancelled, school: school }
+
     before { get schools_withdrawn_request_path(withdrawn) }
 
     it { expect(response).to have_http_status(:success) }

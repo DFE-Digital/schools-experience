@@ -3,8 +3,9 @@ require 'rails_helper'
 describe Bookings::PlacementRequest, type: :model do
   include ActiveSupport::Testing::TimeHelpers
 
-  include_context 'Stubbed candidates school'
-  subject { described_class.new bookings_school_id: school.id }
+  subject(:placement_request) { described_class.new bookings_school_id: school.id }
+
+  include_context 'with a stubbed candidate school'
 
   it { is_expected.to have_db_column(:objectives).of_type(:text).with_options null: false }
   it { is_expected.to have_db_column(:urn).of_type(:integer).with_options null: false }
@@ -35,22 +36,26 @@ describe Bookings::PlacementRequest, type: :model do
 
     context 'with legacy record' do
       subject { create(:placement_request) }
-      before { subject.update_columns(candidate_id: nil) }
-      before { subject.reload }
+
+      before do
+        subject.update_columns(candidate_id: nil)
+        subject.reload
+      end
+
       it { is_expected.to be_valid }
     end
   end
 
-  context 'relationships' do
+  context 'with relationships' do
     it do
-      is_expected.to \
+      expect(subject).to \
         have_one(:candidate_cancellation)
           .dependent(:destroy)
           .class_name('Bookings::PlacementRequest::Cancellation')
     end
 
     it do
-      is_expected.to \
+      expect(subject).to \
         have_one(:school_cancellation)
           .dependent(:destroy)
           .class_name('Bookings::PlacementRequest::Cancellation')
@@ -61,7 +66,7 @@ describe Bookings::PlacementRequest, type: :model do
     it { is_expected.to belong_to(:placement_date).class_name('Bookings::PlacementDate').with_foreign_key(:bookings_placement_date_id).optional }
 
     it do
-      is_expected.to belong_to(:candidate).class_name('Bookings::Candidate')\
+      expect(subject).to belong_to(:candidate).class_name('Bookings::Candidate')\
         .with_foreign_key(:candidate_id).without_validating_presence
     end
   end
@@ -70,7 +75,7 @@ describe Bookings::PlacementRequest, type: :model do
 
   it_behaves_like 'a background check'
 
-  context 'scopes' do
+  context 'when scopes' do
     let :school do
       FactoryBot.create :bookings_school, :with_subjects
     end
@@ -105,87 +110,76 @@ describe Bookings::PlacementRequest, type: :model do
         .bookings_placement_request
     end
 
-    context '.unprocessed' do
+    describe '.unprocessed' do
       subject { described_class.unprocessed }
+
       it do
-        is_expected.to match_array [
-          placement_request_open,
-          placement_request_cancelled_by_school_but_not_sent,
-          booked_but_not_accepted_placement_request
-        ]
+        expect(subject).to contain_exactly(placement_request_open, placement_request_cancelled_by_school_but_not_sent, booked_but_not_accepted_placement_request)
       end
     end
 
-    context '.unbooked' do
+    describe '.unbooked' do
       subject { described_class.unbooked }
+
       it do
-        is_expected.to match_array [
-          placement_request_open,
-          placement_request_cancelled_by_school_but_not_sent,
-          placement_request_closed_by_candidate,
-          placement_request_closed_by_school,
-          booked_but_not_accepted_placement_request
-        ]
+        expect(subject).to contain_exactly(placement_request_open, placement_request_cancelled_by_school_but_not_sent, placement_request_closed_by_candidate, placement_request_closed_by_school, booked_but_not_accepted_placement_request)
       end
     end
 
-    context '.cancelled' do
+    describe '.cancelled' do
       subject { described_class.cancelled }
+
       it do
-        is_expected.to match_array [
-          placement_request_closed_by_candidate,
-          placement_request_closed_by_school,
-          booked_then_cancelled_by_candidate
-        ]
+        expect(subject).to contain_exactly(placement_request_closed_by_candidate, placement_request_closed_by_school, booked_then_cancelled_by_candidate)
       end
     end
 
-    context '.not_cancelled' do
+    describe '.not_cancelled' do
       subject { described_class.not_cancelled }
+
       it do
-        is_expected.to match_array [
-          placement_request_open,
-          placement_request_cancelled_by_school_but_not_sent,
-          booked_placement_request,
-          booked_but_not_accepted_placement_request
-        ]
+        expect(subject).to contain_exactly(placement_request_open, placement_request_cancelled_by_school_but_not_sent, booked_placement_request, booked_but_not_accepted_placement_request)
       end
     end
 
-    context '.withdrawn' do
+    describe '.withdrawn' do
+      subject { described_class.withdrawn }
+
       let!(:unviewed) do
         travel_to 2.minutes.from_now do
           create :placement_request, :cancelled, school: school
         end
       end
-      subject { described_class.withdrawn }
+
       it { is_expected.to eq [unviewed, placement_request_closed_by_candidate] }
     end
 
-    context '.withdrawn_but_unviewed' do
-      let!(:withdrawn_and_viewed) do
+    describe '.withdrawn_but_unviewed' do
+      subject { described_class.withdrawn_but_unviewed }
+
+      before do
         create(:placement_request, :cancelled, school: school).tap do |pr|
           pr.candidate_cancellation.viewed!
         end
       end
 
-      subject { described_class.withdrawn_but_unviewed }
-
-      it { is_expected.to match_array [placement_request_closed_by_candidate] }
+      it { is_expected.to contain_exactly(placement_request_closed_by_candidate) }
     end
 
-    context '.rejected' do
+    describe '.rejected' do
+      subject { described_class.rejected }
+
       let!(:unviewed) do
         travel_to 2.minutes.from_now do
           create :placement_request, :cancelled_by_school, school: school
         end
       end
-      subject { described_class.rejected }
+
       it { is_expected.to eq [unviewed, placement_request_closed_by_school] }
     end
   end
 
-  context 'complex scopes' do
+  context 'when complex scopes' do
     let :school do
       create :bookings_school, :with_subjects
     end
@@ -215,7 +209,7 @@ describe Bookings::PlacementRequest, type: :model do
       create :placement_request, school: create(:bookings_school, :with_subjects)
     end
 
-    context '.requiring_attention' do
+    describe '.requiring_attention' do
       subject { school.placement_requests.requiring_attention }
 
       it { is_expected.to     include request_pending_decision }
@@ -227,10 +221,10 @@ describe Bookings::PlacementRequest, type: :model do
     end
   end
 
-  context '.create_from_registration_session' do
+  describe '.create_from_registration_session' do
     let(:candidate) { create(:candidate) }
 
-    context 'invalid session' do
+    context 'when invalid session' do
       let :invalid_session do
         Candidates::Registrations::RegistrationSession.new \
           "candidates_registrations_background_check" => {},
@@ -250,20 +244,20 @@ describe Bookings::PlacementRequest, type: :model do
       end
     end
 
-    context 'valid session' do
-      include_context 'Stubbed candidates school'
-
-      let :registration_session do
-        FactoryBot.build :registration_session
-      end
-
+    context 'when valid session' do
       subject do
         candidate.placement_requests.create_from_registration_session! \
           registration_session
       end
 
+      include_context 'with a stubbed candidate school'
+
+      let :registration_session do
+        FactoryBot.build :registration_session
+      end
+
       it 'creates the placement request' do
-        expect { subject }.to change { described_class.count }.by 1
+        expect { subject }.to change(described_class, :count).by 1
       end
 
       it 'saves the experience type' do
@@ -276,7 +270,7 @@ describe Bookings::PlacementRequest, type: :model do
         create :candidate
       end
 
-      context 'from fixed to flex' do
+      context 'when from fixed to flex' do
         let! :school do
           create :bookings_school,
             :with_placement_dates,
@@ -300,7 +294,7 @@ describe Bookings::PlacementRequest, type: :model do
         end
       end
 
-      context 'from flex to fixed' do
+      context 'when from flex to fixed' do
         let! :school do
           create :bookings_school, availability_preference_fixed: false
         end
@@ -323,23 +317,23 @@ describe Bookings::PlacementRequest, type: :model do
       end
     end
 
-    context 'subject_specific_date' do
+    context 'when subject_specific_date' do
       let! :candidate do
         create :candidate
       end
 
-      let! :bookings_subject_1 do
+      let! :first_bookings_subject do
         create :bookings_subject
       end
 
-      let! :bookings_subject_2 do
+      let! :second_bookings_subject do
         create :bookings_subject
       end
 
       let! :school do
         create :bookings_school,
           availability_preference_fixed: true,
-          subjects: [bookings_subject_1, bookings_subject_2]
+          subjects: [first_bookings_subject, second_bookings_subject]
       end
 
       let! :placement_preference do
@@ -356,6 +350,12 @@ describe Bookings::PlacementRequest, type: :model do
                                     subject_second_choice: school.subjects.second.name
       end
 
+      let :subject_and_date_information do
+        build :subject_and_date_information,
+          bookings_placement_date_id: placement_date.id,
+          bookings_subject_id: first_bookings_subject.id
+      end
+
       let! :registration_session do
         build(:registration_session, urn: school.urn).tap do |rs|
           # Overwrite the default factory steps
@@ -367,22 +367,16 @@ describe Bookings::PlacementRequest, type: :model do
         end
       end
 
-      context 'the school makes the applied for subject unavailable' do
+      context 'when the school makes the applied for subject unavailable' do
         let! :placement_date do
           create :bookings_placement_date,
             bookings_school: school,
             subject_specific: true,
-            subjects: [bookings_subject_1]
-        end
-
-        let! :subject_and_date_information do
-          build :subject_and_date_information,
-            bookings_placement_date_id: placement_date.id,
-            bookings_subject_id: placement_date.placement_date_subjects.first.bookings_subject.id
+            subjects: [first_bookings_subject]
         end
 
         before do
-          placement_date.update! subjects: [bookings_subject_2]
+          placement_date.update! subjects: [second_bookings_subject]
         end
 
         it 'creates the placement_request' do
@@ -394,21 +388,16 @@ describe Bookings::PlacementRequest, type: :model do
         end
       end
 
-      context 'the school makes the applied for date subject_specific' do
+      context 'when the school makes the applied for date subject_specific' do
         let! :placement_date do
           create :bookings_placement_date,
             bookings_school: school,
             subject_specific: false
         end
 
-        let! :subject_and_date_information do
-          build :subject_and_date_information,
-            bookings_placement_date_id: placement_date.id
-        end
-
         before do
           placement_date.update! \
-            subject_specific: true, subjects: [bookings_subject_1]
+            subject_specific: true, subjects: [first_bookings_subject]
         end
 
         it 'creates the placement_request' do
@@ -422,7 +411,7 @@ describe Bookings::PlacementRequest, type: :model do
     end
   end
 
-  context 'attributes' do
+  context 'with attributes' do
     it { is_expected.to respond_to :gitis_contact }
     it { is_expected.to respond_to :urn }
     it { is_expected.to respond_to :degree_stage }
@@ -436,20 +425,18 @@ describe Bookings::PlacementRequest, type: :model do
     it { is_expected.to respond_to :bookings_placement_date_id }
   end
 
-  context 'validations' do
+  context 'when validating' do
     it { is_expected.to validate_presence_of :urn }
 
     it { is_expected.to validate_presence_of :degree_stage }
 
     it do
-      is_expected.to validate_inclusion_of(:degree_stage).in_array \
+      expect(subject).to validate_inclusion_of(:degree_stage).in_array \
         described_class::OPTIONS_CONFIG.fetch 'DEGREE_STAGES'
     end
 
     context 'when degree stage is "Other"' do
-      before do
-        allow(subject).to receive(:degree_stage) { "Other" }
-      end
+      subject { described_class.new(bookings_school_id: school.id, degree_stage: "Other") }
 
       it { is_expected.to validate_presence_of :degree_stage_explaination }
     end
@@ -461,48 +448,44 @@ describe Bookings::PlacementRequest, type: :model do
     it { is_expected.to validate_presence_of :degree_subject }
 
     context 'when degree stage is "I don\'t have a degree and am not studying for one"' do
-      before do
-        allow(subject).to receive(:degree_stage) { "I don't have a degree and am not studying for one" }
-      end
+      subject { described_class.new(bookings_school_id: school.id, degree_stage: "I don't have a degree and am not studying for one") }
 
       it do
-        is_expected.to validate_absence_of(:degree_subject)
+        expect(subject).to validate_absence_of(:degree_subject)
       end
     end
 
     context 'when degree stage is not "I don\'t have a degree and am not studying for one"' do
-      before do
-        allow(subject).to receive(:degree_stage) { 'Final year' }
-      end
+      subject { described_class.new(bookings_school_id: school.id, degree_stage: 'Final year') }
 
       it do
-        is_expected.to validate_presence_of(:degree_subject)
+        expect(subject).to validate_presence_of(:degree_subject)
       end
     end
 
     it { is_expected.to validate_presence_of :teaching_stage }
 
     it do
-      is_expected.to validate_inclusion_of(:teaching_stage).in_array \
+      expect(subject).to validate_inclusion_of(:teaching_stage).in_array \
         described_class::OPTIONS_CONFIG.fetch('TEACHING_STAGES')
     end
 
     it { is_expected.to validate_presence_of :subject_first_choice }
 
     it do
-      is_expected.to validate_inclusion_of(:subject_first_choice).in_array \
+      expect(subject).to validate_inclusion_of(:subject_first_choice).in_array \
         allowed_subject_choices
     end
 
     it { is_expected.to validate_presence_of :subject_second_choice }
 
     it do
-      is_expected.to validate_inclusion_of(:subject_second_choice).in_array \
+      expect(subject).to validate_inclusion_of(:subject_second_choice).in_array \
         second_subject_choices
     end
   end
 
-  context '#available_subject_choices' do
+  describe '#available_subject_choices' do
     context 'when the school has subjects' do
       before do
         school.subjects << FactoryBot.build_list(:bookings_subject, 8)
@@ -522,7 +505,7 @@ describe Bookings::PlacementRequest, type: :model do
     end
   end
 
-  context '#second_subject_choices' do
+  describe '#second_subject_choices' do
     it "returns the list of subjects from it's school" do
       choices = subject.second_subject_choices
       no_choice = choices.shift
@@ -534,7 +517,7 @@ describe Bookings::PlacementRequest, type: :model do
     end
   end
 
-  context '#requires_subject_for_degree_stage?' do
+  describe '#requires_subject_for_degree_stage?' do
     let :result do
       described_class.new.requires_subject_for_degree_stage? stage
     end
@@ -560,23 +543,18 @@ describe Bookings::PlacementRequest, type: :model do
     end
   end
 
-  let! :today do
-    Time.zone.today
-  end
-
-  context 'validations for placement preferences' do
-    before :each do
+  context 'when validations for placement preferences' do
+    before do
       placement_request.validate
     end
 
     context 'when the school mandates fixed dates' do
       before do
         allow(placement_request).to receive(:school_offers_fixed_dates?).and_return(true)
+        placement_request.validate
       end
 
       let(:placement_request) { described_class.new(bookings_school_id: school.id) }
-
-      before(:each) { placement_request.validate }
 
       it 'adds an error to bookings_placement_date_id' do
         expect(placement_request.errors[:bookings_placement_date_id]).to include \
@@ -608,8 +586,8 @@ describe Bookings::PlacementRequest, type: :model do
     end
   end
 
-  context 'validations for availability preference' do
-    before :each do
+  context 'when validations for availability preference' do
+    before do
       placement_request.validate
     end
 
@@ -620,6 +598,7 @@ describe Bookings::PlacementRequest, type: :model do
 
     context 'when the school allows flexible dates' do
       let(:placement_request) { described_class.new(bookings_school_id: school.id) }
+
       context 'when availability is not present' do
         it 'adds an error to availability' do
           expect(placement_request.errors[:availability]).to eq \
@@ -641,7 +620,7 @@ describe Bookings::PlacementRequest, type: :model do
     end
   end
 
-  context '#closed?' do
+  describe '#closed?' do
     context 'when cancelled' do
       context 'when cancelled by candidate' do
         subject { FactoryBot.create :placement_request, :cancelled }
@@ -669,7 +648,7 @@ describe Bookings::PlacementRequest, type: :model do
     end
   end
 
-  context 'build_candidate_cancellation' do
+  context 'when build_candidate_cancellation' do
     let :cancellation do
       described_class.new.build_candidate_cancellation
     end
@@ -679,7 +658,7 @@ describe Bookings::PlacementRequest, type: :model do
     end
   end
 
-  context 'build_school_cancellation' do
+  context 'when build_school_cancellation' do
     let :cancellation do
       described_class.new.build_school_cancellation
     end
@@ -689,7 +668,7 @@ describe Bookings::PlacementRequest, type: :model do
     end
   end
 
-  context '#cancellation' do
+  describe '#cancellation' do
     context 'when cancelled by candidate' do
       subject { create(:placement_request, :cancelled) }
 
@@ -717,8 +696,8 @@ describe Bookings::PlacementRequest, type: :model do
     end
   end
 
-  context '#status' do
-    context 'default' do
+  describe '#status' do
+    context 'with default' do
       subject { create(:placement_request).status }
 
       it { is_expected.to eq 'New' }
@@ -774,6 +753,7 @@ describe Bookings::PlacementRequest, type: :model do
 
     context 'when candidate has attended previous school experiences' do
       subject { create(:placement_request, :with_attended_booking).status }
+
       it { is_expected.to eq 'Flagged' }
     end
 
@@ -814,7 +794,7 @@ describe Bookings::PlacementRequest, type: :model do
     end
   end
 
-  context '#dbs' do
+  describe '#dbs' do
     context 'when has_dbs_check' do
       subject { FactoryBot.create :placement_request, has_dbs_check: true }
 
@@ -840,18 +820,20 @@ describe Bookings::PlacementRequest, type: :model do
     end
   end
 
-  context '#under_consideration?' do
+  describe '#under_consideration?' do
     context 'when under_consideration_at has a date' do
+      subject { under_consideration_placement_request.under_consideration_at? }
+
       let(:under_consideration_placement_request) { create(:placement_request, :under_consideration) }
 
-      subject { under_consideration_placement_request.under_consideration_at? }
       it { is_expected.to be(true) }
     end
 
     context 'when under_consideration_at is null' do
+      subject { placement_request.under_consideration_at? }
+
       let(:placement_request) { create(:placement_request) }
 
-      subject { placement_request.under_consideration_at? }
       it { is_expected.to be(false) }
     end
   end
@@ -861,16 +843,19 @@ describe Bookings::PlacementRequest, type: :model do
 
     context 'when #viewed_at has not already been set' do
       before { subject.viewed! }
+
       specify 'should set #viewed_at to now' do
         expect(subject.viewed_at).to be_within(0.1).of(Time.zone.now)
       end
     end
 
     context 'when #viewed_at has already been set' do
-      let(:ts) { 3.weeks.ago }
       subject { FactoryBot.create(:placement_request, viewed_at: ts) }
 
+      let(:ts) { 3.weeks.ago }
+
       before { subject.viewed! }
+
       specify 'should not overwrite #viewed_at' do
         expect(subject.viewed_at).to eql(ts)
       end
@@ -879,36 +864,37 @@ describe Bookings::PlacementRequest, type: :model do
 
   describe '#requested_on' do
     subject { create :placement_request }
+
     it { is_expected.to have_attributes(requested_on: subject.created_at.to_date) }
   end
 
   describe '#requested_subject' do
-    let :subject_1 do
+    subject { placement_request.requested_subject }
+
+    let :first_subject do
       create :bookings_subject
     end
 
-    let :subject_2 do
+    let :second_subject do
       create :bookings_subject
     end
 
     let :school do
-      create :bookings_school, subjects: [subject_1, subject_2]
+      create :bookings_school, subjects: [first_subject, second_subject]
     end
 
     let :placement_request do
       create :placement_request, school: school
     end
 
-    subject { placement_request.requested_subject }
-
-    context 'when for a non subject specific date' do
-      it { is_expected.to eq subject_1 }
+    context 'when the date is not subject-specific' do
+      it { is_expected.to eq first_subject }
     end
 
-    context 'when for a subject specific date' do
-      before { placement_request.subject = subject_2 }
+    context 'when the date is subject-specific' do
+      before { placement_request.subject = second_subject }
 
-      it { is_expected.to eq subject_2 }
+      it { is_expected.to eq second_subject }
     end
   end
 
@@ -917,37 +903,44 @@ describe Bookings::PlacementRequest, type: :model do
 
     context 'with fixed date' do
       let(:pr) { build :placement_request, :with_a_fixed_date }
+
       it { is_expected.to eql pr.placement_date.date }
     end
 
     context 'with flexible date' do
       let(:pr) { build :placement_request }
+
       it { is_expected.to be_nil }
     end
   end
 
   describe '#fixed_date_is_bookable?' do
-    let(:pr) { build :placement_request, :with_a_fixed_date }
-    let(:date) { pr.placement_date }
     subject { pr.fixed_date_is_bookable? }
 
-    context 'for today' do
+    let(:pr) { build :placement_request, :with_a_fixed_date }
+    let(:date) { pr.placement_date }
+
+    context 'when the date is today' do
       before { date.date = Time.zone.today }
+
       it { is_expected.to be false }
     end
 
-    context 'for yesterday' do
+    context 'when the date is yesterday' do
       before { date.date = Time.zone.yesterday }
+
       it { is_expected.to be false }
     end
 
-    context 'for tomorrow' do
+    context 'when the date is tomorrow' do
       before { date.date = Time.zone.tomorrow }
+
       it { is_expected.to be true }
     end
 
     context 'with flexible' do
       let(:pr) { build(:placement_request) }
+
       it { is_expected.to be false }
     end
   end
@@ -987,8 +980,9 @@ describe Bookings::PlacementRequest, type: :model do
   describe '#unclear_experience_type?' do
     context 'when it is a flex date' do
       context 'when experience is virtual' do
-        let(:school) { build :bookings_school, :flex_virtual }
         subject { build :placement_request, :virtual, school: school }
+
+        let(:school) { build :bookings_school, :flex_virtual }
 
         it 'returns false' do
           expect(subject.unclear_experience_type?).to be false
@@ -996,8 +990,9 @@ describe Bookings::PlacementRequest, type: :model do
       end
 
       context 'when experience is in school' do
-        let(:school) { build :bookings_school, :flex_inschool }
         subject { build :placement_request, :inschool, school: school }
+
+        let(:school) { build :bookings_school, :flex_inschool }
 
         it 'returns false' do
           expect(subject.unclear_experience_type?).to be false
@@ -1005,8 +1000,9 @@ describe Bookings::PlacementRequest, type: :model do
       end
 
       context 'when the experience is both' do
-        let(:school) { build :bookings_school, :flex_both }
         subject { build :placement_request, school: school }
+
+        let(:school) { build :bookings_school, :flex_both }
 
         it 'returns true' do
           expect(subject.unclear_experience_type?).to be true
@@ -1014,8 +1010,9 @@ describe Bookings::PlacementRequest, type: :model do
       end
 
       context 'when the school and placement request experience types are different' do
-        let(:school) { build :bookings_school, :flex_both }
         subject { build :placement_request, :virtual, school: school }
+
+        let(:school) { build :bookings_school, :flex_both }
 
         it 'returns true' do
           expect(subject.unclear_experience_type?).to be true

@@ -12,11 +12,13 @@ describe Candidates::Registrations::GitisRegistrationSession do
 
     context 'with overridden data' do
       let(:registration) { described_class.new(data_with_urn, contact) }
+
       it { is_expected.to include(data) }
     end
 
     context 'with only gitis data' do
       let(:registration) { described_class.new({}, contact) }
+
       it { is_expected.to include(gitis_data) }
     end
   end
@@ -26,13 +28,14 @@ describe Candidates::Registrations::GitisRegistrationSession do
 
     context 'with overridden data' do
       let(:registration) { described_class.new(data_with_urn, contact) }
+
       it { is_expected.to have_attributes(data) }
     end
 
     context 'with only gitis data' do
       let(:registration) { described_class.new({}, contact) }
 
-      it "will raise a missing step error" do
+      it "raises a missing step error" do
         expect { registration.public_send(model_name.to_sym) }.to \
           raise_exception Candidates::Registrations::RegistrationSession::StepNotFound
       end
@@ -53,7 +56,7 @@ describe Candidates::Registrations::GitisRegistrationSession do
     end
   end
 
-  context 'Background Check' do
+  context 'when background Check' do
     let(:model) { Candidates::Registrations::BackgroundCheck }
     let(:data) { { 'has_dbs_check' => false } }
     let(:gitis_data) { { 'has_dbs_check' => nil } }
@@ -67,8 +70,8 @@ describe Candidates::Registrations::GitisRegistrationSession do
     end
   end
 
-  context 'Teaching Preference' do
-    include_context "api teaching subjects"
+  context 'when teaching Preference' do
+    include_context "when the API returns teaching subjects"
 
     let(:model) { Candidates::Registrations::TeachingPreference }
     let(:data) { { 'subject_first_choice' => 'Biology', 'subject_second_choice' => 'Physics' } }

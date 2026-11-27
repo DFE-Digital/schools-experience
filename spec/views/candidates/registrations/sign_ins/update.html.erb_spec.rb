@@ -10,7 +10,7 @@ RSpec.describe "candidates/registrations/sign_ins/update", type: :view do
     render
   end
 
-  it "will notify the user their message has been sent" do
+  it "notifies the user their message has been sent" do
     expect(rendered).to have_css('h1', text: /Verify/i)
     expect(rendered).to \
       have_css("form[action=\"/my/resend/link\"] button", text: "Send a new link")

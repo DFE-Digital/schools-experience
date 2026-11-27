@@ -32,12 +32,14 @@ describe "Rate limiting" do
 
   describe "registrations endpoints rate limiting" do
     before do
-      allow_any_instance_of(Candidates::Registrations::ConfirmationEmailsController).to \
-        receive(:current_registration) { registration_session }
+      allow(Candidates::Registrations::ConfirmationEmailsController).to receive(:new).and_wrap_original do |original, *args|
+        original.call(*args).tap do |controller|
+          allow(controller).to receive(:current_registration).and_return(registration_session)
+        end
+      end
       allow(Candidates::Registrations::SendEmailConfirmationJob).to \
         receive(:perform_later)
-      allow_any_instance_of(Candidates::Registrations::RegistrationStore).to \
-        receive(:store!)
+      allow(Candidates::Registrations::RegistrationStore.instance).to receive(:store!)
     end
 
     let :registration_session do

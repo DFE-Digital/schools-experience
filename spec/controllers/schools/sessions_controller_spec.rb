@@ -2,8 +2,8 @@ require 'rails_helper'
 require_relative 'session_context'
 
 describe Schools::SessionsController, type: :request do
-  shared_context 'oidc callback' do
-    include_context "session double"
+  shared_context 'when handling an OIDC callback' do
+    include_context "with a session double"
 
     let(:code) { 'OTA4MTU0ZTgtMjBhZC00YmNmLThmMmQtOGZiZDhmNTYxMTA2vLY8wh-MpR-WR3vsn4C2J_oBkN-KGjD9-XVcDFS8UyADwt5DrIrYe0Gjgsj2gpvAt5L2cka5n8ZZmiojr6zgWg' }
     let(:session_state) { '652b5afc63d7c4875c42de4231f66e4940226f840b2a7ea02441544751ea0a2a.h3bd7bc2438a84dc' }
@@ -68,14 +68,14 @@ describe Schools::SessionsController, type: :request do
     let(:callback) { "/auth/callback?code=#{code}&state=#{state}&session_state=#{session_state}" }
   end
 
-  context '#create' do
+  describe '#create' do
     let(:return_url) { '/schools/dashboard' }
     let(:state) { 'd18ce84b-423e-4696-bee4-b74caa47163e' }
 
     context 'when the user is not yet signed in' do
-      include_context 'oidc callback'
+      include_context 'when handling an OIDC callback'
 
-      subject! { get callback }
+      subject! { get callback } # rubocop:disable RSpec/LeadingSubject -- Request must run after OIDC setup.
 
       specify 'should redirect to the return url' do
         expect(response.body).to redirect_to(return_url)
@@ -93,24 +93,26 @@ describe Schools::SessionsController, type: :request do
         expect(session[:current_user]).to be_a(OpenIDConnect::ResponseObject::UserInfo)
       end
 
-      context 'errors' do
-        context 'Errors returned by DfE Sign-in' do
+      context 'when errors' do
+        before { allow(Rails.logger).to receive(:error) }
+
+        context 'when errors returned by DfE Sign-in' do
           let(:error) { 'baderror' }
           let(:callback) { "/auth/callback?error=#{error}" }
 
-          after { get callback }
+          before { get callback }
 
           specify 'should raise an AuthFailed error' do
-            expect(response.status).to eql 302
+            expect(response.status).to be 302
             expect(response.redirect_url).to end_with('schools/errors/auth_failed')
           end
 
           specify 'should write a message to the log' do
-            expect(Rails.logger).to receive(:error).with(/DfE Sign-in error response/)
+            expect(Rails.logger).to have_received(:error).with(/DfE Sign-in error response/)
           end
         end
 
-        context 'StateMismatchError' do
+        context 'when stateMismatchError' do
           {
             'aaaaaaaa-bbbb-1111-2222-333333333333' => 'not-matching',
             '' => 'empty',
@@ -118,30 +120,32 @@ describe Schools::SessionsController, type: :request do
           }.each do |bad_state, description|
             context description do
               let(:callback) { "/auth/callback?code=#{code}&state=#{bad_state}&session_state=#{session_state}" }
-              after { get callback }
+
+              before { get callback }
 
               specify 'should raise StateMismatchError' do
-                expect(Rails.logger).to receive(:error).with(/doesn't match session state/)
+                expect(Rails.logger).to have_received(:error).with(/doesn't match session state/)
               end
 
               specify 'should redirect to an error page' do
-                expect(response.status).to eql 302
+                expect(response.status).to be 302
                 expect(response.redirect_url).to end_with('schools/errors/auth_failed')
               end
             end
           end
         end
 
-        context 'AuthFailedError' do
+        context 'when authFailedError' do
           let(:code) { nil }
-          after { get callback }
+
+          before { get callback }
 
           specify 'should raise AuthFailedError' do
-            expect(Rails.logger).to receive(:error).with(/Login failed/)
+            expect(Rails.logger).to have_received(:error).with(/Login failed/)
           end
 
           specify 'should redirect to an error page' do
-            expect(response.status).to eql 302
+            expect(response.status).to be 302
             expect(response.redirect_url).to end_with('schools/errors/auth_failed')
           end
         end
@@ -149,14 +153,15 @@ describe Schools::SessionsController, type: :request do
     end
 
     describe 'role checking' do
-      include_context 'oidc callback'
+      include_context 'when handling an OIDC callback'
+
+      let(:signin_role_check_response) { false }
+
       before do
-        allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
-        allow(Schools::DFESignInAPI::Client).to receive(:role_check_enabled?).and_return(true)
-        allow_any_instance_of(Schools::DFESignInAPI::Roles).to receive(:has_school_experience_role?).and_return(false)
+        allow(Schools::DFESignInAPI::Client).to receive_messages(enabled?: true, role_check_enabled?: true)
       end
 
-      subject! { get callback }
+      subject! { get callback } # rubocop:disable RSpec/LeadingSubject -- Request must run after OIDC and role setup.
 
       specify 'should redirect to the insufficient privileges error page' do
         expect(subject).to redirect_to(schools_errors_insufficient_privileges_path)
@@ -168,7 +173,9 @@ describe Schools::SessionsController, type: :request do
     end
 
     context 'when the user is already logged in' do
-      include_context 'oidc callback'
+      subject { get auth_callback_path }
+
+      include_context 'when handling an OIDC callback'
 
       before do
         session_hash[:return_url] = return_url
@@ -176,22 +183,20 @@ describe Schools::SessionsController, type: :request do
         session_hash[:current_user] = OpenIDConnect::ResponseObject::UserInfo.new(sub: "abc1243", name: 'Milhouse')
       end
 
-      subject { get auth_callback_path }
-
       specify 'should redirect to the dashboard' do
         expect(subject).to redirect_to(schools_dashboard_path)
       end
     end
 
     context 'when the session has timed out' do
+      subject { get expired_auth_callback_path }
+
       let(:message) { 'sessionexpired' }
       let(:expired_auth_callback_path) { "/auth/callback?error=#{message}" }
 
       before do
         allow(Rails.logger).to receive(:warn).and_return(true)
       end
-
-      subject { get expired_auth_callback_path }
 
       specify 'should log that the session has expired' do
         subject
@@ -204,7 +209,9 @@ describe Schools::SessionsController, type: :request do
     end
 
     context 'when the saved application session state is missing' do
-      include_context 'oidc callback'
+      subject(:call_callback) { get callback }
+
+      include_context 'when handling an OIDC callback'
 
       let(:return_url) { '/schools/dashboard' }
       let(:callback_state) { 'd18ce84b-423e-4696-bee4-b74caa47163e' }
@@ -216,8 +223,6 @@ describe Schools::SessionsController, type: :request do
         allow(Rails.logger).to receive(:warn).and_call_original
         allow(Rails.logger).to receive(:error).and_call_original
       end
-
-      subject(:call_callback) { get callback }
 
       shared_examples 'a recovery that discards the callback' do
         specify 'redirects to the dashboard so sign-in restarts' do
@@ -232,8 +237,9 @@ describe Schools::SessionsController, type: :request do
         end
 
         specify 'does not capture an exception in Sentry' do
-          expect(Sentry).not_to receive(:capture_exception)
+          allow(Sentry).to receive(:capture_exception)
           call_callback
+          expect(Sentry).not_to have_received(:capture_exception)
         end
 
         specify 'does not exchange the code or fetch userinfo' do
@@ -304,7 +310,9 @@ describe Schools::SessionsController, type: :request do
     end
 
     context 'when the saved application session state is present' do
-      include_context 'oidc callback'
+      subject(:call_callback) { get callback }
+
+      include_context 'when handling an OIDC callback'
 
       let(:return_url) { '/schools/dashboard' }
       let(:saved_state) { 'd18ce84b-423e-4696-bee4-b74caa47163e' }
@@ -314,8 +322,6 @@ describe Schools::SessionsController, type: :request do
         session_hash[:state] = saved_state
         allow(Rails.logger).to receive(:error).and_call_original
       end
-
-      subject(:call_callback) { get callback }
 
       {
         'missing' => nil,
@@ -331,8 +337,9 @@ describe Schools::SessionsController, type: :request do
           end
 
           specify 'captures a StateMismatchError in Sentry' do
-            expect(Sentry).to receive(:capture_exception).with(an_instance_of(Schools::StateMismatchError))
+            allow(Sentry).to receive(:capture_exception)
             call_callback
+            expect(Sentry).to have_received(:capture_exception).with(an_instance_of(Schools::StateMismatchError))
           end
 
           specify 'does not exchange the code' do
@@ -352,21 +359,20 @@ describe Schools::SessionsController, type: :request do
   end
 
   describe '#logout' do
-    include_context "logged in DfE user"
+    include_context "when a DfE user is logged in"
 
     context 'when a session exists and there is an id_token' do
+      subject { get(logout_schools_session_path) }
+
       let(:oidc_host) { 'some-oidc-host' }
       let(:id_token) { 'abcdefg123456' }
 
-      before { get(root_path) }
-      subject { get(logout_schools_session_path) }
-
       before do
+        get(root_path)
         allow(OpenIDConnect::Client).to receive(:new)
-          .and_return(OpenStruct.new(host: oidc_host))
+                  .and_return(OpenStruct.new(host: oidc_host))
+        session[:id_token] = id_token
       end
-
-      before { session[:id_token] = id_token }
 
       specify 'should redirect to the OpenID Connect end session endpoint with the correct query params' do
         expect(subject).to redirect_to(

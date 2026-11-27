@@ -2,11 +2,11 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::ChangeSchoolsController, type: :request do
-  include_context "logged in DfE user"
-  include_context "stub role check api"
+  include_context "when a DfE user is logged in"
+  include_context "when stubbing the role-check API"
 
   let(:enable_school_change) { true }
-  let(:old_school) { @current_user_school }
+  let(:old_school) { current_user_school }
   let(:new_school) { create(:bookings_school) }
 
   before do
@@ -15,24 +15,25 @@ describe Schools::ChangeSchoolsController, type: :request do
   end
 
   describe '#show' do
-    before do
-      allow_any_instance_of(described_class).to \
-        receive(:current_urn) { current_urn }
-    end
-
     subject do
       get '/schools/change'
       response
     end
 
+    before do
+      session_hash[:urn] = current_urn
+    end
+
     context 'with URN set' do
       let(:current_urn) { old_school.urn }
+
       it { is_expected.to have_http_status :success }
       it { is_expected.to have_rendered :show }
     end
 
     context 'with no URN set' do
       let(:current_urn) { nil }
+
       it { is_expected.to have_http_status :success }
       it { is_expected.to have_rendered :show }
     end
@@ -42,17 +43,21 @@ describe Schools::ChangeSchoolsController, type: :request do
     let(:params) { { schools_change_school: { change_to_urn: new_school.urn } } }
 
     context 'when internal school chooser is enabled' do
+      subject { post('/schools/change', params: params) }
+
       let(:urns) { [old_school, new_school].map(&:urn) }
+      let(:change_school_page) { get '/schools/change' }
 
       before do
-        allow_any_instance_of(Schools::DFESignInAPI::RoleCheckedOrganisations).to \
-          receive(:organisation_uuid_pairs).and_return \
+        organisations = instance_double(
+          Schools::DFESignInAPI::RoleCheckedOrganisations,
+          organisation_uuid_pairs: {
             SecureRandom.uuid => old_school.urn,
             SecureRandom.uuid => new_school.urn
+          }
+        )
+        allow(Schools::DFESignInAPI::RoleCheckedOrganisations).to receive(:new).and_return(organisations)
       end
-
-      let(:change_school_page) { get '/schools/change' }
-      subject { post('/schools/change', params: params) }
 
       context 'when the request access to another school option is chosen' do
         let(:params) { { schools_change_school: { change_to_urn: "request access" } } }
@@ -75,13 +80,13 @@ describe Schools::ChangeSchoolsController, type: :request do
     end
 
     context 'when internal changing is disabled' do
+      subject { post('/schools/change', params: params) }
+
       let(:enable_school_change) { false }
       let(:change_school_page) { get '/schools/change' }
 
-      subject { post('/schools/change', params: params) }
-
       specify 'should fail with a 403: forbidden' do
-        expect(subject).to eql(403)
+        expect(subject).to be(403)
       end
     end
 
@@ -91,18 +96,16 @@ describe Schools::ChangeSchoolsController, type: :request do
       let(:new_school_uuid) { SecureRandom.uuid }
 
       before do
-        allow_any_instance_of(described_class).to receive(:current_urn) { nil }
+        session_hash[:urn] = nil
 
-        allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
-          receive(:uuids).and_return new_school_uuid => new_school.urn
-
-        allow(Schools::DFESignInAPI::Roles).to receive(:new).and_call_original
-
-        allow_any_instance_of(Schools::DFESignInAPI::Roles).to \
-          receive(:has_school_experience_role?).and_return(true)
+        organisations = instance_double(
+          Schools::DFESignInAPI::Organisations,
+          uuids: { new_school_uuid => new_school.urn }
+        )
+        allow(Schools::DFESignInAPI::Organisations).to receive(:new).and_return(organisations)
       end
 
-      subject! { post('/schools/change', params: params) }
+      subject! { post('/schools/change', params: params) } # rubocop:disable RSpec/LeadingSubject -- Request must run after role setup.
 
       it { is_expected.to redirect_to(schools_dashboard_path) }
 

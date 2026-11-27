@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::TeachingPreferencesController, type: :request do
-  include_context 'Stubbed candidates school'
-  include_context 'Stubbed current_registration'
+  include_context 'with a stubbed candidate school'
+  include_context 'with a stubbed current registration'
 
   let :registration_session do
     FactoryBot.build :registration_session, with: %i[
@@ -12,7 +12,7 @@ describe Candidates::Registrations::TeachingPreferencesController, type: :reques
     ]
   end
 
-  context '#new' do
+  describe '#new' do
     context 'without existing teaching_preference in the session' do
       before do
         get '/candidates/schools/11048/registrations/teaching_preference/new'
@@ -35,9 +35,6 @@ describe Candidates::Registrations::TeachingPreferencesController, type: :reques
 
       before do
         registration_session.save teaching_preference
-      end
-
-      before do
         get '/candidates/schools/11048/registrations/teaching_preference/new'
       end
 
@@ -56,7 +53,7 @@ describe Candidates::Registrations::TeachingPreferencesController, type: :reques
     end
   end
 
-  context '#create' do
+  describe '#create' do
     let :teaching_preference_params do
       {
         candidates_registrations_teaching_preference: \
@@ -69,7 +66,7 @@ describe Candidates::Registrations::TeachingPreferencesController, type: :reques
         params: teaching_preference_params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :teaching_preference do
         Candidates::Registrations::TeachingPreference.new
       end
@@ -84,7 +81,7 @@ describe Candidates::Registrations::TeachingPreferencesController, type: :reques
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :teaching_preference do
         FactoryBot.build :teaching_preference
       end
@@ -101,16 +98,13 @@ describe Candidates::Registrations::TeachingPreferencesController, type: :reques
     end
   end
 
-  context '#edit' do
+  describe '#edit' do
     let :exisitng_teaching_preference do
       FactoryBot.build :teaching_preference
     end
 
     before do
       registration_session.save exisitng_teaching_preference
-    end
-
-    before do
       get '/candidates/schools/11048/registrations/teaching_preference/edit'
     end
 
@@ -124,15 +118,10 @@ describe Candidates::Registrations::TeachingPreferencesController, type: :reques
     end
   end
 
-  context '#update' do
+  describe '#update' do
     let :exisitng_teaching_preference do
       FactoryBot.build :teaching_preference
     end
-
-    before do
-      registration_session.save exisitng_teaching_preference
-    end
-
     let :teaching_preference_params do
       {
         candidates_registrations_teaching_preference: \
@@ -141,11 +130,12 @@ describe Candidates::Registrations::TeachingPreferencesController, type: :reques
     end
 
     before do
+      registration_session.save exisitng_teaching_preference
       patch '/candidates/schools/11048/registrations/teaching_preference',
-        params: teaching_preference_params
+              params: teaching_preference_params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :teaching_preference do
         Candidates::Registrations::TeachingPreference.new
       end
@@ -160,7 +150,7 @@ describe Candidates::Registrations::TeachingPreferencesController, type: :reques
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :teaching_preference do
         FactoryBot.build :teaching_preference,
           teaching_stage: 'I’m not sure and finding out more'

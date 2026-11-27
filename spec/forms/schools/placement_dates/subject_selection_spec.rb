@@ -5,14 +5,14 @@ describe Schools::PlacementDates::SubjectSelection, type: :model do
     create :bookings_school, :with_subjects, subject_count: 3
   end
 
-  context 'validations' do
+  context 'when validating' do
     it { is_expected.to validate_presence_of :subject_ids }
   end
 
-  context '.new_from_date' do
+  describe '.new_from_date' do
     subject { described_class.new_from_date placement_date }
 
-    context 'published' do
+    context 'when published' do
       let :placement_date do
         create \
           :bookings_placement_date,
@@ -25,7 +25,7 @@ describe Schools::PlacementDates::SubjectSelection, type: :model do
       end
     end
 
-    context 'unpublished' do
+    context 'when unpublished' do
       let :placement_date do
         create \
           :bookings_placement_date,
@@ -39,14 +39,14 @@ describe Schools::PlacementDates::SubjectSelection, type: :model do
     end
   end
 
-  context '#subject_ids=' do
+  describe '#subject_ids=' do
     it 'removes any blank values' do
       subject.subject_ids = ["", "1", "2", "3"]
       expect(subject.subject_ids).to eq %w[1 2 3]
     end
   end
 
-  context '#save' do
+  describe '#save' do
     let :placement_date do
       create \
         :bookings_placement_date,
@@ -57,7 +57,7 @@ describe Schools::PlacementDates::SubjectSelection, type: :model do
 
     before { described_class.new(attributes).save(placement_date) }
 
-    context 'invalid' do
+    context 'when invalid' do
       let :attributes do
         { subject_ids: nil }
       end
@@ -65,11 +65,11 @@ describe Schools::PlacementDates::SubjectSelection, type: :model do
       it { is_expected.to(be_invalid) }
 
       it 'doesnt update the placement_date' do
-        expect(placement_date.published_at).to be nil
+        expect(placement_date.published_at).to be_nil
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :subjects do
         school.subjects.first(2)
       end

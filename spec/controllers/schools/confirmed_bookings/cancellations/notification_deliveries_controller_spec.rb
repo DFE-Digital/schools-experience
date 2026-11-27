@@ -2,7 +2,7 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let :school do
     Bookings::School.find_by!(urn: urn).tap do |s|
@@ -12,7 +12,7 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
   end
 
   let :candidate_request_rejection_notification_email do
-    double NotifyEmail::CandidateBookingSchoolCancelsBooking,
+    instance_double NotifyEmail::CandidateBookingSchoolCancelsBooking,
       despatch_later!: true
   end
 
@@ -21,7 +21,7 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
   end
 
   let :candidate_request_rejection_notification_sms do
-    double NotifySms::CandidateBookingSchoolCancelsBooking,
+    instance_double NotifySms::CandidateBookingSchoolCancelsBooking,
       despatch_later!: true
   end
 
@@ -41,7 +41,7 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
     end
   end
 
-  context '#create' do
+  describe '#create' do
     before do
       post schools_booking_cancellation_notification_delivery_path \
         booking
@@ -130,7 +130,7 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
     end
   end
 
-  context '#show' do
+  describe '#show' do
     let :placement_request do
       FactoryBot.create \
         :placement_request, :cancelled_by_school, school: school

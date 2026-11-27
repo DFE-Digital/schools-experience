@@ -30,11 +30,11 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
     end
 
     describe "rejection" do
+      subject { cancellation.errors.messages }
+
       let(:cancellation) { build(:cancellation) }
 
       before { cancellation.save(context: :rejection) }
-
-      subject { cancellation.errors.messages }
 
       it { is_expected.to include(base: ["Choose a reason for rejecting this candidate"]) }
 
@@ -68,24 +68,26 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
 
   describe 'scopes' do
     describe '#sent' do
-      let!(:cancellation) { create :cancellation }
       subject { described_class.sent.to_a }
+
+      let!(:cancellation) { create :cancellation }
 
       it { is_expected.not_to include cancellation }
 
       context 'when sent' do
         before { cancellation.sent! }
+
         it { is_expected.to include cancellation }
       end
     end
   end
 
   context 'when placement_request is already closed' do
+    subject { described_class.new placement_request: placement_request }
+
     let :placement_request do
       FactoryBot.create :placement_request, :cancelled
     end
-
-    subject { described_class.new placement_request: placement_request }
 
     before do
       subject.validate
@@ -96,7 +98,7 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
     end
   end
 
-  context '#sent!' do
+  describe '#sent!' do
     subject { FactoryBot.create :cancellation }
 
     before do
@@ -123,8 +125,9 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
   end
 
   describe '#dates_requested' do
-    let(:placement_request) { create(:placement_request, :cancelled_by_school) }
     subject { placement_request.school_cancellation }
+
+    let(:placement_request) { create(:placement_request, :cancelled_by_school) }
 
     context 'when the placement has been accepted' do
       let!(:booking) { create(:bookings_booking, bookings_placement_request: placement_request) }
@@ -194,7 +197,7 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
       let(:cancellation) { build(:cancellation, fully_booked: true, duplicate: true, reason: nil) }
 
       it "returns the translated strings" do
-        is_expected.to contain_exactly(
+        expect(subject).to contain_exactly(
           "The date you requested is fully booked.",
           "This is a duplicate request."
         )
@@ -207,7 +210,7 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
         end
 
         it "returns the translated strings" do
-          is_expected.to contain_exactly(
+          expect(subject).to contain_exactly(
             "The date you requested is fully booked.",
             "This is a duplicate request.",
             "Other reason."

@@ -22,7 +22,7 @@ describe EncryptedAttributes do
     subject { instance.encrypted_attributes }
 
     it "encrypts attributes flagged for encryption" do
-      is_expected.to include({
+      expect(subject).to include({
         "name" => "EMLFEkHwBtL0",
         "email" => "V0DuvAtJPsp4skoCYxU10S2nFDpC1pSLQF5kIwLhPRTXkFe5Hn4",
         "height" => nil,
@@ -32,9 +32,9 @@ describe EncryptedAttributes do
   end
 
   describe ".new_decrypt" do
-    let(:encrypted_attributes) { instance.encrypted_attributes }
-
     subject { test_model.new_decrypt(encrypted_attributes).attributes }
+
+    let(:encrypted_attributes) { instance.encrypted_attributes }
 
     it { is_expected.to eq(instance.attributes) }
 

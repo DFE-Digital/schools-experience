@@ -3,7 +3,7 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::OnBoarding::DescriptionsController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let(:task_progress_on_boarding) { false }
 
@@ -12,8 +12,8 @@ describe Schools::OnBoarding::DescriptionsController, type: :request do
       .and_return(task_progress_on_boarding)
   end
 
-  context '#new' do
-    let! :school_profile do
+  describe '#new' do
+    before do
       FactoryBot.create \
         :school_profile,
         :with_dbs_requirement,
@@ -24,9 +24,6 @@ describe Schools::OnBoarding::DescriptionsController, type: :request do
         :with_other_fee,
         :with_only_early_years_phase,
         :with_key_stage_list
-    end
-
-    before do
       get '/schools/on_boarding/description/new'
     end
 
@@ -39,7 +36,7 @@ describe Schools::OnBoarding::DescriptionsController, type: :request do
     end
   end
 
-  context '#create' do
+  describe '#create' do
     let! :school_profile do
       FactoryBot.create \
         :school_profile,
@@ -61,7 +58,7 @@ describe Schools::OnBoarding::DescriptionsController, type: :request do
       post '/schools/on_boarding/description', params: params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :description do
         Schools::OnBoarding::Description.new
       end
@@ -75,7 +72,7 @@ describe Schools::OnBoarding::DescriptionsController, type: :request do
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :description do
         FactoryBot.build :description
       end
@@ -99,7 +96,7 @@ describe Schools::OnBoarding::DescriptionsController, type: :request do
       end
     end
 
-    context 'skipped' do
+    context 'when skipped' do
       let :params do
         { commit: 'Skip' }
       end
@@ -124,7 +121,7 @@ describe Schools::OnBoarding::DescriptionsController, type: :request do
     end
   end
 
-  context '#edit' do
+  describe '#edit' do
     let! :school_profile do
       FactoryBot.create :school_profile, :completed
     end
@@ -142,7 +139,7 @@ describe Schools::OnBoarding::DescriptionsController, type: :request do
     end
   end
 
-  context '#update' do
+  describe '#update' do
     let! :school_profile do
       FactoryBot.create :school_profile, :completed
     end
@@ -157,7 +154,7 @@ describe Schools::OnBoarding::DescriptionsController, type: :request do
       patch '/schools/on_boarding/description', params: params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :description do
         Schools::OnBoarding::Description.new
       end
@@ -171,7 +168,7 @@ describe Schools::OnBoarding::DescriptionsController, type: :request do
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :description do
         FactoryBot.build :description
       end
@@ -193,7 +190,7 @@ describe Schools::OnBoarding::DescriptionsController, type: :request do
       end
     end
 
-    context 'skipped' do
+    context 'when skipped' do
       let :description do
         FactoryBot.build :description, details: 'Updated'
       end

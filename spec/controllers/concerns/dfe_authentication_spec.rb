@@ -4,15 +4,15 @@ describe DFEAuthentication do
   # testing is much easier with an _actual_ controller, so
   # let's use Dashboards
   describe Schools::DashboardsController, type: :controller do
-    it { expect(described_class.ancestors).to include(DFEAuthentication) }
-
+    let(:auth_host) { Rails.application.config.x.oidc_host }
+    let(:teacher_user) { create(:user) }
     let(:teacher_session) do
       OpenIDConnect::ResponseObject::UserInfo.new(
         sub: teacher_user.sub
       )
     end
-    let(:teacher_user) { create(:user) }
-    let(:auth_host) { Rails.application.config.x.oidc_host }
+
+    it { expect(described_class.ancestors).to include(DFEAuthentication) }
 
     describe 'login redirect' do
       subject do
@@ -25,32 +25,32 @@ describe DFEAuthentication do
           receive(:allow_school_change_in_app?).and_return allow_change_school
       end
 
-      context 'and ChangeSchool not enabled' do
+      context 'without ChangeSchool enabled' do
         let(:allow_change_school) { false }
 
-        it 'will redirect to DfE Sign in' do
-          is_expected.to redirect_to %r{#{Regexp.quote(auth_host)}}
+        it 'redirects to DfE Sign in' do
+          expect(subject).to redirect_to %r{#{Regexp.quote(auth_host)}}
         end
 
-        it 'will request organisation from DfE Sign-in' do
-          is_expected.to redirect_to %r{&scope=profile%20organisation%20openid}
+        it 'requests organisation from DfE Sign-in' do
+          expect(subject).to redirect_to %r{&scope=profile%20organisation%20openid}
         end
       end
 
-      context 'and ChangeSchool enabled' do
+      context 'when ChangeSchool enabled' do
         let(:allow_change_school) { true }
 
-        it 'will redirect to DfE Sign in' do
-          is_expected.to redirect_to %r{#{Regexp.quote(auth_host)}}
+        it 'redirects to DfE Sign in' do
+          expect(subject).to redirect_to %r{#{Regexp.quote(auth_host)}}
         end
 
-        it 'will not request organisation from DfE Sign-in' do
-          is_expected.to redirect_to %r{&scope=profile%20openid}
+        it 'does not request organisation from DfE Sign-in' do
+          expect(subject).to redirect_to %r{&scope=profile%20openid}
         end
       end
     end
 
-    context '#current_user' do
+    describe '#current_user' do
       context 'when the current_user is set' do
         before do
           subject.instance_variable_set(:@current_user, teacher_user)
@@ -62,8 +62,10 @@ describe DFEAuthentication do
       end
 
       context 'when the current user is not set' do
-        before { get :show }
-        before { controller.session[:current_user] = teacher_session }
+        before do
+          get :show
+          controller.session[:current_user] = teacher_session
+        end
 
         specify 'should retrieve the current user from the session' do
           expect(subject.send(:current_user)).to eql(teacher_user)
@@ -71,19 +73,19 @@ describe DFEAuthentication do
       end
     end
 
-    context '#user_signed_in?' do
+    describe '#user_signed_in?' do
       context 'when a user is signed in' do
         before do
           subject.instance_variable_set(:@current_user, teacher_user)
         end
 
-        it 'should be true' do
+        it 'is true' do
           expect(subject.send(:user_signed_in?)).to be(true)
         end
       end
 
       context 'when a user is not signed in' do
-        it 'should be false' do
+        it 'is false' do
           expect(subject.send(:user_signed_in?)).to be(false)
         end
       end
@@ -91,7 +93,7 @@ describe DFEAuthentication do
 
     describe '#school_urns' do
       before do
-        allow(Schools::DFESignInAPI::Client).to receive(:enabled?) { true }
+        allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
 
         allow(controller).to receive(:retrieve_school_uuids).and_return \
           SecureRandom.uuid => 4,
@@ -111,19 +113,21 @@ describe DFEAuthentication do
             SecureRandom.uuid => 3
           }
         end
+
         it { expect(subject.send(:school_urns)).to eql [1, 2, 3] }
       end
 
       context 'with forced reload' do
         before { controller.session[:urns] = [1, 2, 3] }
+
         it { expect(subject.send(:school_urns, reload: true)).to eql [4, 5, 6] }
         it { expect(controller).not_to have_received(:retrieve_school_uuids) }
       end
 
       context 'when DfE Sign-in API is disabled' do
         before do
-          allow(Schools::DFESignInAPI::Client).to receive(:enabled?) { false }
-          allow(controller).to receive(:current_urn) { 1 }
+          allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(false)
+          allow(controller).to receive(:current_urn).and_return(1)
         end
 
         it { expect(subject.send(:school_urns)).to eql [1] }
@@ -132,20 +136,27 @@ describe DFEAuthentication do
     end
 
     describe '#other_school_urns' do
-      before { allow(controller).to receive(:school_urns) { [1, 2, 3] } }
-      before { allow(controller).to receive(:current_school) { build(:bookings_school, urn: 2) } }
+      before do
+        allow(controller).to receive(:school_urns).and_return([1, 2, 3])
+        allow(controller).to receive(:current_school) { build(:bookings_school, urn: 2) }
+      end
+
       it { expect(subject.send(:other_school_urns)).to eql [1, 3] }
     end
 
     describe '#has_other_schools' do
       context 'when other schools' do
-        before { allow(controller).to receive(:other_school_urns) { [1, 2] } }
+        before { allow(controller).to receive(:other_school_urns).and_return([1, 2]) }
+
         it { expect(subject.send(:has_other_schools?)).to be true }
       end
 
       context 'when only one school' do
-        before { allow(Schools::DFESignInAPI::Client).to receive(:enabled?) { true } }
-        before { allow(controller).to receive(:other_school_urns) { [] } }
+        before do
+          allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
+          allow(controller).to receive(:other_school_urns).and_return([])
+        end
+
         it { expect(subject.send(:has_other_schools?)).to be false }
       end
     end

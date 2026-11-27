@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe Bookings::Gitis::SubjectFetcher do
   subject { described_class }
+
   let(:subject_name) { "Maths" }
   let(:subject_id) { 275_000_001 }
   let(:teaching_subjects) do
@@ -9,9 +10,12 @@ describe Bookings::Gitis::SubjectFetcher do
       build(:api_teaching_subject, id: subject_id, value: subject_name),
     ]
   end
+
+  let(:api_client) { instance_double(GetIntoTeachingApiClient::LookupItemsApi) }
+
   before do
-    allow_any_instance_of(GetIntoTeachingApiClient::LookupItemsApi)
-      .to receive(:get_teaching_subjects).and_return(teaching_subjects)
+    allow(GetIntoTeachingApiClient::LookupItemsApi).to receive(:new).and_return(api_client)
+    allow(api_client).to receive(:get_teaching_subjects).and_return(teaching_subjects)
   end
 
   describe ".api_subject_from_gitis_uuid" do

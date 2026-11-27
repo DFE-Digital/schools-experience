@@ -1,14 +1,14 @@
 require "rails_helper"
 
 describe "Tracking Scripts", type: :request do
-  let(:tracking_id) { "AAAAABBBBBCCCCCDDDDDEEEEE" }
-
-  before { allow(ENV).to receive(:[]).and_call_original }
-
   subject do
     get root_path
     response.body
   end
+
+  let(:tracking_id) { "AAAAABBBBBCCCCCDDDDDEEEEE" }
+
+  before { allow(ENV).to receive(:[]).and_call_original }
 
   describe "Google Tag Manager" do
     let(:tracking_id_key) { "GTM_ID" }
@@ -17,7 +17,8 @@ describe "Tracking Scripts", type: :request do
 
     context "when the user has accepted analytics cookies and GTM_ID is present in the environment" do
       before do
-        allow_any_instance_of(CookiePreference).to receive(:allowed?).with(:analytics).and_return(true)
+        cookie_preference = instance_double(CookiePreference, allowed?: true)
+        allow(CookiePreference).to receive(:new).and_return(cookie_preference)
         allow(ENV).to receive(:[]).with("GTM_ID") { tracking_id }
       end
 
@@ -27,9 +28,9 @@ describe "Tracking Scripts", type: :request do
       it { is_expected.not_to match(/<iframe[^>]*style=/) }
     end
 
-    context "When GTM_ID is not present in the environment" do
+    context "when GTM_ID is not present in the environment" do
       before do
-        allow(ENV).to receive(:[]).with("GTM_ID") { "" }
+        allow(ENV).to receive(:[]).with("GTM_ID").and_return("")
       end
 
       it { is_expected.not_to match(gtm_script) }

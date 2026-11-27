@@ -4,17 +4,17 @@ describe Bookings::School, type: :model do
   it { is_expected.to respond_to(:roles) }
 
   describe 'Validation' do
-    context 'name' do
+    context 'with name' do
       it { is_expected.to validate_presence_of(:name) }
       it { is_expected.to validate_length_of(:name).is_at_most(128) }
     end
 
-    context 'fee' do
+    context 'when fee' do
       it { is_expected.to validate_presence_of(:fee) }
       it { is_expected.to validate_numericality_of(:fee).is_greater_than_or_equal_to(0) }
     end
 
-    context 'availability_info' do
+    context 'when availability_info' do
       context 'with no context' do
         it { is_expected.not_to validate_presence_of(:availability_info) }
       end
@@ -24,8 +24,9 @@ describe Bookings::School, type: :model do
         it { is_expected.to validate_length_of(:availability_info).is_at_least(3).on(:configuring_availability) }
       end
 
-      context 'overwriting empty strings before validation' do
+      context 'when overwriting empty strings before validation' do
         subject { create(:bookings_school) }
+
         before do
           subject.availability_info = ''
           subject.valid?
@@ -47,18 +48,18 @@ describe Bookings::School, type: :model do
         "07865 432 321"
       ]
 
-      subject { Bookings::School.new }
+      subject { Bookings::School.new } # rubocop:disable RSpec/DescribedClass -- The nested symbol context changes described_class.
 
       context field_name do
-        context 'valid' do
+        context 'when valid' do
           valid_urls.each do |valid_url|
-            it { should allow_value(valid_url).for(field_name) }
+            it { is_expected.to allow_value(valid_url).for(field_name) }
           end
         end
 
-        context 'invalid' do
+        context 'when invalid' do
           invalid_urls.each do |invalid_url|
-            it { should_not allow_value(invalid_url).for(field_name) }
+            it { is_expected.not_to allow_value(invalid_url).for(field_name) }
           end
         end
       end
@@ -67,7 +68,7 @@ describe Bookings::School, type: :model do
     include_examples "websites", :website
     include_examples "websites", :teacher_training_website
 
-    context 'contact_email' do
+    context 'when contact_email' do
       valid_addresses = ['hello@bbc.co.uk', 'hi.there@bbc.com', nil]
       invalid_addresses = [
         "www.bbc.co.uk",
@@ -80,28 +81,28 @@ describe Bookings::School, type: :model do
         "trailingdot@somewhere."
       ]
 
-      context 'valid' do
+      context 'when valid' do
         valid_addresses.each do |valid_address|
-          it { should allow_value(valid_address).for(:contact_email) }
+          it { is_expected.to allow_value(valid_address).for(:contact_email) }
         end
       end
 
-      context 'invalid' do
+      context 'when invalid' do
         invalid_addresses.each do |invalid_address|
-          it { should_not allow_value(invalid_address).for(:contact_email) }
+          it { is_expected.not_to allow_value(invalid_address).for(:contact_email) }
         end
       end
     end
 
     describe '#availability_preference_fixed' do
-      context 'in the selecting_availability_preference context' do
+      context 'when selecting availability preference' do
         specify 'should not allow nil' do
           subject.availability_preference_fixed = nil
           expect(subject.valid?(:selecting_availability_preference)).to be false
         end
       end
 
-      context 'everywhere else' do
+      context 'when not selecting availability preference' do
         specify 'should allow nil' do
           expect(subject).to allow_value(nil).for(:availability_preference_fixed)
         end
@@ -111,14 +112,14 @@ describe Bookings::School, type: :model do
 
   describe 'Relationships' do
     it do
-      is_expected.to(
+      expect(subject).to(
         have_one(:school_profile)
           .with_foreign_key(:bookings_school_id)
       )
     end
 
     specify do
-      is_expected.to(
+      expect(subject).to(
         have_many(:bookings_schools_subjects)
           .class_name("Bookings::SchoolsSubject")
           .with_foreign_key(:bookings_school_id)
@@ -127,7 +128,7 @@ describe Bookings::School, type: :model do
     end
 
     specify do
-      is_expected.to(
+      expect(subject).to(
         have_many(:subjects)
           .through(:bookings_schools_subjects)
           .class_name("Bookings::Subject")
@@ -136,7 +137,7 @@ describe Bookings::School, type: :model do
     end
 
     specify do
-      is_expected.to(
+      expect(subject).to(
         have_many(:bookings_schools_phases)
           .class_name("Bookings::SchoolsPhase")
           .with_foreign_key(:bookings_school_id)
@@ -145,7 +146,7 @@ describe Bookings::School, type: :model do
     end
 
     specify do
-      is_expected.to(
+      expect(subject).to(
         have_many(:phases)
           .through(:bookings_schools_phases)
           .class_name("Bookings::Phase")
@@ -154,7 +155,7 @@ describe Bookings::School, type: :model do
     end
 
     specify do
-      is_expected.to(
+      expect(subject).to(
         belong_to(:school_type)
           .with_foreign_key(:bookings_school_type_id)
           .class_name("Bookings::SchoolType")
@@ -162,7 +163,7 @@ describe Bookings::School, type: :model do
     end
 
     specify do
-      is_expected.to(
+      expect(subject).to(
         have_many(:bookings_placement_dates)
           .with_foreign_key(:bookings_school_id)
           .class_name('Bookings::PlacementDate')
@@ -171,7 +172,7 @@ describe Bookings::School, type: :model do
     end
 
     specify do
-      is_expected.to(
+      expect(subject).to(
         have_many(:available_placement_dates)
           .with_foreign_key(:bookings_school_id)
           .class_name('Bookings::PlacementDate')
@@ -179,7 +180,7 @@ describe Bookings::School, type: :model do
     end
 
     specify do
-      is_expected.to(
+      expect(subject).to(
         have_many(:bookings)
           .with_foreign_key(:bookings_school_id)
           .class_name('Bookings::Booking')
@@ -188,11 +189,11 @@ describe Bookings::School, type: :model do
     end
 
     specify do
-      is_expected.to have_one(:profile).class_name("Bookings::Profile")
+      expect(subject).to have_one(:profile).class_name("Bookings::Profile")
     end
 
     specify do
-      is_expected.to \
+      expect(subject).to \
         have_many(:placement_requests)
           .with_foreign_key(:bookings_school_id)
           .class_name('Bookings::PlacementRequest')
@@ -200,7 +201,7 @@ describe Bookings::School, type: :model do
     end
 
     specify do
-      is_expected.to \
+      expect(subject).to \
         have_many(:events)
           .with_foreign_key(:bookings_school_id)
           .dependent(:destroy)
@@ -216,19 +217,19 @@ describe Bookings::School, type: :model do
   end
 
   describe 'Scopes' do
-    subject { Bookings::School }
+    subject { described_class }
 
-    context 'Full text searching on Name' do
+    context 'when full text searching on Name' do
       # provided by FullTextSearch
       it { is_expected.to respond_to(:search_by_name) }
     end
 
-    context 'Geographic searching by Coordinates' do
+    context 'when geographic searching by Coordinates' do
       # provided by FullTextSearch
       it { is_expected.to respond_to(:close_to) }
     end
 
-    context 'Enabled' do
+    context 'when enabled' do
       let!(:enabled_school) { create(:bookings_school) }
       let!(:disabled_school) { create(:bookings_school, :disabled) }
 
@@ -243,12 +244,12 @@ describe Bookings::School, type: :model do
       end
     end
 
-    context 'Filtering' do
+    context 'when filtering' do
       let!(:school_a) { create(:bookings_school) }
       let!(:school_b) { create(:bookings_school) }
       let!(:school_c) { create(:bookings_school) }
 
-      context 'By subject' do
+      context 'with subject' do
         let!(:maths) { Bookings::Subject.find_by! name: 'Maths' }
         let!(:physics) { Bookings::Subject.find_by! name: "Physics" }
         let!(:chemistry) { Bookings::Subject.find_by! name: "Chemistry" }
@@ -285,7 +286,7 @@ describe Bookings::School, type: :model do
         end
       end
 
-      context 'By phase' do
+      context 'with phase' do
         let!(:primary) { create(:bookings_phase, name: "Primary") }
         let!(:secondary) { create(:bookings_phase, name: "Secondary") }
         let!(:college) { create(:bookings_phase, name: "College") }
@@ -319,7 +320,7 @@ describe Bookings::School, type: :model do
         end
       end
 
-      context 'By fees' do
+      context 'with fees' do
         let!(:school_a) { create(:bookings_school, fee: 0) }
         let!(:school_b) { create(:bookings_school, fee: 20) }
         let!(:school_c) { create(:bookings_school, fee: 40) }
@@ -343,7 +344,7 @@ describe Bookings::School, type: :model do
         end
       end
 
-      context 'By dbs requirements' do
+      context 'with dbs requirements' do
         let!(:profile_a) { create(:bookings_profile, dbs_policy_conditions: 'required') }
         let!(:profile_b) { create(:bookings_profile, dbs_policy_conditions: 'inschool') }
         let!(:profile_c) { create(:bookings_profile, dbs_policy_conditions: 'notrequired') }
@@ -378,7 +379,7 @@ describe Bookings::School, type: :model do
         end
       end
 
-      context 'by disability confident' do
+      context 'with disability confident' do
         before do
           create(:bookings_profile, school: school_a)
           create(:bookings_profile, school: school_b)
@@ -402,7 +403,7 @@ describe Bookings::School, type: :model do
         end
       end
 
-      context 'By parking' do
+      context 'with parking' do
         before do
           create(:bookings_profile, parking_provided: true, school: school_a)
           create(:bookings_profile, parking_provided: true, school: school_b)
@@ -427,7 +428,16 @@ describe Bookings::School, type: :model do
       end
     end
 
-    context 'Availability and placement dates' do
+    context 'when availability and placement dates' do
+      before do
+        create(:bookings_placement_date, bookings_school: fixed_with_dates)
+        create(:bookings_placement_date, bookings_school: fixed_without_dates, active: false)
+      end
+
+      let!(:fixed_with_dates) { create(:bookings_school, :with_fixed_availability_preference) }
+      let!(:fixed_without_dates) { create(:bookings_school, :with_fixed_availability_preference) }
+      let!(:flexible_with_description) { create(:bookings_school) }
+
       specify { expect(described_class).to respond_to(:flexible) }
       specify { expect(described_class).to respond_to(:flexible_with_description) }
       specify { expect(described_class).to respond_to(:fixed) }
@@ -439,14 +449,7 @@ describe Bookings::School, type: :model do
       specify { expect(described_class.new).to have_db_column(:availability_preference_fixed).of_type(:boolean).with_options(default: false) }
       specify { expect(described_class.new).to have_db_column(:experience_type).of_type(:string).with_options(null: false, default: :inschool) }
 
-      let!(:flexible_with_description) { create(:bookings_school) }
-      let!(:fixed_without_dates) { create(:bookings_school, :with_fixed_availability_preference) }
-      let!(:fixed_with_dates) { create(:bookings_school, :with_fixed_availability_preference) }
-
-      let!(:inactive_date) { create(:bookings_placement_date, bookings_school: fixed_without_dates, active: false) }
-      let!(:active_date) { create(:bookings_placement_date, bookings_school: fixed_with_dates) }
-
-      context '.flexible' do
+      describe '.flexible' do
         subject { described_class.flexible }
 
         specify 'should include schools that offer flexible dates' do
@@ -458,7 +461,7 @@ describe Bookings::School, type: :model do
         end
       end
 
-      context '.flexible_with_description' do
+      describe '.flexible_with_description' do
         subject { described_class.flexible_with_description }
 
         specify 'should include schools that offer flexible_dates with availability_description' do
@@ -471,7 +474,7 @@ describe Bookings::School, type: :model do
         end
       end
 
-      context '.fixed' do
+      describe '.fixed' do
         subject { described_class.fixed }
 
         specify 'should include schools that offer fixed dates' do
@@ -483,8 +486,9 @@ describe Bookings::School, type: :model do
         end
       end
 
-      context '.fixed_with_available_dates' do
+      describe '.fixed_with_available_dates' do
         subject { described_class.fixed_with_available_dates }
+
         specify 'should include schools that offer fixed dates and have available dates' do
           expect(subject).to include(fixed_with_dates)
         end
@@ -494,7 +498,7 @@ describe Bookings::School, type: :model do
         end
       end
 
-      context '.with_availability' do
+      describe '.with_availability' do
         subject { described_class.with_availability }
 
         specify 'should include schools that are either flexible or fixed with available dates' do
@@ -506,7 +510,7 @@ describe Bookings::School, type: :model do
         end
       end
 
-      context '.without_availability' do
+      describe '.without_availability' do
         subject { described_class.without_availability }
 
         it 'includes schools that are fixed without available dates' do
@@ -523,7 +527,7 @@ describe Bookings::School, type: :model do
       end
     end
 
-    context 'Onboarded' do
+    context 'when onboarded' do
       let!(:onboarded_school) { create(:bookings_school, :onboarded) }
       let!(:non_onboarded_school) { create(:bookings_school) }
 
@@ -544,6 +548,7 @@ describe Bookings::School, type: :model do
       context 'when flexible' do
         context 'with availability_info' do
           subject { build(:bookings_school) }
+
           it { is_expected.to have_availability }
         end
       end
@@ -551,16 +556,19 @@ describe Bookings::School, type: :model do
       context 'when fixed' do
         context 'with no dates' do
           subject { build(:bookings_school, :with_fixed_availability_preference) }
+
           it { is_expected.not_to have_availability }
         end
 
         context 'with unavailable dates' do
           subject { create(:bookings_school, :with_fixed_availability_preference, :with_unavailable_placement_dates) }
+
           it { is_expected.not_to have_availability }
         end
 
         context 'with available dates' do
           subject { create(:bookings_school, :with_fixed_availability_preference, :with_placement_dates) }
+
           it { is_expected.to have_availability }
         end
       end
@@ -569,11 +577,13 @@ describe Bookings::School, type: :model do
     describe '#onboarded?' do
       context 'without profile' do
         subject { create(:bookings_school) }
+
         it { is_expected.not_to be_onboarded }
       end
 
       context 'with profile' do
         subject { create(:bookings_profile).school }
+
         it { is_expected.to be_onboarded }
       end
     end
@@ -585,6 +595,7 @@ describe Bookings::School, type: :model do
 
       context 'when the school is enabled' do
         subject { create(:bookings_school) }
+
         before { subject.enable! }
 
         specify 'the school should remain enabled' do
@@ -598,6 +609,7 @@ describe Bookings::School, type: :model do
 
       context 'when the school is disabled' do
         subject { create(:bookings_school, :disabled) }
+
         before { subject.enable! }
 
         specify 'should enable the school' do
@@ -618,6 +630,7 @@ describe Bookings::School, type: :model do
 
       context 'when the school is disabled' do
         subject { create(:bookings_school, :disabled) }
+
         before { subject.disable! }
 
         specify 'the school should remain disabled' do
@@ -631,6 +644,7 @@ describe Bookings::School, type: :model do
 
       context 'when the school is enabled' do
         subject { create(:bookings_school) }
+
         before { subject.disable! }
 
         specify 'should disable the school' do
@@ -645,84 +659,64 @@ describe Bookings::School, type: :model do
     end
 
     describe 'subject support' do
-      let(:phase_supporting_subjects) { double(Bookings::Phase, supports_subjects?: true) }
-      let(:phase_not_supporting_subjects) { double(Bookings::Phase, supports_subjects?: false) }
+      let(:school) { create(:bookings_school) }
+      let(:phase_supporting_subjects) { create(:bookings_phase, :secondary) }
+      let(:phase_not_supporting_subjects) { create(:bookings_phase, :primary) }
+      let(:phases) { [phase_supporting_subjects] }
+
+      before { school.phases << phases }
 
       describe '#has_secondary_phase?' do
         context 'when all phases support subjects' do
-          before do
-            allow(subject).to receive(:phases).and_return([phase_supporting_subjects])
-          end
-
-          specify { expect(subject).to be_has_secondary_phase }
+          specify { expect(school).to be_has_secondary_phase }
         end
 
         context 'when no phases support subjects' do
-          before do
-            allow(subject).to receive(:phases).and_return([phase_not_supporting_subjects])
-          end
+          let(:phases) { [phase_not_supporting_subjects] }
 
-          specify { expect(subject).not_to be_has_secondary_phase }
+          specify { expect(school).not_to be_has_secondary_phase }
         end
 
         context "when some phases support subjects and some don't" do
-          before do
-            allow(subject).to receive(:phases).and_return([phase_supporting_subjects, phase_not_supporting_subjects])
-          end
+          let(:phases) { [phase_supporting_subjects, phase_not_supporting_subjects] }
 
-          specify { expect(subject).to be_has_secondary_phase }
+          specify { expect(school).to be_has_secondary_phase }
         end
       end
 
       describe '#has_primary_phase?' do
         context 'when all phases support subjects' do
-          before do
-            allow(subject).to receive(:phases).and_return([phase_supporting_subjects])
-          end
-
-          specify { expect(subject).not_to be_has_primary_phase }
+          specify { expect(school).not_to be_has_primary_phase }
         end
 
         context 'when no phases support subjects' do
-          before do
-            allow(subject).to receive(:phases).and_return([phase_not_supporting_subjects])
-          end
+          let(:phases) { [phase_not_supporting_subjects] }
 
-          specify { expect(subject).to be_has_primary_phase }
+          specify { expect(school).to be_has_primary_phase }
         end
 
         context "when some phases support subjects and some don't" do
-          before do
-            allow(subject).to receive(:phases).and_return([phase_supporting_subjects, phase_not_supporting_subjects])
-          end
+          let(:phases) { [phase_supporting_subjects, phase_not_supporting_subjects] }
 
-          specify { expect(subject).to be_has_primary_phase }
+          specify { expect(school).to be_has_primary_phase }
         end
       end
 
       describe '#has_primary_and_secondary_phases?' do
         context 'when primary but not secondary' do
-          before do
-            allow(subject).to receive(:phases).and_return([phase_not_supporting_subjects])
-          end
+          let(:phases) { [phase_not_supporting_subjects] }
 
-          specify { expect(subject).not_to be_has_primary_and_secondary_phases }
+          specify { expect(school).not_to be_has_primary_and_secondary_phases }
         end
 
         context 'when secondary but not primary' do
-          before do
-            allow(subject).to receive(:phases).and_return([phase_supporting_subjects])
-          end
-
-          specify { expect(subject).not_to be_has_primary_and_secondary_phases }
+          specify { expect(school).not_to be_has_primary_and_secondary_phases }
         end
 
         context 'when primary and secondary' do
-          before do
-            allow(subject).to receive(:phases).and_return([phase_not_supporting_subjects, phase_supporting_subjects])
-          end
+          let(:phases) { [phase_not_supporting_subjects, phase_supporting_subjects] }
 
-          specify { expect(subject).to be_has_primary_and_secondary_phases }
+          specify { expect(school).to be_has_primary_and_secondary_phases }
         end
       end
     end

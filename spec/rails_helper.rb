@@ -39,7 +39,7 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_paths = ["#{::Rails.root}/spec/fixtures"]
+  config.fixture_paths = [Rails.root.join('spec', 'fixtures').to_s]
   config.global_fixtures = :all
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
@@ -70,7 +70,7 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
   # Prevent unintended API access from Geocoder
-  config.before :each do
+  config.before do
     allow(Geocoder).to receive(:search).and_return([
       Geocoder::Result::Test.new(name: 'Bury', latitude: 53.4794892, longitude: -2.2451148, address_components: [{ long_name: "England" }])
     ])
@@ -80,14 +80,14 @@ RSpec.configure do |config|
     Feature.instance_variable_set(:@config, nil)
   end
 
-  config.before :each do
+  config.before do
     Rails.cache.clear
   end
 
   config.before :suite do
     # Build the esbuild + Dart Sass bundles so Propshaft can serve them in specs.
     # In CI the Docker image already precompiled them, so only build when missing.
-    unless File.exist?(Rails.root.join("app/assets/builds/application.js"))
+    unless File.exist?(Rails.root.join("app", "assets", "builds", "application.js"))
       system("yarn build && yarn build:css", exception: true)
     end
   end

@@ -1,15 +1,17 @@
 require 'rails_helper'
 
 describe Schools::Attendance do
-  let(:booking_1) { create(:bookings_booking, :accepted) }
-  let(:booking_2) { create(:bookings_booking, :accepted) }
-  let(:booking_3) { create(:bookings_booking, :accepted) }
-  let(:bookings) { [booking_1, booking_2, booking_3] }
+  subject { attendance }
+
+  let(:first_booking) { create(:bookings_booking, :accepted) }
+  let(:second_booking) { create(:bookings_booking, :accepted) }
+  let(:third_booking) { create(:bookings_booking, :accepted) }
+  let(:bookings) { [first_booking, second_booking, third_booking] }
   let(:bookings_params) do
     {
-      booking_1.id.to_s => true,
-      booking_2.id.to_s => true,
-      booking_3.id.to_s => false
+      first_booking.id.to_s => true,
+      second_booking.id.to_s => true,
+      third_booking.id.to_s => false
     }
   end
 
@@ -33,8 +35,6 @@ describe Schools::Attendance do
       receive(:from_booking) { feedback_request_double }
   end
 
-  subject { attendance }
-
   describe '#initialize' do
     specify 'should correctly assign bookings' do
       expect(subject.bookings).to match_array(bookings)
@@ -42,9 +42,9 @@ describe Schools::Attendance do
 
     specify 'should correctly assign params' do
       expect(subject.bookings_params).to eql(
-        booking_1.id.to_s => true,
-        booking_2.id.to_s => true,
-        booking_3.id.to_s => false
+        first_booking.id.to_s => true,
+        second_booking.id.to_s => true,
+        third_booking.id.to_s => false
       )
     end
   end
@@ -52,44 +52,43 @@ describe Schools::Attendance do
   describe '#save' do
     context 'when booking cancelled' do
       before do
-        create :cancellation, :sent, placement_request: booking_1.bookings_placement_request
+        create :cancellation, :sent, placement_request: first_booking.bookings_placement_request
         bookings.each(&:reload)
       end
 
-      subject! { attendance.save }
+      subject! { attendance.save } # rubocop:disable RSpec/LeadingSubject -- Save must run after cancellation setup.
 
       specify 'should not update cancelled bookings' do
-        expect(booking_1.reload.attended).to be nil
+        expect(first_booking.reload.attended).to be_nil
       end
 
       specify 'sends feedback emails for attended (and not cancelled) bookings' do
         expect(NotifyEmail::CandidateBookingFeedbackRequest).to \
-          have_received(:from_booking).with(booking_2).once
+          have_received(:from_booking).with(second_booking).once
       end
 
       specify 'does not send feedback emails for unattended (or cancelled) bookings' do
         # Cancelled
         expect(NotifyEmail::CandidateBookingFeedbackRequest).not_to \
-          have_received(:from_booking).with(booking_1)
+          have_received(:from_booking).with(first_booking)
         # Unattended
         expect(NotifyEmail::CandidateBookingFeedbackRequest).not_to \
-          have_received(:from_booking).with(booking_3)
+          have_received(:from_booking).with(third_booking)
       end
 
       specify 'save should return false' do
-        is_expected.to be false
+        expect(subject).to be false
       end
 
       specify 'attendance should have 1 error' do
-        expect(attendance.errors.messages.length).to eql 1
-        expect(attendance.errors.messages[:bookings_params].length).to eql 1
+        expect(attendance.errors.messages.length).to be 1
+        expect(attendance.errors.messages[:bookings_params].length).to be 1
         expect(attendance.errors.messages[:bookings_params].first).to \
           match(/unable to set attendance/i)
       end
 
       specify 'attendance.updated_bookings' do
-        expect(attendance.updated_bookings).to match_array \
-          [booking_2.id, booking_3.id]
+        expect(attendance.updated_bookings).to contain_exactly(second_booking.id, third_booking.id)
       end
     end
 
@@ -103,7 +102,7 @@ describe Schools::Attendance do
       end
 
       specify 'save should return true' do
-        is_expected.to be true
+        expect(subject).to be true
       end
 
       specify 'attendance.updated_bookings' do
@@ -125,7 +124,7 @@ describe Schools::Attendance do
     end
 
     specify 'should correctly update bookings with param values' do
-      bookings_params.each do |id, _status|
+      bookings_params.each_key do |id|
         booking = Bookings::Booking.find(id)
 
         expect(Bookings::Gitis::SchoolExperience).to \

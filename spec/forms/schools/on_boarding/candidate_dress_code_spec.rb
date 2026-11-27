@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 describe Schools::OnBoarding::CandidateDressCode, type: :model do
-  context 'attributes' do
+  context 'with attributes' do
     it { is_expected.to respond_to :selected_requirements }
     it { is_expected.to respond_to :other_dress_requirements_detail }
   end
 
-  context 'validations' do
+  context 'when validating' do
     describe "#other_dress_requirements_detail" do
       context 'when other is not selected' do
         subject { described_class.new(selected_requirements: []) }

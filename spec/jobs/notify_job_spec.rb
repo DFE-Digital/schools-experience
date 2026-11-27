@@ -11,6 +11,8 @@ shared_examples "notify_job" do
   let :personalisation do
     { school_name: "A School", confirmation_link: "ABC123" }
   end
+  let(:log_messages) { [] }
+  let(:executions) { 1 }
 
   let :template_id do
     '11111111-aaaa-1111-aaaa-111111111111'
@@ -33,8 +35,7 @@ shared_examples "notify_job" do
     allow(Sentry).to receive :capture_exception
 
     allow(ActiveJob::Base.logger).to receive :info do |&block|
-      personalisation.each_value { |v| expect(block.call).not_to include v }
-      expect(block.call).not_to include email_address
+      log_messages << block.call
     end
 
     freeze_time
@@ -42,9 +43,16 @@ shared_examples "notify_job" do
     executions.times { job.perform_now }
   end
 
-  context '#perform' do
-    context 'on error' do
-      context 'retryable error' do
+  describe '#perform' do
+    it 'does not log personalisation or recipient details' do
+      personalisation.each_value do |value|
+        expect(log_messages.join).not_to include(value)
+      end
+      expect(log_messages.join).not_to include(recipient)
+    end
+
+    context 'when on error' do
+      context 'when retryable error' do
         let(:notify_class) { NotifyRetryableErroringClient }
         let(:executions) { 4 }
         let(:retry_in) { 2.hours.from_now.to_i }
@@ -61,7 +69,7 @@ shared_examples "notify_job" do
         end
       end
 
-      context 'non retryable error' do
+      context 'when non retryable error' do
         let(:notify_class) { NotifyNonRetryableErroringClient }
         let(:executions) { 2 }
         let(:application_job_timeout) { (executions**4) + 2 }
@@ -75,8 +83,8 @@ shared_examples "notify_job" do
       end
     end
 
-    context 'on success' do
-      let(:notify_class) { double Class, new: stub_client }
+    context 'when on success' do
+      let(:notify_class) { class_double(Notifications::Client, new: stub_client) }
       let(:executions) { 1 }
 
       it 'sends the email' do
@@ -136,10 +144,10 @@ shared_examples "notify recipient restriction handling" do
     allow(Rails.env).to receive(:production?).and_return(production)
   end
 
-  context 'outside production' do
+  context 'when outside production' do
     let(:production) { false }
 
-    context 'team-only API key error' do
+    context 'with team-only api key error' do
       let(:notify_class) { erroring_client(team_only_message) }
 
       it 'swallows the error without raising, retrying or alerting' do
@@ -155,7 +163,7 @@ shared_examples "notify recipient restriction handling" do
       end
     end
 
-    context 'trial mode error' do
+    context 'with trial mode error' do
       let(:notify_class) { erroring_client(trial_mode_message) }
 
       it 'swallows the error without retrying or alerting' do
@@ -165,7 +173,7 @@ shared_examples "notify recipient restriction handling" do
       end
     end
 
-    context 'restriction message in a different case' do
+    context 'when restriction message in a different case' do
       let(:notify_class) { erroring_client(team_only_message.upcase) }
 
       it 'still swallows the error (case-insensitive match)' do
@@ -174,7 +182,7 @@ shared_examples "notify recipient restriction handling" do
       end
     end
 
-    context 'any other bad request error' do
+    context 'when any other bad request error' do
       let(:notify_class) { erroring_client(other_bad_request_message) }
 
       it 'lets the error propagate to be retried' do
@@ -184,10 +192,10 @@ shared_examples "notify recipient restriction handling" do
     end
   end
 
-  context 'in production' do
+  context 'when in production' do
     let(:production) { true }
 
-    context 'team-only API key error' do
+    context 'with team-only api key error' do
       let(:notify_class) { erroring_client(team_only_message) }
 
       it 'lets the error propagate to be retried' do
@@ -196,7 +204,7 @@ shared_examples "notify recipient restriction handling" do
       end
     end
 
-    context 'trial mode error' do
+    context 'with trial mode error' do
       let(:notify_class) { erroring_client(trial_mode_message) }
 
       it 'lets the error propagate to be retried' do
@@ -207,9 +215,9 @@ shared_examples "notify recipient restriction handling" do
   end
 end
 
-describe Notify::BaseJob, type: :job do
-  context "#perform" do
-    it "should fail with NotImplementedError'" do
+describe Notify::BaseJob, type: :job do # rubocop:disable RSpec/MultipleDescribes -- Shared notify job specs cover the related job family.
+  describe "#perform" do
+    it "fails with NotImplementedError'" do
       expect { subject.perform }.to raise_error(NotImplementedError, 'You must implement the perform method')
     end
   end
@@ -217,7 +225,7 @@ end
 
 describe Notify::EmailJob, type: :job do
   let(:recipient) { 'test@example.com' }
-  let(:stub_client) { double Notifications::Client, send_email: true }
+  let(:stub_client) { instance_double Notifications::Client, send_email: true }
   let(:notify_method) { :send_email }
   let(:notify_method_params) do
     {
@@ -233,7 +241,7 @@ end
 
 describe Notify::SmsJob, type: :job do
   let(:recipient) { "07777777777" }
-  let(:stub_client) { double Notifications::Client, send_sms: true }
+  let(:stub_client) { instance_double Notifications::Client, send_sms: true }
   let(:notify_method) { :send_sms }
   let(:notify_method_params) do
     {

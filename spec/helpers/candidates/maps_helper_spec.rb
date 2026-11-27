@@ -1,50 +1,51 @@
 require 'rails_helper'
 
 RSpec.describe Candidates::MapsHelper, type: :helper do
+  let(:latitude) { "53.4782" }
+  let(:longitude) { "-2.2299" }
+  let(:zoom) { 8 }
+
   before do
-    allow(Rails.application.config.x).to receive(:google_maps_key) { '12345' }
-    @latitude = "53.4782"
-    @longitude = "-2.2299"
-    @zoom = 8
+    allow(Rails.application.config.x).to receive(:google_maps_key).and_return('12345')
   end
 
-  context '.static_map_url' do
+  describe '.static_map_url' do
     subject do
-      static_map_url(@latitude, @longitude, mapsize: [300, 200], zoom: @zoom)
+      static_map_url(latitude, longitude, mapsize: [300, 200], zoom: zoom)
     end
 
-    it('should return a correct Google Maps url') do
+    it('returns a correct Google Maps url') do
       url = "https://maps.googleapis.com/maps/api/staticmap"
-      params = "center=#{@latitude}%2C#{@longitude}&key=12345&markers=#{@latitude}%2C#{@longitude}&scale=2&size=300x200&zoom=#{@zoom}"
+      params = "center=#{latitude}%2C#{longitude}&key=12345&markers=#{latitude}%2C#{longitude}&scale=2&size=300x200&zoom=#{zoom}"
       expect(subject).to eq("#{url}?#{params}")
     end
   end
 
-  context '.ajax_map' do
+  describe '.ajax_map' do
     include ActionController::Base::HelperMethods
 
-    subject { ajax_map(@latitude, @longitude, mapsize: [300, 200], zoom: @zoom) }
+    subject { ajax_map(latitude, longitude, mapsize: [300, 200], zoom: zoom) }
 
-    it "should include wrapping div" do
+    it "includes wrapping div" do
       expect(subject).to match('class="embedded-map"')
     end
 
-    it "should include map container div" do
+    it "includes map container div" do
       expect(subject).to match('class="embedded-map__inner-container"')
     end
 
-    it "should include nested non-js fallback img" do
+    it "includes nested non-js fallback img" do
       expect(subject).to match(/<img /)
-      expect(subject).to match(";markers=#{@latitude}%2C#{@longitude}")
+      expect(subject).to match(";markers=#{latitude}%2C#{longitude}")
     end
   end
 
-  context '.external_map_url' do
-    subject { external_map_url(latitude: @latitude, longitude: @longitude, name: 'test', zoom: @zoom) }
+  describe '.external_map_url' do
+    subject { external_map_url(latitude: latitude, longitude: longitude, name: 'test', zoom: zoom) }
 
-    it "should add in latitude and longitude" do
+    it "adds in latitude and longitude" do
       expect(subject).to \
-        eq("https://www.google.com/maps/dir/?api=1&destination=#{@latitude},#{@longitude}")
+        eq("https://www.google.com/maps/dir/?api=1&destination=#{latitude},#{longitude}")
     end
   end
 end

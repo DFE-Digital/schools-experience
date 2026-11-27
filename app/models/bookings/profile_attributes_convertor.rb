@@ -50,13 +50,13 @@ module Bookings
       output[:dbs_policy_conditions] = input[:dbs_requirement_dbs_policy_conditions]
 
       output[:dbs_policy_details] = case input[:dbs_requirement_dbs_policy_conditions]
-                                    when 'notrequired'
+      when 'notrequired'
                                       input[:dbs_requirement_no_dbs_policy_details].presence
-                                    when 'inschool'
+      when 'inschool'
                                       input[:dbs_requirement_dbs_policy_details_inschool].presence
-                                    else
+      else
                                       input[:dbs_requirement_dbs_policy_details].presence
-                                    end
+      end
     end
 
     def convert_individual_requirements

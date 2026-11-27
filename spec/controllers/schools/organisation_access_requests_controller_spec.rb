@@ -2,9 +2,9 @@ require "rails_helper"
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 RSpec.describe Schools::OrganisationAccessRequestsController, type: :request do
-  include_context "logged in DfE user"
-
   subject { page_request && response }
+
+  include_context "when a DfE user is logged in"
 
   before do
     allow(Rails.application.config.x).to \

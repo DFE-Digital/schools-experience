@@ -16,7 +16,7 @@ describe Cron::Reminders::AddAvailabilityJob, type: :job do
       end
     end
 
-    subject! { described_class.new.perform }
+    subject! { described_class.new.perform } # rubocop:disable RSpec/LeadingSubject -- Job must run after reminder setup.
 
     it 'sends a reminder email to all schools who created their profile yesterday and have no availability' do
       expect(reminder_email_double).to have_received(:despatch_later!).once

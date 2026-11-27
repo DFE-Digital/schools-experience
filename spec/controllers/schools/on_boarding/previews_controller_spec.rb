@@ -2,35 +2,28 @@ require 'rails_helper'
 require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 
 describe Schools::OnBoarding::PreviewsController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let! :early_years do
     FactoryBot.create :bookings_phase, :early_years
+  end
+  let! :school do
+    FactoryBot.create :bookings_school
   end
 
   let! :primary do
     FactoryBot.create :bookings_phase, :primary
   end
 
-  let! :secondary do
+  before do
     FactoryBot.create :bookings_phase, :secondary
-  end
-
-  let! :college do
     FactoryBot.create :bookings_phase, :college
   end
 
-  let! :school do
-    FactoryBot.create :bookings_school
-  end
-
-  context '#show' do
+  describe '#show' do
     context 'when profile is not complete' do
-      let! :school_profile do
-        FactoryBot.create :school_profile, bookings_school: school
-      end
-
       before do
+        FactoryBot.create :school_profile, bookings_school: school
         get '/schools/on_boarding/preview'
       end
 

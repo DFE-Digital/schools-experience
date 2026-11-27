@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Candidates::SchoolsController, type: :request do
-  context "GET #index with search params" do
+  context "when GET #index with search params" do
     let(:query_params) do
       {
         query: 'Something',
@@ -94,7 +94,11 @@ RSpec.describe Candidates::SchoolsController, type: :request do
 
     context "when search is invalid" do
       before do
-        allow_any_instance_of(Candidates::SchoolSearch).to receive(:valid?).and_return false
+        allow(Candidates::SchoolSearch).to receive(:new_decrypt).and_wrap_original do |original, *args|
+          original.call(*args).tap do |search|
+            allow(search).to receive(:valid?).and_return(false)
+          end
+        end
       end
 
       it "renders the search page" do
@@ -103,10 +107,11 @@ RSpec.describe Candidates::SchoolsController, type: :request do
     end
   end
 
-  context "GET #show" do
+  context "when GET #show" do
+    subject! { req }
+
     let(:school) { create(:bookings_school) }
     let(:req) { get candidates_school_path(school) }
-    subject! { req }
 
     it "returns http success" do
       expect(response).to have_http_status(:success)
@@ -117,11 +122,12 @@ RSpec.describe Candidates::SchoolsController, type: :request do
     end
 
     it "assigns the the school" do
-      expect(assigns(:school)).to_not be_nil
+      expect(assigns(:school)).not_to be_nil
     end
 
-    context 'counting' do
+    context 'when counting' do
       let!(:count) { school.views }
+
       before { req }
 
       specify 'count should have increased when viewed' do
@@ -148,6 +154,7 @@ RSpec.describe Candidates::SchoolsController, type: :request do
         get candidates_schools_path
         response
       end
+
       it { is_expected.to redirect_to candidates_root_path }
     end
 
@@ -156,6 +163,7 @@ RSpec.describe Candidates::SchoolsController, type: :request do
         get candidates_school_path(school)
         response
       end
+
       it { is_expected.to redirect_to candidates_root_path }
     end
   end
@@ -170,20 +178,24 @@ RSpec.describe Candidates::SchoolsController, type: :request do
 
     describe '#show' do
       context 'when in whitelist' do
-        let(:whitelist) { school.urn.to_s }
         subject do
           get candidates_school_path(school)
           response
         end
+
+        let(:whitelist) { school.urn.to_s }
+
         it { is_expected.to have_rendered 'show' }
       end
 
       context 'when not in whitelist' do
-        let(:whitelist) { '-1' }
         subject do
           get candidates_school_path(school)
           response
         end
+
+        let(:whitelist) { '-1' }
+
         it { is_expected.to redirect_to candidates_root_path }
       end
     end

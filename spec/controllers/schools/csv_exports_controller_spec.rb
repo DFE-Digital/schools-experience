@@ -2,9 +2,9 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::CsvExportsController, type: :request do
-  include_context "logged in DfE user for school with profile"
-
   subject { page_request && response }
+
+  include_context "when a DfE user is logged in for a school with a profile"
 
   describe "#show" do
     let(:page_request) { get schools_csv_export_path }

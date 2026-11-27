@@ -15,8 +15,9 @@ RSpec.describe User, type: :model do
     subject(:exchange) { described_class.exchange(dfe_sign_in_user) }
 
     it { expect { exchange }.to change(described_class, :count).by(1) }
+
     it do
-      is_expected.to have_attributes(
+      expect(subject).to have_attributes(
         sub: dfe_sign_in_user.sub,
         given_name: dfe_sign_in_user.given_name,
         family_name: dfe_sign_in_user.family_name,

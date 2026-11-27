@@ -6,12 +6,12 @@ end
 Given("I am on the accept placement request page") do
   path = path_for("accept placement request", placement_request: @placement_request)
   visit(path)
-  expect(page.current_path).to eql(path)
+  expect(page).to have_current_path(path)
 end
 
 Then("every row of the booking details list should have a {string} link") do |string|
   within('#booking-details') do
-    page.all('div.govuk-summary-list__row').each do |row|
+    page.all('div.govuk-summary-list__row').each do |row| # rubocop:disable Rails/FindEach -- Capybara collections are arrays.
       expect(row).to have_link(string)
     end
   end
@@ -43,7 +43,7 @@ end
 When("I am on the {string} screen for that placement request") do |string|
   path = path_for(string, placement_request: @placement_request)
   visit(path)
-  expect(page.current_path).to eql(path)
+  expect(page).to have_current_path(path)
 end
 
 Then("the {string} link should take me to the {string} page") do |link_text, screen|

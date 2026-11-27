@@ -3,8 +3,8 @@ require 'rails_helper'
 describe Schools::OnBoarding::FromBookingsSchool do
   subject { described_class.new school }
 
-  context '#[]' do
-    context 'availability_description' do
+  describe '#[]' do
+    context 'when availability_description' do
       let :school do
         FactoryBot.build :bookings_school
       end
@@ -15,7 +15,7 @@ describe Schools::OnBoarding::FromBookingsSchool do
       end
     end
 
-    context 'availability_preference' do
+    context 'when availability_preference' do
       context 'when the school has availability_info' do
         let :school do
           FactoryBot.build :bookings_school
@@ -37,7 +37,7 @@ describe Schools::OnBoarding::FromBookingsSchool do
       end
     end
 
-    context 'experience_outline' do
+    context 'when experience_outline' do
       let :school do
         FactoryBot.build :bookings_school,
           :with_placement_info
@@ -49,7 +49,7 @@ describe Schools::OnBoarding::FromBookingsSchool do
       end
     end
 
-    context 'teacher_training' do
+    context 'when teacher_training' do
       let :school do
         FactoryBot.build :bookings_school,
           :with_placement_info,
@@ -73,7 +73,7 @@ describe Schools::OnBoarding::FromBookingsSchool do
         it 'returns the correct attributes' do
           expect(
             subject['teacher_training'][:provides_teacher_training]
-          ).to eq true
+          ).to be true
         end
       end
 
@@ -85,12 +85,12 @@ describe Schools::OnBoarding::FromBookingsSchool do
         it 'returns the correct attributes' do
           expect(
             subject['experience_outline'][:provides_teacher_training]
-          ).to eq nil
+          ).to be_nil
         end
       end
     end
 
-    context 'key_stage_list' do
+    context 'when key_stage_list' do
       context 'when has early years' do
         let :school do
           FactoryBot.build :bookings_school,
@@ -158,7 +158,7 @@ describe Schools::OnBoarding::FromBookingsSchool do
       end
     end
 
-    context 'phases_list' do
+    context 'when phases_list' do
       context 'when primary_key_stage_info is present' do
         let :school do
           FactoryBot.build :bookings_school, :with_primary_key_stage_info
@@ -180,7 +180,7 @@ describe Schools::OnBoarding::FromBookingsSchool do
       end
     end
 
-    context 'subject_list' do
+    context 'when subject_list' do
       let :school do
         FactoryBot.create :bookings_school, :with_subjects
       end

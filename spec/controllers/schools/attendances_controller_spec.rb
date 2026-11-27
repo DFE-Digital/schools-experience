@@ -2,7 +2,7 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::AttendancesController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let! :school do
     Bookings::School.find_by!(urn: urn).tap do |s|
@@ -10,7 +10,7 @@ describe Schools::AttendancesController, type: :request do
     end
   end
 
-  let! :booking do
+  before do
     create :bookings_booking, :previous, :accepted, :attended,
       bookings_placement_request: create(:bookings_placement_request, school: school),
       bookings_school: school

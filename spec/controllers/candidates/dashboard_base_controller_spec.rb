@@ -15,7 +15,7 @@ RSpec.describe Candidates::DashboardBaseController, type: :request do
     end
 
     context 'when logged in' do
-      include_context 'candidate signin'
+      include_context 'when the candidate signs in'
 
       before { get '/restricted' }
 

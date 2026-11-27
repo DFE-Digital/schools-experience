@@ -32,30 +32,30 @@ describe Candidates::BookingFeedbacksController, type: :request do
   let(:token) { placement_request.token }
 
   describe "#new" do
-    include_context "invalid requests"
-
     subject(:perform_request) do
       get new_candidates_booking_feedback_path(token)
       response
     end
 
+    include_context "invalid requests"
+
     it { is_expected.to render_template(:new) }
   end
 
   describe "#create" do
+    subject(:perform_request) do
+      post candidates_booking_feedback_path(token, params: params)
+      response
+    end
+
     include_context "invalid requests"
 
     let(:attributes) { attributes_for(:candidates_booking_feedback) }
     let(:params) { { candidates_booking_feedback: attributes } }
     let(:created_feedback) { Candidates::BookingFeedback.last }
 
-    subject(:perform_request) do
-      post candidates_booking_feedback_path(token, params: params)
-      response
-    end
-
     it { is_expected.to redirect_to(created_feedback) }
-    it { expect { perform_request }.to change { Candidates::BookingFeedback.count }.by(1) }
+    it { expect { perform_request }.to change(Candidates::BookingFeedback, :count).by(1) }
 
     it "creates feedback associated to the booking" do
       perform_request

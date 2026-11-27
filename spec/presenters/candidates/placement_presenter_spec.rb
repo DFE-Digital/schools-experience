@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Candidates::PlacementPresenter do
+  subject(:placement_presenter) { described_class.new(placement_request) }
+
   let(:placement_request) { create(:placement_request) }
-  subject { described_class.new(placement_request) }
 
   describe '#date' do
     context 'when placement is booked' do
@@ -88,6 +89,7 @@ RSpec.describe Candidates::PlacementPresenter do
 
       context 'when the booking is cancelled by the school' do
         let(:placement_request) { create(:placement_request) }
+
         before do
           create(:bookings_booking, :accepted, :cancelled_by_school, bookings_placement_request: placement_request)
         end
@@ -100,6 +102,7 @@ RSpec.describe Candidates::PlacementPresenter do
 
       context 'when the booking is cancelled by the candidate' do
         let(:placement_request) { create(:placement_request) }
+
         before do
           create(:bookings_booking, :accepted, :cancelled_by_candidate, bookings_placement_request: placement_request)
         end
@@ -140,10 +143,10 @@ RSpec.describe Candidates::PlacementPresenter do
   end
 
   describe '#status_tag_colour' do
-    it 'returns a govuk tag colour css class' do
-      allow(subject).to receive(:status).and_return('Withdrawn')
+    let(:placement_request) { create(:placement_request, :cancelled) }
 
-      expect(subject.status_tag_colour).to eq('govuk-tag--orange')
+    it 'returns a govuk tag colour css class' do
+      expect(placement_presenter.status_tag_colour).to eq('govuk-tag--orange')
     end
   end
 

@@ -16,7 +16,7 @@ describe Cron::Reminders::TomorrowJob, type: :job do
       allow(Bookings::ReminderJob).to receive(:perform_later).and_return(true)
     end
 
-    subject! { described_class.new.perform }
+    subject! { described_class.new.perform } # rubocop:disable RSpec/LeadingSubject -- Job must run after bookings and stubs are set up.
 
     specify 'should schedule Bookings::ReminderJob for accepted bookings' do
       expect(Bookings::ReminderJob).to have_received(:perform_later).exactly(2).times

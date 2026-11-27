@@ -2,19 +2,19 @@ require 'rails_helper'
 
 describe Candidates::PlacementRequests::CancellationsController, type: :request do
   let :notify_school_request_cancellation do
-    double NotifyEmail::SchoolRequestCancellation, despatch_later!: true
+    instance_double NotifyEmail::SchoolRequestCancellation, despatch_later!: true
   end
 
   let :notify_candidate_request_cancellation do
-    double NotifyEmail::CandidateRequestCancellation, despatch_later!: true
+    instance_double NotifyEmail::CandidateRequestCancellation, despatch_later!: true
   end
 
   let :notify_school_booking_cancellation do
-    double NotifyEmail::SchoolBookingCancellation, despatch_later!: true
+    instance_double NotifyEmail::SchoolBookingCancellation, despatch_later!: true
   end
 
   let :notify_candidate_booking_cancellation do
-    double NotifyEmail::CandidateBookingCancellation, despatch_later!: true
+    instance_double NotifyEmail::CandidateBookingCancellation, despatch_later!: true
   end
 
   let :school_experience do
@@ -45,7 +45,7 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
       receive(:write_to_gitis_contact)
   end
 
-  context '#new' do
+  describe '#new' do
     before do
       get "/candidates/placement_requests/#{placement_request.token}/cancellation/new"
     end
@@ -84,7 +84,7 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
     end
   end
 
-  context '#create' do
+  describe '#create' do
     let :cancellation_params do
       { bookings_placement_request_cancellation: cancellation.attributes }
     end
@@ -138,7 +138,7 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
           FactoryBot.create :placement_request
         end
 
-        context 'invalid' do
+        context 'when invalid' do
           let :cancellation do
             Bookings::PlacementRequest::Cancellation.new
           end
@@ -167,7 +167,7 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
           end
         end
 
-        context 'valid' do
+        context 'when valid' do
           let :cancellation do
             FactoryBot.build :cancellation, placement_request: placement_request
           end
@@ -246,7 +246,7 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
           FactoryBot.create :placement_request, :booked
         end
 
-        context 'invalid' do
+        context 'when invalid' do
           let :cancellation do
             Bookings::PlacementRequest::Cancellation.new
           end
@@ -270,7 +270,7 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
           end
         end
 
-        context 'valid' do
+        context 'when valid' do
           let :cancellation do
             FactoryBot.build :cancellation, placement_request: placement_request
           end
@@ -322,7 +322,7 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
     end
   end
 
-  context '#show' do
+  describe '#show' do
     before do
       get \
         "/candidates/placement_requests/#{placement_request.token}/cancellation"

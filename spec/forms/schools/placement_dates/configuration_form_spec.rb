@@ -5,7 +5,7 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
     create :bookings_school, :with_subjects, subject_count: 3
   end
 
-  context '.new_from_date' do
+  describe '.new_from_date' do
     subject { described_class.new_from_date placement_date }
 
     context 'when the placement_date has already been published' do
@@ -49,17 +49,17 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
       end
 
       it 'returns a new subject selection without attributes set' do
-        expect(subject.available_for_all_subjects).to be nil
-        expect(subject.max_bookings_count).to be nil
-        expect(subject.has_limited_availability).to be nil
+        expect(subject.available_for_all_subjects).to be_nil
+        expect(subject.max_bookings_count).to be_nil
+        expect(subject.has_limited_availability).to be_nil
       end
     end
   end
 
-  context '#save' do
+  describe '#save' do
     before { described_class.new(attributes).save(placement_date) }
 
-    context 'for a unpublished placement_date' do
+    context 'with a unpublished placement_date' do
       let :placement_date do
         create \
           :bookings_placement_date, bookings_school: school, published_at: nil
@@ -140,13 +140,13 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
           end
 
           it 'sets published_at to nil' do
-            expect(placement_date.published_at).to eq nil
+            expect(placement_date.published_at).to be_nil
           end
         end
       end
     end
 
-    context 'for a published placement_date' do
+    context 'with a published placement_date' do
       let :placement_date do
         create \
           :bookings_placement_date,
@@ -214,20 +214,23 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
     end
   end
 
-  context '#subject_specific?' do
+  describe '#subject_specific?' do
     context 'when the date doesnt support subjects' do
       subject { described_class.new supports_subjects: false }
+
       it { is_expected.not_to be_subject_specific }
     end
 
     context 'when the date supports subject' do
       context 'when the date is available_for_all_subjects' do
         subject { described_class.new supports_subjects: true, available_for_all_subjects: true }
+
         it { is_expected.not_to be_subject_specific }
       end
 
       context 'when the date is not available_for_all_subjects' do
         subject { described_class.new supports_subjects: true, available_for_all_subjects: false }
+
         it { is_expected.to be_subject_specific }
       end
     end

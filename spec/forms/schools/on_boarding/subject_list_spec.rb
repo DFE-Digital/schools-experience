@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 describe Schools::OnBoarding::SubjectList, type: :model do
-  context '#attibutes' do
+  describe '#attibutes' do
     it { is_expected.to respond_to :subject_ids }
   end
 
-  context '#subject_ids' do
+  describe '#subject_ids' do
     it 'removes blank values' do
       expect(described_class.new(subject_ids: [""]).subject_ids).to eq []
     end
@@ -15,7 +15,7 @@ describe Schools::OnBoarding::SubjectList, type: :model do
     end
   end
 
-  context 'validations' do
+  context 'when validating' do
     context 'when no subjects selected' do
       subject { described_class.new subject_ids: [] }
 
@@ -26,11 +26,11 @@ describe Schools::OnBoarding::SubjectList, type: :model do
     end
 
     context 'when non existent subject ids selected' do
+      subject { described_class.new subject_ids: [bookings_subject.id + 1] }
+
       let :bookings_subject do
         FactoryBot.create :bookings_subject
       end
-
-      subject { described_class.new subject_ids: [bookings_subject.id + 1] }
 
       it 'is invalid' do
         expect(subject).not_to be_valid
@@ -39,12 +39,12 @@ describe Schools::OnBoarding::SubjectList, type: :model do
     end
   end
 
-  context '.new_from_bookings_school' do
+  describe '.new_from_bookings_school' do
+    subject { described_class.new_from_bookings_school bookings_school }
+
     let :bookings_school do
       FactoryBot.create :bookings_school, :with_subjects
     end
-
-    subject { described_class.new_from_bookings_school bookings_school }
 
     it 'sets the subjects from the bookings school' do
       expect(subject.subject_ids).to eq bookings_school.subject_ids

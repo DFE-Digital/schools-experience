@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::PlacementPreferencesController, type: :request do
-  include_context 'Stubbed candidates school'
-  include_context 'Stubbed current_registration'
+  include_context 'with a stubbed candidate school'
+  include_context 'with a stubbed current registration'
 
   let :registration_session do
     FactoryBot.build :registration_session, with: %i[
@@ -15,7 +15,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
   end
 
   context 'without existing placement_preference in session' do
-    context '#new' do
+    describe '#new' do
       before do
         get '/candidates/schools/11048/registrations/placement_preference/new'
       end
@@ -29,7 +29,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
       end
     end
 
-    context '#create' do
+    describe '#create' do
       let :placement_preference_params do
         {
           candidates_registrations_placement_preference: \
@@ -42,7 +42,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
           params: placement_preference_params
       end
 
-      context 'invalid' do
+      context 'when invalid' do
         let :placement_preference do
           Candidates::Registrations::PlacementPreference.new
         end
@@ -57,7 +57,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
         end
       end
 
-      context 'valid' do
+      context 'when valid' do
         let :placement_preference do
           FactoryBot.build :placement_preference, urn: school.urn
         end
@@ -84,7 +84,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
       registration_session.save existing_placement_preference
     end
 
-    context '#new' do
+    describe '#new' do
       before do
         get '/candidates/schools/11048/registrations/placement_preference/new'
       end
@@ -99,7 +99,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
       end
     end
 
-    context '#edit' do
+    describe '#edit' do
       before do
         get '/candidates/schools/11048/registrations/placement_preference/edit'
       end
@@ -114,7 +114,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
       end
     end
 
-    context '#update' do
+    describe '#update' do
       let :placement_preference_params do
         {
           candidates_registrations_placement_preference: \
@@ -127,7 +127,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
           params: placement_preference_params
       end
 
-      context 'invalid' do
+      context 'when invalid' do
         let :placement_preference do
           Candidates::Registrations::PlacementPreference.new
         end
@@ -142,7 +142,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
         end
       end
 
-      context 'valid' do
+      context 'when valid' do
         let :placement_preference do
           FactoryBot.build :placement_preference,
             urn: school.urn,

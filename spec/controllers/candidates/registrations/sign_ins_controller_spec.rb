@@ -3,8 +3,6 @@ require 'rails_helper'
 RSpec.describe Candidates::Registrations::SignInsController, type: :request do
   include ActiveJob::TestHelper
   let(:school_id) { 11_048 }
-  let!(:school) { create(:bookings_school, urn: school_id) }
-
   let :registration_session do
     Candidates::Registrations::RegistrationSession.new(
       'urn' => school_id,
@@ -18,19 +16,21 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
     )
   end
 
+  before { create(:bookings_school, urn: school_id) }
+
   describe 'GET #show' do
-    include_context 'Stubbed current_registration'
+    include_context 'with a stubbed current registration'
 
     before { get candidates_school_registrations_sign_in_path(school_id) }
 
-    it "should return HTTP success" do
+    it "returns HTTP success" do
       expect(response).to have_http_status(:success)
     end
   end
 
   describe 'GET #update' do
-    include_context "Stubbed current_registration"
-    include_context "api correct verification code for personal info"
+    include_context "with a stubbed current registration"
+    include_context "when the API returns a correct verification code for personal information"
 
     let(:personal_info) { registration_session.personal_information }
     let(:params) do
@@ -48,37 +48,32 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
     context "with a valid code" do
       before { perform_request }
 
-      it "will redirect_to ContactInformation step" do
+      it "redirect_toes ContactInformation step" do
         expect(response).to \
           redirect_to new_candidates_school_registrations_contact_information_path(school_id)
       end
 
-      it "will create a confirmed candidate" do
+      it "creates a confirmed candidate" do
         candidate = Bookings::Candidate.find_by(gitis_uuid: sign_up.candidate_id)
         expect(candidate).to be_confirmed
       end
     end
 
     context "with an invalid code" do
-      include_context "api incorrect verification code"
+      include_context "when the API returns an incorrect verification code"
 
       before { perform_request }
 
-      it "will show error screen" do
+      it "shows error screen" do
         expect(response).to have_http_status(:success)
         expect(response.body).to include("Please enter the latest verification code sent to your email address")
       end
     end
 
     context "when already signed in" do
-      include_context "candidate signin"
+      include_context "when the candidate signs in"
 
-      before do
-        expect_any_instance_of(described_class).to \
-          receive(:delete_registration_sessions!)
-      end
-
-      it "will redirect_to ContactInformation step" do
+      it "redirect_toes ContactInformation step" do
         perform_request
 
         expect(response).to \
@@ -87,12 +82,12 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
     end
 
     context "when the Candidate already exists" do
-      include_context "candidate signin"
+      include_context "when the candidate signs in"
 
       let(:sign_up) { build(:api_schools_experience_sign_up_with_name, candidate_id: gitis_contact_attrs[:candidate_id]) }
 
-      it "will not create another Candidate and redirect_to ConfirmationInformation step" do
-        expect { perform_request }.not_to(change { Bookings::Candidate.count })
+      it "does not create another Candidate and redirect_to ConfirmationInformation step" do
+        expect { perform_request }.not_to(change(Bookings::Candidate, :count))
 
         expect(response).to \
           redirect_to new_candidates_school_registrations_contact_information_path(school_id)
@@ -104,12 +99,12 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
 
       before { perform_request }
 
-      it "will redirect_to ContactInformation step" do
+      it "redirect_toes ContactInformation step" do
         expect(response).to \
           redirect_to new_candidates_school_registrations_contact_information_path(school_id)
       end
 
-      it "will have confirmed candidate" do
+      it "has confirmed candidate" do
         candidate = Bookings::Candidate.find_by(gitis_uuid: sign_up.candidate_id)
         expect(candidate).to be_confirmed
       end
@@ -117,10 +112,10 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
   end
 
   describe 'POST #create' do
-    include_context 'Stubbed current_registration'
-    include_context "api candidate matched back"
+    include_context 'with a stubbed current registration'
+    include_context "when the API candidate matches back"
 
-    let!(:candidate) { create(:candidate, gitis_uuid: SecureRandom.uuid) }
+    before { create(:candidate, gitis_uuid: SecureRandom.uuid) }
 
     let(:perform_request) do
       perform_enqueued_jobs do
@@ -128,7 +123,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
       end
     end
 
-    it "will issue a verification code and redirect to the show page" do
+    it "issues a verification code and redirect to the show page" do
       perform_request
 
       expect(response).to \

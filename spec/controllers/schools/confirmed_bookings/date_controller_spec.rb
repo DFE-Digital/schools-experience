@@ -2,13 +2,13 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::ConfirmedBookings::DateController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let(:booking) do
-    create(:bookings_booking, :accepted, bookings_school: @current_user_school)
+    create(:bookings_booking, :accepted, bookings_school: current_user_school)
   end
 
-  let!(:profile) { create(:bookings_profile, school: @current_user_school) }
+  before { create(:bookings_profile, school: current_user_school) }
 
   describe '#edit' do
     subject { get edit_schools_booking_date_path(booking.id) }
@@ -24,12 +24,14 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
       end
 
       specify do
-        is_expected.to render_template(:uneditable)
+        expect(subject).to render_template(:uneditable)
       end
     end
   end
 
   describe '#update' do
+    subject { patch schools_booking_date_path(booking.id, params: params) }
+
     let(:new_date) { 3.weeks.from_now.to_date }
     let(:params) do
       { bookings_booking: { date: new_date.to_formatted_s(:govuk) } }
@@ -37,13 +39,11 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
 
     let(:old_date) { booking.date }
 
-    subject { patch schools_booking_date_path(booking.id, params: params) }
-
     specify 'should redirect to the booking page' do
       expect(subject).to redirect_to(schools_booking_date_path(booking))
     end
 
-    context 'updating the booking' do
+    context 'when updating the booking' do
       before { subject }
 
       specify 'should update the booking' do
@@ -60,33 +60,32 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
       end
 
       specify do
-        is_expected.to render_template(:uneditable)
+        expect(subject).to render_template(:uneditable)
       end
     end
 
-    context 'events' do
+    context 'when events' do
       before do
         allow(Event).to receive(:create).and_return(true)
+        subject
       end
-
-      before { subject }
 
       specify 'should add an event' do
         expect(Event).to have_received(:create).with(
           event_type: :booking_date_changed,
-          bookings_school: @current_user_school,
+          bookings_school: current_user_school,
           recordable: booking
         )
       end
     end
 
-    context 'sending an email' do
+    context 'when sending an email' do
       let :email do
-        double(NotifyEmail::CandidateBookingDateChanged, despatch_later!: true)
+        instance_double(NotifyEmail::CandidateBookingDateChanged, despatch_later!: true)
       end
 
       let :virtual_email do
-        double(NotifyEmail::CandidateVirtualExperienceBookingDateChanged, despatch_later!: true)
+        instance_double(NotifyEmail::CandidateVirtualExperienceBookingDateChanged, despatch_later!: true)
       end
 
       before do
@@ -95,9 +94,8 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
 
         api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
         booking.gitis_contact = api.get_schools_experience_sign_up(booking.contact_uuid)
+        subject
       end
-
-      before { subject }
 
       context "when it's an in school experience" do
         specify 'should send a candidate booking date changed email with the correct values' do
@@ -112,7 +110,7 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
       end
 
       context "when it's a virtual experience" do
-        let(:booking) { create(:bookings_booking, :virtual_experience, :accepted, bookings_school: @current_user_school) }
+        let(:booking) { create(:bookings_booking, :virtual_experience, :accepted, bookings_school: current_user_school) }
 
         specify 'should send a candidate virtual experience booking date changed email with the correct values' do
           expect(NotifyEmail::CandidateVirtualExperienceBookingDateChanged).to have_received(:from_booking).with(
@@ -126,13 +124,13 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
       end
     end
 
-    context 'updating with same date' do
+    context 'when updating with same date' do
+      subject! { patch schools_booking_date_path(booking.id, params: params) }
+
       let(:date) { booking.date }
       let(:params) do
         { bookings_booking: { date: date.to_formatted_s(:govuk) } }
       end
-
-      subject! { patch schools_booking_date_path(booking.id, params: params) }
 
       specify("should render edit page") do
         expect(response).to have_http_status 200
@@ -148,7 +146,7 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
       expect(subject).to render_template(:show)
     end
 
-    context 'dynamic contents' do
+    context 'with dynamic contents' do
       before { subject }
 
       specify 'should contain the new date' do

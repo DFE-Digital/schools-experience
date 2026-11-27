@@ -2,36 +2,37 @@ require "rails_helper"
 
 describe Cron::IdentifyClosedSchoolsJob, type: :job do
   describe "#perform" do
+    subject(:perform) { described_class.new.perform }
+
     let(:email_double) { instance_double(NotifyEmail::ClosedOnboardedSchoolsSummary, despatch_later!: nil) }
-    let(:closed_school_1) { create(:bookings_school, :onboarded) }
-    let(:closed_school_2) { create(:bookings_school, :onboarded) }
-    let(:closed_school_3) { create(:bookings_school, :onboarded, :disabled) }
-    let(:closed_school_4) { create(:bookings_school, :onboarded, :disabled) }
-    let(:closed_school_5) { create(:bookings_school, :onboarded) }
-    let(:reopened_school_1) { create(:bookings_school) }
-    let(:reopened_school_2) { create(:bookings_school) }
-    let(:reopened_school_3) { create(:bookings_school) }
+    let(:enabled_school_closed_last_month) { create(:bookings_school, :onboarded) }
+    let(:enabled_school_closed_yesterday) { create(:bookings_school, :onboarded) }
+    let(:disabled_school_closed_two_days_ago) { create(:bookings_school, :onboarded, :disabled) }
+    let(:disabled_school_closed_five_days_ago) { create(:bookings_school, :onboarded, :disabled) }
+    let(:enabled_school_closed_twelve_days_ago) { create(:bookings_school, :onboarded) }
+    let(:replacement_school_hillend_one) { create(:bookings_school) }
+    let(:replacement_school_hillend_two) { create(:bookings_school) }
+    let(:replacement_school_st_anne) { create(:bookings_school) }
     let(:csv) do
       <<~CSV
         URN,CloseDate,LA (code),EstablishmentNumber,LA (name)
-        #{closed_school_1.urn},#{1.month.ago},888,1572,Hillend Primary
-        #{closed_school_2.urn},#{1.day.ago},888,1572,Hillend Primary
-        #{reopened_school_1.urn},,888,1572,Hillend Primary
-        #{reopened_school_2.urn},,888,1572,Hillend Primary
-        #{closed_school_3.urn},#{2.days.ago},999,1984,Main St Secondary
-        #{closed_school_4.urn},#{5.days.ago},777,1847,St Anne Primary
-        #{reopened_school_3.urn},,777,1847,St Anne Primary
-        #{closed_school_5.urn},#{12.days.ago},444,1746,St James Primary
+        #{enabled_school_closed_last_month.urn},#{1.month.ago},888,1572,Hillend Primary
+        #{enabled_school_closed_yesterday.urn},#{1.day.ago},888,1572,Hillend Primary
+        #{replacement_school_hillend_one.urn},,888,1572,Hillend Primary
+        #{replacement_school_hillend_two.urn},,888,1572,Hillend Primary
+        #{disabled_school_closed_two_days_ago.urn},#{2.days.ago},999,1984,Main St Secondary
+        #{disabled_school_closed_five_days_ago.urn},#{5.days.ago},777,1847,St Anne Primary
+        #{replacement_school_st_anne.urn},,777,1847,St Anne Primary
+        #{enabled_school_closed_twelve_days_ago.urn},#{12.days.ago},444,1746,St James Primary
       CSV
     end
-
-    subject(:perform) { described_class.new.perform }
 
     before do
       temp_csv = Tempfile.new
       temp_csv.write(csv)
       temp_csv.close
-      allow_any_instance_of(Bookings::Data::GiasDataFile).to receive(:path) { temp_csv.path }
+      data_file = instance_double(Bookings::Data::GiasDataFile, path: temp_csv.path)
+      allow(Bookings::Data::GiasDataFile).to receive(:new).and_return(data_file)
       allow(Rails).to receive(:env) { "production".inquiry }
     end
 
@@ -39,20 +40,20 @@ describe Cron::IdentifyClosedSchoolsJob, type: :job do
       closed_text = <<~MARKDOWN.chomp
         ## Schools that are disabled without replacements
 
-        * #{closed_school_3.name} (URN #{closed_school_3.urn}).
+        * #{disabled_school_closed_two_days_ago.name} (URN #{disabled_school_closed_two_days_ago.urn}).
 
         ## Schools that are disabled with replacements
 
-        * #{closed_school_4.name} (URN #{closed_school_4.urn}, replacement URN(s) #{reopened_school_3.urn}).
+        * #{disabled_school_closed_five_days_ago.name} (URN #{disabled_school_closed_five_days_ago.urn}, replacement URN(s) #{replacement_school_st_anne.urn}).
 
         ## Schools that are enabled without replacements
 
-        * #{closed_school_5.name} (URN #{closed_school_5.urn}).
+        * #{enabled_school_closed_twelve_days_ago.name} (URN #{enabled_school_closed_twelve_days_ago.urn}).
 
         ## Schools that are enabled with replacements
 
-        * #{closed_school_1.name} (URN #{closed_school_1.urn}, replacement URN(s) #{reopened_school_1.urn} and #{reopened_school_2.urn}).
-        * #{closed_school_2.name} (URN #{closed_school_2.urn}, replacement URN(s) #{reopened_school_1.urn} and #{reopened_school_2.urn}).
+        * #{enabled_school_closed_last_month.name} (URN #{enabled_school_closed_last_month.urn}, replacement URN(s) #{replacement_school_hillend_one.urn} and #{replacement_school_hillend_two.urn}).
+        * #{enabled_school_closed_yesterday.name} (URN #{enabled_school_closed_yesterday.urn}, replacement URN(s) #{replacement_school_hillend_one.urn} and #{replacement_school_hillend_two.urn}).
       MARKDOWN
 
       params = {
@@ -82,7 +83,9 @@ describe Cron::IdentifyClosedSchoolsJob, type: :job do
       before { allow(Rails).to receive(:env) { "preprod".inquiry } }
 
       it "does not send any emails" do
-        expect(NotifyEmail::ClosedOnboardedSchoolsSummary).not_to receive(:new)
+        allow(NotifyEmail::ClosedOnboardedSchoolsSummary).to receive(:new)
+        perform
+        expect(NotifyEmail::ClosedOnboardedSchoolsSummary).not_to have_received(:new)
       end
     end
   end

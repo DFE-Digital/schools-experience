@@ -1,15 +1,15 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::ApplicationPreviewsController, type: :request do
-  include_context 'Stubbed candidates school'
-  include_context 'Stubbed current_registration'
+  include_context 'with a stubbed candidate school'
+  include_context 'with a stubbed current registration'
 
-  context '#show' do
+  describe '#show' do
     before do
       get '/candidates/schools/urn/registrations/application_preview'
     end
 
-    context 'candidate skipped ahead' do
+    context 'when candidate skipped ahead' do
       let :registration_session do
         FactoryBot.build :registration_session, urn: school.urn, with: []
       end
@@ -20,7 +20,7 @@ describe Candidates::Registrations::ApplicationPreviewsController, type: :reques
       end
     end
 
-    context 'candidate has not skipped ahead' do
+    context 'when candidate has not skipped ahead' do
       let :registration_session do
         FactoryBot.build :registration_session
       end

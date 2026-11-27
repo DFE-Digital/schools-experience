@@ -2,9 +2,9 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::FeedbacksController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
-  context '#new' do
+  describe '#new' do
     before do
       get '/schools/feedbacks/new'
     end
@@ -18,7 +18,7 @@ describe Schools::FeedbacksController, type: :request do
     end
   end
 
-  context '#create' do
+  describe '#create' do
     let :feedback_params do
       { schools_feedback: feedback.attributes }
     end
@@ -27,7 +27,7 @@ describe Schools::FeedbacksController, type: :request do
       post '/schools/feedbacks', params: feedback_params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :feedback do
         Schools::Feedback.new
       end
@@ -41,7 +41,7 @@ describe Schools::FeedbacksController, type: :request do
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :feedback do
         FactoryBot.build :schools_feedback
       end
@@ -57,7 +57,7 @@ describe Schools::FeedbacksController, type: :request do
     end
   end
 
-  context '#show' do
+  describe '#show' do
     let :feedback do
       FactoryBot.create :schools_feedback
     end

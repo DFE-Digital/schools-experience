@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::ResendConfirmationEmailsController, type: :request do
-  include_context 'Stubbed candidates school'
-  include_context 'Stubbed current_registration'
+  include_context 'with a stubbed candidate school'
+  include_context 'with a stubbed current registration'
 
   let :registration_session do
     FactoryBot.build :registration_session
@@ -13,9 +13,9 @@ describe Candidates::Registrations::ResendConfirmationEmailsController, type: :r
       receive :perform_later
   end
 
-  context '#create' do
-    context 'session found' do
-      context 'session not pending email confirmation' do
+  describe '#create' do
+    context 'when session found' do
+      context 'when session not pending email confirmation' do
         before do
           Candidates::Registrations::RegistrationStore.instance.store! \
             registration_session
@@ -35,7 +35,7 @@ describe Candidates::Registrations::ResendConfirmationEmailsController, type: :r
         end
       end
 
-      context 'session pending email confirmation' do
+      context 'when session pending email confirmation' do
         before do
           registration_session.flag_as_pending_email_confirmation!
 
@@ -60,7 +60,7 @@ describe Candidates::Registrations::ResendConfirmationEmailsController, type: :r
       end
     end
 
-    context 'session not found' do
+    context 'when session not found' do
       before do
         allow(Sentry).to receive :capture_exception
 

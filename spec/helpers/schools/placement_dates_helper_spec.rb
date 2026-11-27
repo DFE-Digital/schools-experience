@@ -55,7 +55,7 @@ describe Schools::PlacementDatesHelper, type: 'helper' do
 
     context 'when the placement date is subject specific' do
       let(:subjects) { Bookings::Subject.where(name: %w[Biology Maths]) }
-      let(:pd) { double(Bookings::PlacementDate, subjects: subjects, subject_specific?: true) }
+      let(:pd) { instance_double(Bookings::PlacementDate, subjects: subjects, subject_specific?: true) }
 
       specify 'should return the subjects list' do
         expect(subject).to eql('Biology, Maths')
@@ -63,7 +63,7 @@ describe Schools::PlacementDatesHelper, type: 'helper' do
     end
 
     context 'when the placement date supports subjects' do
-      let(:pd) { double(Bookings::PlacementDate, subject_specific?: false, supports_subjects?: true) }
+      let(:pd) { instance_double(Bookings::PlacementDate, subject_specific?: false, supports_subjects?: true) }
 
       specify "should return 'All subjects'" do
         expect(subject).to eql('All subjects')
@@ -71,7 +71,7 @@ describe Schools::PlacementDatesHelper, type: 'helper' do
     end
 
     context "when the placement date doesn't support subjects" do
-      let(:pd) { double(Bookings::PlacementDate, subject_specific?: false, supports_subjects?: false) }
+      let(:pd) { instance_double(Bookings::PlacementDate, subject_specific?: false, supports_subjects?: false) }
 
       specify "should return 'Primary'" do
         expect(subject).to eql('Primary')
@@ -111,13 +111,13 @@ describe Schools::PlacementDatesHelper, type: 'helper' do
     subject { placement_date_phase(placement_date) }
 
     context "when supports_subjects is true" do
-      let(:placement_date) { double(Bookings::PlacementDate, supports_subjects: true) }
+      let(:placement_date) { instance_double(Bookings::PlacementDate, supports_subjects: true) }
 
       it { is_expected.to eq("Secondary") }
     end
 
     context "when supports_subjects is false" do
-      let(:placement_date) { double(Bookings::PlacementDate, supports_subjects: false) }
+      let(:placement_date) { instance_double(Bookings::PlacementDate, supports_subjects: false) }
 
       it { is_expected.to eq("Primary") }
     end
@@ -127,13 +127,13 @@ describe Schools::PlacementDatesHelper, type: 'helper' do
     subject { placement_date_anchor(placement_date) }
 
     context "when supports_subjects is true" do
-      let(:placement_date) { double(Bookings::PlacementDate, supports_subjects: true, date: Date.new(2021, 1, 2)) }
+      let(:placement_date) { instance_double(Bookings::PlacementDate, supports_subjects: true, date: Date.new(2021, 1, 2)) }
 
       it { is_expected.to eq("secondary-placement-date-2021-01-02") }
     end
 
     context "when supports_subjects is false" do
-      let(:placement_date) { double(Bookings::PlacementDate, supports_subjects: false, date: Date.new(2021, 3, 4)) }
+      let(:placement_date) { instance_double(Bookings::PlacementDate, supports_subjects: false, date: Date.new(2021, 3, 4)) }
 
       it { is_expected.to eq("primary-placement-date-2021-03-04") }
     end

@@ -17,9 +17,9 @@ protected
   def add_x_robots_tag(set_to_all: false)
     headers["X-Robots-Tag"] = if set_to_all || request.path.in?(CRAWLABLE_PATHS)
                                 "all"
-                              else
+    else
                                 "none"
-                              end
+    end
   end
 
   def http_basic_authenticate

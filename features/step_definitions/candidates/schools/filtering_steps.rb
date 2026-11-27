@@ -11,7 +11,7 @@ When("I click the {string} tag") do |string|
 end
 
 When("the results have finished loading") do
-  expect(page).not_to have_selector(".loading", visible: true)
+  expect(page).not_to have_selector(".loading", visible: :visible)
 end
 
 Then("only {string} schools should remain in the results") do |phase|

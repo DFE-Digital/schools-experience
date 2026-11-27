@@ -2,7 +2,7 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::PlacementDatesController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let! :school do
     Bookings::School.find_by!(urn: urn).tap do |s|
@@ -46,7 +46,7 @@ describe Schools::PlacementDatesController, type: :request do
     end
   end
 
-  context '#edit' do
+  describe '#edit' do
     let(:placement_date) { create :bookings_placement_date, bookings_school: school }
 
     before { get "/schools/placement_dates/#{placement_date.id}/edit" }
@@ -58,7 +58,7 @@ describe Schools::PlacementDatesController, type: :request do
     end
   end
 
-  context '#close' do
+  describe '#close' do
     let(:placement_date) { create :bookings_placement_date, :active, bookings_school: school }
 
     context 'when confirmed' do

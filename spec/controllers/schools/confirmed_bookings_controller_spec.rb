@@ -2,7 +2,7 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::ConfirmedBookingsController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let! :school do
     Bookings::School.find_by!(urn: urn).tap do |s|
@@ -23,6 +23,7 @@ describe Schools::ConfirmedBookingsController, type: :request do
 
   describe '#show' do
     let(:booking) { create(:bookings_booking, :accepted, bookings_school: school) }
+
     before { get schools_booking_path(booking) }
 
     it { expect(response).to have_http_status(:success) }

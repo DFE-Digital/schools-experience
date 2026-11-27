@@ -11,7 +11,7 @@ describe Schools::OnBoarding::Wizard do
       let(:previous_step) { nil }
 
       it "returns the first required step (from all steps/sections)" do
-        is_expected.to be(:phases_list)
+        expect(subject).to be(:phases_list)
       end
     end
 
@@ -19,7 +19,7 @@ describe Schools::OnBoarding::Wizard do
       let(:previous_step) { :unknown }
 
       it "returns the first required step (from all steps/sections)" do
-        is_expected.to be(:phases_list)
+        expect(subject).to be(:phases_list)
       end
     end
 
@@ -33,7 +33,7 @@ describe Schools::OnBoarding::Wizard do
       let(:previous_step) { :dbs_requirement }
 
       it "returns the next step" do
-        is_expected.to be(:fees)
+        expect(subject).to be(:fees)
       end
     end
 
@@ -42,12 +42,12 @@ describe Schools::OnBoarding::Wizard do
       let(:previous_step) { :dbs_requirement }
 
       it "skips the complted step, returning the next incomplete step" do
-        is_expected.to be(:administration_fee)
+        expect(subject).to be(:administration_fee)
       end
     end
 
     describe "section/step specific behaviour" do
-      context "within the safeguarding_and_fees section" do
+      context "when within the safeguarding_and_fees section" do
         context "when the next step is fees" do
           let(:previous_step) { :dbs_requirement }
 
@@ -118,7 +118,7 @@ describe Schools::OnBoarding::Wizard do
         end
       end
 
-      context "within the subjects_and_education_phases section" do
+      context "when within the subjects_and_education_phases section" do
         context "when the next step is key_stage_list" do
           let(:school_profile) { build(:school_profile, phases_list_primary: true) }
           let(:previous_step) { :phases_list }
@@ -164,7 +164,7 @@ describe Schools::OnBoarding::Wizard do
         end
       end
 
-      context "within the candidate_requirements_and_school_experience_details section" do
+      context "when within the candidate_requirements_and_school_experience_details section" do
         context "when the next step is description" do
           let(:previous_step) { :candidate_requirements_selection }
 
@@ -238,7 +238,7 @@ describe Schools::OnBoarding::Wizard do
         end
       end
 
-      context "within the disability_and_access section" do
+      context "when within the disability_and_access section" do
         context "when the next step is access_needs_detail" do
           let(:school_profile) { build(:school_profile, :with_access_needs_support) }
           let(:previous_step) { :access_needs_support }
@@ -300,9 +300,9 @@ describe Schools::OnBoarding::Wizard do
   end
 
   describe "#step_state" do
-    let(:step) { :dbs_requirement }
-
     subject { instance.step_state(step) }
+
+    let(:step) { :dbs_requirement }
 
     it { is_expected.to be(:not_started) }
 

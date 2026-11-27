@@ -3,11 +3,10 @@ require 'csv'
 
 describe Bookings::Data::SchoolMassImporter do
   before do
-    allow($stdout).to receive(:puts).and_return(true)
-    allow_any_instance_of(Kernel).to receive(:print).and_return(nil)
+    allow($stdout).to receive_messages(puts: true, write: 0)
   end
 
-  context 'Initialization' do
+  context 'when initializing' do
     let(:edubase_data) do
       CSV.parse(
         Rails.root.join('spec', 'sample_data', 'edubase.csv').read.scrub,
@@ -15,8 +14,8 @@ describe Bookings::Data::SchoolMassImporter do
       )
     end
 
-    context 'EduBase Data' do
-      subject { Bookings::Data::SchoolMassImporter.new([], edubase_data).edubase_data }
+    context 'with edubase data' do
+      subject { described_class.new([], edubase_data).edubase_data }
 
       specify 'should convert to a hash' do
         expect(subject).to be_a(Hash)
@@ -31,7 +30,9 @@ describe Bookings::Data::SchoolMassImporter do
       end
     end
 
-    context 'Importing' do
+    context 'when importing' do
+      subject { described_class.new(edubase_data) }
+
       let!(:count_before) { Bookings::School.count }
       let(:school_type_id) { 2 }
 
@@ -47,11 +48,8 @@ describe Bookings::Data::SchoolMassImporter do
           create(:bookings_phase, name: name, edubase_id: i)
         end
         create(:bookings_school_type, edubase_id: school_type_id)
+        subject.import
       end
-
-      subject { Bookings::Data::SchoolMassImporter.new(edubase_data) }
-
-      before { subject.import }
 
       specify 'it should import the correct number of rows' do
         expect(Bookings::School.count).to eql(count_before + edubase_data.size)
@@ -91,7 +89,7 @@ describe Bookings::Data::SchoolMassImporter do
         end
       end
 
-      context 'Cleaning up websites' do
+      context 'when cleaning up websites' do
         specify 'invalid websites should raise errors' do
           expect { subject.send(:cleanup_website, { 'URN' => 101_010, 'SchoolWebsite' => "invalidcom" }) }.to raise_error(
             RuntimeError, "invalid hostname for 101010, invalidcom"
@@ -113,17 +111,18 @@ describe Bookings::Data::SchoolMassImporter do
       specify 'the new records should have coordinates' do
         # we're relying on Breasal to do the maths, so just check
         # they're populated
-        Bookings::School.all.each do |school|
+        Bookings::School.all.find_each do |school|
           expect(school.coordinates).to be_present
         end
       end
 
-      context 'Overriding email addresses' do
+      context 'when overriding email addresses' do
+        subject { described_class.new(edubase_data, email_override) }
+
         let(:email_override) { "someone@someschool.org" }
-        subject { Bookings::Data::SchoolMassImporter.new(edubase_data, email_override) }
 
         specify "all emails should be set to the override email address" do
-          Bookings::School.all.each do |school|
+          Bookings::School.all.find_each do |school|
             expect(school.contact_email).to eql(email_override)
           end
         end

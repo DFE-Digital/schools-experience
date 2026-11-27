@@ -1,139 +1,150 @@
 require 'rails_helper'
+require 'tmpdir'
 
 describe Bookings::Data::GiasDataFile do
-  let(:today) { Time.zone.today.strftime('%Y%m%d') }
+  let(:gias_data_file) { described_class.new }
+  let(:today) { gias_data_file.today }
+  let(:valid_file_contents) { "#{described_class::EXPECTED_HEADER}\n10000,\n" }
+  let(:temp_root) { Dir.mktmpdir }
+
+  before do
+    stub_const('Bookings::Data::GiasDataFile::TEMP_PATH', Pathname.new(temp_root).join('gias'))
+  end
+
+  after { FileUtils.remove_entry(temp_root) }
 
   describe '#path' do
-    before { allow(subject).to receive(:valid_file?).and_return true }
-    before { allow(subject).to receive(:already_downloaded?).and_return false }
-    before { allow(subject).to receive(:remove_old_files!).and_return true }
-    before { allow(subject).to receive(:remove_todays_file!).and_return true }
-    before { allow(subject).to receive(:download_and_save) { subject.todays_file } }
-    before { allow(subject).to receive(:create_temp_dir).and_return true }
-
     context 'with existing file' do
-      before { allow(subject).to receive(:already_downloaded?).and_return true }
-      let!(:path) { subject.path }
-
-      it "will return path of todays file" do
-        expect(path).to eql \
-          Rails.root.join('tmp', 'gias', "edubase-#{today}.csv")
+      before do
+        FileUtils.mkdir_p(described_class::TEMP_PATH)
+        File.write(gias_data_file.todays_file, valid_file_contents)
+        allow(Net::HTTP).to receive(:get).and_call_original
       end
 
-      it "will return existing file" do
-        is_expected.not_to have_received(:download_and_save)
+      it "returns path of todays file" do
+        expect(gias_data_file.path).to eql(
+          described_class::TEMP_PATH.join("edubase-#{today}.csv")
+        )
       end
 
-      it "will clean up old csv files" do
-        is_expected.to have_received(:remove_old_files!)
-      end
+      it "does not download an existing file" do
+        gias_data_file.path
 
-      it "will create temp dir" do
-        is_expected.not_to have_received(:create_temp_dir)
+        expect(Net::HTTP).not_to have_received(:get)
       end
     end
 
     context 'without existing file' do
-      let!(:path) { subject.path }
-
-      it "will return path of todays file" do
-        expect(path).to eql \
-          Rails.root.join('tmp', 'gias', "edubase-#{today}.csv")
+      before do
+        stub_request(:get, gias_data_file.source_url).to_return(
+          status: 200,
+          body: valid_file_contents
+        )
       end
 
-      it "will download a new file" do
-        is_expected.to have_received(:download_and_save)
+      it "returns path of todays file" do
+        expect(gias_data_file.path).to eql(
+          described_class::TEMP_PATH.join("edubase-#{today}.csv")
+        )
       end
 
-      it "will clean up old csv files" do
-        is_expected.to have_received(:remove_old_files!)
+      it "downloads a new file" do
+        path = gias_data_file.path
+
+        expect(File.read(path)).to eq(valid_file_contents)
       end
 
-      it "will create temp dir" do
-        is_expected.to have_received(:create_temp_dir)
+      it "creates temp dir" do
+        gias_data_file.path
+
+        expect(File.directory?(described_class::TEMP_PATH)).to be(true)
       end
     end
 
-    context 'with invalid source file' do
-      before { allow(subject).to receive(:valid_file?).and_return false }
+    context 'with an invalid source file' do
+      before do
+        stub_request(:get, gias_data_file.source_url).to_return(
+          status: 200,
+          body: 'invalid source'
+        )
+      end
 
-      it "will raise an exception and remove file" do
-        expect { subject.path }.to raise_exception described_class::InvalidSourceUri
-        is_expected.to have_received(:remove_todays_file!)
+      it "raises an exception and removes the file" do
+        expect { gias_data_file.path }.to raise_exception(described_class::InvalidSourceUri)
+        expect(File.exist?(gias_data_file.todays_file)).to be(false)
       end
     end
   end
 
-  context '#remove_old_files' do
+  describe '#remove_old_files!' do
     let(:yesterday) { Time.zone.yesterday.strftime('%Y%m%d') }
-    let(:today) { Time.zone.today.strftime('%Y%m%d') }
     let(:tomorrow) { Time.zone.tomorrow.strftime('%Y%m%d') }
-    let(:files) do
-      [yesterday, today, tomorrow].map do |day|
-        described_class::TEMP_PATH.join("edubase-#{day}.csv").to_s
+
+    before do
+      FileUtils.mkdir_p(described_class::TEMP_PATH)
+      [yesterday, today, tomorrow].each do |day|
+        File.write(described_class::TEMP_PATH.join("edubase-#{day}.csv"), '')
       end
+
+      gias_data_file.remove_old_files!
     end
 
-    before do
-      allow(subject).to receive(:list_files).and_return(files)
-      allow(File).to receive(:unlink).and_return(true)
-      subject.remove_old_files!
+    it "removes yesterday's file" do
+      expect(File.exist?(described_class::TEMP_PATH.join("edubase-#{yesterday}.csv"))).to be(false)
     end
 
-    it "will remove yesterdays" do
-      expect(File).to have_received(:unlink).with \
-        described_class::TEMP_PATH.join("edubase-#{yesterday}.csv").to_s
+    it "removes tomorrow's file" do
+      expect(File.exist?(described_class::TEMP_PATH.join("edubase-#{tomorrow}.csv"))).to be(false)
     end
 
-    it "will remove tomorrows" do
-      expect(File).to have_received(:unlink).with \
-        described_class::TEMP_PATH.join("edubase-#{tomorrow}.csv").to_s
-    end
-
-    it "wont remove todays" do
-      expect(File).not_to have_received(:unlink).with \
-        described_class::TEMP_PATH.join("edubase-#{today}.csv").to_s
+    it "keeps today's file" do
+      expect(File.exist?(described_class::TEMP_PATH.join("edubase-#{today}.csv"))).to be(true)
     end
   end
 
-  context '#remove_todays_file!' do
+  describe '#remove_todays_file!' do
     let(:yesterday) { Time.zone.yesterday.strftime('%Y%m%d') }
-    let(:today) { Time.zone.today.strftime('%Y%m%d') }
 
     before do
-      allow(File).to receive(:unlink).and_return(true)
-      subject.remove_todays_file!
+      FileUtils.mkdir_p(described_class::TEMP_PATH)
+      [yesterday, today].each do |day|
+        File.write(described_class::TEMP_PATH.join("edubase-#{day}.csv"), '')
+      end
+
+      gias_data_file.remove_todays_file!
     end
 
-    it "wont remove yesterdays" do
-      expect(File).not_to have_received(:unlink).with \
-        described_class::TEMP_PATH.join("edubase-#{yesterday}.csv")
+    it "keeps yesterday's file" do
+      expect(File.exist?(described_class::TEMP_PATH.join("edubase-#{yesterday}.csv"))).to be(true)
     end
 
-    it "will remove todays" do
-      expect(File).to have_received(:unlink).with \
-        described_class::TEMP_PATH.join("edubase-#{today}.csv")
+    it "removes today's file" do
+      expect(File.exist?(described_class::TEMP_PATH.join("edubase-#{today}.csv"))).to be(false)
     end
   end
 
-  context 'valid_file?' do
-    let(:tempfile) { Tempfile.new }
-    before { allow(subject).to receive(:todays_file).and_return tempfile.path }
+  context 'when valid_file?' do
+    let(:file_contents) { '' }
+
+    before do
+      FileUtils.mkdir_p(described_class::TEMP_PATH)
+      File.write(gias_data_file.todays_file, file_contents)
+    end
 
     context 'with empty file' do
-      it { is_expected.to have_attributes valid_file?: false }
+      it { expect(gias_data_file).not_to be_valid_file }
     end
 
     context 'with header only' do
-      before { tempfile.write "#{described_class::EXPECTED_HEADER}\n" }
-      before { tempfile.flush }
-      it { is_expected.to have_attributes valid_file?: false }
+      let(:file_contents) { "#{described_class::EXPECTED_HEADER}\n" }
+
+      it { expect(gias_data_file).not_to be_valid_file }
     end
 
     context 'with header and body' do
-      before { tempfile.write "#{described_class::EXPECTED_HEADER}\n10000,\n" }
-      before { tempfile.flush }
-      it { is_expected.to have_attributes valid_file?: true }
+      let(:file_contents) { valid_file_contents }
+
+      it { expect(gias_data_file).to be_valid_file }
     end
   end
 end

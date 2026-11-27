@@ -2,17 +2,20 @@ require 'rails_helper'
 
 RSpec.describe Bookings::RegistrationContactMapper do
   describe ".new" do
+    subject { described_class.new(registration, contact) }
+
     let(:registration) { build(:registration_session) }
     let(:contact) { GetIntoTeachingApiClient::SchoolsExperienceSignUp.new }
-    subject { described_class.new(registration, contact) }
 
     it { is_expected.to have_attributes(registration_session: registration) }
     it { is_expected.to have_attributes(gitis_contact: contact) }
   end
 
   describe "#registration_to_contact" do
-    include_context "api latest privacy policy"
-    include_context "api teaching subjects"
+    subject { mapper.registration_to_contact }
+
+    include_context "when the API returns the latest privacy policy"
+    include_context "when the API returns teaching subjects"
 
     let(:registration) { build(:registration_session, :with_school) }
     let(:contact) { GetIntoTeachingApiClient::SchoolsExperienceSignUp.new }
@@ -29,8 +32,6 @@ RSpec.describe Bookings::RegistrationContactMapper do
       ]
     end
     let(:mapper) { described_class.new(registration, contact) }
-
-    subject { mapper.registration_to_contact }
 
     it { is_expected.to have_attributes(first_name: registration.personal_information.first_name) }
     it { is_expected.to have_attributes(last_name: registration.personal_information.last_name) }
@@ -59,10 +60,11 @@ RSpec.describe Bookings::RegistrationContactMapper do
   end
 
   describe "#contact_to_personal_information" do
+    subject { mapper.contact_to_personal_information }
+
     let(:contact) { build(:api_schools_experience_sign_up_with_name) }
     let(:registration) { build(:registration_session) }
     let(:mapper) { described_class.new(registration, contact) }
-    subject { mapper.contact_to_personal_information }
 
     it { is_expected.to include("first_name" => contact.first_name) }
     it { is_expected.to include("last_name" => contact.last_name) }
@@ -71,17 +73,18 @@ RSpec.describe Bookings::RegistrationContactMapper do
     context 'with whitespace in email address' do
       let(:contact) { build(:api_schools_experience_sign_up_with_name, email: "  someone@education.gov.uk  ") }
 
-      it "will strip the whitespace" do
-        is_expected.to include("email" => "someone@education.gov.uk")
+      it "strips the whitespace" do
+        expect(subject).to include("email" => "someone@education.gov.uk")
       end
     end
   end
 
   describe "#contact_to_contact_information" do
+    subject { mapper.contact_to_contact_information }
+
     let(:contact) { build(:api_schools_experience_sign_up_with_name) }
     let(:registration) { build(:registration_session) }
     let(:mapper) { described_class.new(registration, contact) }
-    subject { mapper.contact_to_contact_information }
 
     it { is_expected.to include("phone" => contact.telephone) }
     it { is_expected.to include("building" => contact.address_line1) }
@@ -92,7 +95,9 @@ RSpec.describe Bookings::RegistrationContactMapper do
   end
 
   describe "#contact_to_teaching_preference" do
-    include_context "api teaching subjects"
+    subject { mapper.contact_to_teaching_preference }
+
+    include_context "when the API returns teaching subjects"
 
     let(:maths) { Bookings::Subject.find_by!(name: 'Maths') }
     let(:english) { Bookings::Subject.find_by!(name: 'English') }
@@ -111,7 +116,6 @@ RSpec.describe Bookings::RegistrationContactMapper do
     end
     let(:registration) { build(:registration_session) }
     let(:mapper) { described_class.new(registration, contact) }
-    subject { mapper.contact_to_teaching_preference }
 
     it { is_expected.to include('subject_first_choice' => maths.name) }
     it { is_expected.to include('subject_second_choice' => english.name) }

@@ -17,21 +17,17 @@ describe Schools::ChangeSchool, type: :model do
       SecureRandom.uuid => 1_000_000
     }
   end
-  let(:change_school) { described_class.new(user, uuid_map, urn: current_urn) }
-
   let(:change_school) do
     described_class.new user, uuid_map, change_to_urn: change_to_urn
   end
 
   before do
-    allow(Schools::DFESignInAPI::Roles).to \
-      receive(:new).and_call_original
-
-    allow_any_instance_of(Schools::DFESignInAPI::Roles).to \
-      receive(:has_school_experience_role?) { user_has_role }
+    roles = instance_double(
+      Schools::DFESignInAPI::Roles,
+      has_school_experience_role?: user_has_role
+    )
+    allow(Schools::DFESignInAPI::Roles).to receive(:new).and_return(roles)
   end
-
-  subject { change_school }
 
   describe 'attributes' do
     it { is_expected.to respond_to :change_to_urn }
@@ -46,24 +42,25 @@ describe Schools::ChangeSchool, type: :model do
     subject { change_school.available_schools }
 
     it 'only returns schools which we have in our system' do
-      is_expected.to contain_exactly(first_school, second_school)
+      expect(subject).to contain_exactly(first_school, second_school)
     end
 
     it 'returns schools in alphabetical order' do
-      is_expected.to eq([second_school, first_school])
+      expect(subject).to eq([second_school, first_school])
     end
 
     context 'when a school has outstanding tasks' do
       before { create :placement_request, school: first_school }
 
       it 'returns schools with the most outstanding tasks first' do
-        is_expected.to eq([first_school, second_school])
+        expect(subject).to eq([first_school, second_school])
       end
     end
   end
 
   describe '#school_uuid' do
     let(:change_to_urn) { second_school.urn }
+
     it { is_expected.to have_attributes school_uuid: uuid_map.keys[1] }
   end
 
@@ -83,8 +80,8 @@ describe Schools::ChangeSchool, type: :model do
     end
 
     context 'with valid urn' do
-      it 'should return school' do
-        is_expected.to eql second_school
+      it 'returns school' do
+        expect(subject).to eql second_school
       end
     end
 
@@ -98,10 +95,13 @@ describe Schools::ChangeSchool, type: :model do
   describe '#task_count_for_urn' do
     context 'with unexpected URN' do
       subject { change_school.task_count_for_urn 987_654 }
+
       it { is_expected.to be_nil }
     end
 
     context 'with known URN' do
+      subject { change_school.task_count_for_urn first_school.urn }
+
       before do
         create :placement_request, school: first_school
         create :placement_request, school: second_school
@@ -111,10 +111,8 @@ describe Schools::ChangeSchool, type: :model do
         end
       end
 
-      subject { change_school.task_count_for_urn first_school.urn }
-
-      it "should include count only for requested school" do
-        is_expected.to eql 2
+      it "includes count only for requested school" do
+        expect(subject).to be 2
       end
     end
   end

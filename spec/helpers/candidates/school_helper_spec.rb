@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Candidates::SchoolHelper, type: :helper do
-  context '.format_school_address' do
-    before do
-      @school = OpenStruct.new(
+  describe '.format_school_address' do
+    let(:school) do
+      OpenStruct.new(
         address_1: nil,
         address_2: 'Picadilly Gate',
         address_3: '',
@@ -11,16 +11,15 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
         county: 'Manchester',
         postcode: 'MA1 1AM'
       )
+    end
+    let(:formatted) { format_school_address(school) }
 
-      @formatted = format_school_address(@school)
+    it 'is html_safe' do
+      expect(formatted.html_safe?).to be true
     end
 
-    it 'should be html_safe' do
-      expect(@formatted.html_safe?).to be true
-    end
-
-    it 'should concatenate non blank fields' do
-      expect(@formatted).to eq "Picadilly Gate, Manchester, Manchester, MA1 1AM"
+    it 'concatenates non blank fields' do
+      expect(formatted).to eq "Picadilly Gate, Manchester, Manchester, MA1 1AM"
     end
   end
 
@@ -33,9 +32,9 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
   end
 
   describe ".format_school_subjects_list" do
-    let(:school) { create(:bookings_school, subjects: subjects) }
-
     subject { format_school_subjects_list(school) }
+
+    let(:school) { create(:bookings_school, subjects: subjects) }
 
     context "when there are no subjects" do
       let(:subjects) { [] }
@@ -56,7 +55,7 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     end
   end
 
-  context '.format_school_subjects' do
+  describe '.format_school_subjects' do
     let(:school) { create(:bookings_school) }
     let(:output) { format_school_subjects(school) }
 
@@ -65,40 +64,41 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
         []
       end
 
-      it 'should return "Not specified"' do
+      it 'returns "Not specified"' do
         expect(output).to eq 'Not specified'
       end
     end
 
     context 'with subjects' do
-      let(:subject_1) { create(:bookings_subject, name: 'First') }
-      let(:subject_2) { create(:bookings_subject, name: 'Second') }
-      let(:subject_3) { create(:bookings_subject, name: 'Third') }
+      let(:first_subject) { create(:bookings_subject, name: 'First') }
+      let(:second_subject) { create(:bookings_subject, name: 'Second') }
+      let(:third_subject) { create(:bookings_subject, name: 'Third') }
 
-      let!(:subjects) { [subject_1, subject_2, subject_3] }
+      let!(:subjects) { [first_subject, second_subject, third_subject] }
+
       before do
         school.subjects << subjects
       end
 
-      it 'should be html_safe' do
+      it 'is html_safe' do
         expect(output.html_safe?).to be true
       end
 
-      it 'should turn them into a sentence' do
+      it 'turns them into a sentence' do
         expect(output).to eq "First, Second, and Third"
       end
 
-      context 'highlighting filter matches' do
+      context 'when highlighting filter matches' do
         before do
-          allow(self).to receive(:filtered_subject_ids).and_return([subject_2.id])
+          allow(self).to receive(:filtered_subject_ids).and_return([second_subject.id])
         end
 
-        it 'should bolden matched subjects' do
-          expect(output).to have_css('strong', text: subject_2.name)
+        it 'boldens matched subjects' do
+          expect(output).to have_css('strong', text: second_subject.name)
         end
 
-        it 'should include but not bolden unmatched subjects' do
-          [subject_1, subject_3].each do |subj|
+        it 'includes but not bolden unmatched subjects' do
+          [first_subject, third_subject].each do |subj|
             expect(output).to have_content(subj.name)
             expect(output).not_to have_css('strong', text: subj.name)
           end
@@ -107,9 +107,9 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     end
   end
 
-  context '.format_school_phases' do
-    before do
-      @school = OpenStruct.new(
+  describe '.format_school_phases' do
+    let(:school) do
+      OpenStruct.new(
         phases: [
           OpenStruct.new(id: 1, name: 'First'),
           OpenStruct.new(id: 2, name: 'Second'),
@@ -118,24 +118,24 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
       )
     end
 
-    let(:formatted) do
-      format_school_phases(@school)
-    end
+    let(:formatted) { format_school_phases(school) }
 
     let(:parsed) { Nokogiri.parse(formatted) }
 
-    it 'should be html_safe' do
+    it 'is html_safe' do
       expect(formatted.html_safe?).to be true
     end
 
-    it 'should turn them into a list' do
-      expect(parsed.css('ul.govuk-list > li').map(&:text)).to eql(@school.phases.map(&:name))
+    it 'turns them into a list' do
+      expect(parsed.css('ul.govuk-list > li').map(&:text)).to eql(school.phases.map(&:name))
     end
   end
 
   describe ".format_school_phases_compact" do
-    before do
-      @school = OpenStruct.new(
+    subject { format_school_phases_compact(school) }
+
+    let(:school) do
+      OpenStruct.new(
         phases: [
           OpenStruct.new(id: 1, name: "First"),
           OpenStruct.new(id: 2, name: "Second"),
@@ -144,18 +144,16 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
       )
     end
 
-    subject { format_school_phases_compact(@school) }
-
     it { is_expected.to eq("First, Second, Third") }
   end
 
-  context '.describe_current_search' do
-    let(:opts) { {} }
-
+  describe '.describe_current_search' do
     subject { describe_current_search(search, **opts) }
 
+    let(:opts) { {} }
+
     context 'with location search' do
-      context 'and name supplied by search' do
+      context 'when name supplied by search' do
         let(:search) do
           instance_double(Candidates::SchoolSearch,
             latitude: '',
@@ -217,52 +215,60 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     end
   end
 
-  context '.school_location_map' do
+  describe '.school_location_map' do
     include Candidates::MapsHelper
     include ActionController::Base::HelperMethods
 
+    subject { school_location_map school }
+
     before do
-      allow(Rails.application.config.x).to receive(:google_maps_key) { '12345' }
-      @latitude = "53.4782"
-      @longitude = "-2.2299"
-      @school = OpenStruct.new(
+      allow(Rails.application.config.x).to receive(:google_maps_key).and_return('12345')
+    end
+
+    let(:latitude) { "53.4782" }
+    let(:longitude) { "-2.2299" }
+    let(:school) do
+      OpenStruct.new(
         name: 'Stub School',
-        coordinates: OpenStruct.new(latitude: @latitude, longitude: @longitude)
+        coordinates: OpenStruct.new(latitude: latitude, longitude: longitude)
       )
     end
 
-    subject { school_location_map @school }
-
-    it('should return a correct Google Maps for schools location') do
+    it('returns a correct Google Maps for schools location') do
       expect(subject).to match(/<img /)
-      expect(subject).to match("#{@latitude}%2C#{@longitude}")
+      expect(subject).to match("#{latitude}%2C#{longitude}")
     end
   end
 
   describe '#cleanup_school_url' do
     context 'with blank url' do
       subject { cleanup_school_url(' ') }
-      it('should return a same page url') { expect(subject).to eq('#') }
+
+      it('returns a same page url') { expect(subject).to eq('#') }
     end
 
     context 'with protocol present' do
       subject { cleanup_school_url('https://www.gov.uk') }
-      it('should return as is') { expect(subject).to eq('https://www.gov.uk') }
+
+      it('returns as is') { expect(subject).to eq('https://www.gov.uk') }
     end
 
     context 'with email mailto link' do
       subject { cleanup_school_url('mailto:me@you.com') }
-      it('should return as is') { expect(subject).to eq('mailto:me@you.com') }
+
+      it('returns as is') { expect(subject).to eq('mailto:me@you.com') }
     end
 
     context 'with email address' do
       subject { cleanup_school_url('me@you.com') }
-      it('should add mailto protocol') { expect(subject).to eq('mailto:me@you.com') }
+
+      it('adds mailto protocol') { expect(subject).to eq('mailto:me@you.com') }
     end
 
     context 'with no protocol' do
       subject { cleanup_school_url('www.gov.uk') }
-      it('should use http protocol') { expect(subject).to eq('http://www.gov.uk') }
+
+      it('uses http protocol') { expect(subject).to eq('http://www.gov.uk') }
     end
   end
 
@@ -279,16 +285,19 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
   describe '#content_or_msg' do
     context 'with content' do
       subject { content_or_msg('<p>foobar</p>', 'no content') }
+
       it { is_expected.to have_css('p', text: 'foobar') }
     end
 
     context 'without content but text msg' do
       subject { content_or_msg('', 'no content') }
+
       it { is_expected.to have_css('em', text: 'no content') }
     end
 
     context 'without content but block msg' do
       subject { content_or_msg('') { '<b>no content</b>' } }
+
       it { is_expected.to have_css('b', text: 'no content') }
     end
   end
@@ -302,7 +311,9 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
       expect(split_to_list('')).to be_nil
     end
 
-    context 'splitting up items into a HTML list' do
+    context 'when splitting up items into a HTML list' do
+      subject { split_to_list content }
+
       let(:content) do
         <<~CONTENT
           The good,
@@ -311,14 +322,14 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
         CONTENT
       end
 
-      subject { split_to_list content }
-
       specify 'should create a list with the correct number of entries' do
-        is_expected.to have_css('ul.govuk-list--bullet > li', count: 3)
+        expect(subject).to have_css('ul.govuk-list--bullet > li', count: 3)
       end
     end
 
-    context 'dealing with blank lines' do
+    context 'when dealing with blank lines' do
+      subject { split_to_list content }
+
       let(:content) do
         <<~CONTENT
           The good,
@@ -327,10 +338,8 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
         CONTENT
       end
 
-      subject { split_to_list content }
-
       specify 'should create a list with the correct number of entries' do
-        is_expected.to have_css('ul.govuk-list--bullet > li', count: 2)
+        expect(subject).to have_css('ul.govuk-list--bullet > li', count: 2)
       end
     end
   end
@@ -338,21 +347,21 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
   describe "#format_school_placement_locations" do
     subject { format_school_placement_locations school }
 
-    context "for school with virtual placements" do
+    context "with a school that has virtual placements" do
       let(:school) { create(:bookings_placement_date, virtual: true).bookings_school }
 
       it { is_expected.to have_css "strong", text: "Virtual" }
       it { is_expected.not_to have_css "strong", text: "In school" }
     end
 
-    context "for school with inschool placements" do
+    context "with a school that has inschool placements" do
       let(:school) { create(:bookings_placement_date, virtual: false).bookings_school }
 
       it { is_expected.not_to have_css "strong", text: "Virtual" }
       it { is_expected.to have_css "strong", text: "In school" }
     end
 
-    context "for school with both virtual and inschool placements" do
+    context "with a school that has both virtual and inschool placements" do
       let :school do
         create(:bookings_placement_date, virtual: true).bookings_school.tap do |school|
           create :bookings_placement_date, virtual: false, bookings_school: school

@@ -2,10 +2,10 @@ require "rails_helper"
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::OnBoarding::ProgressesController, type: :request do
-  include_context "logged in DfE user"
-  include_context "stub role check api"
+  include_context "when a DfE user is logged in"
+  include_context "when stubbing the role-check API"
 
-  context "#show" do
+  describe "#show" do
     let!(:school_profile) { create(:school_profile, :with_dbs_requirement) }
 
     before { get schools_on_boarding_progress_path }

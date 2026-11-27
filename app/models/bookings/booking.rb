@@ -119,7 +119,7 @@ module Bookings
       # only populate the date if it's in the future
       date = if placement_request&.fixed_date_is_bookable?
                placement_request.fixed_date
-             end
+      end
       duration = placement_request.placement_date&.duration || DEFAULT_DURATION
       experience_type = placement_request.experience_type unless placement_request.unclear_experience_type?
 
@@ -158,7 +158,7 @@ module Bookings
     delegate :status, to: :bookings_placement_request
 
     def placement_start_date_with_duration
-      if bookings_placement_request&.placement_date&.present?
+      if bookings_placement_request&.placement_date.present?
         [date.to_formatted_s(:govuk), 'for', duration_days].join(' ')
       else
         date.to_formatted_s(:govuk)

@@ -16,7 +16,9 @@ describe ApplicationHelper, type: :helper do
   end
   let(:user) { User.exchange(dfe_sign_in_user) }
 
-  context 'Breadcrumbs' do
+  context 'when breadcrumbs' do
+    subject { Nokogiri.parse(helper.breadcrumbs) }
+
     let(:args) do
       {
         'page one' => '/page/one',
@@ -31,7 +33,6 @@ describe ApplicationHelper, type: :helper do
     let(:hyperlink_breadcrumb_count) { hyperlink_breadcrumbs.count }
 
     before { helper.breadcrumbs = args }
-    subject { Nokogiri.parse(helper.breadcrumbs) }
 
     specify 'the generated list should contain GOV.UK breadcrumb-compliant markup' do
       selector = [
@@ -66,8 +67,9 @@ describe ApplicationHelper, type: :helper do
     end
   end
 
-  context '#current_user_info_and_logout_link' do
+  describe '#current_user_info_and_logout_link' do
     subject { helper.current_user_info_and_logout_link user }
+
     context 'when a user is logged in' do
       specify "should contain the person's name" do
         expect(subject).to include("#{given_name} #{family_name}")
@@ -79,12 +81,12 @@ describe ApplicationHelper, type: :helper do
     end
   end
 
-  context '#current_candidate_info_and_logout_link' do
+  describe '#current_candidate_info_and_logout_link' do
+    subject { helper.current_candidate_info_and_logout_link current_candidate }
+
     let(:current_candidate) do
       create(:candidate, :with_api_contact)
     end
-
-    subject { helper.current_candidate_info_and_logout_link current_candidate }
 
     specify "should contain the person's name" do
       expect(subject).to include(current_candidate.full_name)
@@ -106,6 +108,7 @@ describe ApplicationHelper, type: :helper do
 
     context 'when current_user absent' do
       let(:user) { nil }
+
       specify "should return 'Unknown'" do
         expect(subject).to eql("Unknown")
       end
@@ -115,43 +118,39 @@ describe ApplicationHelper, type: :helper do
   describe '#page_heading' do
     context 'with parameter' do
       subject! { page_heading('My Page Title') }
+
       it { is_expected.to eql('<h1 class="govuk-heading-l">My Page Title</h1>') }
       it { expect(page_title).to eql('My Page Title - Get school experience - GOV.UK') }
     end
 
     context 'with block' do
       subject! { page_heading { 'My Page Title' } }
+
       it { is_expected.to eql('<h1 class="govuk-heading-l">My Page Title</h1>') }
       it { expect(page_title).to eql('My Page Title - Get school experience - GOV.UK') }
     end
 
     context 'with custom options' do
       subject! { page_heading('Page Title', class: 'govuk-heading-xl') }
+
       it { is_expected.to eql('<h1 class="govuk-heading-xl">Page Title</h1>') }
       it { expect(page_title).to eql('Page Title - Get school experience - GOV.UK') }
     end
   end
 
   describe "#site_header_path" do
-    let(:request) { double('request') }
-    let(:path) { double('path') }
-
-    before do
-      allow(request).to receive(:path).and_return(path)
-    end
-
     context 'when in schools namespace' do
-      it 'returns the schools dashboard path' do
-        allow(path).to receive(:start_with?).with('/schools').and_return(true)
+      let(:request) { instance_double(ActionDispatch::Request, path: '/schools/dashboard') }
 
+      it 'returns the schools dashboard path' do
         expect(site_header_path).to eql(schools_dashboard_path)
       end
     end
 
     context 'when not in schools namespace' do
-      it 'returns the root path' do
-        allow(path).to receive(:start_with?).with('/schools').and_return(false)
+      let(:request) { instance_double(ActionDispatch::Request, path: '/') }
 
+      it 'returns the root path' do
         expect(site_header_path).to eql(root_path)
       end
     end

@@ -2,23 +2,23 @@ require 'rails_helper'
 
 describe NumberOfWordsValidator do
   let :errors do
-    double 'errors', add: true
+    instance_double(ActiveModel::Errors, add: true)
   end
 
   let :model do
-    double 'model', description: description, errors: errors
+    Struct.new(:description, :errors).new(description, errors)
   end
 
   let :validator do
     described_class.new attributes: :description, less_than: 150
   end
 
-  before :each do
+  before do
     validator.validate_each model, :description, description
   end
 
-  context 'less than' do
-    context 'too many words' do
+  context 'when less than' do
+    context 'when too many words' do
       let :description do
         151.times.map { 'word' }.join(' ')
       end
@@ -29,7 +29,7 @@ describe NumberOfWordsValidator do
       end
     end
 
-    context 'correct number of words' do
+    context 'when correct number of words' do
       let :description do
         149.times.map { 'word' }.join(' ')
       end

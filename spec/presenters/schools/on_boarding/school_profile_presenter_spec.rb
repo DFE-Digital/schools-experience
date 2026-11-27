@@ -7,7 +7,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     FactoryBot.create :bookings_school, :full_address, urn: 123_456
   end
 
-  context '#school_name' do
+  describe '#school_name' do
     let :profile do
       FactoryBot.create :school_profile, bookings_school: school
     end
@@ -17,7 +17,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#school_address' do
+  describe '#school_address' do
     let :profile do
       FactoryBot.build :school_profile, bookings_school: school
     end
@@ -28,7 +28,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#school_email' do
+  describe '#school_email' do
     let :profile do
       FactoryBot.build :school_profile, bookings_school: school
     end
@@ -38,7 +38,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#fees' do
+  describe '#fees' do
     context 'with no fees' do
       let :profile do
         FactoryBot.build :school_profile
@@ -88,7 +88,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#dbs_check' do
+  describe '#dbs_check' do
     let :profile do
       build :school_profile
     end
@@ -141,7 +141,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#individual_requirements' do
+  describe '#individual_requirements' do
     context 'without requirements' do
       let :profile do
         FactoryBot.build :school_profile
@@ -172,8 +172,8 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#school_experience_phases' do
-    context 'all phases selected' do
+  describe '#school_experience_phases' do
+    context 'when all phases selected' do
       let :profile do
         FactoryBot.build :school_profile, :with_phases
       end
@@ -184,7 +184,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
       end
     end
 
-    context 'subset of phases selected' do
+    context 'when subset of phases selected' do
       let :profile do
         FactoryBot.build :school_profile, :with_only_early_years_phase
       end
@@ -195,7 +195,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#primary_key_stages_offered?' do
+  describe '#primary_key_stages_offered?' do
     context 'when offered' do
       let :profile do
         FactoryBot.build \
@@ -203,7 +203,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
       end
 
       it 'returns true' do
-        expect(subject.primary_key_stages_offered?).to eq true
+        expect(subject.primary_key_stages_offered?).to be true
       end
     end
 
@@ -214,12 +214,12 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
       end
 
       it 'returns false' do
-        expect(subject.primary_key_stages_offered?).to eq false
+        expect(subject.primary_key_stages_offered?).to be false
       end
     end
   end
 
-  context '#primary_key_stages' do
+  describe '#primary_key_stages' do
     context 'when primary phase not selected' do
       let :profile do
         FactoryBot.build \
@@ -244,7 +244,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#subjects_offered?' do
+  describe '#subjects_offered?' do
     context 'when offered' do
       let :profile do
         FactoryBot.build \
@@ -252,7 +252,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
       end
 
       it 'returns true' do
-        expect(subject.subjects_offered?).to eq true
+        expect(subject.subjects_offered?).to be true
       end
     end
 
@@ -262,12 +262,12 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
       end
 
       it 'returns false' do
-        expect(subject.subjects_offered?).to eq false
+        expect(subject.subjects_offered?).to be false
       end
     end
   end
 
-  context '#subjects' do
+  describe '#subjects' do
     context 'when subjects not offered' do
       let :profile do
         FactoryBot.build :school_profile, :with_only_early_years_phase
@@ -289,7 +289,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#descriptions' do
+  describe '#descriptions' do
     let :profile do
       FactoryBot.build :school_profile, :with_description
     end
@@ -299,7 +299,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#school_experience_details' do
+  describe '#school_experience_details' do
     let :profile do
       FactoryBot.build :school_profile, :with_experience_outline
     end
@@ -309,7 +309,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#dress_code' do
+  describe '#dress_code' do
     context "when dress code options are selected" do
       let(:profile) { build :school_profile, :with_candidate_dress_code }
 
@@ -329,7 +329,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#parking' do
+  describe '#parking' do
     context 'when parking is offered' do
       let :profile do
         FactoryBot.build :school_profile, :with_candidate_parking_information
@@ -352,7 +352,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#start_time' do
+  describe '#start_time' do
     let :profile do
       FactoryBot.build :school_profile, :with_candidate_experience_schedule
     end
@@ -362,7 +362,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#end_time' do
+  describe '#end_time' do
     let :profile do
       FactoryBot.build :school_profile, :with_candidate_experience_schedule
     end
@@ -372,7 +372,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#flexible_on_times' do
+  describe '#flexible_on_times' do
     context 'when flexible_on_times' do
       let :profile do
         FactoryBot.build :school_profile, \
@@ -396,7 +396,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#admin_contact_email' do
+  describe '#admin_contact_email' do
     let :profile do
       FactoryBot.build :school_profile, :with_admin_contact
     end
@@ -406,7 +406,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#admin_contact_email_secondary' do
+  describe '#admin_contact_email_secondary' do
     let :profile do
       FactoryBot.build :school_profile, :with_admin_contact
     end
@@ -416,7 +416,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#admin_contact_phone' do
+  describe '#admin_contact_phone' do
     let :profile do
       FactoryBot.build :school_profile, :with_admin_contact
     end

@@ -2,6 +2,8 @@ require 'rails_helper'
 require 'csv'
 
 describe Bookings::Data::SchoolManager do
+  subject { described_class.new(parsed_csv) }
+
   let(:urns) do
     [100_111, 100_112, 100_113]
   end
@@ -17,19 +19,17 @@ describe Bookings::Data::SchoolManager do
     CSV.parse(raw_csv, headers: true)
   end
 
-  subject { described_class.new(parsed_csv) }
-
   before do
     allow(Rails.logger).to receive(:info).and_return(true)
   end
 
-  context 'Initialization' do
+  context 'when initializing' do
     specify 'should correctly set urns' do
       expect(subject.urns).to be_a(CSV::Table)
     end
   end
 
-  context 'Enabling' do
+  context 'when enabling' do
     context 'when all schools exist' do
       let!(:targetted_schools) do
         urns.map { |urn| create(:bookings_school, urn: urn, enabled: false) }
@@ -56,7 +56,7 @@ describe Bookings::Data::SchoolManager do
     end
 
     context 'when some schools are missing' do
-      let!(:targetted_schools) do
+      before do
         urns.drop(1).map { |urn| create(:bookings_school, urn: urn, enabled: false) }
       end
 
@@ -66,7 +66,7 @@ describe Bookings::Data::SchoolManager do
     end
   end
 
-  context 'Disabling' do
+  context 'when disabling' do
     context 'when all schools exist' do
       let!(:targetted_schools) do
         urns.map { |urn| create(:bookings_school, urn: urn, enabled: true) }
@@ -93,7 +93,7 @@ describe Bookings::Data::SchoolManager do
     end
 
     context 'when some schools are missing' do
-      let!(:targetted_schools) do
+      before do
         urns.drop(1).map { |urn| create(:bookings_school, urn: urn, enabled: true) }
       end
 

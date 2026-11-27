@@ -1,16 +1,19 @@
 require 'rails_helper'
 
 describe Bookings::Gitis::SchoolExperience, type: :model do
+  let(:subject_name) { "Maths" }
+  let(:subject_id) { 275_000_001 }
+  let(:gitis_id) { SecureRandom.uuid }
+
   describe "validations" do
-    let(:model) { create(:placement_request, :booked) }
-    let(:status) { :requested }
     subject { described_class.from_placement_request(model, status) }
 
-    before { allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to receive(:add_school_experience) }
+    let(:model) { create(:placement_request, :booked) }
+    let(:status) { :requested }
 
     context "with valid arguments" do
       it "does not throw error" do
-        expect { subject }.to_not raise_error
+        expect { subject }.not_to raise_error
       end
     end
 
@@ -54,27 +57,34 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
     expect { described_class.new(any_args) }.to raise_exception NoMethodError
   end
 
-  let(:gitis_id) { SecureRandom.uuid }
-  let(:subject_id) { 275_000_001 }
-  let(:subject_name) { "Maths" }
-
   shared_examples "a successful API post" do
-    before do
-      expect_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi)
-        .to receive(:add_school_experience).with(gitis_id, expected_school_experience)
+    let(:schools_experience_api) { instance_double(GetIntoTeachingApiClient::SchoolsExperienceApi) }
+    let(:lookup_items_api) { instance_double(GetIntoTeachingApiClient::LookupItemsApi) }
 
-      allow_any_instance_of(GetIntoTeachingApiClient::LookupItemsApi)
-        .to receive(:get_teaching_subjects).and_return([build(:api_teaching_subject, id: subject_id, value: subject_name)])
+    before do
+      allow(GetIntoTeachingApiClient::SchoolsExperienceApi).to receive(:new)
+        .and_return(schools_experience_api)
+      allow(GetIntoTeachingApiClient::LookupItemsApi).to receive(:new)
+        .and_return(lookup_items_api)
+      allow(lookup_items_api)
+        .to receive(:get_teaching_subjects)
+        .and_return([build(:api_teaching_subject, id: subject_id, value: subject_name)])
+      allow(schools_experience_api).to receive(:add_school_experience)
     end
 
     describe "#write_to_gitis_contact" do
       it "posts to gitis" do
         subject.write_to_gitis_contact(gitis_id)
+
+        expect(schools_experience_api).to have_received(:add_school_experience)
+          .with(gitis_id, expected_school_experience)
       end
     end
   end
 
   context 'with a Bookings::PlacementRequest' do
+    subject { described_class.from_placement_request(placement_request, status) }
+
     let(:status) { :requested }
     let(:placement_request) { create(:placement_request, :with_incomplete_booking) }
 
@@ -86,8 +96,6 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
       )
     end
 
-    subject { described_class.from_placement_request(placement_request, status) }
-
     context "with flexible dates" do
       it_behaves_like "a successful API post"
     end
@@ -95,6 +103,7 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
     context "with fixed dates" do
       let(:placement_date) { create(:bookings_placement_date, bookings_school: placement_request.school) }
       let(:date) { placement_date.date }
+
       before do
         expected_school_experience.date_of_school_experience = date
         expected_school_experience.duration_of_placement_in_days = 1
@@ -106,6 +115,8 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
   end
 
   context "with a Bookings::Booking" do
+    subject { described_class.from_booking(booking, status) }
+
     let(:status) { :confirmed }
     let(:booking) { create(:bookings_booking, :accepted) }
 
@@ -119,8 +130,6 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
       )
     end
 
-    subject { described_class.from_booking(booking, status) }
-
     context "without existing subject" do
       it_behaves_like "a successful API post"
     end
@@ -128,6 +137,7 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
     context "with existing subject" do
       let(:booking) { create(:bookings_booking, :with_existing_subject, :accepted) }
       let(:subject_name) { booking.bookings_subject.name }
+
       before do
         expected_school_experience.teaching_subject_id = subject_id
       end
@@ -137,6 +147,7 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
 
     context "when attended" do
       let(:status) { :completed }
+
       before do
         booking.update!(attended: true)
         expected_school_experience.status = 222_750_005
@@ -149,7 +160,7 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
   context "with a Bookings::Cancellation" do
     subject { described_class.from_cancellation(cancellation, status) }
 
-    context "cancelled by candidate" do
+    context "when cancelled by candidate" do
       let(:status) { :cancelled_by_candidate }
 
       context "when cancelled after being accepted" do
@@ -183,7 +194,7 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
       end
     end
 
-    context "cancelled by school" do
+    context "when cancelled by school" do
       let(:status) { :cancelled_by_school }
       let(:cancellation) { create(:bookings_booking, :cancelled_by_school).school_cancellation }
       let(:expected_school_experience) do

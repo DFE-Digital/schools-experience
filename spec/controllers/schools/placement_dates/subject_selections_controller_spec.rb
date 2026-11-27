@@ -20,9 +20,9 @@ describe Schools::PlacementDates::SubjectSelectionsController, type: :request do
       max_bookings_count: 5
   end
 
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
-  context '#new' do
+  describe '#new' do
     before do
       get "/schools/placement_dates/#{placement_date.id}/subject_selection/new"
     end
@@ -36,7 +36,7 @@ describe Schools::PlacementDates::SubjectSelectionsController, type: :request do
     end
   end
 
-  context '#create' do
+  describe '#create' do
     let :params do
       {
         schools_placement_dates_subject_selection: { subject_ids: subject_ids }
@@ -52,7 +52,7 @@ describe Schools::PlacementDates::SubjectSelectionsController, type: :request do
       placement_date.reload
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :subject_ids do
         []
       end
@@ -62,7 +62,7 @@ describe Schools::PlacementDates::SubjectSelectionsController, type: :request do
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :subject_ids do
         school.subject_ids.first 2
       end

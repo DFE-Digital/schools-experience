@@ -33,16 +33,16 @@ RSpec.describe Schools::CsvExport do
     describe "header rows" do
       subject { parsed_csv[0] }
 
-      it "should contain a header row" do
-        is_expected.to eql \
+      it "contains a header row" do
+        expect(subject).to eql \
           ["Id", "Name", "Email", "Date", "Duration", "Subject", "Second Subject", "Status", "Attendance"]
       end
     end
 
     describe "data rows" do
-      include_context "api sign ups for requests"
-
       subject { parsed_csv.slice(1...).map(&:first).map(&:to_i) }
+
+      include_context "when the API signs up for requests"
 
       let(:first) { create(:bookings_booking).bookings_placement_request }
       let(:school) { first.school }
@@ -52,15 +52,15 @@ RSpec.describe Schools::CsvExport do
       end
       let(:requests) { [first, second] }
 
-      it "should contain placement requests from this academic year" do
-        is_expected.to eql [first.id, second.id]
+      it "contains placement requests from this academic year" do
+        expect(subject).to eql [first.id, second.id]
       end
 
-      it "should not contain placement requests from earlier academic years" do
-        is_expected.not_to include historical.id
+      it "does not contain placement requests from earlier academic years" do
+        expect(subject).not_to include historical.id
       end
 
-      context "crm data" do
+      context "when crm data" do
         subject { parsed_csv.slice(1...).map(&:second) }
 
         it { is_expected.to eql sign_ups.map(&:full_name) }

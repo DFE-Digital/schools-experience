@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::RegistrationAsPlacementRequest do
-  let(:urn) { 11_048 }
   subject { described_class.new session }
+
+  let(:urn) { 11_048 }
 
   pii = {
     "full_name" => 'Testy McTest',
@@ -15,7 +16,7 @@ describe Candidates::Registrations::RegistrationAsPlacementRequest do
     "phone" => "01234567890"
   }.freeze
 
-  context '#attributes' do
+  describe '#attributes' do
     context 'when flexible dates' do
       let(:school) { create(:bookings_school, urn: urn) }
 
@@ -39,16 +40,16 @@ describe Candidates::Registrations::RegistrationAsPlacementRequest do
         }
       end
 
-      context 'PII' do
+      context 'with PII' do
         # Redundant given the next spec, but going for clarity!
-        pii.each do |k, _|
+        pii.each_key do |k|
           it "removes #{k}" do
-            expect(subject.attributes[k]).to eq nil
+            expect(subject.attributes[k]).to be_nil
           end
         end
       end
 
-      context 'Non PII' do
+      context 'without PII' do
         it 'returns the expected attributes for the session' do
           expect(subject.attributes).to eq(expected_attributes)
         end
@@ -88,16 +89,16 @@ describe Candidates::Registrations::RegistrationAsPlacementRequest do
         }
       end
 
-      context 'PII' do
+      context 'with PII' do
         # Redundant given the next spec, but going for clarity!
-        pii.each do |k, _|
+        pii.each_key do |k|
           it "removes #{k}" do
-            expect(subject.attributes[k]).to eq nil
+            expect(subject.attributes[k]).to be_nil
           end
         end
       end
 
-      context 'Non PII' do
+      context 'without PII' do
         it 'returns the expected attributes for the session' do
           expect(subject.attributes).to eq(expected_attributes)
         end

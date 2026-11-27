@@ -1,6 +1,6 @@
 describe 'Conversions' do
   describe 'Distance::Miles::ToMetres' do
-    context '.convert' do
+    describe '.convert' do
       subject { Conversions::Distance::Miles::ToMetres }
 
       specify "should multiply by 1609.344" do
@@ -15,8 +15,8 @@ describe 'Conversions' do
     end
   end
 
-  describe 'Distance::Miles::ToMetres' do
-    context '.convert' do
+  describe 'Distance::Metres::ToMiles' do
+    describe '.convert' do
       context 'with precision of 0' do
         subject { Conversions::Distance::Metres::ToMiles }
 

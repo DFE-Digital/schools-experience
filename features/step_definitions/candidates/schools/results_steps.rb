@@ -43,7 +43,7 @@ end
 
 Then("each result should have the following information") do |table|
   attributes = table.raw.flatten
-  page.all('ul > li.school-result').each do |result|
+  page.all('ul > li.school-result').each do |result| # rubocop:disable Rails/FindEach -- Capybara collections are arrays.
     attributes.each do |attribute|
       expect(result).to have_css('strong', text: attribute)
     end
@@ -104,12 +104,12 @@ Given("I search for schools near {string}") do |string|
   visit(new_candidates_school_search_path)
   fill_in 'Enter location or postcode', with: string
   click_button 'Search'
-  expect(page.current_path).to eql(candidates_schools_path)
+  expect(page).to have_current_path(candidates_schools_path, ignore_query: true)
 end
 
 When("I click back on the results screen") do
   click_link 'Back'
-  expect(page.current_path).to eql(new_candidates_school_search_path)
+  expect(page).to have_current_path(new_candidates_school_search_path, ignore_query: true)
 end
 
 Then("the location input should be populated with {string}") do |string|

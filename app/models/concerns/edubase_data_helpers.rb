@@ -44,17 +44,17 @@ module EdubaseDataHelpers
     url_with_prefix = if url.starts_with?("http:", "https:")
                         url
 
-                        # typos
-                      elsif url.starts_with?("http;")
+    # typos
+    elsif url.starts_with?("http;")
                         url.tr('http;', 'http:')
 
-                      elsif url.starts_with?("Hhtp:")
+    elsif url.starts_with?("Hhtp:")
                         url.tr('Hhtp:', 'http:')
 
-                        # add a prefix if none present, most common error
-                      else
+    # add a prefix if none present, most common error
+    else
                         "http://#{url}"
-                      end
+    end
 
     # skip ip addresses
     return nil if url_with_prefix =~ /\d+\.\d+\.\d+\.\d+/

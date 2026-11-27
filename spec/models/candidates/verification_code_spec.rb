@@ -28,21 +28,26 @@ describe Candidates::VerificationCode do
       context "when the code is invalid" do
         let(:code) { "123" }
 
+        before do
+          allow(GetIntoTeachingApiClient::SchoolsExperienceApi).to receive(:new).and_call_original
+        end
+
         it { is_expected.to be_falsy }
 
         it "does not call the API" do
-          expect_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).not_to \
-            receive(:exchange_access_token_for_schools_experience_sign_up)
+          exchange
+
+          expect(GetIntoTeachingApiClient::SchoolsExperienceApi).not_to have_received(:new)
         end
       end
 
       context "when the code is valid" do
-        include_context "api correct verification code for personal info"
+        include_context "when the API returns a correct verification code for personal information"
 
         it { is_expected.to eq(sign_up) }
 
         context "when the code is incorrect" do
-          include_context "api incorrect verification code"
+          include_context "when the API returns an incorrect verification code"
 
           it { is_expected.to be_nil }
 
@@ -54,7 +59,7 @@ describe Candidates::VerificationCode do
       end
 
       context "when gitis contact is missing the first or last name" do
-        include_context "api correct verification code for personal info without name"
+        include_context "when the API returns a correct verification code for personal information without a name"
 
         it "updates the first name" do
           expect(exchange.first_name).not_to be_empty
@@ -67,6 +72,8 @@ describe Candidates::VerificationCode do
     end
 
     describe "#issue_verification_code" do
+      subject { instance.issue_verification_code }
+
       let(:code) { nil }
 
       let(:request) do
@@ -77,19 +84,18 @@ describe Candidates::VerificationCode do
         )
       end
 
-      subject { instance.issue_verification_code }
+      let(:candidates_api_client) { instance_double(GetIntoTeachingApiClient::CandidatesApi) }
 
       before do
-        allow_any_instance_of(GetIntoTeachingApiClient::CandidatesApi).to \
-          receive(:create_candidate_access_token).with(request)
+        allow(GetIntoTeachingApiClient::CandidatesApi).to receive(:new).and_return(candidates_api_client)
+        allow(candidates_api_client).to receive(:create_candidate_access_token).with(request)
       end
 
       it { is_expected.to be_truthy }
 
       context "when the user cannot be matched back" do
         before do
-          allow_any_instance_of(GetIntoTeachingApiClient::CandidatesApi).to \
-            receive(:create_candidate_access_token)
+          allow(candidates_api_client).to receive(:create_candidate_access_token)
               .with(request).and_raise(GetIntoTeachingApiClient::ApiError)
         end
 

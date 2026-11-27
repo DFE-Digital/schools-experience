@@ -2,7 +2,7 @@ require 'rails_helper'
 require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 
 describe Schools::OnBoarding::DbsRequirementsController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let(:task_progress_on_boarding) { false }
 
@@ -11,12 +11,11 @@ describe Schools::OnBoarding::DbsRequirementsController, type: :request do
       .and_return(task_progress_on_boarding)
   end
 
-  context '#new' do
-    let! :school_profile do
+  describe '#new' do
+    before do
       create :school_profile
+      get '/schools/on_boarding/dbs_requirement/new'
     end
-
-    before { get '/schools/on_boarding/dbs_requirement/new' }
 
     it 'assigns the model' do
       expect(assigns(:dbs_requirement)).to eq_model \
@@ -28,7 +27,7 @@ describe Schools::OnBoarding::DbsRequirementsController, type: :request do
     end
   end
 
-  context '#create' do
+  describe '#create' do
     let! :school_profile do
       create :school_profile
     end
@@ -42,7 +41,7 @@ describe Schools::OnBoarding::DbsRequirementsController, type: :request do
       school_profile.reload
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :dbs_requirement do
         Schools::OnBoarding::DbsRequirement.new
       end
@@ -56,7 +55,7 @@ describe Schools::OnBoarding::DbsRequirementsController, type: :request do
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :dbs_requirement do
         build :dbs_requirement
       end
@@ -81,7 +80,7 @@ describe Schools::OnBoarding::DbsRequirementsController, type: :request do
     end
   end
 
-  context '#edit' do
+  describe '#edit' do
     let! :school_profile do
       create :school_profile, :completed
     end
@@ -98,7 +97,7 @@ describe Schools::OnBoarding::DbsRequirementsController, type: :request do
     end
   end
 
-  context '#update' do
+  describe '#update' do
     let! :school_profile do
       create :school_profile, :completed
     end
@@ -116,7 +115,7 @@ describe Schools::OnBoarding::DbsRequirementsController, type: :request do
       school_profile.reload
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :dbs_requirement do
         Schools::OnBoarding::DbsRequirement.new
       end
@@ -131,7 +130,7 @@ describe Schools::OnBoarding::DbsRequirementsController, type: :request do
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :dbs_requirement do
         build :dbs_requirement, dbs_policy_details: 'Updated'
       end

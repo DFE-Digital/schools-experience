@@ -83,9 +83,9 @@ class CookiePreference
   def allowed?(cookie_category_or_name)
     value = if attributes.key? cookie_category_or_name.to_s
               attributes[cookie_category_or_name.to_s]
-            else
+    else
               attributes[category(cookie_category_or_name).to_s]
-            end
+    end
 
     value == true
   end

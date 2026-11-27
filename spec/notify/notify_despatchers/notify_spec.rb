@@ -16,7 +16,7 @@ shared_examples "notify_client" do
           end
         end
 
-        it "should send emails with the correct parameters" do
+        it "sends emails with the correct parameters" do
           recipients.each do |recipient|
             expect(NotifyService.instance).to have_received(notify_method).with notify_params.call(recipient)
           end
@@ -28,7 +28,7 @@ shared_examples "notify_client" do
           subject.new to: recipients, name: nil
         end
 
-        it "should raise an error whilst trying to enqueue" do
+        it "raises an error whilst trying to enqueue" do
           expect { notification.despatch_later! }.to \
             raise_exception NotifyDespatchers::Base::InvalidPersonalisationError
         end
@@ -38,13 +38,14 @@ shared_examples "notify_client" do
         let :notification do
           subject.new to: recipients, name: 1
         end
+
         before do
           perform_enqueued_jobs do
             notification.despatch_later!
           end
         end
 
-        it "should cast personalisations to string" do
+        it "casts personalisations to string" do
           recipients.each do |recipient|
             expect(NotifyService.instance).to have_received(notify_method).with notify_params.call(recipient, { name: "1" })
           end
@@ -92,16 +93,16 @@ private
   end
 end
 
-describe NotifyDespatchers::Base do
+describe NotifyDespatchers::Base do # rubocop:disable RSpec/MultipleDescribes -- The base and concrete dispatchers share this contract suite.
   include ActiveJob::TestHelper
+  subject { described_class.new(to: to) }
+
   let(:to) { 'somename@somecompany.org' }
 
   before do
     allow(NotifyService.instance).to receive(:send_email)
     allow(NotifyService.instance).to receive(:send_sms)
   end
-
-  subject { NotifyDespatchers::Base.new(to: to) }
 
   describe 'Attributes' do
     it { is_expected.to respond_to(:to) }
@@ -123,20 +124,20 @@ describe NotifyDespatchers::Base do
 
   describe 'Methods' do
     describe '#despatch_later!' do
-      it "should fail with NotImplementedError'" do
+      it "fails with NotImplementedError'" do
         expect { subject.despatch_later! }.to raise_error(NotImplementedError, 'You must implement the despatch_later! method')
       end
     end
 
-    context 'Private methods' do
+    context 'when private methods' do
       describe '#personalisation' do
-        it "should fail with 'Not implemented'" do
+        it "fails with 'Not implemented'" do
           expect { subject.send(:personalisation) }.to raise_error('Not implemented')
         end
       end
 
       describe '#template_id' do
-        it "should fail with 'Not implemented'" do
+        it "fails with 'Not implemented'" do
           expect { subject.send(:template_id) }.to raise_error('Not implemented')
         end
       end
@@ -146,6 +147,8 @@ end
 
 describe NotifyDespatchers::Email do
   include ActiveJob::TestHelper
+  subject { StubEmailNotification }
+
   let(:to) { 'somename@somecompany.org' }
   let :recipients do
     %w[test1@user.com test2@user.com]
@@ -162,12 +165,13 @@ describe NotifyDespatchers::Email do
   end
   let(:notification) { subject.new to: recipients, name: 'Test User' }
 
-  subject { StubEmailNotification }
   include_examples "notify_client"
 end
 
 describe NotifyDespatchers::Sms do
   include ActiveJob::TestHelper
+  subject { StubSmsNotification }
+
   let(:to) { '07777777777' }
   let :recipients do
     %w[07777777778 07777777779]
@@ -184,14 +188,12 @@ describe NotifyDespatchers::Sms do
   end
   let(:notification) { subject.new to: recipients, name: 'Test User' }
 
-  before { allow(Feature).to receive(:enabled?).with(:sms) { true } }
-
-  subject { StubSmsNotification }
+  before { allow(Feature).to receive(:enabled?).with(:sms).and_return(true) }
 
   include_examples "notify_client"
 
   context "when in non-production environments" do
-    before { allow(Feature).to receive(:enabled?).with(:sms) { false } }
+    before { allow(Feature).to receive(:enabled?).with(:sms).and_return(false) }
 
     it "does not despatch SMS" do
       perform_enqueued_jobs do

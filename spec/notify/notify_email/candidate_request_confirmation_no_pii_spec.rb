@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe NotifyEmail::CandidateRequestConfirmationNoPii do
-  it_should_behave_like "email template", "8ee470a1-0b94-48ee-9fe7-98b7beb8921c",
+  it_behaves_like "email template", "8ee470a1-0b94-48ee-9fe7-98b7beb8921c",
     school_name: "Springfield Elementary School",
     candidate_dbs_check_document: "Yes",
     candidate_degree_stage: "Postgraduate",
@@ -14,6 +14,8 @@ describe NotifyEmail::CandidateRequestConfirmationNoPii do
     cancellation_url: 'https://example.com/'
 
   describe ".from_application_preview" do
+    subject { described_class.from_application_preview(to, ap, cancellation_url) }
+
     before do
       stub_const(
         'Notify::API_KEY',
@@ -21,19 +23,17 @@ describe NotifyEmail::CandidateRequestConfirmationNoPii do
       )
     end
 
-    specify { expect(described_class).to respond_to(:from_application_preview) }
-
-    let!(:school) { create(:bookings_school, urn: 11_048) }
-    let(:rs) { build(:registration_session) }
-    let(:to) { "morris.szyslak@moes.net" }
-    let(:cancellation_url) { 'https://example.com/placement_request/cancellations' }
     let(:ap) { Candidates::Registrations::ApplicationPreview.new(rs) }
+    let(:cancellation_url) { 'https://example.com/placement_request/cancellations' }
+    let(:to) { "morris.szyslak@moes.net" }
+    let(:rs) { build(:registration_session) }
+    let!(:school) { create(:bookings_school, urn: 11_048) }
 
-    subject { described_class.from_application_preview(to, ap, cancellation_url) }
+    specify { expect(described_class).to respond_to(:from_application_preview) }
 
     it { is_expected.to be_a(described_class) }
 
-    context 'correctly assigning attributes' do
+    context 'when assigning attributes' do
       specify 'cancellation_url is correctly-assigned' do
         expect(subject.cancellation_url).to eql(cancellation_url)
       end
@@ -66,7 +66,7 @@ describe NotifyEmail::CandidateRequestConfirmationNoPii do
         expect(subject.school_name).to eql(ap.school.name)
       end
 
-      context 'placement availability/dates' do
+      context 'with placement availability/dates' do
         context 'when school availability is flexible' do
           specify 'placement_availability is correctly-assigned' do
             expect(subject.placement_availability).to eql(ap.placement_availability)
@@ -77,6 +77,7 @@ describe NotifyEmail::CandidateRequestConfirmationNoPii do
           let(:school) { create(:bookings_school, :with_fixed_availability_preference) }
 
           let(:rs) { build(:registration_session, :with_school, urn: school.urn) }
+
           specify 'bookings_placement_date_id is correctly-assigned' do
             expect(subject.placement_availability).to eql(Bookings::PlacementDate.last.to_s)
           end

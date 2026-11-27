@@ -2,7 +2,7 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::PlacementDates::PublishDatesController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let(:school) { Bookings::School.find_by!(urn: urn).tap { |s| create :bookings_profile, school: s } }
   let(:placement_date) { create(:bookings_placement_date, bookings_school: school, supports_subjects: false, recurring: true) }
@@ -21,7 +21,7 @@ describe Schools::PlacementDates::PublishDatesController, type: :request do
     post schools_placement_date_recurrences_selection_path(placement_date.id), params: params
   end
 
-  context "#new" do
+  describe "#new" do
     before do
       get new_schools_placement_date_publish_dates_path(placement_date.id)
     end
@@ -29,7 +29,7 @@ describe Schools::PlacementDates::PublishDatesController, type: :request do
     it { is_expected.to render_template(:new) }
   end
 
-  context "#create" do
+  describe "#create" do
     let(:submitted_dates) { date_range }
 
     before do

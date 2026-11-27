@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
-  include_context 'Stubbed candidates school', fixed: true
+  include_context 'with a stubbed candidate school', fixed: true
   it_behaves_like 'a registration step'
 
   describe 'attributes' do
@@ -11,46 +11,48 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
     it { is_expected.to respond_to :bookings_subject_id }
   end
 
-  context 'methods' do
+  context 'when calling methods' do
     specify { expect(subject).to respond_to(:placement_date) }
     specify { expect(subject).to respond_to(:placement_date_subject) }
   end
 
   describe 'validations' do
-    let(:school) { create(:bookings_school, availability_preference_fixed: true) }
     subject { described_class.new(urn: school.urn) }
+
+    let(:school) { create(:bookings_school, availability_preference_fixed: true) }
 
     describe 'when the associated school has fixed availability' do
       before { subject.urn = create(:bookings_school, :with_fixed_availability_preference).urn }
+
       it { is_expected.to validate_presence_of(:bookings_placement_date_id) }
     end
 
     describe '#bookings_placement_dates_subject_id' do
       context 'when the placement date is not subject-specific' do
-        let(:placement_date) { create(:bookings_placement_date, subject_specific: false) }
-
         subject do
           described_class.new \
             urn: school.urn,
             bookings_placement_date_id: placement_date.id
         end
 
+        let(:placement_date) { create(:bookings_placement_date, subject_specific: false) }
+
         it { is_expected.not_to validate_presence_of :bookings_subject_id }
       end
 
       context 'when the placement date is subject-specific' do
         let(:maths) { Bookings::Subject.find_by(name: 'Maths') }
-        let(:english) { Bookings::Subject.find_by(name: 'English') }
-        before { school.subjects << [maths] }
-
         let(:placement_date) do
           build(:bookings_placement_date, bookings_school: school, subject_specific: true).tap do |bpd|
             bpd.subjects << maths
             bpd.save
           end
         end
+        let(:english) { Bookings::Subject.find_by(name: 'English') }
 
-        context 'and no date subject specified' do
+        before { school.subjects << [maths] }
+
+        context 'without date subject specified' do
           subject do
             described_class.new \
               urn: school.urn,
@@ -58,13 +60,13 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
           end
 
           specify 'should validate the presence of bookings_subject_id' do
-            is_expected.to \
+            expect(subject).to \
               validate_presence_of(:bookings_subject_id)
                 .with_message('Choose a subject')
           end
         end
 
-        context 'and invalid date subject specified' do
+        context 'when invalid date subject specified' do
           # race scenario if school removes subject from date whilst
           # candidate is viewing it
 
@@ -76,7 +78,7 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
           end
 
           specify 'should validate the presence of bookings_placement_date_subject' do
-            is_expected.not_to be_valid
+            expect(subject).not_to be_valid
             expect(subject.errors.full_messages).to include('Choose a subject')
           end
         end
@@ -85,11 +87,15 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
   end
 
   describe 'methods' do
-    describe '#placement_date' do
-      it { is_expected.to respond_to(:placement_date) }
+    subject(:registration_step) { described_class.new(urn: school.urn) }
 
-      before { allow(subject).to receive(:bookings_placement_date_id).and_return(1) }
-      before { allow(Bookings::PlacementDate).to receive(:find_by).and_return('a') }
+    describe '#placement_date' do
+      before do
+        allow(Bookings::PlacementDate).to receive(:find_by).and_return('a')
+        registration_step.bookings_placement_date_id = 1
+      end
+
+      it { is_expected.to respond_to(:placement_date) }
 
       specify 'should find the placement date via its id' do
         subject.placement_date
@@ -98,14 +104,13 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
     end
 
     describe '#placement_date_subject' do
-      it { is_expected.to respond_to(:placement_date_subject) }
-
       before do
+        allow(Bookings::PlacementDateSubject).to receive(:find_by).and_return('a')
         subject.bookings_placement_date_id = 1
         subject.bookings_subject_id = 2
       end
 
-      before { allow(Bookings::PlacementDateSubject).to receive(:find_by).and_return('a') }
+      it { is_expected.to respond_to(:placement_date_subject) }
 
       specify 'should find the placement date via its id' do
         subject.placement_date_subject
@@ -117,10 +122,6 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
     end
 
     describe '#date_and_subject_ids' do
-      it { is_expected.to respond_to(:placement_date_subject) }
-
-      let!(:bookings_placement_date) { create :bookings_placement_date, bookings_school: school }
-      let!(:bookings_subject) { create :bookings_subject, schools: [school] }
       let!(:bookings_placement_dates_subject) do
         create(
           :bookings_placement_date_subject,
@@ -128,11 +129,15 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
           bookings_subject: bookings_subject
         )
       end
+      let!(:bookings_subject) { create :bookings_subject, schools: [school] }
+      let!(:bookings_placement_date) { create :bookings_placement_date, bookings_school: school }
 
       before do
         subject.bookings_placement_date_id = bookings_placement_date.id
         subject.bookings_subject_id = bookings_subject.id
       end
+
+      it { is_expected.to respond_to(:placement_date_subject) }
 
       specify 'should join the placement date and placement date subject ids separated by an underscore' do
         expect(subject.date_and_subject_ids).to eql(bookings_placement_dates_subject.date_and_subject_id)
@@ -164,48 +169,50 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
     end
 
     describe '#has_primary_dates?' do
-      subject { described_class.new }
+      subject(:registration_step) { described_class.new(urn: school.urn) }
+
       context 'when primary dates are present' do
-        before { allow(subject).to receive(:primary_placement_dates).and_return(%w[yes]) }
+        before do
+          create(:bookings_placement_date, :active, :not_supporting_subjects, bookings_school: school)
+        end
 
         it { is_expected.to have_primary_dates }
       end
 
       context 'when no primary dates are present' do
-        before { allow(subject).to receive(:primary_placement_dates).and_return([]) }
-
         it { is_expected.not_to have_primary_dates }
       end
     end
 
     describe '#has_secondary_dates?' do
-      subject { described_class.new }
+      subject(:registration_step) { described_class.new(urn: school.urn) }
+
       context 'when secondary dates are present' do
-        before { allow(subject).to receive(:secondary_placement_dates_grouped_by_date).and_return(%w[yes]) }
+        before do
+          create(:bookings_placement_date, :active, bookings_school: school)
+        end
 
         it { is_expected.to have_secondary_dates }
       end
 
       context 'when no secondary dates are present' do
-        before { allow(subject).to receive(:secondary_placement_dates_grouped_by_date).and_return({}) }
-
         it { is_expected.not_to have_secondary_dates }
       end
     end
 
     describe '#has_primary_and_secondary_dates?' do
-      subject { described_class.new }
+      subject(:registration_step) { described_class.new(urn: school.urn) }
+
       context 'when secondary dates are present' do
-        before { allow(subject).to receive(:primary_placement_dates).and_return(%w[yes]) }
-        before { allow(subject).to receive(:secondary_placement_dates_grouped_by_date).and_return(%w[yes]) }
+        before do
+          create(:bookings_placement_date, :active, :not_supporting_subjects, bookings_school: school)
+          create(:bookings_placement_date, :active, bookings_school: school)
+        end
 
         it { is_expected.to have_primary_and_secondary_dates }
       end
 
       context 'when no secondary dates are present' do
-        before { allow(subject).to receive(:secondary_placement_dates_grouped_by_date).and_return({}) }
-        before { allow(subject).to receive(:primary_placement_dates).and_return([]) }
-
         it { is_expected.not_to have_primary_and_secondary_dates }
       end
     end

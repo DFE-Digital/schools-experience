@@ -2,15 +2,9 @@ require 'rails_helper'
 require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 
 describe Schools::OnBoarding::AccessNeedsPoliciesController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let(:task_progress_on_boarding) { false }
-
-  before do
-    allow(Feature).to receive(:enabled?).with(:task_progress_on_boarding)
-      .and_return(task_progress_on_boarding)
-  end
-
   let! :school_profile do
     FactoryBot.create \
       :school_profile,
@@ -31,7 +25,12 @@ describe Schools::OnBoarding::AccessNeedsPoliciesController, type: :request do
       :with_disability_confident
   end
 
-  context '#new' do
+  before do
+    allow(Feature).to receive(:enabled?).with(:task_progress_on_boarding)
+      .and_return(task_progress_on_boarding)
+  end
+
+  describe '#new' do
     before do
       get '/schools/on_boarding/access_needs_policy/new'
     end
@@ -46,7 +45,7 @@ describe Schools::OnBoarding::AccessNeedsPoliciesController, type: :request do
     end
   end
 
-  context '#create' do
+  describe '#create' do
     let :params do
       {
         schools_on_boarding_access_needs_policy: access_needs_policy.attributes
@@ -57,7 +56,7 @@ describe Schools::OnBoarding::AccessNeedsPoliciesController, type: :request do
       post '/schools/on_boarding/access_needs_policy', params: params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :access_needs_policy do
         Schools::OnBoarding::AccessNeedsPolicy.new
       end
@@ -72,7 +71,7 @@ describe Schools::OnBoarding::AccessNeedsPoliciesController, type: :request do
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :access_needs_policy do
         FactoryBot.build :access_needs_policy
       end
@@ -97,7 +96,7 @@ describe Schools::OnBoarding::AccessNeedsPoliciesController, type: :request do
     end
   end
 
-  context '#edit' do
+  describe '#edit' do
     let! :school_profile do
       FactoryBot.create :school_profile, :completed
     end
@@ -116,7 +115,7 @@ describe Schools::OnBoarding::AccessNeedsPoliciesController, type: :request do
     end
   end
 
-  context '#update' do
+  describe '#update' do
     let! :school_profile do
       FactoryBot.create :school_profile, :completed
     end
@@ -132,7 +131,7 @@ describe Schools::OnBoarding::AccessNeedsPoliciesController, type: :request do
       patch '/schools/on_boarding/access_needs_policy', params: params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :access_needs_policy do
         Schools::OnBoarding::AccessNeedsPolicy.new
       end
@@ -147,7 +146,7 @@ describe Schools::OnBoarding::AccessNeedsPoliciesController, type: :request do
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :access_needs_policy do
         FactoryBot.build :access_needs_policy,
           has_access_needs_policy: false,

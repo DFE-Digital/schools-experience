@@ -3,9 +3,10 @@ require 'rails_helper'
 RSpec.describe Candidates::SchoolPresenter do
   include ActiveSupport::Testing::TimeHelpers
 
+  subject { described_class.new(school, profile) }
+
   let(:profile) { build(:bookings_profile) }
   let(:school) { profile.school }
-  subject { described_class.new(school, profile) }
 
   describe ".school" do
     it { expect(subject.school).to eql(school) }
@@ -59,11 +60,13 @@ RSpec.describe Candidates::SchoolPresenter do
 
     context 'with booleans' do
       before { profile.dress_code_business = true }
+
       it { is_expected.to be true }
     end
 
     context 'with details' do
       before { profile.dress_code_other_details = "lorem ipsum" }
+
       it { is_expected.to be true }
     end
 
@@ -86,6 +89,7 @@ RSpec.describe Candidates::SchoolPresenter do
 
     context 'with content' do
       before { profile.dress_code_other_details = 'lorem ipsum' }
+
       it { is_expected.to match(/<p>lorem ipsum<\/p>/) }
     end
 
@@ -96,24 +100,27 @@ RSpec.describe Candidates::SchoolPresenter do
 
   describe '#dbs_required' do
     context 'when legacy profile' do
+      subject { described_class.new(school, legacy_profile).dbs_required }
+
       let :legacy_profile do
         build :bookings_profile, dbs_policy_conditions: nil, dbs_policy_details: nil
       end
 
-      subject { described_class.new(school, legacy_profile).dbs_required }
-
       context 'when yes' do
         before { legacy_profile.dbs_required = 'always' }
+
         it { is_expected.to eql "Yes - Always" }
       end
 
       context 'when no' do
         before { legacy_profile.dbs_required = 'never' }
+
         it { is_expected.to eql "No - Candidates will be accompanied at all times" }
       end
 
-      context 'when yes' do
+      context 'when yes, sometimes required' do
         before { legacy_profile.dbs_required = 'sometimes' }
+
         it { is_expected.to eql "Yes - Sometimes" }
       end
     end
@@ -143,14 +150,14 @@ RSpec.describe Candidates::SchoolPresenter do
 
   describe '#dbs_policy' do
     context 'when legacy profile' do
+      subject { described_class.new(school, legacy_profile).dbs_policy }
+
       let :legacy_profile do
         build :bookings_profile,
           dbs_policy_conditions: nil,
           dbs_policy_details: nil,
           dbs_policy: 'Our DBS policy'
       end
-
-      subject { described_class.new(school, legacy_profile).dbs_policy }
 
       it { is_expected.to eql 'Our DBS policy' }
     end

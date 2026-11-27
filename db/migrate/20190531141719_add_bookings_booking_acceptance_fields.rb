@@ -3,7 +3,7 @@ class AddBookingsBookingAcceptanceFields < ActiveRecord::Migration[5.2]
     add_column :bookings_bookings, :placement_details, :text, null: true
 
     add_column :bookings_bookings, :contact_name, :string, null: true
-    add_column :bookings_bookings, :contact_number, :string,  null: true
+    add_column :bookings_bookings, :contact_number, :string, null: true
     add_column :bookings_bookings, :contact_email, :string, null: true
     add_column :bookings_bookings, :location, :text, null: true
 

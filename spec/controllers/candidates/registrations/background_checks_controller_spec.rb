@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::BackgroundChecksController, type: :request do
-  include_context 'Stubbed current_registration'
+  include_context 'with a stubbed current registration'
 
   before do
     FactoryBot.create :bookings_school, urn: 11_048
@@ -19,7 +19,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
       ]
     end
 
-    context '#new' do
+    describe '#new' do
       before do
         get '/candidates/schools/11048/registrations/background_check/new'
       end
@@ -29,7 +29,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
       end
     end
 
-    context '#create' do
+    describe '#create' do
       let :background_check_params do
         {
           candidates_registrations_background_check: \
@@ -42,7 +42,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
           params: background_check_params
       end
 
-      context 'invalid' do
+      context 'when invalid' do
         let :background_check do
           Candidates::Registrations::BackgroundCheck.new
         end
@@ -57,7 +57,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
         end
       end
 
-      context 'valid' do
+      context 'when valid' do
         let :background_check do
           FactoryBot.build :background_check
         end
@@ -76,7 +76,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
   end
 
   context 'with existing background check in gitis' do
-    include_context 'candidate signin'
+    include_context 'when the candidate signs in'
 
     let :registration_session do
       FactoryBot.build :gitis_registration_session,
@@ -91,7 +91,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
         ]
     end
 
-    context '#new' do
+    describe '#new' do
       before do
         get '/candidates/schools/11048/registrations/background_check/new'
       end
@@ -126,7 +126,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
       registration_session.save existing_background_check
     end
 
-    context '#new' do
+    describe '#new' do
       before do
         get '/candidates/schools/11048/registrations/background_check/new'
       end
@@ -140,7 +140,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
       end
     end
 
-    context '#edit' do
+    describe '#edit' do
       before do
         get '/candidates/schools/11048/registrations/background_check/edit'
       end
@@ -154,7 +154,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
       end
     end
 
-    context '#update' do
+    describe '#update' do
       let :background_check_params do
         {
           candidates_registrations_background_check: \
@@ -167,7 +167,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
           params: background_check_params
       end
 
-      context 'invalid' do
+      context 'when invalid' do
         let :background_check do
           Candidates::Registrations::BackgroundCheck.new
         end
@@ -182,7 +182,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
         end
       end
 
-      context 'valid' do
+      context 'when valid' do
         let :background_check do
           FactoryBot.build :background_check, has_dbs_check: has_dbs_check
         end

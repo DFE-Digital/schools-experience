@@ -3,13 +3,13 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::PlacementDates::PlacementDetailsController, type: :request do
   include ActiveSupport::Testing::TimeHelpers
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let(:school) { Bookings::School.find_by!(urn: urn).tap { |s| create :bookings_profile, school: s } }
 
   let(:placement_date) { create :bookings_placement_date, bookings_school: school, supports_subjects: false }
 
-  context '#new' do
+  describe '#new' do
     before do
       get "/schools/placement_dates/#{placement_date.id}/placement_detail/new"
     end
@@ -23,13 +23,13 @@ describe Schools::PlacementDates::PlacementDetailsController, type: :request do
     end
   end
 
-  context '#create' do
+  describe '#create' do
     subject do
       post "/schools/placement_dates/#{placement_date.id}/placement_detail",
            params: params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :params do
         {
           schools_placement_dates_placement_detail: {
@@ -48,7 +48,7 @@ describe Schools::PlacementDates::PlacementDetailsController, type: :request do
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :params do
         {
           schools_placement_dates_placement_detail: {

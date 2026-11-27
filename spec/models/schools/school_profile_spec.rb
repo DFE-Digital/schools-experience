@@ -1,246 +1,246 @@
 require 'rails_helper'
 
 describe Schools::SchoolProfile, type: :model do
-  context 'attributes' do
+  context 'with attributes' do
     it do
-      is_expected.to have_db_column(:bookings_school_id).of_type :integer
+      expect(subject).to have_db_column(:bookings_school_id).of_type :integer
     end
 
     it do
-      is_expected.to \
+      expect(subject).to \
         have_db_column(:dbs_requirement_requires_check).of_type :boolean
     end
 
     it do
-      is_expected.to \
+      expect(subject).to \
         have_db_column(:dbs_requirement_dbs_policy_conditions).of_type :string
     end
 
     it do
-      is_expected.to \
+      expect(subject).to \
         have_db_column(:dbs_requirement_dbs_policy_details).of_type :text
     end
 
     it do
-      is_expected.to \
+      expect(subject).to \
         have_db_column(:dbs_requirement_no_dbs_policy_details).of_type :text
     end
 
     it do
-      is_expected.to \
+      expect(subject).to \
         have_db_column(:candidate_requirement_dbs_requirement).of_type :string
     end
 
     it do
-      is_expected.to \
+      expect(subject).to \
         have_db_column(:candidate_requirement_dbs_policy).of_type :text
     end
 
     it do
-      is_expected.to \
+      expect(subject).to \
         have_db_column(:candidate_requirement_requirements).of_type :boolean
     end
 
     it do
-      is_expected.to \
+      expect(subject).to \
         have_db_column(:candidate_requirement_requirements_details).of_type :text
     end
 
     it do
-      is_expected.to \
+      expect(subject).to \
         have_db_column(:fees_administration_fees).of_type :boolean
     end
 
     it do
-      is_expected.to have_db_column(:fees_dbs_fees).of_type :boolean
+      expect(subject).to have_db_column(:fees_dbs_fees).of_type :boolean
     end
 
     it do
-      is_expected.to have_db_column(:fees_other_fees).of_type :boolean
+      expect(subject).to have_db_column(:fees_other_fees).of_type :boolean
     end
 
     %w[administration_fee dbs_fee other_fee].each do |fee|
       it do
-        is_expected.to \
+        expect(subject).to \
           have_db_column(:"#{fee}_amount_pounds")
             .of_type(:decimal).with_options(precision: 6, scale: 2)
       end
 
       it do
-        is_expected.to have_db_column(:"#{fee}_description").of_type :text
+        expect(subject).to have_db_column(:"#{fee}_description").of_type :text
       end
 
       it do
-        is_expected.to have_db_column(:"#{fee}_interval").of_type :string
+        expect(subject).to have_db_column(:"#{fee}_interval").of_type :string
       end
 
       it do
-        is_expected.to have_db_column(:"#{fee}_payment_method").of_type :text
+        expect(subject).to have_db_column(:"#{fee}_payment_method").of_type :text
       end
     end
 
     it do
-      is_expected.to have_db_column(:phases_list_primary).of_type :boolean
+      expect(subject).to have_db_column(:phases_list_primary).of_type :boolean
     end
 
     it do
-      is_expected.to have_db_column(:phases_list_secondary).of_type :boolean
+      expect(subject).to have_db_column(:phases_list_secondary).of_type :boolean
     end
 
     it do
-      is_expected.to have_db_column(:phases_list_college).of_type :boolean
+      expect(subject).to have_db_column(:phases_list_college).of_type :boolean
     end
 
     it do
-      is_expected.to \
+      expect(subject).to \
         have_db_column(:phases_list_secondary_and_college).of_type :boolean
     end
 
     it do
-      is_expected.to have_db_column(:description_details).of_type :text
+      expect(subject).to have_db_column(:description_details).of_type :text
     end
 
     it do
-      is_expected.to have_db_column(:candidate_dress_code_business_dress).of_type :boolean
+      expect(subject).to have_db_column(:candidate_dress_code_business_dress).of_type :boolean
     end
 
     it do
-      is_expected.to have_db_column(:candidate_dress_code_cover_up_tattoos).of_type :boolean
+      expect(subject).to have_db_column(:candidate_dress_code_cover_up_tattoos).of_type :boolean
     end
 
     it do
-      is_expected.to have_db_column(:candidate_dress_code_remove_piercings).of_type :boolean
+      expect(subject).to have_db_column(:candidate_dress_code_remove_piercings).of_type :boolean
     end
 
     it do
-      is_expected.to have_db_column(:candidate_dress_code_smart_casual).of_type :boolean
+      expect(subject).to have_db_column(:candidate_dress_code_smart_casual).of_type :boolean
     end
 
     it do
-      is_expected.to have_db_column(:candidate_dress_code_other_dress_requirements).of_type :boolean
+      expect(subject).to have_db_column(:candidate_dress_code_other_dress_requirements).of_type :boolean
     end
 
     it do
-      is_expected.to have_db_column(:candidate_dress_code_step_completed).of_type :boolean
+      expect(subject).to have_db_column(:candidate_dress_code_step_completed).of_type :boolean
     end
 
     it do
-      is_expected.to have_db_column(:candidate_dress_code_other_dress_requirements_detail).of_type :string
+      expect(subject).to have_db_column(:candidate_dress_code_other_dress_requirements_detail).of_type :string
     end
 
     it do
-      is_expected.to have_db_column(:candidate_parking_information_parking_provided).of_type :boolean
+      expect(subject).to have_db_column(:candidate_parking_information_parking_provided).of_type :boolean
     end
 
     it do
-      is_expected.to have_db_column(:candidate_parking_information_parking_details).of_type :string
+      expect(subject).to have_db_column(:candidate_parking_information_parking_details).of_type :string
     end
 
     it do
-      is_expected.to have_db_column(:candidate_parking_information_nearby_parking_details).of_type :string
+      expect(subject).to have_db_column(:candidate_parking_information_nearby_parking_details).of_type :string
     end
 
     it do
-      is_expected.to have_db_column(:candidate_experience_schedule_start_time).of_type :string
+      expect(subject).to have_db_column(:candidate_experience_schedule_start_time).of_type :string
     end
 
     it do
-      is_expected.to have_db_column(:candidate_experience_schedule_end_time).of_type :string
+      expect(subject).to have_db_column(:candidate_experience_schedule_end_time).of_type :string
     end
 
     it do
-      is_expected.to have_db_column(:candidate_experience_schedule_times_flexible).of_type :boolean
+      expect(subject).to have_db_column(:candidate_experience_schedule_times_flexible).of_type :boolean
     end
 
     it do
-      is_expected.to \
+      expect(subject).to \
         have_db_column(:candidate_experience_schedule_times_flexible_details).of_type :text
     end
 
     it do
-      is_expected.to \
+      expect(subject).to \
         have_db_column(:experience_outline_candidate_experience).of_type :text
     end
 
     it do
-      is_expected.to \
+      expect(subject).to \
         have_db_column(:teacher_training_provides_teacher_training).of_type :boolean
     end
 
     it do
-      is_expected.to \
+      expect(subject).to \
         have_db_column(:teacher_training_teacher_training_details).of_type :text
     end
 
     it do
-      is_expected.to \
+      expect(subject).to \
         have_db_column(:teacher_training_teacher_training_url).of_type :string
     end
 
     it do
-      is_expected.to have_db_column(:admin_contact_full_name).of_type :string
+      expect(subject).to have_db_column(:admin_contact_full_name).of_type :string
     end
 
     it do
-      is_expected.to have_db_column(:admin_contact_email).of_type :string
+      expect(subject).to have_db_column(:admin_contact_email).of_type :string
     end
 
     it do
-      is_expected.to have_db_column(:admin_contact_email_secondary).of_type :string
+      expect(subject).to have_db_column(:admin_contact_email_secondary).of_type :string
     end
 
     it do
-      is_expected.to \
+      expect(subject).to \
         have_db_column(:confirmation_acceptance).of_type(:boolean)
     end
 
     it do
-      is_expected.to \
+      expect(subject).to \
         have_db_column(:candidate_requirements_selection_step_completed)
           .of_type(:boolean).with_options(default: false)
     end
 
     it do
-      is_expected.to \
+      expect(subject).to \
         have_db_column(:access_needs_detail_description).of_type(:string)
     end
 
     it do
-      is_expected.to \
+      expect(subject).to \
         have_db_column(:disability_confident_is_disability_confident).of_type(:boolean)
     end
 
     it do
-      is_expected.to \
+      expect(subject).to \
         have_db_column(:access_needs_policy_has_access_needs_policy).of_type(:boolean)
     end
 
     it do
-      is_expected.to have_db_column(:access_needs_policy_url).of_type(:string)
+      expect(subject).to have_db_column(:access_needs_policy_url).of_type(:string)
     end
   end
 
-  context 'relationships' do
+  context 'with relationships' do
     it { is_expected.to have_many(:profile_subjects) }
     it { is_expected.to have_many(:subjects) }
     it { is_expected.to belong_to(:bookings_school) }
   end
 
-  context 'delegation' do
+  context 'when delegating' do
     it { is_expected.to delegate_method(:urn).to(:bookings_school) }
   end
 
-  context 'validations' do
+  context 'when validating' do
     it do
-      is_expected.to validate_presence_of :bookings_school
+      expect(subject).to validate_presence_of :bookings_school
     end
   end
 
-  context 'associations' do
-    context 'subjects' do
-      let(:bookings_school) { create(:bookings_school) }
+  context 'when associations' do
+    context 'when subjects' do
       subject { described_class.create!(bookings_school: bookings_school) }
 
+      let(:bookings_school) { create(:bookings_school) }
       let :bookings_subject do
         FactoryBot.create :bookings_subject
       end
@@ -249,7 +249,7 @@ describe Schools::SchoolProfile, type: :model do
         subject.subjects << bookings_subject
       end
 
-      context '#subjects' do
+      describe '#subjects' do
         it 'only returns subjects' do
           expect(subject.subjects.to_a).to eq [bookings_subject]
         end
@@ -257,13 +257,13 @@ describe Schools::SchoolProfile, type: :model do
     end
   end
 
-  context 'values from form models' do
+  context 'when values from form models' do
     let(:bookings_school) { create(:bookings_school) }
     let :model do
       described_class.new bookings_school: bookings_school
     end
 
-    context '#dbs_requirement' do
+    describe '#dbs_requirement' do
       let :form_model do
         FactoryBot.build :dbs_requirement
       end
@@ -287,7 +287,7 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
-    context '#fees' do
+    describe '#fees' do
       let :form_model do
         FactoryBot.build :fees
       end
@@ -314,7 +314,7 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
-    context 'school_fees' do
+    context 'when school_fees' do
       %w[administration_fee dbs_fee other_fee].each do |fee|
         context fee do
           let :form_model do
@@ -352,7 +352,7 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
-    context '#phases_list' do
+    describe '#phases_list' do
       let :form_model do
         FactoryBot.build :phases_list
       end
@@ -383,7 +383,7 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
-    context '#key_stage_list' do
+    describe '#key_stage_list' do
       let :form_model do
         FactoryBot.build :key_stage_list
       end
@@ -405,7 +405,7 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
-    context '#description' do
+    describe '#description' do
       let :form_model do
         FactoryBot.build :description
       end
@@ -423,7 +423,7 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
-    context '#candidate_dress_code' do
+    describe '#candidate_dress_code' do
       let :form_model do
         FactoryBot.build :candidate_dress_code
       end
@@ -451,7 +451,7 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
-    context '#candidate_parking_information' do
+    describe '#candidate_parking_information' do
       let :form_model do
         FactoryBot.build :candidate_parking_information
       end
@@ -476,7 +476,7 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
-    context '#candidate_experience_schedule' do
+    describe '#candidate_experience_schedule' do
       let :form_model do
         FactoryBot.build :candidate_experience_schedule
       end
@@ -502,7 +502,7 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
-    context '#access_needs_support' do
+    describe '#access_needs_support' do
       let :form_model do
         FactoryBot.build :access_needs_support
       end
@@ -523,7 +523,7 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
-    context '#access_needs_detail' do
+    describe '#access_needs_detail' do
       let :form_model do
         FactoryBot.build :access_needs_detail
       end
@@ -544,7 +544,7 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
-    context '#disability_confident' do
+    describe '#disability_confident' do
       let :form_model do
         FactoryBot.build :disability_confident
       end
@@ -565,7 +565,7 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
-    context '#access_needs_policy' do
+    describe '#access_needs_policy' do
       let :form_model do
         FactoryBot.build :access_needs_policy
       end
@@ -586,7 +586,7 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
-    context '#experience_outline' do
+    describe '#experience_outline' do
       let :form_model do
         FactoryBot.build :experience_outline
       end
@@ -605,7 +605,7 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
-    context '#teacher_training' do
+    describe '#teacher_training' do
       let :form_model do
         FactoryBot.build :teacher_training
       end
@@ -630,7 +630,7 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
-    context '#admin_contact' do
+    describe '#admin_contact' do
       let :form_model do
         FactoryBot.build :admin_contact
       end
@@ -651,7 +651,7 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
-    context '#confirmation' do
+    describe '#confirmation' do
       let :form_model do
         FactoryBot.build :confirmation
       end
@@ -666,8 +666,8 @@ describe Schools::SchoolProfile, type: :model do
     end
   end
 
-  context 'callbacks' do
-    context 'before_validation' do
+  context 'when callbacks' do
+    context 'when before_validation' do
       context 'when administration_fee no longer makes sense' do
         let :school_profile do
           FactoryBot.create \
@@ -782,9 +782,9 @@ describe Schools::SchoolProfile, type: :model do
   end
 
   describe "#dup" do
-    let(:profile) { create(:school_profile, :completed) }
-
     subject(:duplicate) { profile.dup }
+
+    let(:profile) { create(:school_profile, :completed) }
 
     it "duplicates the profile and related subjects" do
       expected_attributes = profile.attributes.without(%w[id created_at updated_at])
@@ -793,7 +793,7 @@ describe Schools::SchoolProfile, type: :model do
     end
   end
 
-  context '#requires_subjects?' do
+  describe '#requires_subjects?' do
     let :school_profile do
       FactoryBot.create :school_profile
     end
@@ -828,10 +828,10 @@ describe Schools::SchoolProfile, type: :model do
   end
 
   describe "#current_step" do
+    subject { school_profile.current_step(previous_step) }
+
     let(:previous_step) { nil }
     let(:school_profile) { build(:school_profile) }
-
-    subject { school_profile.current_step(previous_step) }
 
     it { is_expected.to be(:dbs_requirement) }
 
@@ -848,9 +848,9 @@ describe Schools::SchoolProfile, type: :model do
   end
 
   describe "#completed?" do
-    let(:school_profile) { build(:school_profile) }
-
     subject { school_profile }
+
+    let(:school_profile) { build(:school_profile) }
 
     it { is_expected.not_to be_completed }
 

@@ -6,18 +6,20 @@ describe HealthchecksController, type: :request do
   let(:encoded) do
     ActionController::HttpAuthentication::Basic.encode_credentials(username, password)
   end
+  let(:dfe_healthcheck) do
+    instance_double(Schools::DFESignInAPI::Healthcheck, up?: true)
+  end
 
-  include_context "api healthy"
+  include_context "when the API is healthy"
 
   before do
     allow(ENV).to receive(:[]).and_call_original
 
-    allow_any_instance_of(Schools::DFESignInAPI::Healthcheck).to \
-      receive(:up?).and_return(true)
+    allow(Schools::DFESignInAPI::Healthcheck).to receive(:new).and_return(dfe_healthcheck)
 
     allow(ENV).to receive(:[]).with("REDIS_URL").and_return \
       "redis://localhost:6379/1"
-    allow(REDIS).to receive(:ping) { "PONG" }
+    allow(REDIS).to receive(:ping).and_return("PONG")
 
     allow(ApplicationRecord).to \
       receive(:connected?).and_return(true)
@@ -57,10 +59,11 @@ describe HealthchecksController, type: :request do
     end
 
     context 'with the DfE Sign In healthcheck reporting down' do
-      before do
-        allow_any_instance_of(Schools::DFESignInAPI::Healthcheck).to \
-          receive(:up?).and_return(false)
+      let(:dfe_healthcheck) do
+        instance_double(Schools::DFESignInAPI::Healthcheck, up?: false)
+      end
 
+      before do
         get healthcheck_path
       end
 
@@ -69,7 +72,7 @@ describe HealthchecksController, type: :request do
     end
 
     context 'with unhealthy API' do
-      include_context "api no connection"
+      include_context "when the API cannot be reached"
 
       before do
         get healthcheck_path
@@ -82,8 +85,9 @@ describe HealthchecksController, type: :request do
     context "when the git_api feature is enabled" do
       context "with unhealthy API" do
         before do
-          allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \
-            receive(:health_check).and_raise(GetIntoTeachingApiClient::ApiError)
+          api_client = instance_double(GetIntoTeachingApiClient::OperationsApi)
+          allow(GetIntoTeachingApiClient::OperationsApi).to receive(:new).and_return(api_client)
+          allow(api_client).to receive(:health_check).and_raise(GetIntoTeachingApiClient::ApiError)
 
           get healthcheck_path
         end
@@ -150,8 +154,6 @@ describe HealthchecksController, type: :request do
       before do
         allow(Rails.application.config.x).to \
           receive(:dfe_sign_in_api_enabled).and_return(false)
-        allow_any_instance_of(Schools::DFESignInAPI::Healthcheck).to \
-          receive(:up?).and_call_original
 
         get api_health_path
       end
@@ -161,7 +163,7 @@ describe HealthchecksController, type: :request do
     end
 
     context 'with unhealthy API' do
-      include_context "api no connection"
+      include_context "when the API cannot be reached"
 
       before do
         get api_health_path
@@ -172,10 +174,11 @@ describe HealthchecksController, type: :request do
     end
 
     context 'with the DfE Sign In healthcheck reporting down' do
-      before do
-        allow_any_instance_of(Schools::DFESignInAPI::Healthcheck).to \
-          receive(:up?).and_return(false)
+      let(:dfe_healthcheck) do
+        instance_double(Schools::DFESignInAPI::Healthcheck, up?: false)
+      end
 
+      before do
         get api_health_path
       end
 

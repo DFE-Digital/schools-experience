@@ -1,17 +1,18 @@
 require 'rails_helper'
 
 describe Schools::OnBoarding::TeacherTraining, type: :model do
-  context 'attributes' do
+  context 'with attributes' do
     it { is_expected.to respond_to :provides_teacher_training }
     it { is_expected.to respond_to :teacher_training_details }
     it { is_expected.to respond_to :teacher_training_url }
   end
 
-  context 'validates' do
+  context 'when validates' do
     it { is_expected.not_to allow_value(nil).for :provides_teacher_training }
 
     context 'when provides_teacher_training' do
       subject { described_class.new provides_teacher_training: true }
+
       it { is_expected.to validate_presence_of :teacher_training_details }
 
       context 'when teacher_training_url is present' do
@@ -30,12 +31,15 @@ describe Schools::OnBoarding::TeacherTraining, type: :model do
 
     context 'when not provides_teacher_training' do
       subject { described_class.new provides_teacher_training: false }
+
       it { is_expected.not_to validate_presence_of :teacher_training_details }
       it { is_expected.not_to validate_presence_of :teacher_training_url }
     end
   end
 
-  context '.new_from_bookings_school' do
+  describe '.new_from_bookings_school' do
+    subject { described_class.new_from_bookings_school school }
+
     let :school do
       FactoryBot.build \
         :bookings_school,
@@ -43,8 +47,6 @@ describe Schools::OnBoarding::TeacherTraining, type: :model do
         :with_teacher_training_website,
         teacher_training_provider: true
     end
-
-    subject { described_class.new_from_bookings_school school }
 
     it "sets provides_teacher_training" do
       expect(subject.provides_teacher_training).to be true

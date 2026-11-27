@@ -38,7 +38,7 @@ end
 When("I am viewing my chosen cancelled booking") do
   path = path_for('cancelled booking', booking_id: @booking_id)
   visit(path)
-  expect(page.current_path).to eql(path)
+  expect(page).to have_current_path(path)
 end
 
 Given("there is a cancelled booking") do
@@ -52,7 +52,7 @@ end
 
 Then("every booking should contain a link to view cancelled booking details") do
   within('#bookings') do
-    page.all('.booking').each do |sr|
+    page.all('.booking').each do |sr| # rubocop:disable Rails/FindEach -- Capybara collections are arrays.
       within(sr) do
         booking_id = sr['data-booking']
         expect(page).to have_link('View', href: schools_cancelled_booking_path(booking_id))

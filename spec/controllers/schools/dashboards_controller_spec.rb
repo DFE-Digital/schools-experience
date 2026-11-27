@@ -8,9 +8,9 @@ describe Schools::DashboardsController, type: :request do
     end
 
     context 'when logged in' do
-      include_context "logged in DfE user"
+      include_context "when a DfE user is logged in"
 
-      subject! { get '/schools/dashboard' }
+      subject! { get '/schools/dashboard' } # rubocop:disable RSpec/LeadingSubject -- Request must run after login setup.
 
       it 'sets the correct school' do
         expect(assigns(:school)).to eq(school)
@@ -23,16 +23,18 @@ describe Schools::DashboardsController, type: :request do
 
     context 'when not logged in' do
       subject { get '/schools/dashboard' }
+
       it_behaves_like "a protected page"
     end
   end
 
   context "when the school doesn't exist" do
-    include_context "logged in DfE user"
     subject { get '/schools/dashboard' }
 
+    include_context "when a DfE user is logged in"
+
     before do
-      @current_user_school.destroy!
+      current_user_school.destroy!
     end
 
     specify 'should redirect to school not registered error page' do
@@ -41,17 +43,17 @@ describe Schools::DashboardsController, type: :request do
   end
 
   context "when the urn isn't present in the session" do
-    include_context "logged in DfE user"
+    include_context "when a DfE user is logged in"
 
     before do
       allow(Schools::ChangeSchool).to \
         receive(:allow_school_change_in_app?) { allow_school_change }
 
-      allow_any_instance_of(described_class).to receive(:current_urn) { nil }
+      session_hash[:urn] = nil
       get '/schools/dashboard'
     end
 
-    context 'and in app school change is deactivated' do
+    context 'when in app school change is deactivated' do
       let(:allow_school_change) { false }
 
       specify 'should redirect to school not registered error page' do
@@ -60,7 +62,7 @@ describe Schools::DashboardsController, type: :request do
       end
     end
 
-    context 'and DfE Sign-in api integration is activated' do
+    context 'when DfE Sign-in api integration is activated' do
       let(:allow_school_change) { true }
 
       specify 'should redirect to change school page' do

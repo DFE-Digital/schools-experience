@@ -3,22 +3,25 @@ require "rails_helper"
 describe "Basic authentication", type: :request do
   before do
     allow(ENV).to receive(:[]).and_call_original
-    allow(ENV).to receive(:[]).with("REDIS_URL") { "redis://localhost:6379/1" }
+    allow(ENV).to receive(:[]).with("REDIS_URL").and_return("redis://localhost:6379/1")
 
-    allow(REDIS).to receive(:ping) { "PONG" }
-    allow(ApplicationRecord).to receive(:connected?) { true }
+    allow(REDIS).to receive(:ping).and_return("PONG")
+    allow(ApplicationRecord).to receive(:connected?).and_return(true)
 
-    allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \
-      receive(:health_check) { GetIntoTeachingApiClient::HealthCheckResponse.new(status: "healthy") }
+    operations_api = instance_double(
+      GetIntoTeachingApiClient::OperationsApi,
+      health_check: GetIntoTeachingApiClient::HealthCheckResponse.new(status: "healthy")
+    )
+    allow(GetIntoTeachingApiClient::OperationsApi).to receive(:new).and_return(operations_api)
 
-    allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
-      receive_messages(enabled?: true, uuids: [])
+    organisations = instance_double(Schools::DFESignInAPI::Organisations, enabled?: true, uuids: [])
+    allow(Schools::DFESignInAPI::Organisations).to receive(:new).and_return(organisations)
   end
 
   context "when the environment requires basic auth" do
     before do
-      allow(ENV).to receive(:[]).with("SECURE_USERNAME") { "user" }
-      allow(ENV).to receive(:[]).with("SECURE_PASSWORD") { "pass" }
+      allow(ENV).to receive(:[]).with("SECURE_USERNAME").and_return("user")
+      allow(ENV).to receive(:[]).with("SECURE_PASSWORD").and_return("pass")
       allow(Rails).to receive(:env) { "staging".inquiry }
     end
 

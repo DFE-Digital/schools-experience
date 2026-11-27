@@ -11,8 +11,8 @@ RSpec.describe Schools::CsvExportRow do
       described_class.new(pr).row
     end
 
-    context "a placement request without a booking" do
-      context "for a fixed date school" do
+    context "when a placement request without a booking" do
+      context "with a fixed date school" do
         let(:pr) { create :placement_request, :with_a_fixed_date }
 
         it { is_expected.to include "Id" => pr.id }
@@ -25,20 +25,20 @@ RSpec.describe Schools::CsvExportRow do
         it { is_expected.to include "Status" => "New" }
         it { is_expected.to include "Attendance" => nil }
 
-        context "which has been cancelled by the school" do
+        context "when it has been cancelled by the school" do
           let(:pr) { create :placement_request, :cancelled_by_school, :with_a_fixed_date }
 
           it { is_expected.to include "Status" => "Rejected" }
         end
 
-        context "which has been cancelled by the candidate" do
+        context "when it has been cancelled by the candidate" do
           let(:pr) { create :placement_request, :cancelled, :with_a_fixed_date }
 
           it { is_expected.to include "Status" => "Withdrawn" }
         end
       end
 
-      context "for a flexible date school" do
+      context "with a flexible date school" do
         let(:pr) { create :placement_request }
 
         it { is_expected.to include "Id" => pr.id }
@@ -66,7 +66,7 @@ RSpec.describe Schools::CsvExportRow do
       it { is_expected.to include "Status" => "Booked" }
       it { is_expected.to include "Attendance" => nil }
 
-      context "which has been cancelled by the school" do
+      context "when it has been cancelled by the school" do
         let(:pr) do
           create(:bookings_booking, :accepted, :cancelled_by_school)
             .bookings_placement_request
@@ -75,7 +75,7 @@ RSpec.describe Schools::CsvExportRow do
         it { is_expected.to include "Status" => "School cancellation" }
       end
 
-      context "which has been cancelled by the candidate" do
+      context "when it has been cancelled by the candidate" do
         let(:pr) do
           create(:bookings_booking, :accepted, :cancelled_by_candidate)
             .bookings_placement_request

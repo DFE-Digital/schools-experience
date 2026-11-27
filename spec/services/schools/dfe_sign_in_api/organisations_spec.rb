@@ -2,15 +2,15 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::DFESignInAPI::Organisations do
-  include_context "logged in DfE user"
+  subject { described_class.new(user_guid) }
+
+  include_context "when a DfE user is logged in"
 
   let(:uuid_map) do
     dfe_signin_school_data.each.with_object({}) do |s, uuids|
       uuids[s[:id]] = s[:urn]
     end
   end
-
-  subject { Schools::DFESignInAPI::Organisations.new(user_guid) }
 
   before do
     allow(described_class).to receive(:enabled?).and_return(true)
@@ -48,11 +48,12 @@ describe Schools::DFESignInAPI::Organisations do
   end
 
   describe 'error_handling' do
-    subject { Schools::DFESignInAPI::Organisations.new(user_guid) }
+    subject(:organisations) { described_class.new(user_guid) }
 
     describe 'when an invalid response is returned' do
       before do
-        allow(subject).to receive(:response).and_return({})
+        stub_request(:get, "https://some-signin-host.signin.education.gov.uk/users/#{user_guid}/organisations")
+          .to_return(status: 200, body: '{}', headers: {})
       end
 
       specify 'urns should match the API request content' do

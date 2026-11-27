@@ -7,7 +7,7 @@ RSpec.describe Bookings::Profile, type: :model do
 
   describe 'methods' do
     describe '#dress_code' do
-      context 'omitting other details' do
+      context 'when omitting other details' do
         subject { create(:bookings_profile, dress_code_cover_tattoos: true, dress_code_other_details: 'any pants') }
 
         specify 'should not include the contents of dress_code_other_details' do
@@ -15,7 +15,7 @@ RSpec.describe Bookings::Profile, type: :model do
         end
       end
 
-      context 'correctly adding code flags' do
+      context 'when correctly adding code flags' do
         subject { create(:bookings_profile, dress_code_cover_tattoos: true, dress_code_remove_piercings: true) }
 
         specify 'should contain the correct information' do
@@ -29,7 +29,7 @@ RSpec.describe Bookings::Profile, type: :model do
         end
       end
 
-      context 'capitalising output' do
+      context 'when capitalising output' do
         subject { create(:bookings_profile, dress_code_smart_casual: true) }
 
         specify 'should not include incorrect information' do
@@ -42,6 +42,7 @@ RSpec.describe Bookings::Profile, type: :model do
   describe "validations" do
     describe "bookings_school_id" do
       before { create(:bookings_profile) }
+
       it { is_expected.to validate_uniqueness_of :school_id }
     end
 
@@ -57,16 +58,19 @@ RSpec.describe Bookings::Profile, type: :model do
     describe "dbs_policy_details" do
       context 'when dbs_policy_conditions is required' do
         before { subject.dbs_policy_conditions = 'required' }
+
         it { is_expected.to validate_presence_of :dbs_policy_details }
       end
 
       context 'when dbs_policy_conditions is inschool' do
         before { subject.dbs_policy_conditions = 'inschool' }
+
         it { is_expected.to validate_presence_of :dbs_policy_details }
       end
 
       context 'when dbs_policy_conditions is notrequired' do
         before { subject.dbs_policy_conditions = 'notrequired' }
+
         it { is_expected.not_to validate_presence_of :dbs_policy_details }
       end
     end
@@ -117,16 +121,19 @@ RSpec.describe Bookings::Profile, type: :model do
 
         context 'with key_stage_early_years' do
           before { subject.key_stage_early_years = true }
+
           it { expect(subject.valid?).to be true }
         end
 
         context 'with key_stage_1' do
           before { subject.key_stage_1 = true }
+
           it { expect(subject.valid?).to be true }
         end
 
         context 'with key_stage_2' do
           before { subject.key_stage_2 = true }
+
           it { expect(subject.valid?).to be true }
         end
 
@@ -135,6 +142,7 @@ RSpec.describe Bookings::Profile, type: :model do
             subject.key_stage_early_years = true
             subject.key_stage_1 = true
           end
+
           it { expect(subject.valid?).to be true }
         end
       end
@@ -146,6 +154,7 @@ RSpec.describe Bookings::Profile, type: :model do
             secondary_phase: true,
             key_stage_2: false)
         end
+
         it { expect(subject.valid?).to be true }
       end
     end
@@ -251,6 +260,7 @@ RSpec.describe Bookings::Profile, type: :model do
 
       context 'with assigned teacher_training_info' do
         subject { described_class.new(teacher_training_info: 'hello world') }
+
         it { is_expected.to allow_value('').for(:teacher_training_url) }
         it { is_expected.to allow_value('https://test.com').for(:teacher_training_url) }
         it { is_expected.to allow_value('http://test.com').for(:teacher_training_url) }
@@ -297,6 +307,7 @@ RSpec.describe Bookings::Profile, type: :model do
     describe "administration_fee_description" do
       context "with amount_pounds set" do
         subject { described_class.new(administration_fee_amount_pounds: 10.00) }
+
         it { is_expected.to validate_presence_of :administration_fee_description }
       end
 
@@ -308,6 +319,7 @@ RSpec.describe Bookings::Profile, type: :model do
     describe "administration_fee_interval" do
       context "with amount_pounds set" do
         subject { described_class.new(administration_fee_amount_pounds: 10.00) }
+
         described_class::AVAILABLE_INTERVALS.each do |interval|
           it { is_expected.to allow_value(interval).for :administration_fee_interval }
         end
@@ -322,6 +334,7 @@ RSpec.describe Bookings::Profile, type: :model do
     describe "administration_fee_payment_method" do
       context "with amount_pounds set" do
         subject { described_class.new(administration_fee_amount_pounds: 10.00) }
+
         it { is_expected.to validate_presence_of :administration_fee_payment_method }
       end
 
@@ -340,6 +353,7 @@ RSpec.describe Bookings::Profile, type: :model do
     describe "dbs_fee_description" do
       context "with amount_pounds set" do
         subject { described_class.new(dbs_fee_amount_pounds: 10.00) }
+
         it { is_expected.to validate_presence_of :dbs_fee_description }
       end
 
@@ -351,6 +365,7 @@ RSpec.describe Bookings::Profile, type: :model do
     describe "dbs_fee_interval" do
       context "with amount_pounds set" do
         subject { described_class.new(dbs_fee_amount_pounds: 10.00) }
+
         described_class::AVAILABLE_INTERVALS.each do |interval|
           it { is_expected.to allow_value(interval).for :dbs_fee_interval }
         end
@@ -365,6 +380,7 @@ RSpec.describe Bookings::Profile, type: :model do
     describe "dbs_fee_payment_method" do
       context "with amount_pounds set" do
         subject { described_class.new(dbs_fee_amount_pounds: 10.00) }
+
         it { is_expected.to validate_presence_of :dbs_fee_payment_method }
       end
 
@@ -383,6 +399,7 @@ RSpec.describe Bookings::Profile, type: :model do
     describe "other_fee_description" do
       context "with amount_pounds set" do
         subject { described_class.new(other_fee_amount_pounds: 10.00) }
+
         it { is_expected.to validate_presence_of :other_fee_description }
       end
 
@@ -394,6 +411,7 @@ RSpec.describe Bookings::Profile, type: :model do
     describe "other_fee_interval" do
       context "with amount_pounds set" do
         subject { described_class.new(other_fee_amount_pounds: 10.00) }
+
         described_class::AVAILABLE_INTERVALS.each do |interval|
           it { is_expected.to allow_value(interval).for :other_fee_interval }
         end
@@ -408,6 +426,7 @@ RSpec.describe Bookings::Profile, type: :model do
     describe "other_fee_payment_method" do
       context "with amount_pounds set" do
         subject { described_class.new(other_fee_amount_pounds: 10.00) }
+
         it { is_expected.to validate_presence_of :other_fee_payment_method }
       end
 
@@ -427,11 +446,13 @@ RSpec.describe Bookings::Profile, type: :model do
 
         context 'with has_access_needs_policy' do
           before { subject.has_access_needs_policy = true }
+
           it { is_expected.to validate_presence_of :access_needs_policy_url }
         end
 
         context 'without has_access_needs_policy' do
           before { subject.has_access_needs_policy = false }
+
           it { is_expected.not_to validate_presence_of :access_needs_policy_url }
         end
       end

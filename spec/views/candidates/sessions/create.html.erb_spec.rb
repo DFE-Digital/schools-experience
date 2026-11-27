@@ -14,7 +14,7 @@ RSpec.describe "candidates/sessions/create", type: :view do
     render
   end
 
-  it "should explain the email has been sent" do
+  it "explains the email has been sent" do
     expect(rendered).to have_css('h1', text: 'Verify your school experience sign in')
     expect(rendered).to have_css('p', text: /enter the verification code/i)
     expect(rendered).to have_css('li', text: /testy@mctest.com/)

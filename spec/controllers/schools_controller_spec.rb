@@ -3,21 +3,21 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe SchoolsController, type: :request do
   describe '#show' do
-    before do
-      allow(ENV).to receive(:[]).and_call_original
-      allow(ENV).to receive(:[]).with('DFE_SIGNIN_DEACTIVATED') { toggle }
-    end
-
     subject do
       get '/schools'
       response
+    end
+
+    before do
+      allow(ENV).to receive(:[]).and_call_original
+      allow(ENV).to receive(:[]).with('DFE_SIGNIN_DEACTIVATED') { toggle }
     end
 
     context 'when sign in is enabled' do
       let(:toggle) { 'false' }
 
       specify 'should render the correct template' do
-        is_expected.to have_rendered :show
+        expect(subject).to have_rendered :show
       end
 
       specify 'should show login button' do
@@ -33,7 +33,7 @@ describe SchoolsController, type: :request do
       let(:toggle) { '1' }
 
       specify 'should render the correct template' do
-        is_expected.to have_rendered :show
+        expect(subject).to have_rendered :show
       end
 
       specify 'should not show login button' do
@@ -53,7 +53,7 @@ describe SchoolsController, type: :request do
       let(:toggle) { 'custom message' }
 
       specify 'should render the correct template' do
-        is_expected.to have_rendered :show
+        expect(subject).to have_rendered :show
       end
 
       specify 'should not show login button' do

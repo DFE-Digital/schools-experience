@@ -6,7 +6,7 @@ end
 Given("I am on the profile page for the chosen school") do
   path = candidates_school_path(@school.urn)
   visit(path)
-  expect(page.current_path).to eql(path)
+  expect(page).to have_current_path(path)
 end
 
 Given("I am on the profile page for the school") do
@@ -160,13 +160,13 @@ end
 
 Given("my school of choice has {string} dates") do |option|
   @school = case option
-            when 'fixed'
+  when 'fixed'
               FactoryBot.create(:bookings_school, :with_fixed_availability_preference)
-            when 'flexible'
+  when 'flexible'
               FactoryBot.create(:bookings_school)
-            else
+  else
               raise 'invalid flexibility option'
-            end
+  end
 end
 
 Then("there should not be a button called {string} that begins the wizard") do |string|

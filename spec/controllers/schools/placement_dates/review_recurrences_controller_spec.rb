@@ -2,7 +2,7 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::PlacementDates::ReviewRecurrencesController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let(:school) { Bookings::School.find_by!(urn: urn).tap { |s| create :bookings_profile, school: s } }
   let(:first_weekday_next_month) { (Date.today + 1.month).beginning_of_month.next_occurring(:monday) }
@@ -21,7 +21,7 @@ describe Schools::PlacementDates::ReviewRecurrencesController, type: :request do
     post schools_placement_date_recurrences_selection_path(placement_date.id), params: params
   end
 
-  context "#new" do
+  describe "#new" do
     before do
       get new_schools_placement_date_review_recurrences_path(placement_date.id)
     end
@@ -44,7 +44,7 @@ describe Schools::PlacementDates::ReviewRecurrencesController, type: :request do
     end
   end
 
-  context "#create" do
+  describe "#create" do
     let(:submitted_dates) { date_range }
 
     before do

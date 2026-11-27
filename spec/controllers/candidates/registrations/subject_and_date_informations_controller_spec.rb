@@ -11,7 +11,7 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
     end
 
     context 'when the school has flexible dates' do
-      include_context 'Stubbed candidates school'
+      include_context 'with a stubbed candidate school'
 
       context 'without existing subject and date in session' do
         before do
@@ -20,14 +20,14 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
 
         it('responds with 302') { expect(response.status).to eq 302 }
 
-        it 'should redirect to the personal information page' do
+        it 'redirects to the personal information page' do
           expect(response.header["Location"]).to end_with('schools/11048/registrations/personal_information/new')
         end
       end
     end
 
     context 'when the school has fixed dates' do
-      include_context 'Stubbed candidates school', true
+      include_context 'with a stubbed candidate school', true
 
       context 'without existing subject and date in session' do
         before do
@@ -53,12 +53,14 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
   end
 
   describe '#post' do
-    include_context 'Stubbed candidates school', true
+    include_context 'with a stubbed candidate school', true
     let :subject_and_date_info_path do
       '/candidates/schools/11048/registrations/subject_and_date_information'
     end
 
     context 'when the school has primary dates' do
+      subject! { post subject_and_date_info_path, params: params }
+
       let(:primary_placement_date) { create(:bookings_placement_date, bookings_school: school, supports_subjects: false) }
       let(:params) do
         {
@@ -67,8 +69,6 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
           }
         }
       end
-
-      subject! { post subject_and_date_info_path, params: params }
 
       specify 'correctly stores the primary placement date in the registration session' do
         persisted_session = \
@@ -80,16 +80,18 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
     end
 
     context 'when no parameters are supplied' do
+      subject { post subject_and_date_info_path, params: params }
+
       let(:params) do
         {}
       end
-
-      subject { post subject_and_date_info_path, params: params }
 
       specify { expect { subject }.to raise_error(ActionController::ParameterMissing, /candidates_registrations_subject_and_date_information/) }
     end
 
     context 'when the school has secondary non-subject-specific dates' do
+      subject! { post subject_and_date_info_path, params: params }
+
       let(:secondary_placement_date) { create(:bookings_placement_date, bookings_school: school, supports_subjects: true) }
       let(:params) do
         {
@@ -98,8 +100,6 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
           }
         }
       end
-
-      subject! { post subject_and_date_info_path, params: params }
 
       specify 'correctly stores the secondary placement date in the registration session' do
         persisted_session = \
@@ -119,19 +119,19 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
     end
 
     context 'when the school has secondary subject-specific dates' do
+      subject! do
+        school.subjects << bookings_subject
+        post subject_and_date_info_path, params: params
+      end
+
       let(:bookings_subject) { create(:bookings_subject) }
-
-      before { school.subjects << bookings_subject }
-
       let(:secondary_placement_date) do
         build(:bookings_placement_date, bookings_school: school, subject_specific: true, supports_subjects: true).tap do |pd|
           pd.subjects << bookings_subject
           pd.save
         end
       end
-
       let(:placement_date_subject) { secondary_placement_date.placement_date_subjects.first }
-
       let(:params) do
         {
           candidates_registrations_subject_and_date_information: {
@@ -139,8 +139,6 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
           }
         }
       end
-
-      subject! { post subject_and_date_info_path, params: params }
 
       specify 'correctly stores the secondary placement date in the registration session' do
         persisted_session = \

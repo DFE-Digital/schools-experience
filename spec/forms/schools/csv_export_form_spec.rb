@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 describe Schools::CsvExportForm, type: :model do
-  context "attributes" do
+  context "with attributes" do
     it { is_expected.to respond_to :from_date }
     it { is_expected.to respond_to :to_date }
   end
 
-  context "validation" do
+  context "when validating" do
     it { is_expected.to validate_presence_of(:from_date) }
     it { is_expected.to validate_presence_of(:to_date) }
 
@@ -29,11 +29,11 @@ describe Schools::CsvExportForm, type: :model do
   context "when not valid" do
     subject { described_class.new }
 
-    it "should not be valid" do
+    it "is not valid" do
       expect(subject).not_to be_valid
     end
 
-    it "should have errors" do
+    it "has errors" do
       subject.valid?
       expect(subject.errors.messages[:from_date]).to include "You must specify the From date"
       expect(subject.errors.messages[:to_date]).to include "You must specify the To date"

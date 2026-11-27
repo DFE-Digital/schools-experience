@@ -33,9 +33,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
     t.datetime "accepted_at", precision: nil
     t.boolean "attended"
     t.string "experience_type"
-    t.index ["bookings_placement_request_id"], name: "index_bookings_bookings_on_bookings_placement_request_id", unique: true
-    t.index ["bookings_school_id"], name: "index_bookings_bookings_on_bookings_school_id"
-    t.index ["bookings_subject_id"], name: "index_bookings_bookings_on_bookings_subject_id"
+    t.index %w[bookings_placement_request_id], name: "index_bookings_bookings_on_bookings_placement_request_id", unique: true
+    t.index %w[bookings_school_id], name: "index_bookings_bookings_on_bookings_school_id"
+    t.index %w[bookings_subject_id], name: "index_bookings_bookings_on_bookings_subject_id"
   end
 
   create_table "bookings_candidates", force: :cascade do |t|
@@ -44,7 +44,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "confirmed_at", precision: nil
     t.boolean "created_in_gitis", default: false
-    t.index ["gitis_uuid"], name: "index_bookings_candidates_on_gitis_uuid", unique: true
+    t.index %w[gitis_uuid], name: "index_bookings_candidates_on_gitis_uuid", unique: true
   end
 
   create_table "bookings_phases", force: :cascade do |t|
@@ -54,8 +54,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
     t.integer "position"
     t.integer "edubase_id"
     t.boolean "supports_subjects", default: true, null: false
-    t.index ["name"], name: "index_bookings_phases_on_name", unique: true
-    t.index ["position"], name: "index_bookings_phases_on_position", unique: true
+    t.index %w[name], name: "index_bookings_phases_on_name", unique: true
+    t.index %w[position], name: "index_bookings_phases_on_position", unique: true
   end
 
   create_table "bookings_placement_date_subjects", force: :cascade do |t|
@@ -63,8 +63,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
     t.bigint "bookings_subject_id"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.index ["bookings_placement_date_id"], name: "index_placement_date_subject_on_date_id"
-    t.index ["bookings_subject_id"], name: "index_placement_date_subject_on_subject_id"
+    t.index %w[bookings_placement_date_id], name: "index_placement_date_subject_on_date_id"
+    t.index %w[bookings_subject_id], name: "index_placement_date_subject_on_subject_id"
   end
 
   create_table "bookings_placement_dates", force: :cascade do |t|
@@ -83,7 +83,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
     t.integer "start_availability_offset", default: 60, null: false
     t.boolean "recurring", default: false
     t.boolean "publishable", default: false
-    t.index ["bookings_school_id"], name: "index_bookings_placement_dates_on_bookings_school_id"
+    t.index %w[bookings_school_id], name: "index_bookings_placement_dates_on_bookings_school_id"
   end
 
   create_table "bookings_placement_request_cancellations", force: :cascade do |t|
@@ -108,8 +108,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
     t.boolean "wrong_choice_secondary", default: false
     t.boolean "wrong_choice_primary", default: false
     t.boolean "other", default: false
-    t.index ["bookings_placement_request_id"], name: "index_cancellations_on_bookings_placement_request_id", unique: true
-    t.index ["rejection_category"], name: "index_bookings_placement_request_cancellations_category"
+    t.index %w[bookings_placement_request_id], name: "index_cancellations_on_bookings_placement_request_id", unique: true
+    t.index %w[rejection_category], name: "index_bookings_placement_request_cancellations_category"
   end
 
   create_table "bookings_placement_requests", force: :cascade do |t|
@@ -134,11 +134,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
     t.bigint "bookings_subject_id"
     t.datetime "under_consideration_at", precision: nil
     t.string "experience_type"
-    t.index ["bookings_placement_date_id"], name: "index_bookings_placement_requests_on_bookings_placement_date_id"
-    t.index ["bookings_school_id"], name: "index_bookings_placement_requests_on_bookings_school_id"
-    t.index ["bookings_subject_id"], name: "index_bookings_placement_requests_on_bookings_subject_id"
-    t.index ["candidate_id"], name: "index_bookings_placement_requests_on_candidate_id"
-    t.index ["token"], name: "index_bookings_placement_requests_on_token", unique: true
+    t.index %w[bookings_placement_date_id], name: "index_bookings_placement_requests_on_bookings_placement_date_id"
+    t.index %w[bookings_school_id], name: "index_bookings_placement_requests_on_bookings_school_id"
+    t.index %w[bookings_subject_id], name: "index_bookings_placement_requests_on_bookings_subject_id"
+    t.index %w[candidate_id], name: "index_bookings_placement_requests_on_candidate_id"
+    t.index %w[token], name: "index_bookings_placement_requests_on_token", unique: true
   end
 
   create_table "bookings_profiles", force: :cascade do |t|
@@ -194,7 +194,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
     t.boolean "has_access_needs_policy"
     t.string "access_needs_policy_url"
     t.string "dbs_policy_conditions"
-    t.index ["school_id"], name: "index_bookings_profiles_on_school_id", unique: true
+    t.index %w[school_id], name: "index_bookings_profiles_on_school_id", unique: true
   end
 
   create_table "bookings_school_searches", force: :cascade do |t|
@@ -206,7 +206,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
     t.integer "max_fee"
     t.integer "page"
     t.integer "number_of_results", default: 0
-    t.geography "coordinates", limit: {srid: 4326, type: "st_point", geographic: true}
+    t.geography "coordinates", limit: { srid: 4326, type: "st_point", geographic: true }
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.uuid "analytics_tracking_uuid"
@@ -220,12 +220,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
     t.integer "edubase_id"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.index ["name"], name: "index_bookings_school_types_on_name", unique: true
+    t.index %w[name], name: "index_bookings_school_types_on_name", unique: true
   end
 
   create_table "bookings_schools", force: :cascade do |t|
     t.string "name", limit: 128, null: false
-    t.geography "coordinates", limit: {srid: 4326, type: "st_point", geographic: true}
+    t.geography "coordinates", limit: { srid: 4326, type: "st_point", geographic: true }
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.integer "fee", default: 0, null: false
@@ -250,9 +250,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
     t.integer "views", default: 0, null: false
     t.uuid "dfe_signin_organisation_uuid"
     t.string "experience_type", default: "inschool", null: false
-    t.index ["coordinates"], name: "index_bookings_schools_on_coordinates", using: :gist
-    t.index ["name"], name: "index_bookings_schools_on_name"
-    t.index ["urn"], name: "index_bookings_schools_on_urn", unique: true
+    t.index %w[coordinates], name: "index_bookings_schools_on_coordinates", using: :gist
+    t.index %w[name], name: "index_bookings_schools_on_name"
+    t.index %w[urn], name: "index_bookings_schools_on_urn", unique: true
   end
 
   create_table "bookings_schools_phases", force: :cascade do |t|
@@ -260,7 +260,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
     t.integer "bookings_phase_id", null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.index ["bookings_school_id", "bookings_phase_id"], name: "index_bookings_schools_phases_school_id_and_phase_id", unique: true
+    t.index %w[bookings_school_id bookings_phase_id], name: "index_bookings_schools_phases_school_id_and_phase_id", unique: true
   end
 
   create_table "bookings_schools_subjects", force: :cascade do |t|
@@ -268,7 +268,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
     t.integer "bookings_subject_id", null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.index ["bookings_school_id", "bookings_subject_id"], name: "index_bookings_schools_subjects_school_id_and_subject_id", unique: true
+    t.index %w[bookings_school_id bookings_subject_id], name: "index_bookings_schools_subjects_school_id_and_subject_id", unique: true
   end
 
   create_table "bookings_subjects", force: :cascade do |t|
@@ -277,8 +277,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
     t.datetime "updated_at", precision: nil, null: false
     t.boolean "hidden", default: false
     t.boolean "secondary_subject", default: true, null: false
-    t.index ["hidden"], name: "index_bookings_subjects_on_hidden"
-    t.index ["name"], name: "index_bookings_subjects_on_name", unique: true
+    t.index %w[hidden], name: "index_bookings_subjects_on_hidden"
+    t.index %w[name], name: "index_bookings_subjects_on_name", unique: true
   end
 
   create_table "candidates_booking_feedbacks", force: :cascade do |t|
@@ -290,7 +290,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
     t.integer "effect_on_decision"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["bookings_booking_id"], name: "index_candidates_booking_feedbacks_on_bookings_booking_id", unique: true
+    t.index %w[bookings_booking_id], name: "index_candidates_booking_feedbacks_on_bookings_booking_id", unique: true
   end
 
   create_table "candidates_session_tokens", force: :cascade do |t|
@@ -300,8 +300,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "confirmed_at", precision: nil
-    t.index ["candidate_id"], name: "index_candidates_session_tokens_on_candidate_id"
-    t.index ["token"], name: "index_candidates_session_tokens_on_token", unique: true
+    t.index %w[candidate_id], name: "index_candidates_session_tokens_on_candidate_id"
+    t.index %w[token], name: "index_candidates_session_tokens_on_token", unique: true
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -317,7 +317,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.string "cron"
-    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+    t.index %w[priority run_at], name: "delayed_jobs_priority"
   end
 
   create_table "events", force: :cascade do |t|
@@ -328,8 +328,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.integer "bookings_candidate_id"
-    t.index ["bookings_candidate_id"], name: "index_events_on_bookings_candidate_id"
-    t.index ["bookings_school_id"], name: "index_events_on_bookings_school_id"
+    t.index %w[bookings_candidate_id], name: "index_events_on_bookings_candidate_id"
+    t.index %w[bookings_school_id], name: "index_events_on_bookings_school_id"
   end
 
   create_table "feedbacks", force: :cascade do |t|
@@ -352,9 +352,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
     t.bigint "resource_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
-    t.index ["name"], name: "index_roles_on_name"
-    t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
+    t.index %w[name resource_type resource_id], name: "index_roles_on_name_and_resource_type_and_resource_id"
+    t.index %w[name], name: "index_roles_on_name"
+    t.index %w[resource_type resource_id], name: "index_roles_on_resource"
   end
 
   create_table "schools_on_boarding_profile_subjects", force: :cascade do |t|
@@ -362,9 +362,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
     t.bigint "bookings_subject_id"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.index ["bookings_subject_id"], name: "index_profile_subjects_on_school_profile_i"
-    t.index ["schools_school_profile_id", "bookings_subject_id"], name: "index_profile_subjects_school_profile_id_and_subject_id", unique: true
-    t.index ["schools_school_profile_id"], name: "index_profile_subjects_on_school_profile_id"
+    t.index %w[bookings_subject_id], name: "index_profile_subjects_on_school_profile_i"
+    t.index %w[schools_school_profile_id bookings_subject_id], name: "index_profile_subjects_school_profile_id_and_subject_id", unique: true
+    t.index %w[schools_school_profile_id], name: "index_profile_subjects_on_school_profile_id"
   end
 
   create_table "schools_school_profiles", force: :cascade do |t|
@@ -447,14 +447,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
     t.string "dbs_requirement_dbs_policy_conditions"
     t.text "dbs_requirement_dbs_policy_details_inschool"
     t.boolean "candidate_dress_code_step_completed", default: false
-    t.index ["bookings_school_id"], name: "index_schools_school_profiles_on_bookings_school_id"
+    t.index %w[bookings_school_id], name: "index_schools_school_profiles_on_bookings_school_id"
   end
 
   create_table "users", force: :cascade do |t|
     t.string "sub"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["sub"], name: "index_users_on_sub", unique: true
+    t.index %w[sub], name: "index_users_on_sub", unique: true
   end
 
   create_table "users_roles", force: :cascade do |t|
@@ -462,9 +462,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_162733) do
     t.bigint "role_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["role_id"], name: "index_users_roles_on_role_id"
-    t.index ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id"
-    t.index ["user_id"], name: "index_users_roles_on_user_id"
+    t.index %w[role_id], name: "index_users_roles_on_role_id"
+    t.index %w[user_id role_id], name: "index_users_roles_on_user_id_and_role_id"
+    t.index %w[user_id], name: "index_users_roles_on_user_id"
   end
 
   add_foreign_key "bookings_bookings", "bookings_placement_requests"

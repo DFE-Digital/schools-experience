@@ -2,24 +2,19 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::OnBoarding::FeesController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
-  context '#new' do
-    let! :school_profile do
+  describe '#new' do
+    before do
       FactoryBot.create :school_profile,
         :with_dbs_requirement,
         :with_candidate_requirements_selection
-    end
-    let(:task_progress_on_boarding) { false }
-
-    before do
       allow(Feature).to receive(:enabled?).with(:task_progress_on_boarding)
-        .and_return(task_progress_on_boarding)
-    end
-
-    before do
+              .and_return(task_progress_on_boarding)
       get '/schools/on_boarding/fees/new'
     end
+
+    let(:task_progress_on_boarding) { false }
 
     it 'assigns the model' do
       expect(assigns(:fees)).to eq Schools::OnBoarding::Fees.new(dbs_fees_specified: false)
@@ -30,7 +25,7 @@ describe Schools::OnBoarding::FeesController, type: :request do
     end
   end
 
-  context '#create' do
+  describe '#create' do
     let! :school_profile do
       FactoryBot.create :school_profile,
         :with_dbs_requirement,
@@ -45,7 +40,7 @@ describe Schools::OnBoarding::FeesController, type: :request do
       post '/schools/on_boarding/fees', params: params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :fees do
         Schools::OnBoarding::Fees.new(selected_fees: %w[administration_fees none])
       end
@@ -59,7 +54,7 @@ describe Schools::OnBoarding::FeesController, type: :request do
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :fees do
         FactoryBot.build :fees
       end
@@ -84,7 +79,7 @@ describe Schools::OnBoarding::FeesController, type: :request do
     end
   end
 
-  context '#edit' do
+  describe '#edit' do
     let! :school_profile do
       FactoryBot.create :school_profile, :completed
     end
@@ -102,7 +97,7 @@ describe Schools::OnBoarding::FeesController, type: :request do
     end
   end
 
-  context '#update' do
+  describe '#update' do
     let! :school_profile do
       FactoryBot.create :school_profile, :completed
     end
@@ -115,7 +110,7 @@ describe Schools::OnBoarding::FeesController, type: :request do
       patch '/schools/on_boarding/fees', params: params
     end
 
-    context 'invalid' do
+    context 'when invalid' do
       let :fees do
         Schools::OnBoarding::Fees.new(selected_fees: %w[administration_fees none])
       end
@@ -129,7 +124,7 @@ describe Schools::OnBoarding::FeesController, type: :request do
       end
     end
 
-    context 'valid' do
+    context 'when valid' do
       let :fees do
         FactoryBot.build :fees
       end

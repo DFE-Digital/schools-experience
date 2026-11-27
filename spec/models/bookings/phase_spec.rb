@@ -6,10 +6,11 @@ RSpec.describe Bookings::Phase, type: :model do
   end
 
   describe "Validation" do
-    context "Name" do
+    context "with name" do
       it { is_expected.to validate_presence_of(:name) }
+
       it do
-        is_expected.to validate_length_of(:name)
+        expect(subject).to validate_length_of(:name)
           .is_at_least(2)
           .is_at_most(32)
       end
@@ -22,7 +23,7 @@ RSpec.describe Bookings::Phase, type: :model do
 
   describe "Relationsips" do
     specify do
-      is_expected.to(
+      expect(subject).to(
         have_many(:bookings_schools_phases)
           .class_name("Bookings::SchoolsPhase")
           .with_foreign_key(:bookings_phase_id)
@@ -31,7 +32,7 @@ RSpec.describe Bookings::Phase, type: :model do
     end
 
     specify do
-      is_expected.to(
+      expect(subject).to(
         have_many(:schools)
           .through(:bookings_schools_phases)
           .class_name("Bookings::School")

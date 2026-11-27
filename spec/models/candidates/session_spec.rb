@@ -20,6 +20,7 @@ RSpec.describe Candidates::Session, type: :model do
 
   describe 'validates' do
     subject { described_class.new }
+
     it { is_expected.to validate_presence_of(:email) }
     it { is_expected.to validate_presence_of(:firstname) }
     it { is_expected.to validate_presence_of(:lastname) }
@@ -33,22 +34,22 @@ RSpec.describe Candidates::Session, type: :model do
     let!(:token) { create(:candidate_session_token, candidate: first.candidate) }
 
     context 'with valid token' do
-      before { @candidate = described_class.signin!(token.token) }
+      let!(:candidate) { described_class.signin!(token.token) }
 
-      it { expect(@candidate).to eql(token.candidate) }
+      it { expect(candidate).to eql(token.candidate) }
 
-      it "should clear out other tokens" do
-        expect(token.candidate.session_tokens.valid.count).to eql(0)
+      it "clears out other tokens" do
+        expect(token.candidate.session_tokens.valid.count).to be(0)
       end
     end
 
     context 'with unknown token' do
-      before { @candidate = described_class.signin!('UNKNOWNTOKEN') }
+      let!(:candidate) { described_class.signin!('UNKNOWNTOKEN') }
 
-      it { expect(@candidate).to be_nil }
+      it { expect(candidate).to be_nil }
 
-      it "should not remove tokens" do
-        expect(Candidates::SessionToken.valid.count).to eql(2)
+      it "does not remove tokens" do
+        expect(Candidates::SessionToken.valid.count).to be(2)
       end
     end
   end

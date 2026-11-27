@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::RegistrationStore do
+  subject { described_class.instance }
+
   let :redis do
     REDIS
   end
@@ -9,10 +11,8 @@ describe Candidates::Registrations::RegistrationStore do
     FactoryBot.build :registration_session, uuid: 'sekret'
   end
 
-  subject { described_class.instance }
-
-  context '#store!' do
-    let! :returned_uuid do
+  describe '#store!' do
+    before do
       subject.store! session
     end
 
@@ -26,9 +26,9 @@ describe Candidates::Registrations::RegistrationStore do
     end
   end
 
-  context '#store! with a blank key' do
+  describe '#store! with a blank key' do
     before do
-      allow(session).to receive(:uuid) { nil }
+      allow(session).to receive(:uuid).and_return(nil)
     end
 
     it 'raises an error' do
@@ -38,7 +38,7 @@ describe Candidates::Registrations::RegistrationStore do
     end
   end
 
-  context '#get!' do
+  describe '#get!' do
     before do
       subject.store! session
     end
@@ -62,7 +62,7 @@ describe Candidates::Registrations::RegistrationStore do
     end
   end
 
-  context '#delete!' do
+  describe '#delete!' do
     before do
       subject.store! session
     end
@@ -80,25 +80,25 @@ describe Candidates::Registrations::RegistrationStore do
       end
 
       it 'removes the key from redis' do
-        expect(redis.get("test:registrations:sekret")).to eq nil
+        expect(redis.get("test:registrations:sekret")).to be_nil
       end
     end
   end
 
-  context '#has_registration?' do
-    let! :returned_uuid do
+  describe '#has_registration?' do
+    before do
       subject.store! session
     end
 
     context 'when registration does not exist' do
       it 'returns false' do
-        expect(subject.has_registration?('bad-uuid')).to eq false
+        expect(subject.has_registration?('bad-uuid')).to be false
       end
     end
 
     context 'when registration exists' do
       it 'returns true' do
-        expect(subject.has_registration?(session.uuid)).to eq true
+        expect(subject.has_registration?(session.uuid)).to be true
       end
     end
   end

@@ -2,16 +2,18 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::ConfirmAttendanceController, type: :request do
-  include_context "logged in DfE user"
+  include_context "when a DfE user is logged in"
 
   let(:school) { Bookings::School.find_by(urn: urn) }
-  let!(:profile) { create(:bookings_profile, school: school) }
   let :school_experience do
     instance_double(Bookings::Gitis::SchoolExperience)
   end
 
+  before { create(:bookings_profile, school: school) }
+
   describe '#show' do
     subject { get(schools_confirm_attendance_path) }
+
     it 'renders the show template' do
       expect(subject).to render_template(:show)
     end
@@ -29,13 +31,14 @@ describe Schools::ConfirmAttendanceController, type: :request do
         unattended.candidate.gitis_uuid,
         attended.candidate.gitis_uuid,
       ]
-      allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-        receive(:get_schools_experience_sign_ups).with(ids) do
-          [
-            build(:api_schools_experience_sign_up),
-            build(:api_schools_experience_sign_up)
-          ]
-        end
+      api_client = instance_double(GetIntoTeachingApiClient::SchoolsExperienceApi)
+      allow(GetIntoTeachingApiClient::SchoolsExperienceApi).to receive(:new).and_return(api_client)
+      allow(api_client).to receive(:get_schools_experience_sign_ups).with(ids) do
+        [
+          build(:api_schools_experience_sign_up),
+          build(:api_schools_experience_sign_up)
+        ]
+      end
     end
 
     let!(:attended) do
@@ -50,7 +53,7 @@ describe Schools::ConfirmAttendanceController, type: :request do
       end
     end
 
-    subject! do
+    subject! do # rubocop:disable RSpec/LeadingSubject -- Request must run after API stubs and bookings are set up.
       put(
         schools_confirm_attendance_path,
         params: {

@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::ConfirmationEmailsController, type: :request do
-  include_context 'Stubbed candidates school'
-  include_context 'Stubbed current_registration'
+  include_context 'with a session double'
+  include_context 'with a stubbed candidate school'
+  include_context 'with a stubbed current registration'
 
   let :registration_session do
     FactoryBot.build :registration_session, urn: school.urn,
@@ -27,20 +28,20 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
       receive(:perform_later)
   end
 
-  context '#create' do
+  describe '#create' do
     let(:skip_confirmation_emails) { false }
 
     before { allow(Feature).to receive(:enabled?).with(:skip_candidate_confirmation_emails) { skip_confirmation_emails } }
 
-    context 'skipped step' do
-      before { registration_store.send :delete, 'some-uuid' } # ensure key not left lying around
+    context 'when skipped step' do
+      # ensure key not left lying around
+      before do
+        registration_store.send :delete, 'some-uuid'
+        post candidates_school_registrations_confirmation_email_path(school)
+      end
 
       let :registration_session do
         FactoryBot.build :registration_session, with: []
-      end
-
-      before do
-        post candidates_school_registrations_confirmation_email_path(school)
       end
 
       it "doesn't store the session" do
@@ -62,7 +63,7 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
       end
     end
 
-    context 'no skipped steps' do
+    context 'without skipped steps' do
       before do
         post candidates_school_registrations_confirmation_email_path(school)
       end
@@ -112,7 +113,7 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
       end
     end
 
-    context 'no skipped steps and already signed in' do
+    context 'when the candidate is already signed in and has not skipped any steps' do
       let(:candidate) { create(:candidate, :confirmed) }
       let(:contact) do
         api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
@@ -121,11 +122,7 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
       let(:contact_attributes) { contact.to_hash }
 
       before do
-        allow_any_instance_of(ActionDispatch::Request::Session).to \
-          receive(:[]).and_call_original
-        allow_any_instance_of(ActionDispatch::Request::Session).to \
-          receive(:[]).with(:gitis_contact).and_return(contact_attributes)
-
+        session_hash[:gitis_contact] = contact_attributes
         post candidates_school_registrations_confirmation_email_path(school)
       end
 
@@ -151,7 +148,7 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
     end
   end
 
-  context '#show' do
+  describe '#show' do
     before do
       get candidates_school_registrations_confirmation_email_path school
     end

@@ -67,7 +67,7 @@ end
 Given("I am on the placement request page") do
   path = path_for('placement request', placement_request: @placement_request)
   visit(path)
-  expect(page.current_path).to eql(path)
+  expect(page).to have_current_path(path)
 end
 
 Then("I should see all the upcoming requests listed") do
@@ -105,7 +105,7 @@ end
 
 Then("every request should contain a title starting with {string}") do |string|
   within('#placement-requests') do
-    page.all('.placement-request').each do |sr|
+    page.all('.placement-request').each do |sr| # rubocop:disable Rails/FindEach -- Capybara collections are arrays.
       within(sr) do
         expect(page).to have_css('h2', text: /#{string}/)
       end
@@ -164,7 +164,7 @@ end
 Then("I should be on the confirm booking page") do
   path = path_for('confirm booking', placement_request: @placement_request)
   visit(path)
-  expect(page.current_path).to eql(path)
+  expect(page).to have_current_path(path)
 end
 
 Then("I should see a table with the following headings:") do |table|
@@ -277,7 +277,7 @@ end
 When("I am on the flagged placement request page") do
   path = path_for('placement request', placement_request: @placement_requests.last)
   visit(path)
-  expect(page.current_path).to eql(path)
+  expect(page).to have_current_path(path)
 end
 
 Then("I should see the warning details") do
