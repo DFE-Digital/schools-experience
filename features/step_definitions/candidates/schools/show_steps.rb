@@ -160,13 +160,13 @@ end
 
 Given("my school of choice has {string} dates") do |option|
   @school = case option
-            when 'fixed'
+  when 'fixed'
               FactoryBot.create(:bookings_school, :with_fixed_availability_preference)
-            when 'flexible'
+  when 'flexible'
               FactoryBot.create(:bookings_school)
-            else
+  else
               raise 'invalid flexibility option'
-            end
+  end
 end
 
 Then("there should not be a button called {string} that begins the wizard") do |string|

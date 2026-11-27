@@ -124,6 +124,7 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
 
   gem 'rubocop-govuk', require: false
+  gem 'rubocop-rails-omakase', require: false
 
   # Debugging
   gem 'pry-byebug'

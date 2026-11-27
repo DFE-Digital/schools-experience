@@ -82,11 +82,11 @@ module Candidates::SchoolHelper
   def describe_current_search(search, include_result_count: false)
     description = if search.location_name.present?
                     "near #{search.location_name}"
-                  elsif search.location.present?
+    elsif search.location.present?
                     "near #{search.location}"
-                  else
+    else
                     "matching #{search.query}"
-                  end
+    end
 
     return description unless include_result_count
 

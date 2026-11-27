@@ -22,11 +22,11 @@ module Schools::OnBoardingHelper
     return nil if status == :cannot_start_yet
 
     color = case status
-            when :complete
+    when :complete
               "green"
-            else
+    else
               "grey"
-            end
+    end
 
     tag.strong(status.to_s.humanize, class: "govuk-tag govuk-tag--#{color}")
   end

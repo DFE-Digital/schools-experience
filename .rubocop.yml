@@ -4,9 +4,17 @@ plugins:
   - rubocop-factory_bot
 
 inherit_gem:
-  rubocop-govuk:
-    - config/default.yml
-    - config/rails.yml
+  rubocop-rails-omakase: rubocop.yml
+  rubocop-govuk: config/default.yml
+
+inherit_mode:
+  merge:
+    - Exclude
+
+# Omakase requires spaces inside array brackets, which would rewrite ~1,000
+# lines; keep the existing GOV.UK (no space) style.
+Layout/SpaceInsideArrayLiteralBrackets:
+  EnforcedStyle: no_space
 
 Gemspec/RequiredRubyVersion:
   Exclude:

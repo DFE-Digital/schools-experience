@@ -125,9 +125,9 @@ class Bookings::SchoolSearch < ApplicationRecord
   def radius=(dist)
     self[:radius] = if whitelisted_urns?
                       1000 # include all whitelisted schools but still order by distance
-                    else
+    else
                       dist
-                    end
+    end
   end
 
 private

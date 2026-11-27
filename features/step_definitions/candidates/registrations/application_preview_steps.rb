@@ -139,9 +139,9 @@ Then("I should see the following summary rows:") do |table|
 
     row_selector = if page.has_selector? ".#{heading_selector}"
                      ".#{heading_selector}"
-                   else
+    else
                      "##{heading_selector}"
-                   end
+    end
 
     within row_selector do
       expect(page).to have_css('dd', text: row['Value'])
