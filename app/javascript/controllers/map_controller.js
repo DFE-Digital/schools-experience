@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus'
-import { Loader } from "@googlemaps/js-api-loader"
+import { importGoogleMapsLibrary } from "./google_maps_loader";
 
 export default class extends Controller {
   static values = {
@@ -16,14 +16,9 @@ export default class extends Controller {
     this.initMap() ;
   }
 
-  initMap() {
-    const loader = new Loader({
-      apiKey: this.apiKeyValue
-    });
-
-    loader.load().then(() => {
-      this.drawMap() ;
-    });
+  async initMap() {
+    await importGoogleMapsLibrary(this.apiKeyValue, "maps");
+    this.drawMap() ;
   }
 
   drawMap() {

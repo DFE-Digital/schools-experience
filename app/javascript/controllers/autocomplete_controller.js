@@ -1,6 +1,6 @@
 import { Controller } from '@hotwired/stimulus'
-import { Loader } from "@googlemaps/js-api-loader";
 import accessibleAutocomplete from "accessible-autocomplete";
+import { importGoogleMapsLibrary } from "./google_maps_loader";
 
 export default class extends Controller {
   #autocompleteService = null;
@@ -84,15 +84,11 @@ export default class extends Controller {
   }
 
   async #initialiseService() {
-    const loader = new Loader({
-      apiKey: this.apiKeyValue,
-      libraries: ["places"],
-    });
+    const { AutocompleteService, AutocompleteSessionToken } =
+      await importGoogleMapsLibrary(this.apiKeyValue, "places");
 
-    const google = await loader.load();
-
-    this.#sessionToken = new google.maps.places.AutocompleteSessionToken();
-    this.#autocompleteService = new google.maps.places.AutocompleteService();
+    this.#sessionToken = new AutocompleteSessionToken();
+    this.#autocompleteService = new AutocompleteService();
   }
 
   #initialiseAutoComplete() {

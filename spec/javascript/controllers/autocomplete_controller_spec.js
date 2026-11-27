@@ -1,5 +1,12 @@
 import { Application } from '@hotwired/stimulus'
+import { importLibrary, setOptions } from "@googlemaps/js-api-loader";
 import AutocompleteController from "autocomplete_controller.js";
+import { resetGoogleMapsLoaderState } from "google_maps_loader.js";
+
+jest.mock("@googlemaps/js-api-loader", () => ({
+  importLibrary: jest.fn(),
+  setOptions: jest.fn(),
+}));
 
 describe("AutocompleteController", () => {
   beforeAll(() => {
@@ -8,8 +15,19 @@ describe("AutocompleteController", () => {
   });
 
   beforeEach(() => {
+    jest.clearAllMocks();
+    resetGoogleMapsLoaderState();
     clearHead();
-    setupGoogleMock();
+
+    const AutocompleteService = jest.fn(() => ({
+      getPlacePredictions: jest.fn(),
+    }));
+    const AutocompleteSessionToken = jest.fn();
+
+    importLibrary.mockResolvedValue({
+      AutocompleteService,
+      AutocompleteSessionToken,
+    });
   });
 
   describe("connecting", () => {
@@ -35,6 +53,13 @@ describe("AutocompleteController", () => {
           '[data-autocomplete-target="autocompleteInputLabel"]'
         ).classList
       ).not.toContain("govuk-visually-hidden");
+    });
+
+    it("initialises Places library with the configured API key", async () => {
+      await flushPromises();
+
+      expect(setOptions).toHaveBeenCalledWith({ key: "KEY" });
+      expect(importLibrary).toHaveBeenCalledWith("places");
     });
   });
 
@@ -91,27 +116,12 @@ describe("AutocompleteController", () => {
     }
   };
 
-  const setupGoogleMock = () => {
-    global.window.google = {
-      maps: {
-        places: {
-          AutocompleteService: jest.fn(),
-          AutocompleteSessionToken: jest.fn(),
-          PlacesServiceStatus: {
-            INVALID_REQUEST: "INVALID_REQUEST",
-            NOT_FOUND: "NOT_FOUND",
-            OK: "OK",
-            OVER_QUERY_LIMIT: "OVER_QUERY_LIMIT",
-            REQUEST_DENIED: "REQUEST_DENIED",
-            UNKNOWN_ERROR: "UNKNOWN_ERROR",
-            ZERO_RESULTS: "ZERO_RESULTS",
-          },
-        },
-      },
-    };
-  };
-
   const clearHead = () => {
     document.head.innerHTML = null;
+  };
+
+  const flushPromises = async () => {
+    await Promise.resolve();
+    await Promise.resolve();
   };
 });
