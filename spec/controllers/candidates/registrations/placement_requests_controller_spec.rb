@@ -93,7 +93,7 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
             Candidates::Registrations::RegistrationStore.instance.retrieve! uuid
           end
 
-          it 'marks the registration as completed and re-stores it in redis' do
+          it 'marks the registration as completed and re-stores it' do
             expect(stored_registration_session).to be_completed
           end
 

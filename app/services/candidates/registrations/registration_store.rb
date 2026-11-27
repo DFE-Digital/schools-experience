@@ -1,4 +1,11 @@
-# Reads and writes registraion sessions to redis under a random key
+# Reads and writes unfinished registrations, keyed by the registration's UUID.
+#
+# Registrations live in the candidate_registrations table. While moving off
+# Redis, SessionStorage.phase decides where they are read from and whether
+# Redis is still written (see docs/documents/session-storage-cutover.md).
+# Records are never copied between stores on read: every write and delete
+# updates both stores together under one advisory lock, so a delete can't be
+# undone by a concurrent copy and the stores never disagree about a deletion.
 module Candidates
   module Registrations
     class RegistrationStore
@@ -9,12 +16,7 @@ module Candidates
       class NoKey < StandardError; end
 
       def initialize
-        @namespace = 'registrations'.freeze
         @ttl = 1.day.to_i
-
-        # Note this is using the same connection as was created during boot
-        # so no need for reconnection params here
-        @redis = REDIS
       end
 
       def store!(registration_session)
@@ -24,14 +26,19 @@ module Candidates
           raise NoKey, "`registration_session#uuid` can't be blank"
         end
 
-        @redis.set \
-          namespace(key),
-          serialize(registration_session),
-          ex: @ttl
+        value = serialize(registration_session)
+
+        CandidateRegistration.with_advisory_lock(key) do
+          CandidateRegistration.upsert(
+            { uuid: key, registration_data: value, expires_at: @ttl.seconds.from_now },
+            unique_by: :uuid
+          )
+          legacy_redis.set(legacy_key(key), value, ex: @ttl) if SessionStorage.redis_written?
+        end
       end
 
       def retrieve!(uuid)
-        value = @redis.get namespace(uuid)
+        value = read(uuid)
         raise SessionNotFound unless value
 
         deserialize(value)
@@ -40,24 +47,32 @@ module Candidates
       # If we're trying to delete keys that no longer exist we're probably
       # doing something wrong and should find out!
       def delete!(uuid)
-        return_value = delete(uuid)
-        raise SessionNotFound if return_value.zero?
+        deleted = CandidateRegistration.with_advisory_lock(uuid) do
+          from_database = CandidateRegistration.live.where(uuid: uuid).delete_all
+          from_redis = SessionStorage.redis_written? ? legacy_redis.del(legacy_key(uuid)) : 0
+          SessionStorage.redis_authoritative? ? from_redis : from_database
+        end
+        raise SessionNotFound if deleted.zero?
 
         true
       end
 
       def has_registration?(uuid)
-        @redis.exists? namespace(uuid)
+        if SessionStorage.redis_authoritative?
+          legacy_redis.exists?(legacy_key(uuid))
+        else
+          CandidateRegistration.live.exists?(uuid: uuid)
+        end
       end
 
     private
 
-      def delete(uuid)
-        @redis.del namespace(uuid)
-      end
-
-      def namespace(key)
-        "#{Rails.env}:#{@namespace}:#{key}"
+      def read(uuid)
+        if SessionStorage.redis_authoritative?
+          legacy_redis.get(legacy_key(uuid))
+        else
+          CandidateRegistration.live.find_by(uuid: uuid)&.registration_data
+        end
       end
 
       def serialize(session)
@@ -66,6 +81,14 @@ module Candidates
 
       def deserialize(value)
         RegistrationSession.new JSON.parse(value)
+      end
+
+      def legacy_redis
+        REDIS
+      end
+
+      def legacy_key(uuid)
+        "#{Rails.env}:registrations:#{uuid}"
       end
     end
   end

@@ -22,4 +22,6 @@ Rails.application.config.filter_parameters += %i[
   county
   postcode
   phone
+  registration_data
+  session_data
 ]

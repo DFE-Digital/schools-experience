@@ -64,7 +64,7 @@ Rails.application.configure do
   # Tell Active Support which deprecation messages to disallow.
   config.active_support.disallowed_deprecation_warnings = []
 
-  # Use Redis for Session and cache
+  # Use Redis for the cache
   config.cache_store = :redis_cache_store,
                        {
                          url: ENV['REDIS_URL'].presence,
@@ -72,9 +72,11 @@ Rails.application.configure do
                          namespace: 'test-cache'
                        }
 
-  config.session_store :cache_store,
+  config.x.session_storage = ENV.fetch("SESSION_STORAGE", "database")
+
+  config.session_store :database_store,
     key: 'schoolex-test-session',
-    expire_after: 1.hour # Sets explicit TTL for Session Redis keys
+    expire_after: 1.hour # Sliding expiry, enforced on read as well as by cleanup
 
   # Use the test adapter for active jobs
   config.active_job.queue_adapter = :test

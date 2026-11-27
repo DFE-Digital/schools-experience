@@ -67,15 +67,15 @@ Rails.application.configure do
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
 
-  # Use Redis for Session and cache if REDIS_URL or REDIS_CACHE_URL is set
+  # Use Redis for the cache if REDIS_URL or REDIS_CACHE_URL is set
   config.cache_store = :redis_cache_store,
                        {
                          url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL']
                        }
 
-  config.session_store :cache_store,
+  config.session_store :database_store,
     key: 'schoolex-session',
-    expire_after: 1.hour, # Sets explicit TTL for Session Redis keys
+    expire_after: 1.hour, # Sliding expiry, enforced on read as well as by cleanup
     same_site: :lax
 
   config.after_initialize do
