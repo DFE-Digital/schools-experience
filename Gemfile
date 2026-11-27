@@ -22,7 +22,7 @@ gem 'breasal'
 gem 'geocoder'
 
 # Use Puma as the app server
-gem 'puma', '~> 7.2.0'
+gem 'puma', '~> 8.0'
 
 # Asset pipeline: Propshaft serves/digests assets; esbuild bundles JavaScript
 # (jsbundling-rails) and Dart Sass compiles CSS (cssbundling-rails).
@@ -70,9 +70,9 @@ gem "redis", "~> 4.7"
 
 gem 'kaminari'
 
-gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.15.1"
-gem 'dfe-autocomplete', require: 'dfe/autocomplete', github: 'DFE-Digital/dfe-autocomplete'
-gem 'dfe-reference-data', require: 'dfe/reference_data', github: 'DFE-Digital/dfe-reference-data', tag: 'v3.5.0'
+gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.16.4"
+gem 'dfe-autocomplete', require: 'dfe/autocomplete', github: 'DFE-Digital/dfe-autocomplete', tag: 'v1.0.0'
+gem 'dfe-reference-data', require: 'dfe/reference_data', github: 'DFE-Digital/dfe-reference-data', tag: 'v3.10.2'
 gem "multi_json"
 
 gem "rolify"
@@ -91,6 +91,7 @@ gem 'uk_postcode'
 
 gem 'addressable'
 gem 'faraday'
+gem 'faraday-retry'
 
 gem 'ice_cube'
 
@@ -98,7 +99,7 @@ gem 'activerecord-import'
 
 gem "validates_timeliness", '~> 8'
 
-gem "get_into_teaching_api_client_faraday", '>= 3.6.0', github: "DFE-Digital/get-into-teaching-api-ruby-client", require: "api/client"
+gem "get_into_teaching_api_client_faraday", '>= 4.3.8', github: "DFE-Digital/get-into-teaching-api-ruby-client", require: "api/client"
 
 # See https://github.com/mikel/mail/pull/1439
 gem 'net-smtp', require: false
@@ -132,7 +133,7 @@ group :development, :test do
   # Testing framework
   gem 'factory_bot_rails', '>= 6.2.0'
   gem 'rspec_junit_formatter'
-  gem 'rspec-rails', '~> 6.1.1'
+  gem 'rspec-rails', '~> 8.1'
   gem 'rspec-sonarqube-formatter'
 
   gem 'brakeman', '>= 6.0.1'

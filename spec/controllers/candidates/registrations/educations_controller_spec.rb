@@ -25,6 +25,34 @@ describe Candidates::Registrations::EducationsController, type: :request do
       it 'renders the new template' do
         expect(response).to render_template :new
       end
+
+      describe 'degree subject markup' do
+        let(:page) { Nokogiri::HTML(response.body) }
+        let(:stage_inputs) { page.css('#education-degree-stage-container input[type=radio]') }
+
+        it 'flags which degree stages need a subject' do
+          no_degree = stage_inputs.find { |i| i['value'].start_with?("I don't have a degree") }
+          expect(no_degree['data-requires-subject']).to eq('false')
+          expect(stage_inputs.excluding(no_degree).map { |i| i['data-requires-subject'] }.uniq).to eq(%w[true])
+          expect(stage_inputs.map { |i| i['data-action'] }.uniq).to eq(['click->education-form#degreeStageSelected'])
+        end
+
+        it 'renders a no-JavaScript fallback that JavaScript hides' do
+          fallback = page.at_css('#degree_subject_nojs.hide-with-javascript')
+          expect(fallback.at_css('input[type=text][name$="[degree_subject_nojs]"]')).to be_present
+          expect(page.at_css('input.nojs-flag[type=hidden]')['value']).to eq('true')
+        end
+
+        it 'renders a labelled, described autocomplete select that JavaScript enables' do
+          autocomplete = page.at_css('#degree_subject.show-with-javascript[data-module="app-dfe-autocomplete"]')
+          select = autocomplete.at_css('select[data-education-form-target="degreeSubject"]')
+
+          expect(select['disabled']).to be_present
+          expect(select['class']).to include('enable-with-javascript')
+          expect(autocomplete.at_css("label[for='#{select['id']}']").text).to eq('What subject are you studying?')
+          expect(autocomplete.at_css("##{select['aria-describedby']}")).to be_present
+        end
+      end
     end
 
     context 'with existing education in session' do
